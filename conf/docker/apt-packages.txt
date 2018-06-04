@@ -1,5 +1,2 @@
-curl
 gettext-base
-postgresql-client-9.6
-sudo
-vim
+postgresql-client-9.6=9.6.7-0+deb9u1
