@@ -27,6 +27,7 @@ def gather_context(request):
     context = {
         'dev_mode': settings.DEBUG,
         'app_name': settings.APP_NAME,
+        'app_full_name': settings.APP_FULL_NAME,
         'navigation_list': navigation_list,
         'kernel_url': settings.AETHER_APPS['kernel']['url'],
     }

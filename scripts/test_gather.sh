@@ -37,14 +37,6 @@ function prepare_and_test_container() {
   echo "_____________________________________________ $1 tasks done"
 }
 
-function prepare_and_test_gather_test_container () {
-    echo "_____________________________________________ Starting gather-test tasks"
-    $DC_TEST build gather-test
-    $DC_TEST run gather-test setuptestdb
-    $DC_TEST run gather-test test --noinput
-    echo "_____________________________________________ gather-test tasks done"
-}
-
 DC_TEST="docker-compose -f docker-compose-test.yml"
 
 echo "_____________________________________________ TESTING"
@@ -59,7 +51,6 @@ $DC_TEST down
 echo "_____________________________________________ Starting databases"
 $DC_TEST up -d db-test
 
-# prepare kernel with initial project
 echo "_____________________________________________ Preparing kernel and odk"
 prepare_container kernel
 prepare_container odk
@@ -68,7 +59,7 @@ echo "_____________________________________________ Starting kernel and odk"
 $DC_TEST up -d kernel-test odk-test
 
 # test a clean Gather TEST container
-prepare_and_test_gather_test_container
+prepare_and_test_container gather
 
 # kill ALL containers
 echo "_____________________________________________ Killing auxiliary containers"

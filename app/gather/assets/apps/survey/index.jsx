@@ -22,7 +22,6 @@ import React, { Component } from 'react'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import {
-  getProjectAPIPath,
   getSubmissionsAPIPath,
   getSurveyorsAPIPath,
   getSurveysAPIPath
@@ -40,12 +39,7 @@ export default class SurveyDispatcher extends Component {
 
     switch (action) {
       case 'add':
-        const addUrls = [
-          {
-            name: 'project',
-            url: getProjectAPIPath()
-          }
-        ]
+        const addUrls = []
 
         if (ODK_ACTIVE) {
           const odkAddUrls = [
@@ -65,10 +59,6 @@ export default class SurveyDispatcher extends Component {
           {
             name: 'survey',
             url: getSurveysAPIPath({id: surveyId})
-          },
-          {
-            name: 'project',
-            url: getProjectAPIPath()
           }
         ]
 
@@ -79,7 +69,7 @@ export default class SurveyDispatcher extends Component {
               url: getSurveysAPIPath({ app: ODK_APP, id: surveyId }),
               force: {
                 url: getSurveysAPIPath({ app: ODK_APP }),
-                data: { mapping_id: surveyId }
+                data: { project_id: surveyId }
               }
             },
             {
@@ -103,7 +93,7 @@ export default class SurveyDispatcher extends Component {
           {
             // take the first 10 submissions to extract the table columns
             name: 'submissions',
-            url: getSubmissionsAPIPath({mapping: surveyId, pageSize: 10})
+            url: getSubmissionsAPIPath({project: surveyId, pageSize: 10})
           }
         ]
 

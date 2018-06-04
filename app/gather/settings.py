@@ -240,13 +240,14 @@ if not TESTING and DEBUG:  # pragma: no cover
 
 
 # ------------------------------------------------------------------------------
-# UI Configuration
+# Gather Configuration
 # ------------------------------------------------------------------------------
 
 ROOT_URLCONF = 'gather.urls'
 WSGI_APPLICATION = 'gather.wsgi.application'
 
 APP_NAME = 'Gather'
+APP_FULL_NAME = 'Gather on Aether'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
 
@@ -260,7 +261,6 @@ WEBPACK_LOADER = {
 
 INSTALLED_APPS += [
     'webpack_loader',
-    'solo.apps.SoloAppConfig',
     'gather',
 ]
 

@@ -106,6 +106,12 @@ input.hidden-file {
       color: $light-grey;
     }
   }
+
+  textarea.error,
+  textarea.error.form-control {
+    background: $red;
+    color: $white;
+  }
 }
 
 .FilteredMultiSelect {

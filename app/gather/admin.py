@@ -30,7 +30,7 @@ class UserTokensAdmin(admin.ModelAdmin):
 
 class SurveyAdmin(admin.ModelAdmin):
 
-    list_display = ('mapping_id', 'name',)
+    list_display = ('project_id', 'name',)
     search_fields = ('name',)
     ordering = list_display
 

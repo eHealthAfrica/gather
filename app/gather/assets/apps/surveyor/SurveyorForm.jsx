@@ -37,11 +37,11 @@ const MESSAGES = defineMessages({
     id: 'surveyor.form.action.delete.confirm'
   },
   deleteError: {
-    defaultMessage: 'An error occurred while deleting “{username}”',
+    defaultMessage: 'An error occurred while deleting “{username}”.',
     id: 'surveyor.form.action.delete.error'
   },
   submitError: {
-    defaultMessage: 'An error occurred while saving “{username}”',
+    defaultMessage: 'An error occurred while saving “{username}”.',
     id: 'surveyor.form.action.submit.error'
   },
 
@@ -255,7 +255,6 @@ class SurveyorForm extends Component {
       return
     }
 
-    const {formatMessage} = this.props.intl
     const surveyor = {
       username: this.state.username,
       password: this.state.password_1 || this.props.surveyor.password
@@ -266,42 +265,31 @@ class SurveyorForm extends Component {
 
     return saveMethod(url, surveyor)
       .then(this.goBack)
-      .catch(error => {
-        if (error.content) {
-          this.setState({ errors: error.content })
-        } else {
-          this.setState({
-            errors: {
-              generic: [formatMessage(MESSAGES.submitError, {...surveyor})]
-            }
-          })
-        }
-      })
+      .catch(error => { this.handleError(error, 'submitError') })
   }
 
   onDelete () {
-    const {formatMessage} = this.props.intl
-    const surveyor = this.state
-
     const url = getSurveyorsAPIPath({id: this.props.surveyor.id})
     return deleteData(url)
       .then(this.goBack)
-      .catch(error => {
-        if (error.content) {
-          this.setState({ errors: error.content })
-        } else {
-          this.setState({
-            errors: {
-              generic: [formatMessage(MESSAGES.deleteError, {...surveyor})]
-            }
-          })
-        }
-      })
+      .catch(error => { this.handleError(error, 'deleteError') })
+  }
+
+  handleError (error, action) {
+    if (error.content) {
+      this.setState({ errors: error.content })
+    } else {
+      const {formatMessage} = this.props.intl
+      const surveyor = this.state
+      const generic = [formatMessage(MESSAGES[action], {...surveyor})]
+
+      this.setState({ errors: { generic } })
+    }
   }
 
   goBack () {
     // navigate to Surveyors list page
-    window.location.pathname = getSurveyorsPath({action: 'list'})
+    window.location.assign(getSurveyorsPath({action: 'list'}))
   }
 }
 

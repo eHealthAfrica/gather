@@ -27,14 +27,13 @@ from . import views
 
 router = routers.DefaultRouter()
 
-# create `mappings` entry for concordance with aether
-router.register('mappings', views.SurveyViewSet, base_name='mappings')
+# create `projects` entry for concordance with aether
+router.register('projects', views.SurveyViewSet, base_name='projects')
 router.register('surveys', views.SurveyViewSet, base_name='surveys')
 router.register('masks', views.MaskViewSet, base_name='masks')
 
 urlpatterns = [
     path('gather/', include(router.urls)),
-    path('gather/project/', views.project_view, name='project-view'),
 ]
 
 for app_name in settings.AETHER_APPS:

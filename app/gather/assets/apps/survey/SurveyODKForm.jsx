@@ -81,9 +81,9 @@ class SurveyODKForm extends Component {
   }
 
   render () {
-    const dataQA = (!this.props.survey.mapping_id
+    const dataQA = (!this.props.survey.project_id
       ? 'survey-odk-add'
-      : `survey-odk-edit-${this.props.survey.mapping_id}`
+      : `survey-odk-edit-${this.props.survey.project_id}`
     )
 
     return (
@@ -96,6 +96,7 @@ class SurveyODKForm extends Component {
   }
 
   renderODK () {
+    const errors = this.props.errors || {}
     return (
       <div className='survey-section'>
         <label>
@@ -114,6 +115,7 @@ class SurveyODKForm extends Component {
               defaultMessage='Click here to see more about Open Data Kit' />
           </a>
         </HelpMessage>
+        <ErrorAlert errors={errors.generic} />
       </div>
     )
   }
@@ -147,6 +149,7 @@ class SurveyODKForm extends Component {
 
   renderXForms () {
     const {xforms, surveyors} = this.state
+    const errors = this.props.errors || {}
 
     return (
       <div>
@@ -175,6 +178,7 @@ class SurveyODKForm extends Component {
               <XFormIntl
                 key={xform.key}
                 xform={xform}
+                errors={errors[xform.key]}
                 surveyors={surveyors}
                 onRemove={() => this.setState({
                   xforms: xforms.filter((_, jndex) => jndex !== index)
@@ -249,6 +253,10 @@ class XForm extends Component {
   render () {
     const {formatMessage} = this.props.intl
     const xform = this.state
+    const errors = this.props.errors || {}
+
+    const allErrors = []
+    Object.keys(errors).forEach(key => { allErrors.push(errors[key]) })
 
     const title = (
       <span title={xform.description} className='form-title'>
@@ -293,85 +301,89 @@ class XForm extends Component {
     )
 
     return (
-      <div className={`form-item mb-2 ${this.state.editView ? 'expanded' : ''}`}>
-        { title }
-        { date }
-        { mediaFiles }
-        <ConfirmButton
-          className='btn btn-sm icon-only btn-danger ml-2 mr-2'
-          cancelable
-          onConfirm={this.props.onRemove}
-          title={title}
-          message={formatMessage(MESSAGES.deleteConfirm, {...xform})}
-          buttonLabel={<i className='fas fa-times' />}
-        />
+      <React.Fragment>
+        <ErrorAlert errors={allErrors} />
+        <div className={`form-item mb-2 ${this.state.editView ? 'expanded' : ''}`}>
+          { title }
+          { date }
+          { mediaFiles }
+          <ConfirmButton
+            className='btn btn-sm icon-only btn-danger ml-2 mr-2'
+            cancelable
+            onConfirm={this.props.onRemove}
+            title={title}
+            message={formatMessage(MESSAGES.deleteConfirm, {...xform})}
+            buttonLabel={<i className='fas fa-times' />}
+          />
 
-        { /* only existing xforms can edit */
-          xform.id &&
-          <button
-            type='button'
-            className='btn btn-sm btn-secondary btn-edit icon-only'
-            onClick={this.toggleEditView.bind(this)}>
-            <i className={`fas fa-${this.state.editView ? 'minus' : 'pencil-alt'}`} />
-          </button>
-        }
+          { /* only existing xforms can edit */
+            xform.id &&
+            <button
+              type='button'
+              className='btn btn-sm btn-secondary btn-edit icon-only'
+              onClick={this.toggleEditView.bind(this)}>
+              <i className={`fas fa-${this.state.editView ? 'minus' : 'pencil-alt'}`} />
+            </button>
+          }
 
-        {
-          this.state.editView &&
-          <div className='edit-form-item mt-3'>
-            <div className='form-group'>
-              <textarea
-                name='description'
-                className='form-control code mb-2'
-                rows={3}
-                value={xform.description}
-                placeholder={formatMessage(MESSAGES.description)}
-                onChange={this.onInputChange.bind(this)}
-              />
+          {
+            this.state.editView &&
+            <div className='edit-form-item mt-3'>
+              <div className='form-group'>
+                <textarea
+                  name='description'
+                  className='form-control code mb-2'
+                  rows={3}
+                  value={xform.description}
+                  placeholder={formatMessage(MESSAGES.description)}
+                  onChange={this.onInputChange.bind(this)}
+                />
 
-              <label className='btn btn-secondary' htmlFor='xFormFile'>
-                <FormattedMessage
-                  id='survey.odk.form.xform.file'
-                  defaultMessage='Upload new xForm/XLSForm file' />
-              </label>
-              <input
-                name='file'
-                id='xFormFile'
-                type='file'
-                className='hidden-file'
-                accept='.xls,.xlsx,.xml'
-                onChange={this.onFileChange.bind(this)}
-              />
-              {
-                xform.file &&
-                <span className='ml-4'>
-                  <span>{ xform.file.name }</span>
-                  <button
-                    type='button'
-                    className='btn btn-sm icon-only btn-danger ml-2'
-                    onClick={this.removeFile.bind(this)}><i className='fas fa-times' /></button>
-                </span>
-              }
+                <label className='btn btn-secondary' htmlFor='xFormFile'>
+                  <FormattedMessage
+                    id='survey.odk.form.xform.file'
+                    defaultMessage='Upload new xForm/XLSForm file' />
+                </label>
+                <input
+                  name='file'
+                  id='xFormFile'
+                  type='file'
+                  className='hidden-file'
+                  accept='.xls,.xlsx,.xml'
+                  onChange={this.onFileChange.bind(this)}
+                />
+                {
+                  xform.file &&
+                  <span className='ml-4'>
+                    <span>{ xform.file.name }</span>
+                    <button
+                      type='button'
+                      className='btn btn-sm icon-only btn-danger ml-2'
+                      onClick={this.removeFile.bind(this)}><i className='fas fa-times' /></button>
+                  </span>
+                }
 
-              <textarea
-                name='xml_data'
-                className='form-control code'
-                disabled={xform.file !== undefined}
-                rows={10}
-                value={xform.xml_data}
-                onChange={this.onInputChange.bind(this)}
+                <textarea
+                  name='xml_data'
+                  className={`${errors.xml_data ? 'error' : ''} form-control code`}
+                  disabled={xform.file !== undefined}
+                  rows={10}
+                  value={xform.xml_data}
+                  onChange={this.onInputChange.bind(this)}
+                />
+                <ErrorAlert errors={errors.xml_data} />
+              </div>
+
+              <MediaFileIntl
+                id={xform.id}
+                title={title}
+                mediaFiles={xform.media_files}
+                onChange={(mediaFiles) => this.setState({media_files: mediaFiles})}
               />
             </div>
-
-            <MediaFileIntl
-              id={xform.id}
-              title={title}
-              mediaFiles={xform.media_files}
-              onChange={(mediaFiles) => this.setState({media_files: mediaFiles})}
-            />
-          </div>
-        }
-      </div>
+          }
+        </div>
+      </React.Fragment>
     )
   }
 

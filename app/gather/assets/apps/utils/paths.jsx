@@ -18,37 +18,26 @@
  * under the License.
  */
 
-import jQuery from 'jquery'
 import { KERNEL_APP, ODK_APP, GATHER_APP } from './constants'
 
 const API_PREFIX = ''
 const APPS = [ KERNEL_APP, ODK_APP, GATHER_APP ]
 
 /**
- * Returns the API url to get the Mappings/Surveys data
+ * Returns the API url to get the Projects/Surveys data
  *
- * Internally in Aether the concept is Mapping but in Gather it refers to Survey.
+ * Internally in Aether the concept is Project but in Gather it refers to Survey.
  *
  * @param {string}  app          - app source: `kernel` (default), `odk` or `gather`
- * @param {number}  id           - mapping/survey id
- * @param {boolean} withStats    - include mapping/survey stats?
+ * @param {number}  id           - project/survey id
+ * @param {boolean} withStats    - include project/survey stats?
  * @param {object}  params       - query string parameters
  */
 export const getSurveysAPIPath = ({app, id, withStats, ...params}) => {
   const source = (APPS.indexOf(app) === -1 ? KERNEL_APP : app)
   const stats = (source === KERNEL_APP && withStats ? '-stats' : '')
 
-  let projectId
-  if (app === KERNEL_APP && !params.id) {
-    // Include project id in call
-    projectId = jQuery('[data-qa=project-id]').val()
-  }
-
-  return buildAPIPath(source, `mappings${stats}`, id, {...params, projectId})
-}
-
-export const getProjectAPIPath = () => {
-  return '/gather/project/'
+  return buildAPIPath(source, `projects${stats}`, id, {...params})
 }
 
 /**
@@ -104,28 +93,28 @@ export const getMasksAPIPath = ({id, ...params}) => {
 /**
  * Return the REST API url
  *
- * If format is "json"
+ * Without "action":
  *
- * With    {id} -> {app}/{type}/{id}.json?{queryString}
- * Without {id} -> {app}/{type}.json?{queryString}
+ *    With    {id} -> {app}/{type}/{id}.json?{queryString}
+ *    Without {id} -> {app}/{type}.json?{queryString}
  *
- * If format is not "json" (special case that allows to use POST to fetch data)
+ * With "action":
  *
- * With    {id} -> {app}/{type}/{id}/details.{format}?{queryString}
- * Without {id} -> {app}/{type}/fetch.{format}?{queryString}
+ *    With    {id} -> {app}/{type}/{id}/{action}.{format}?{queryString}
+ *    Without {id} -> {app}/{type}/{action}.{format}?{queryString}
  *
  * @param {string}  app         - app source: `kernel`, `odk` or `gather`
  * @param {string}  type        - item type
  * @param {number}  id          - item id
  * @param {string}  format      - response format
+ * @param {string}  action      - special suffix to include before the format
  * @param {object}  params      - query string parameters
  */
-const buildAPIPath = (app, type, id, {format = 'json', ...params}) => {
+const buildAPIPath = (app, type, id, {format = 'json', action, ...params}) => {
   const suffix = (
     (id ? '/' + id : '') +
-    // suffix with the "post as get" friendly option
-    (format !== 'json' ? '/' + (id ? 'details' : 'fetch') : '')
-  )
+    // indicates the ation suffix like "details", "fetch" or "propagates"
+    (action ? '/' + action : ''))
   const queryString = id ? '' : buildQueryString(params)
   return `${API_PREFIX}/${app}/${type}${suffix}.${format}?${queryString}`
 }
@@ -155,7 +144,7 @@ export const buildQueryString = (params = {}) => (
  * Returns the path to go to any Surveys page
  *
  * @param {string} action       - action: `list` (default), `view`, `add`, `edit`
- * @param {number} id           - mapping/survey id
+ * @param {number} id           - project/survey id
  */
 export const getSurveysPath = ({action, id}) => {
   switch (action) {

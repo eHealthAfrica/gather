@@ -26,9 +26,9 @@ import { AppIntl } from './components'
 import SurveyDispatcher from './survey'
 
 /*
-This is the surveys/surveys app.
+This is the projects/surveys app.
 
-An Aether "Mapping" is equivalent to a Gather "Survey".
+An Aether "Project" is equivalent to a Gather "Survey".
 */
 
 const appElement = document.getElementById('surveys-app')

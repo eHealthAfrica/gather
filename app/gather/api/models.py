@@ -24,8 +24,7 @@ from collections import namedtuple
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from solo.models import SingletonModel
-
+from django.utils.translation import ugettext as _
 
 from ..settings import AETHER_APPS
 
@@ -41,10 +40,27 @@ class UserTokens(models.Model):
     User auth tokens to connect to the different apps.
     '''
 
-    user = models.OneToOneField(to=get_user_model(), primary_key=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        to=get_user_model(),
+        primary_key=True,
+        on_delete=models.CASCADE,
+        verbose_name=_('user')
+    )
 
-    kernel_token = models.CharField(max_length=40, null=True, blank=True)
-    odk_token = models.CharField(max_length=40, null=True, blank=True)
+    kernel_token = models.CharField(
+        max_length=40,
+        null=True,
+        blank=True,
+        verbose_name=_('Aether Kernel token'),
+        help_text=_('This token corresponds to an Aether Kernel authorization token linked to this user.'),
+    )
+    odk_token = models.CharField(
+        max_length=40,
+        null=True,
+        blank=True,
+        verbose_name=_('Aether ODK token'),
+        help_text=_('This token corresponds to an Aether ODK token authorization linked to this user.'),
+    )
 
     def get_app_url(self, app_name):
         '''
@@ -173,36 +189,37 @@ class UserTokens(models.Model):
     class Meta:
         app_label = 'gather'
         default_related_name = 'app_tokens'
-
-
-class Project(SingletonModel):
-    '''
-    Database link to an Aether Kernel Project model
-    '''
-    project_id = models.UUIDField(default=uuid.uuid4)
-    project_name = models.TextField(max_length=50)
+        verbose_name = _('user authorization tokens')
+        verbose_name_plural = _('users authorization tokens')
 
 
 class Survey(models.Model):
     '''
-    Database link of a Aether Kernel Mapping
+    Database link of a Aether Kernel Project
     '''
 
     # This is needed to match data with kernel
     # (there is a one to one relation)
-    mapping_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    name = models.TextField(null=True, blank=True, default='')
+    project_id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        verbose_name=_('project ID'),
+        help_text=_('This ID corresponds to an Aether Kernel project ID.'),
+    )
+    name = models.TextField(null=True, blank=True, default='', verbose_name=_('name'))
 
     @property
-    def survey_id(self):  # pragma: no cover
-        return self.mapping_id
+    def survey_id(self):
+        return self.project_id or ''
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         return self.name
 
     class Meta:
         app_label = 'gather'
         default_related_name = 'surveys'
+        verbose_name = _('survey')
+        verbose_name_plural = _('surveys')
 
 
 class Mask(models.Model):
@@ -212,15 +229,21 @@ class Mask(models.Model):
     Indicates the submission columns to display in all views and downloads.
     '''
 
-    survey = models.ForeignKey(to=Survey, on_delete=models.CASCADE)
+    survey = models.ForeignKey(to=Survey, on_delete=models.CASCADE, verbose_name=_('survey'))
 
-    name = models.TextField()
-    columns = ArrayField(base_field=models.TextField())
+    name = models.TextField(verbose_name=_('name'))
+    columns = ArrayField(
+        base_field=models.TextField(verbose_name=_('column internal name')),
+        verbose_name=_('masked columns'),
+        help_text=_('Comma separated list of column internal names')
+    )
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         return '{} - {}'.format(str(self.survey), self.name)
 
     class Meta:
         app_label = 'gather'
         default_related_name = 'masks'
         unique_together = ('survey', 'name')
+        verbose_name = _('mask')
+        verbose_name_plural = _('masks')

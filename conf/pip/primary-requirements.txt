@@ -12,12 +12,12 @@
 # Main libraries
 django
 django-cors-headers
-django-solo
 django-webpack-loader
 djangorestframework
 psycopg2-binary
 requests
 uwsgi
+
 
 # UMS
 django-cas-ng

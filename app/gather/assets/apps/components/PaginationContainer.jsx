@@ -23,6 +23,7 @@ import { FormattedMessage } from 'react-intl'
 
 import { getData } from '../utils/request'
 import { buildQueryString } from '../utils/paths'
+import { isMounted } from '../utils/dom'
 
 import EmptyAlert from './EmptyAlert'
 import FetchErrorAlert from './FetchErrorAlert'
@@ -87,16 +88,16 @@ export default class PaginationContainer extends Component {
     const url = `${this.props.url}${sep}${buildQueryString({page, pageSize, search})}`
 
     return getData(url)
-      .then((response) => {
-        this.setState({
+      .then(response => {
+        isMounted(this) && this.setState({
           list: response,
           isLoading: false,
           isRefreshing: false,
           error: null
         })
       })
-      .catch((error) => {
-        this.setState({
+      .catch(error => {
+        isMounted(this) && this.setState({
           isLoading: false,
           isRefreshing: false,
           error

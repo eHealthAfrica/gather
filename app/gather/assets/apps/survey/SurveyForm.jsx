@@ -22,7 +22,7 @@ import React, { Component } from 'react'
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
 import { clone, deepEqual } from '../utils'
-import { deleteData, postData, putData } from '../utils/request'
+import { deleteData, postData, putData, patchData } from '../utils/request'
 import {
   getMediaFileAPIPath,
   getSurveysAPIPath,
@@ -30,7 +30,7 @@ import {
   getXFormsAPIPath
 } from '../utils/paths'
 import { ODK_ACTIVE } from '../utils/env'
-import { ODK_APP } from '../utils/constants'
+import { ODK_APP, GATHER_APP } from '../utils/constants'
 
 import { ConfirmButton, ErrorAlert, Portal } from '../components'
 import SurveyODKForm from './SurveyODKForm'
@@ -70,6 +70,10 @@ const MESSAGES = defineMessages({
     defaultMessage: 'Saving survey “{name}” in ODK',
     id: 'survey.form.action.save.odk.survey'
   },
+  propagateODKSurvey: {
+    defaultMessage: 'Generating artefacts for survey “{name}”',
+    id: 'survey.form.action.propagate.odk.survey'
+  },
   saveODKXForm: {
     defaultMessage: 'Saving xform “{name}” in ODK',
     id: 'survey.form.action.save.odk.xform'
@@ -99,6 +103,11 @@ const MESSAGES = defineMessages({
   handleDone: {
     defaultMessage: 'Done!',
     id: 'survey.form.action.handle.done'
+  },
+
+  errorWhile: {
+    defaultMessage: 'An error occurred while: {action}',
+    id: 'survey.form.action.handle.error'
   }
 })
 
@@ -111,8 +120,7 @@ class SurveyForm extends Component {
       ...survey,
       errors: {},
       isUpdating: false,
-      actionsInProgress: [],
-      project: props.project
+      actionsInProgress: []
     }
 
     if (ODK_ACTIVE) {
@@ -201,14 +209,14 @@ class SurveyForm extends Component {
 
     return (
       <div className='actions'>
-        { (this.props.survey && this.props.survey.id) &&
+        { this.state.id &&
           <div>
             <ConfirmButton
               className='btn btn-delete'
               cancelable
               onConfirm={this.onDelete.bind(this)}
               title={this.renderTitle()}
-              message={formatMessage(MESSAGES.deleteConfirm, {...this.props.survey})}
+              message={formatMessage(MESSAGES.deleteConfirm, {name: this.state.name})}
               buttonLabel={formatMessage(MESSAGES.deleteButton)}
             />
           </div>
@@ -283,112 +291,169 @@ class SurveyForm extends Component {
   }
 
   onCancel () {
-    if (this.props.survey) {
-      // navigate to Survey view page
-      window.location.pathname = getSurveysPath({action: 'view', id: this.props.survey.id})
+    if (this.state.id) {
+      this.backToView()
     } else {
-      // navigate to Surveys list page
-      window.location.pathname = getSurveysPath({action: 'list'})
+      this.backToList()
     }
-  }
-
-  onSubmit (event) {
-    event.preventDefault()
-    this.setState({ errors: {} })
-
-    const {formatMessage} = this.props.intl
-    const survey = {
-      definition: {},
-      id: this.state.id,
-      name: this.state.name,
-      project: this.props.project.id,
-      // FIXME: "revision" field refers to Aether mapping revisions.
-      // This should be auto-incremented every time the Survey/Mapping
-      // edited.
-      // See: https://jira.ehealthafrica.org/browse/AET-124
-      revision: '1'
-    }
-
-    const saveMethod = (survey.id ? putData : postData)
-    const url = getSurveysAPIPath({id: survey.id})
-
-    this.setState({
-      isUpdating: true,
-      actionsInProgress: [
-        formatMessage(MESSAGES.saveKernelSurvey, {name: survey.name})
-      ]
-    })
-    return saveMethod(url, survey)
-      .then(response => {
-        if (ODK_ACTIVE) {
-          this.setState({
-            id: response.id, // update state with new id
-            actionsInProgress: [
-              ...this.state.actionsInProgress,
-              formatMessage(MESSAGES.handleDone),
-              formatMessage(MESSAGES.saveODKSurvey, {name: survey.name})
-            ]
-          })
-
-          return this.onSubmitODK(response)
-        } else {
-          this.backToView(response)
-        }
-      })
-      .catch(this.handleError.bind(this))
   }
 
   onDelete () {
     const {formatMessage} = this.props.intl
-    const {survey} = this.props
-    const handleError = (error) => { this.handleError(error, 'delete') }
+    const survey = this.state
+
+    const afterDelete = () => {
+      this.setState({
+        actionsInProgress: [
+          ...this.state.actionsInProgress,
+          formatMessage(MESSAGES.handleDone)
+        ]
+      })
+
+      this.backToList()
+    }
+
+    const afterGatherDelete = () => {
+      if (!ODK_ACTIVE) {
+        return afterDelete()
+      }
+
+      this.setState({
+        actionsInProgress: [
+          ...this.state.actionsInProgress,
+          formatMessage(MESSAGES.handleDone),
+          formatMessage(MESSAGES.deleteODKSurvey, {name: survey.name})
+        ]
+      })
+
+      // delete ODK survey and continue
+      deleteData(getSurveysAPIPath({app: ODK_APP, id: survey.id}))
+        .then(afterDelete)
+        // ignore ODK errors (it might not exist)
+        .catch(afterDelete)
+    }
 
     this.setState({
+      errors: {},
       isUpdating: true,
       actionsInProgress: [
         formatMessage(MESSAGES.deleteKernelSurvey, {name: survey.name})
       ]
     })
 
-    return deleteData(getSurveysAPIPath({id: survey.id}))
+    // delete Kernel survey and continue
+    deleteData(getSurveysAPIPath({id: survey.id}))
       .then(() => {
-        if (ODK_ACTIVE) {
-          // remove it also in ODK
-          this.setState({ actionsInProgress: [
-            ...this.state.actionsInProgress,
-            formatMessage(MESSAGES.handleDone),
-            formatMessage(MESSAGES.deleteODKSurvey, {name: survey.name})
-          ] })
-
-          return this.onDeleteODK()
-        } else {
-          this.backToList()
-        }
+        // delete also Gather survey and continue
+        deleteData(getSurveysAPIPath({app: GATHER_APP, id: survey.id}))
+          .then(afterGatherDelete)
+          // ignore Gather errors (it might not exist)
+          .catch(afterGatherDelete)
       })
-      .catch(handleError)
+      .catch(error => { this.handleError(error, 'delete') })
   }
 
-  onSubmitODK (kernelSurvey) {
+  onSubmit (event) {
+    event.preventDefault()
+
+    const {formatMessage} = this.props.intl
+    const survey = {
+      id: this.state.id,
+      name: this.state.name
+    }
+
+    const saveMethod = (survey.id ? putData : postData)
+    const url = getSurveysAPIPath({id: survey.id})
+
+    this.setState({
+      errors: {},
+      isUpdating: true,
+      actionsInProgress: [
+        formatMessage(MESSAGES.saveKernelSurvey, {name: survey.name})
+      ]
+    })
+
+    saveMethod(url, survey)
+      .then(response => {
+        this.setState({
+          // update state with new values
+          ...response,
+          actionsInProgress: [
+            ...this.state.actionsInProgress,
+            formatMessage(MESSAGES.handleDone)
+          ]
+        }, () => {
+          if (!ODK_ACTIVE) {
+            return this.backToView()
+          }
+
+          if (!this.props.survey) {
+            // replace history in address bar in case of adding with the new id
+            // https://developer.mozilla.org/en-US/docs/Web/API/History_API#The_replaceState()_method
+            const newUrl = getSurveysPath({action: 'edit', id: response.id})
+            window.history.replaceState(null, '', newUrl)
+          }
+
+          this.onSubmitODK()
+        })
+      })
+      .catch(this.handleError.bind(this))
+  }
+
+  onSubmitODK () {
+    const {formatMessage} = this.props.intl
     const survey = this.state.odk
 
     // save changes in ODK
-    const saveMethod = (survey.mapping_id ? putData : postData)
-    const saveUrl = getSurveysAPIPath({app: ODK_APP, id: survey.mapping_id})
+    const saveMethod = (survey.project_id ? putData : postData)
+    const saveUrl = getSurveysAPIPath({app: ODK_APP, id: survey.project_id})
 
     const odkSurvey = {
-      mapping_id: kernelSurvey.id,
-      name: kernelSurvey.name,
+      project_id: this.state.id,
+      name: this.state.name,
       surveyors: this.state.odk.surveyors
     }
 
-    return saveMethod(saveUrl, odkSurvey)
-      .then(this.onSubmitODKXForms.bind(this))
-      .catch(this.handleODKError.bind(this))
+    this.setState({
+      actionsInProgress: [
+        ...this.state.actionsInProgress,
+        formatMessage(MESSAGES.saveODKSurvey, {name: odkSurvey.name})
+      ]
+    })
+
+    saveMethod(saveUrl, odkSurvey)
+      .then(response => {
+        this.setState({
+          odk: {
+            ...this.state.odk,
+            // update state with new values
+            project_id: response.project_id,
+            name: response.name,
+            surveyors: response.surveyors
+          },
+          actionsInProgress: [
+            ...this.state.actionsInProgress,
+            formatMessage(MESSAGES.handleDone)
+          ]
+        }, () => {
+          // continue with xforms and artefacts
+          this.onSubmitODKXForms()
+        })
+      })
+      .catch(error => {
+        this.setState({ isUpdating: false, actionsInProgress: [] })
+
+        if (error.content) {
+          this.setState({ errors: { odk: error.content } })
+        } else {
+          const generic = [formatMessage(MESSAGES.submitError, {name: odkSurvey.name})]
+          this.setState({ errors: { odk: { generic } } })
+        }
+      })
   }
 
-  onSubmitODKXForms (odkSurvey) {
+  onSubmitODKXForms () {
     const {formatMessage} = this.props.intl
-    this.setState({ odk: { ...this.state.odk, id: odkSurvey.mapping_id } }) // update state with new id
 
     // creates/updates/deletes the xforms+media files sequentially
     const actions = [] // list of actions to execute
@@ -399,13 +464,14 @@ class SurveyForm extends Component {
     // handle current xforms
     currentXForms.forEach(xform => {
       actions.push({
+        key: xform.key,
         message: formatMessage(MESSAGES.saveODKXForm, {name: xform.title}),
         method: xform.id ? putData : postData,
         url: getXFormsAPIPath({ id: xform.id }),
         data: {
           ...xform,
           xml_file: xform.file,
-          mapping: odkSurvey.mapping_id
+          project: this.state.id
         },
         options: { multipart: !!xform.file }
       })
@@ -422,6 +488,7 @@ class SurveyForm extends Component {
         .filter(mf => mf.file)
         .forEach(mf => {
           actions.push({
+            key: xform.key,
             message: formatMessage(MESSAGES.saveODKMediaFile, {name: mf.name}),
             method: postData,
             url: getMediaFileAPIPath({}),
@@ -443,6 +510,7 @@ class SurveyForm extends Component {
       deletedMediaFiles
         .forEach(mf => {
           actions.push({
+            key: xform.key,
             message: formatMessage(MESSAGES.deleteODKMediaFile, {name: mf.name}),
             method: deleteData,
             url: getMediaFileAPIPath({ id: mf.id })
@@ -451,93 +519,87 @@ class SurveyForm extends Component {
     })
 
     // get the list of deleted xforms (they are not in the current list)
-    const deletedXforms = formerXForms.filter(former => !currentXForms.find(current => current.id === former.id))
+    const deletedXforms = formerXForms
+      .filter(former => !currentXForms.find(current => current.id === former.id))
 
     // delete them
     deletedXforms.forEach(xform => {
       actions.push({
+        key: xform.key,
         message: formatMessage(MESSAGES.deleteODKXForm, {name: xform.title}),
         method: deleteData,
         url: getXFormsAPIPath({ id: xform.id })
       })
     })
 
-    if (actions.length === 0) {
-      this.backToView(odkSurvey)
-      return
-    }
+    // The last action is to propagate ODK Project artefacts to Kernel
+    actions.push({
+      message: formatMessage(MESSAGES.propagateODKSurvey, {name: this.state.name}),
+      method: patchData,
+      url: getSurveysAPIPath({ app: ODK_APP, id: this.state.id, action: 'propagates' })
+    })
 
-    return Promise.all(actions.map(action => {
+    const executeActions = () => {
+      if (!actions.length) {
+        return this.backToView()
+      }
+
+      // execute next action
+      const action = actions.shift()
       this.setState({ actionsInProgress: [
         ...this.state.actionsInProgress,
-        formatMessage(MESSAGES.handleDone),
         action.message
       ] })
+      action.method(action.url, action.data, action.options)
+        .then(response => {
+          this.setState({
+            actionsInProgress: [
+              ...this.state.actionsInProgress,
+              formatMessage(MESSAGES.handleDone)
+            ]
+          })
 
-      return action.method(action.url, action.data, action.options)
-    }))
-      .then(() => { this.backToView(odkSurvey) })
-      .catch(this.handleODKError.bind(this))
+          // recursive call
+          executeActions()
+        })
+        .catch(error => {
+          this.setState({ isUpdating: false, actionsInProgress: [] })
+          const generic = [formatMessage(MESSAGES.errorWhile, {action: action.message})]
+
+          if (action.key) {
+            this.setState({ errors: { odk: { generic, [action.key]: {...(error.content || {})} } } })
+          } else {
+            // this is the propagation error
+            this.setState({ errors: {generic, ...(error.content || {})} })
+          }
+        })
+    }
+    executeActions()
   }
 
-  onDeleteODK () {
-    return deleteData(getSurveysAPIPath({app: ODK_APP, id: this.props.survey.id}))
-      .then(this.backToList)
-      .catch(this.backToList) // ignore ODK errors???
-  }
-
-  handleODKError (error) {
-    return this.handleError(error, 'submit', 'odk')
-  }
-
-  handleError (error, action, nestedProperty) {
-    /**
-     * Handles the given error during the execution of the specific action.
-     * The error response object is assigned to `errors` or to some of its
-     * nested objects (defined by `nestedProperty`)
-     */
+  handleError (error, action) {
     const {formatMessage} = this.props.intl
-
     this.setState({ isUpdating: false, actionsInProgress: [] })
 
-    if (!error.message) {
-      console.log(error)
-      if (nestedProperty) {
-        this.setState({ errors: { [nestedProperty]: error } })
-      } else {
-        this.setState({ errors: error })
-      }
-      return
-    }
-
     if (error.content) {
-      if (nestedProperty) {
-        this.setState({ errors: { [nestedProperty]: error.content } })
-      } else {
-        this.setState({ errors: error.content })
-      }
+      this.setState({ errors: error.content })
     } else {
       const actionMessage = (action === 'delete')
         ? MESSAGES.deleteError
         : MESSAGES.submitError
       const generic = [formatMessage(actionMessage, {...this.state})]
-
-      if (nestedProperty) {
-        this.setState({ errors: { [nestedProperty]: { generic } } })
-      } else {
-        this.setState({ errors: { generic } })
-      }
+      this.setState({ errors: { generic } })
     }
   }
 
-  backToView (survey) {
+  backToView () {
     // navigate to Survey view page
-    window.location.pathname = getSurveysPath({action: 'view', id: (survey.id || survey.mapping_id)})
+    window.location.assign(getSurveysPath({action: 'view', id: this.state.id}))
   }
 
   backToList () {
     // navigate to Surveys list page
-    window.location.pathname = getSurveysPath({action: 'list'})
+    window.location.assign(getSurveysPath({action: 'list'}))
   }
 }
 

@@ -18,64 +18,7 @@
  * under the License.
  */
 
-const request = (
-  method, //                  GET, POST, PUT, PATCH, DELETE
-  url, //                     server url
-  // rest of options
-  {
-    payload = null, //        in case of POST, PUT, PATCH the payload
-    multipart = false, //     in case of POST, PUT, PATCH indicates if send as FormData
-    download = false, //      indicates if downloas the response as a file
-    fileName = 'download' //  in case of "download" the file name
-  }
-) => {
-  const inspectResponse = (resolve, reject, response) => {
-    // According to fetch docs: https://github.github.io/fetch/
-    // Note that the promise won't be rejected in case of HTTP 4xx or 5xx server responses.
-    // The promise will be resolved just as it would be for HTTP 2xx.
-    // Inspect the response.ok property within the resolved callback
-    // to add conditional handling of server errors to your code.
-
-    if (response.ok) {
-      // `DELETE` method returns a 204 status code without response content
-      if (response.status === 204) {
-        return resolve() // NO-CONTENT response
-      } else {
-        // file to download
-        if (download) {
-          return response
-            .blob()
-            .then(content => {
-              // triggers a file download by creating
-              // a link object and simulating a click event.
-              const a = document.createElement('a')
-              document.body.appendChild(a)
-              a.style = 'display: none'
-              a.download = fileName
-              a.href = window.URL.createObjectURL(content)
-              a.click()
-              window.URL.revokeObjectURL(url)
-            })
-            .then(() => resolve()) // NO-CONTENT response
-        }
-
-        return response
-          .json()
-          .then(content => resolve(content))
-      }
-    } else {
-      return response
-        .text()
-        .then(content => {
-          try {
-            reject({message: response.statusText, content: JSON.parse(content)})
-          } catch (e) {
-            reject({message: response.statusText, content})
-          }
-        })
-    }
-  }
-
+const buildFetchOptions = (method, payload, multipart) => {
   /* global jQuery */
   // See: https://docs.djangoproject.com/en/2.0/ref/csrf/
   const csrfToken = jQuery('[name=csrfmiddlewaretoken]').val()
@@ -126,10 +69,79 @@ const request = (
     }
   }
 
-  return new Promise((resolve, reject) => {
-    window.fetch(url, options).then(inspectResponse.bind(null, resolve, reject))
-  })
+  return options
 }
+
+const downloadLink = (content, fileName = 'download') => {
+  // triggers a file download by creating
+  // a link object and simulating a click event.
+  const link = document.createElement('a')
+  link.style = 'display: none'
+  link.download = fileName
+  link.href = window.URL.createObjectURL(content)
+
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  window.URL.revokeObjectURL(link.href)
+}
+
+const inspectResponse = ({download, fileName}, resolve, reject, response) => {
+  // According to fetch docs: https://github.github.io/fetch/
+  // Note that the promise won't be rejected in case of HTTP 4xx or 5xx server responses.
+  // The promise will be resolved just as it would be for HTTP 2xx.
+  // Inspect the response.ok property within the resolved callback
+  // to add conditional handling of server errors to your code.
+
+  if (response.status < 400) {
+    // `DELETE` method returns a 204 status code without response content
+    if (response.status === 204) {
+      return resolve() // NO-CONTENT response
+    }
+
+    // file to download
+    if (download) {
+      return response
+        .blob()
+        .then(content => {
+          downloadLink(content, fileName)
+          return resolve() // NO-CONTENT response
+        })
+    }
+
+    return response
+      .json()
+      .then(content => resolve(content))
+  } else {
+    return response
+      .text()
+      .then(content => {
+        const error = new Error(response.statusText)
+        try {
+          error.content = JSON.parse(content)
+        } catch (e) {
+          error.content = content
+        }
+        return reject(error)
+      })
+  }
+}
+
+const request = (
+  method, //      GET, POST, PUT, PATCH, DELETE
+  url, //         server url
+  // rest of options
+  {
+    payload, //   in case of POST, PUT, PATCH the payload
+    multipart, // in case of POST, PUT, PATCH indicates if send as FormData
+    download, //  indicates if download the response as a file
+    fileName //   in case of "download" the file name
+  }
+) => new Promise((resolve, reject) => {
+  window
+    .fetch(url, buildFetchOptions(method, payload, multipart))
+    .then(inspectResponse.bind(null, {download, fileName}, resolve, reject))
+})
 
 /**
  * Request DELETE from an url.
@@ -198,7 +210,7 @@ export const forceGetData = (url, postUrl, postPayload) => (
  *    ...
  *  ]
  *
- * Returns an object where each key is the name defined for
+ * Returns an object where each key is the name defined by
  * each url entry and the value is the response content.
  */
 export const fetchUrls = (urls) => Promise

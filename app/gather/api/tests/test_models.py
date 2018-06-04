@@ -21,7 +21,7 @@ import mock
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from ..models import UserTokens
+from ..models import UserTokens, Survey, Mask
 
 
 get_or_create_user_app_token = UserTokens.get_or_create_user_app_token
@@ -51,6 +51,26 @@ class MockResponse:
 
 
 class ModelsTests(TestCase):
+
+    def test__models(self):
+        survey = Survey.objects.create()
+
+        self.assertEquals(survey.project_id, survey.survey_id)
+        self.assertEquals(str(survey), '')
+
+        survey.name = 'Something'
+        survey.save()
+        self.assertEquals(str(survey), 'Something')
+
+        mask = Mask.objects.create(
+            survey=survey,
+            name='Masking',
+            columns=['a', 'b', 'c'],
+        )
+        self.assertEquals(str(mask), 'Something - Masking')
+
+
+class TokenModelsTests(TestCase):
 
     def setUp(self):
         username = 'test'

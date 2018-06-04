@@ -37,13 +37,11 @@
 ### Installation
 
 ```bash
-git clone git@github.com:eHealthAfrica/gather2.git
-cd gather2
+git clone git@github.com:eHealthAfrica/{repository-name}.git
+cd {repository-name}
 
 docker-compose build
 
-# create initial project linked to this instance
-docker-compose run kernel manage loaddata project.json
 ```
 
 Include this entry in your `/etc/hosts` file:
@@ -58,32 +56,35 @@ Include this entry in your `/etc/hosts` file:
 
 Most of the environment variables are set to default values. This is the short list
 of the most common ones with non default values. For more info take a look at the file
-[docker-compose.yml](docker-compose.yml)
+[docker-compose-base.yml](docker-compose-base.yml)
 
 
 #### Gather
 
-- `CSV_MAX_ROWS_SIZE`: `1048575` indicates the maximum number of rows to include in the CSV file.
-- `CSV_HEADER_RULES`: `replace;.;:;` More CSV header labels parser rules,
-  transforms header from `payload.None.a.b.c` to `a:b:c`.
-  Default rules are `remove-prefix;payload.,remove-prefix;None.,`, removes `payload.None.` prefixes.
-- `CSV_HEADER_RULES_SEP`: `;` rules divider. Default `:`. Include it if any of the rules uses `:`.
-  See more in `aether.common.drf.renderers.CustomCSVRenderer`.
-- `CAS_SERVER_URL`: `https://ums-dev.ehealthafrica.org` Used by UMS.
-- `HOSTNAME`: `gather.local` Used by UMS.
-- `RDS_DB_NAME`: `gather` Postgres database name.
-- `WEB_SERVER_PORT`: `8080` Web server port.
-- `AETHER_KERNEL_PROJECT_ID`: `d3ee41be-e696-424b-8b45-ab6a0d787f6a`
-  Aether Kernel Project linked to this Gather instance.
-- `AETHER_KERNEL_PROJECT_NAME`: `Aether Sample Project` Refers the linked project name.
-- `AETHER_MODULES`: `odk,` Comma separated list with the available modules.
-  To avoid confusion, the values will match the container name, `odk`.
-- `AETHER_KERNEL_TOKEN`: `a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24` Token to connect to Aether Kernel Server.
-- `AETHER_KERNEL_URL`: `http://kernel:8001` Aether Kernel Server url.
-- `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9001` Aether Kernel Testing Server url.
-- `AETHER_ODK_TOKEN`: `d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1` Token to connect to Aether ODK Server.
-- `AETHER_ODK_URL`: `http://odk:8443` Aether ODK Server url.
-- `AETHER_ODK_URL_TEST`: `http://odk-test:9002` Aether ODK Testing Server url.
+- CSV export:
+  - `CSV_MAX_ROWS_SIZE`: `1048575` indicates the maximum number of rows to include in the CSV file.
+  - `CSV_HEADER_RULES`: `replace;.;:;` More CSV header labels parser rules,
+    transforms header from `payload.None.a.b.c` to `a:b:c`.
+    Default rules are `remove-prefix;payload.,remove-prefix;None.,`, removes `payload.None.` prefixes.
+  - `CSV_HEADER_RULES_SEP`: `;` rules divider. Default `:`. Include it if any of the rules uses `:`.
+    See more in `aether.common.drf.renderers.CustomCSVRenderer`.
+- Authentication (UMS):
+  - `CAS_SERVER_URL`: `https://ums-dev.ehealthafrica.org`.
+  - `HOSTNAME`: `gather.local`.
+- Django specific:
+  - `RDS_DB_NAME`: `gather` Postgres database name.
+  - `WEB_SERVER_PORT`: `8080` Web server port.
+- Aether specific:
+  - `AETHER_MODULES`: `odk,` Comma separated list with the available modules.
+    To avoid confusion, the values will match the container name, `odk`.
+  - Aether Kernel:
+    - `AETHER_KERNEL_TOKEN`: `a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24` Token to connect to Aether Kernel Server.
+    - `AETHER_KERNEL_URL`: `http://kernel:8001` Aether Kernel Server url.
+    - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9001` Aether Kernel Testing Server url.
+  - Aether ODK:
+    - `AETHER_ODK_TOKEN`: `d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1` Token to connect to Aether ODK Server.
+    - `AETHER_ODK_URL`: `http://odk:8443` Aether ODK Server url.
+    - `AETHER_ODK_URL_TEST`: `http://odk-test:9002` Aether ODK Testing Server url.
 
 
 ## Usage
@@ -144,10 +145,10 @@ The available options depend on each container.
 
 #### Token Authentication
 
-The communication between the containers is done via
+The communication between the servers is done via
 [token authentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication).
 
-In `gather` there are tokens per user to connect to other containers.
+In `gather` there are tokens per user to connect to other servers.
 This means that every time a logged in user tries to visit any page that requires
 to fetch data from any of the other apps, `aether-kernel` and/or `aether-odk`,
 the system will verify that the user token for that app is valid or will request
@@ -161,7 +162,7 @@ track the user actions.
 ## Development
 
 All development should be tested within the container, but developed in the host folder.
-Read the `docker-compose.yml` file to see how it's mounted.
+Read the [docker-compose-base.yml](docker-compose-base.yml) file to see how it's mounted.
 
 *[Return to TOC](#table-of-contents)*
 
@@ -174,26 +175,7 @@ activate the UMS integration in each container.
 If a valid `AETHER_KERNEL_TOKEN` and `AETHER_KERNEL_URL` combination is not set,
 the server will still start, but all connections to Aether Kernel Server will fail.
 
-To check if it is possible to connect to Aether Kernel with those variables
-visit the entrypoint `/check-kernel` (no credentials needed).
-If the response is `Always Look on the Bright Side of Life!!!`
-it's not possible to connect, on the other hand if the message is
-`Brought to you by eHealth Africa - good tech for hard places` everything goes fine.
-
-Infrastructure deployment is done with Terraform, which configuration
-files are stored in [terraform](terraform) directory.
-
-Application deployment is managed by AWS Elastic Container Service and is
-being done automatically on the following branches/environments:
-
-- branch `develop` is deployed to `dev` environment.
-  [![Build Status](https://travis-ci.com/eHealthAfrica/gather2.svg?token=Rizk7xZxRNoTexqsQfXy&branch=develop)](https://travis-ci.com/eHealthAfrica/gather2)
-
-- branch `staging` is deployed to `staging` environment.
-  [![Build Status](https://travis-ci.com/eHealthAfrica/gather2.svg?token=Rizk7xZxRNoTexqsQfXy&branch=staging)](https://travis-ci.com/eHealthAfrica/gather2)
-
-- branch `master` is deployed to `prod` environment.
-  [![Build Status](https://travis-ci.com/eHealthAfrica/gather2.svg?token=Rizk7xZxRNoTexqsQfXy&branch=master)](https://travis-ci.com/eHealthAfrica/gather2)
+This also applies to Aether ODK module.
 
 *[Return to TOC](#table-of-contents)*
 
@@ -221,9 +203,9 @@ All of the containers definition for development can be found in the
 
 ## Run commands in the containers
 
-Each docker container uses the same script as entrypoint. The `entrypoint.sh`
+The [entrypoint.sh](app/entrypoint.sh)
 script offers a range of commands to start services or run commands.
-The full list of commands can be seen in the script.
+The full list of commands can be seen in the script file.
 
 The pattern to run a command is always
 ``docker-compose run <container-name> <entrypoint-command> <...args>``
@@ -266,7 +248,7 @@ docker-compose -f docker-compose-test.yml up -d <container-name>-test
 **WARNING**
 
 Never run `gather` tests against any PRODUCTION server.
-The tests clean up will **DELETE ALL MAPPINGS!!!**
+The tests clean up will **DELETE ALL PROJECTS!!!**
 
 Look into [docker-compose-base.yml](docker-compose-base.yml), the variable
 `AETHER_KERNEL_URL_TEST` indicates the Aether Kernel Server used in tests.

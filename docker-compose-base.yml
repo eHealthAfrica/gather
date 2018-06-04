@@ -22,7 +22,6 @@ services:
       # media folders per container
       - ./tmp/kernel:/media/kernel
       - ./tmp/odk:/media/odk
-      - ./tmp/gather:/media/gather
     ports:
       - "80:80"
 
@@ -50,8 +49,6 @@ services:
     volumes:
       # media folder
       - ./tmp/kernel:/media
-      # initial project fixture
-      - ./conf/extras/aether_project.json:/code/aether/kernel/fixtures/project.json
     ports:
       - "8001:8001"
     command: start_dev
@@ -126,9 +123,6 @@ services:
       CSV_HEADER_RULES_SEP: ;
       CSV_MAX_ROWS_SIZE: 1000
 
-      # Do not buffer python stdout so we see log output immediatly
-      PYTHONUNBUFFERED: ""
-
       WEB_SERVER_PORT: 8000
     volumes: &gather-volumes
       #################################################
@@ -145,9 +139,6 @@ services:
       - ./app/entrypoint.sh:/code/entrypoint.sh
       - ./app/manage.py:/code/manage.py
       - ./app/package.json:/code/package.json
-
-      # media folder
-      - ./tmp/gather:/media
     ports:
       - "8000:8000"
     command: start_dev

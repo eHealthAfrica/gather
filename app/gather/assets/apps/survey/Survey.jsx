@@ -140,7 +140,7 @@ export default class Survey extends Component {
         </div>
         <PaginationContainer
           pageSize={pageSize}
-          url={getSubmissionsAPIPath({mapping: survey.id, ordering: '-created'})}
+          url={getSubmissionsAPIPath({project: survey.id, ordering: '-created'})}
           position='top'
           listComponent={SubmissionComponent}
           search
@@ -159,9 +159,10 @@ export default class Survey extends Component {
     const pageSize = CSV_MAX_ROWS_SIZE || MAX_PAGE_SIZE
     const sep = CSV_HEADER_RULES_SEP
     const params = {
-      mapping: survey.id,
+      ordering: '-created',
+      project: survey.id,
       fields: 'created,payload',
-      // using different format than `json` will build the "post as get" API path
+      action: 'fetch', // this will build the "post as get" API path
       format: 'csv',
       pageSize
     }
@@ -261,7 +262,7 @@ export default class Survey extends Component {
         url: getSurveysAPIPath({ app: GATHER_APP, id: this.props.survey.id }),
         force: {
           url: getSurveysAPIPath({ app: GATHER_APP }),
-          data: { mapping_id: this.props.survey.id, name: this.props.survey.name }
+          data: { project_id: this.props.survey.id, name: this.props.survey.name }
         }
       }
     ]

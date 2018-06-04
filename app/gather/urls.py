@@ -25,7 +25,6 @@ from django.views.generic import TemplateView
 # Any entry here needs the decorator `tokens_required` if it's going to execute
 # AJAX request to any of the other apps
 from .api.decorators import tokens_required
-from .api.views import empty
 from .views import health
 
 
@@ -67,7 +66,7 @@ urlpatterns = [
          login_required(TemplateView.as_view(template_name='pages/tokens.html')),
          name='tokens'),
     # to check if the user tokens are valid
-    path('check-tokens', login_required(tokens_required(empty)), name='check-tokens'),
+    path('check-tokens', login_required(tokens_required(health)), name='check-tokens'),
 
     re_path(r'^surveys/(?P<action>\w+)/(?P<survey_id>[0-9a-f-]+)?$',
             login_required(tokens_required(TemplateView.as_view(template_name='pages/surveys.html'))),

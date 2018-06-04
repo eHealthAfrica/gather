@@ -16,14 +16,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import mock
 import json
-import os
+import mock
 
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.test import TestCase, RequestFactory
-from django.core.management import call_command
+from django.urls import reverse
 
 from ..views import TokenProxyView
 
@@ -283,12 +281,3 @@ class ViewsTest(TestCase):
                 'X-Method': 'GET',
             }
         )
-
-    def test_project_view(self):
-        # Redirect to /dev/null in order to not clutter the test log.
-        out = open(os.devnull, 'w')
-        call_command('setup_aether_project', stdout=out)
-        url = reverse('gather:project-view')
-        self.client.login(username='test', password='testtest')
-        response = self.client.get(url, content_type='application/json')
-        self.assertEqual(response.status_code, 200)

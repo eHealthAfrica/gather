@@ -22,6 +22,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
+from django.utils.translation import ugettext as _
 
 
 class Command(BaseCommand):
@@ -33,7 +34,7 @@ class Command(BaseCommand):
             '--username',
             '-u',
             type=str,
-            help='Set the admin username',
+            help=_('Set the admin username'),
             dest='username',
             action='store',
             required=False,
@@ -43,7 +44,7 @@ class Command(BaseCommand):
             '--password',
             '-p',
             type=str,
-            help='Set the admin password',
+            help=_('Set the admin password'),
             dest='password',
             action='store',
             required=True,
@@ -52,7 +53,7 @@ class Command(BaseCommand):
             '--email',
             '-e',
             type=str,
-            help='Set the admin e-mail',
+            help=_('Set the admin e-mail'),
             dest='email',
             action='store',
             required=False,
@@ -62,7 +63,7 @@ class Command(BaseCommand):
             '--token',
             '-t',
             type=str,
-            help='Set the admin token',
+            help=_('Set the admin token'),
             dest='token',
             action='store',
             required=False,
@@ -83,13 +84,13 @@ class Command(BaseCommand):
         # create admin user if needed
         if not user_model.filter(username=username).exists():
             user_model.create_superuser(username, email, password)
-            print('Created admin user "{username}"'.format(username=username))
+            print(_('Created admin user "{username}"').format(username=username))
 
         # update password
         admin = user_model.get(username=username)
         admin.set_password(password)
         admin.save()
-        print('Updated admin user "{username}"'.format(username=username))
+        print(_('Updated admin user "{username}"').format(username=username))
 
         # Skips if no given token or the auth token app is not installed
         if token_key and 'rest_framework.authtoken' in settings.INSTALLED_APPS:
@@ -99,4 +100,4 @@ class Command(BaseCommand):
             Token.objects.filter(user=admin).delete()
             # assign token value
             Token.objects.create(user=admin, key=token_key)
-            print('Created token for admin user "{username}"'.format(username=username))
+            print(_('Created token for admin user "{username}"').format(username=username))

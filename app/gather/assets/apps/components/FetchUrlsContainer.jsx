@@ -19,7 +19,9 @@
  */
 
 import React, { Component } from 'react'
+
 import { fetchUrls } from '../utils/request'
+import { isMounted } from '../utils/dom'
 
 import EmptyAlert from './EmptyAlert'
 import FetchErrorAlert from './FetchErrorAlert'
@@ -75,17 +77,17 @@ export default class FetchUrlsContainer extends Component {
 
   loadData () {
     return fetchUrls(this.props.urls)
-      .then((response) => {
+      .then(response => {
         const {handleResponse} = this.props
-        this.setState({
+        isMounted(this) && this.setState({
           response: handleResponse ? handleResponse(response) : response,
           isLoading: false,
           isRefreshing: false,
           error: null
         })
       })
-      .catch((error) => {
-        this.setState({
+      .catch(error => {
+        isMounted(this) && this.setState({
           isLoading: false,
           isRefreshing: false,
           error

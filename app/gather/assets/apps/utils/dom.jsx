@@ -11,17 +11,20 @@
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
+ * software distributed under the License is distributed on anx
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
 
-import { getSurveysPath } from './utils/paths'
+import ReactDOM from 'react-dom'
 
-/*
-This is the home app -> skip welcome screen and go straight to list of surveys
-*/
-
-window.location.assign(getSurveysPath({}))
+export const isMounted = (Component) => {
+  try {
+    ReactDOM.findDOMNode(Component)
+    return true
+  } catch (e) {
+    return false
+  }
+}

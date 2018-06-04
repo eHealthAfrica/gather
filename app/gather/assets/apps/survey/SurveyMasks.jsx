@@ -27,9 +27,43 @@ import { getMasksAPIPath } from '../utils/paths'
 import { ConfirmButton, Portal } from '../components'
 
 const MESSAGES = defineMessages({
+  all: {
+    defaultMessage: 'All',
+    id: 'survey.mask.preset.all'
+  },
+  none: {
+    defaultMessage: 'None',
+    id: 'survey.mask.preset.none'
+  },
+  custom: {
+    defaultMessage: 'Custom',
+    id: 'survey.mask.preset.custom'
+  },
+
   namePlaceholder: {
     defaultMessage: 'Mask name',
     id: 'survey.mask.form.name.placeholder'
+  },
+  confirmDelete: {
+    defaultMessage: 'Are you sure you want to delete this mask?',
+    id: 'survey.mask.preset.delete.confirm'
+  },
+
+  messageTitle: {
+    defaultMessage: 'Mask “{name}”',
+    id: 'survey.mask.preset.message.title'
+  },
+  deleteError: {
+    defaultMessage: 'An error occurred while deleting this mask.',
+    id: 'survey.mask.preset.delete.error.unknown'
+  },
+  submitError: {
+    defaultMessage: 'An error occurred while saving this mask.',
+    id: 'survey.mask.preset.save.error.unknown'
+  },
+  duplicatedError: {
+    defaultMessage: 'This mask name is already in use.',
+    id: 'survey.mask.preset.save.error.duplicated'
   }
 })
 
@@ -67,13 +101,12 @@ class SurveyMasks extends Component {
   }
 
   buildStateWithProps (props, includeColumns = false) {
+    const {formatMessage} = props.intl
     const newState = {
       masks: [
         {
           id: -2,
-          name: <FormattedMessage
-            id='survey.mask.preset.all'
-            defaultMessage='All' />,
+          name: formatMessage(MESSAGES.all),
           columns: []
         },
 
@@ -81,9 +114,7 @@ class SurveyMasks extends Component {
 
         {
           id: -1,
-          name: <FormattedMessage
-            id='survey.mask.preset.none'
-            defaultMessage='None' />,
+          name: formatMessage(MESSAGES.none),
           columns: [...props.columns]
         }
       ]
@@ -119,11 +150,10 @@ class SurveyMasks extends Component {
   }
 
   render () {
+    const {formatMessage} = this.props.intl
     const currentMask = this.state.masks.find(mask => this.isMaskSelected(mask)) || {
       id: 0,
-      name: <FormattedMessage
-        id='survey.mask.preset.custom'
-        defaultMessage='Custom' />
+      name: formatMessage(MESSAGES.custom)
     }
 
     return (
@@ -170,6 +200,7 @@ class SurveyMasks extends Component {
   }
 
   renderMasksList () {
+    const {formatMessage} = this.props.intl
     const getClassName = (mask) => (this.isMaskSelected(mask) ? 'active' : '')
     const selectMaskColumns = (mask) => {
       const columns = {}
@@ -196,15 +227,10 @@ class SurveyMasks extends Component {
                   (mask.id > 0) &&
                   <ConfirmButton
                     className='btn btn-sm icon-only preset-delete'
-                    title={mask.name}
+                    title={formatMessage(MESSAGES.messageTitle, {...mask})}
                     buttonLabel={<i className='fas fa-times' />}
                     cancelable
-                    message={
-                      <FormattedMessage
-                        id='survey.mask.preset.delete.question'
-                        defaultMessage='Are you sure you want to delete this mask?'
-                      />
-                    }
+                    message={formatMessage(MESSAGES.confirmDelete)}
                     onConfirm={() => this.onDelete(mask)}
                   />
                 }
@@ -284,20 +310,17 @@ class SurveyMasks extends Component {
 
   onSubmit (event) {
     event.preventDefault()
+    const {formatMessage} = this.props.intl
 
     const mask = {
-      survey: this.props.survey.mapping_id,
+      survey: this.props.survey.project_id,
       name: document.getElementById('mask-name').value,
       columns: Object.keys(this.state.columns)
         .filter(key => this.state.columns[key])
     }
 
-    const errorTitle = <FormattedMessage
-      id='survey.mask.preset.save.error'
-      defaultMessage='Error saving mask' />
-    const defaultErrorBody = <FormattedMessage
-      id='survey.mask.preset.save.error.unknown'
-      defaultMessage='There was an error saving this mask' />
+    const errorTitle = formatMessage(MESSAGES.messageTitle, {...mask})
+    const defaultErrorBody = formatMessage(MESSAGES.submitError)
 
     return postData(getMasksAPIPath({}), mask)
       .then(this.props.reload)
@@ -307,9 +330,7 @@ class SurveyMasks extends Component {
             message: {
               title: errorTitle,
               body: (error.content.non_field_errors
-                ? <FormattedMessage
-                  id='survey.mask.preset.save.error.duplicated'
-                  defaultMessage='This mask name is already in use' />
+                ? formatMessage(MESSAGES.duplicatedError)
                 : defaultErrorBody
               )
             }
@@ -326,15 +347,15 @@ class SurveyMasks extends Component {
   }
 
   onDelete (mask) {
+    const {formatMessage} = this.props.intl
+
     return deleteData(getMasksAPIPath({id: mask.id}))
       .then(this.props.reload)
       .catch(() => {
         this.setState({
           message: {
-            title: mask.name,
-            body: <FormattedMessage
-              id='survey.mask.preset.delete.error.unknown'
-              defaultMessage='There was an error deleting this mask' />
+            title: formatMessage(MESSAGES.messageTitle, {...mask}),
+            body: formatMessage(MESSAGES.deleteError)
           }
         })
       })

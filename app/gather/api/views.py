@@ -18,12 +18,10 @@
 
 import requests
 
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.views import View
 
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
 
 from ..settings import AETHER_APPS
 from . import models, serializers
@@ -181,21 +179,3 @@ class MaskViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.MaskSerializer
     search_fields = ('survey__name', 'name', 'columns',)
     ordering = ('survey', 'name',)
-
-
-def empty(*args, **kwargs):
-    '''
-    Return empty JSON
-    '''
-
-    return JsonResponse({})
-
-
-@login_required
-@api_view(http_method_names=['GET'])
-def project_view(request):
-    project = models.Project.objects.first()
-    return JsonResponse({
-        'id': project.project_id,
-        'name': project.project_name,
-    })
