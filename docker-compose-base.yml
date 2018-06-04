@@ -119,7 +119,7 @@ services:
       RDS_PORT: 5432
       RDS_USERNAME: postgres
 
-      CSV_HEADER_RULES: replace;.;:;
+      CSV_HEADER_RULES: remove-prefix;payload.,remove-prefix;None.,replace;.;:;
       CSV_HEADER_RULES_SEP: ;
       CSV_MAX_ROWS_SIZE: 1000
 

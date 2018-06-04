@@ -93,7 +93,7 @@ module.exports = (custom) => ({
       AETHER_KERNEL_URL: '/kernel',
       AETHER_MODULES: 'kernel',
       AETHER_ODK_URL: null,
-      CSV_HEADER_RULES: '',
+      CSV_HEADER_RULES: 'remove-prefix:payload.,remove-prefix:None.',
       CSV_HEADER_RULES_SEP: ':',
       CSV_MAX_ROWS_SIZE: '10000'
     }),

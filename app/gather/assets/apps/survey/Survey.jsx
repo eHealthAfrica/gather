@@ -143,7 +143,6 @@ export default class Survey extends Component {
           url={getSubmissionsAPIPath({project: survey.id, ordering: '-created'})}
           position='top'
           listComponent={SubmissionComponent}
-          search
           showPrevious
           showNext
           extras={extras}
@@ -157,7 +156,6 @@ export default class Survey extends Component {
     const {total, allColumns, selectedColumns} = this.state
 
     const pageSize = CSV_MAX_ROWS_SIZE || MAX_PAGE_SIZE
-    const sep = CSV_HEADER_RULES_SEP
     const params = {
       ordering: '-created',
       project: survey.id,
@@ -167,10 +165,8 @@ export default class Survey extends Component {
       pageSize
     }
     const payload = {
-      // remove "payload.None." prefix from headers labels
-      // from "payload.None.a.b.c" to "a.b.c"
-      parse_columns: `remove-prefix${sep}payload.,remove-prefix${sep}None.,${CSV_HEADER_RULES}`,
-      rule_sep: sep
+      parse_columns: CSV_HEADER_RULES,
+      rule_sep: CSV_HEADER_RULES_SEP
     }
 
     // restrict the columns to export with the selected columns
