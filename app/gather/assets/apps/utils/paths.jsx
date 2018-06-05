@@ -115,8 +115,12 @@ const buildAPIPath = (app, type, id, {format = 'json', action, ...params}) => {
     (id ? '/' + id : '') +
     // indicates the ation suffix like "details", "fetch" or "propagates"
     (action ? '/' + action : ''))
+  const url = `${API_PREFIX}/${app}/${type}${suffix}.${format}`
   const queryString = id ? '' : buildQueryString(params)
-  return `${API_PREFIX}/${app}/${type}${suffix}.${format}?${queryString}`
+  if (queryString === '') {
+    return url
+  }
+  return `${url}?${queryString}`
 }
 
 /**

@@ -36,15 +36,15 @@ import {
 describe('paths utils', () => {
   describe('getMasksAPIPath', () => {
     it('should return the Mask API path', () => {
-      assert.equal(getMasksAPIPath({}), '/gather/masks.json?')
-      assert.equal(getMasksAPIPath({id: 1}), '/gather/masks/1.json?')
+      assert.equal(getMasksAPIPath({}), '/gather/masks.json')
+      assert.equal(getMasksAPIPath({id: 1}), '/gather/masks/1.json')
     })
   })
 
   describe('getMediaFileAPIPath', () => {
     it('should return the Media Files API path', () => {
-      assert.equal(getMediaFileAPIPath({}), '/odk/media-files.json?')
-      assert.equal(getMediaFileAPIPath({id: 1}), '/odk/media-files/1.json?')
+      assert.equal(getMediaFileAPIPath({}), '/odk/media-files.json')
+      assert.equal(getMediaFileAPIPath({id: 1}), '/odk/media-files/1.json')
     })
   })
 
@@ -53,13 +53,13 @@ describe('paths utils', () => {
       const prefix = '/kernel/'
 
       it('should return the Surveys API path', () => {
-        assert.equal(getSurveysAPIPath({}), prefix + 'projects.json?')
-        assert.equal(getSurveysAPIPath({id: 1}), prefix + 'projects/1.json?')
+        assert.equal(getSurveysAPIPath({}), prefix + 'projects.json')
+        assert.equal(getSurveysAPIPath({id: 1}), prefix + 'projects/1.json')
       })
 
       it('should return the Surveys Stats API path', () => {
-        assert.equal(getSurveysAPIPath({app: 'kernel', withStats: true}), prefix + 'projects-stats.json?')
-        assert.equal(getSurveysAPIPath({withStats: true, id: 1}), prefix + 'projects-stats/1.json?')
+        assert.equal(getSurveysAPIPath({app: 'kernel', withStats: true}), prefix + 'projects-stats.json')
+        assert.equal(getSurveysAPIPath({withStats: true, id: 1}), prefix + 'projects-stats/1.json')
       })
 
       it('should return the Surveys API path with search', () => {
@@ -67,16 +67,16 @@ describe('paths utils', () => {
       })
 
       it('should return the Surveys API path without search', () => {
-        assert.equal(getSurveysAPIPath({app: 'kernel', search: 'survey', id: 1}), prefix + 'projects/1.json?')
+        assert.equal(getSurveysAPIPath({app: 'kernel', search: 'survey', id: 1}), prefix + 'projects/1.json')
       })
 
       it('should return the Surveys API path with the POST option', () => {
         assert.equal(
           getSurveysAPIPath({app: 'kernel', format: 'txt', action: 'fetch'}),
-          prefix + 'projects/fetch.txt?')
+          prefix + 'projects/fetch.txt')
         assert.equal(
           getSurveysAPIPath({app: 'kernel', format: 'txt', action: 'details', id: 1}),
-          prefix + 'projects/1/details.txt?')
+          prefix + 'projects/1/details.txt')
       })
     })
 
@@ -84,13 +84,13 @@ describe('paths utils', () => {
       const prefix = '/odk/'
 
       it('should return the Surveys API path', () => {
-        assert.equal(getSurveysAPIPath({app: 'odk'}), prefix + 'projects.json?')
-        assert.equal(getSurveysAPIPath({app: 'odk', id: 1}), prefix + 'projects/1.json?')
+        assert.equal(getSurveysAPIPath({app: 'odk'}), prefix + 'projects.json')
+        assert.equal(getSurveysAPIPath({app: 'odk', id: 1}), prefix + 'projects/1.json')
       })
 
       it('should not return the Surveys Stats API path', () => {
-        assert.equal(getSurveysAPIPath({app: 'odk', withStats: true}), prefix + 'projects.json?')
-        assert.equal(getSurveysAPIPath({app: 'odk', withStats: true, id: 1}), prefix + 'projects/1.json?')
+        assert.equal(getSurveysAPIPath({app: 'odk', withStats: true}), prefix + 'projects.json')
+        assert.equal(getSurveysAPIPath({app: 'odk', withStats: true, id: 1}), prefix + 'projects/1.json')
       })
 
       it('should return the Surveys API path with search', () => {
@@ -98,16 +98,16 @@ describe('paths utils', () => {
       })
 
       it('should return the Surveys API path without search', () => {
-        assert.equal(getSurveysAPIPath({app: 'odk', search: 'survey', id: 1}), prefix + 'projects/1.json?')
+        assert.equal(getSurveysAPIPath({app: 'odk', search: 'survey', id: 1}), prefix + 'projects/1.json')
       })
 
       it('should return the Surveys API path with the POST option', () => {
         assert.equal(
           getSurveysAPIPath({app: 'odk', format: 'txt', action: 'fetch'}),
-          prefix + 'projects/fetch.txt?')
+          prefix + 'projects/fetch.txt')
         assert.equal(
           getSurveysAPIPath({app: 'odk', format: 'txt', action: 'details', id: 1}),
-          prefix + 'projects/1/details.txt?')
+          prefix + 'projects/1/details.txt')
       })
     })
   })
@@ -116,7 +116,7 @@ describe('paths utils', () => {
     const prefix = '/kernel/'
 
     it('should return the Submissions API path', () => {
-      assert.equal(getSubmissionsAPIPath({}), prefix + 'submissions.json?')
+      assert.equal(getSubmissionsAPIPath({}), prefix + 'submissions.json')
     })
 
     it('should return the Survey Submissions API path', () => {
@@ -128,8 +128,8 @@ describe('paths utils', () => {
     const prefix = '/odk/'
 
     it('should return the Surveyors API path', () => {
-      assert.equal(getSurveyorsAPIPath({}), prefix + 'surveyors.json?')
-      assert.equal(getSurveyorsAPIPath({id: 1}), prefix + 'surveyors/1.json?')
+      assert.equal(getSurveyorsAPIPath({}), prefix + 'surveyors.json')
+      assert.equal(getSurveyorsAPIPath({id: 1}), prefix + 'surveyors/1.json')
     })
 
     it('should return the Surveyors API path filtering by survey', () => {
@@ -137,7 +137,7 @@ describe('paths utils', () => {
     })
 
     it('should return the Surveyors API path but not filtering by survey', () => {
-      assert.equal(getSurveyorsAPIPath({project: 1, id: 1}), prefix + 'surveyors/1.json?')
+      assert.equal(getSurveyorsAPIPath({project: 1, id: 1}), prefix + 'surveyors/1.json')
     })
 
     it('should return the Surveyors API path with search', () => {
@@ -145,7 +145,7 @@ describe('paths utils', () => {
     })
 
     it('should return the Surveyors API path without search', () => {
-      assert.equal(getSurveyorsAPIPath({search: 'surveyor', id: 1}), prefix + 'surveyors/1.json?')
+      assert.equal(getSurveyorsAPIPath({search: 'surveyor', id: 1}), prefix + 'surveyors/1.json')
     })
   })
 
@@ -153,7 +153,7 @@ describe('paths utils', () => {
     const prefix = '/odk/'
 
     it('should return the xForms API path', () => {
-      assert.equal(getXFormsAPIPath({}), prefix + 'xforms.json?')
+      assert.equal(getXFormsAPIPath({}), prefix + 'xforms.json')
     })
 
     it('should return the xForms API path filtering by survey', () => {
