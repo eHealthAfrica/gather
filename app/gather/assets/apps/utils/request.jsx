@@ -113,15 +113,15 @@ const inspectResponse = ({download, fileName}, resolve, reject, response) => {
       .json()
       .then(content => resolve(content))
   } else {
+    const error = new Error(response.statusText)
     return response
-      .text()
+      .json()
       .then(content => {
-        const error = new Error(response.statusText)
-        try {
-          error.content = JSON.parse(content)
-        } catch (e) {
-          error.content = content
-        }
+        error.content = content
+        return reject(error)
+      })
+      .catch(() => {
+        // response is not a json, ignore content
         return reject(error)
       })
   }

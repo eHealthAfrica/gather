@@ -565,12 +565,13 @@ class SurveyForm extends Component {
         .catch(error => {
           this.setState({ isUpdating: false, actionsInProgress: [] })
           const generic = [formatMessage(MESSAGES.errorWhile, {action: action.message})]
+          const content = error.content || {generic: [error.message]}
 
           if (action.key) {
-            this.setState({ errors: { odk: { generic, [action.key]: {...(error.content || {})} } } })
+            this.setState({ errors: { odk: { generic, [action.key]: {...content} } } })
           } else {
             // this is the propagation error
-            this.setState({ errors: {generic, ...(error.content || {})} })
+            this.setState({ errors: { generic, odk: content } })
           }
         })
     }
