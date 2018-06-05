@@ -107,7 +107,11 @@ class SurveyODKForm extends Component {
         <HelpMessage>
           <FormattedMessage
             id='survey.odk.form.odk.help.odk'
-            defaultMessage='Open Data Kit (ODK) is a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions.' />
+            defaultMessage={`
+              Open Data Kit (or ODK for short) is an open-source suite of tools
+              that helps organizations author, collect, and manage mobile data
+              collection solutions.
+            `} />
           <br />
           <a href='https://opendatakit.org/' target='_blank'>
             <FormattedMessage
@@ -160,15 +164,37 @@ class SurveyODKForm extends Component {
               defaultMessage='xForms' />
           </label>
           <HelpMessage>
-            <FormattedMessage
-              id='survey.odk.form.xform.file.help'
-              defaultMessage='XLSForm is a kind of survey definition used by ODK Collect.' />
-            <br />
-            <a href='http://xlsform.org/' target='_blank'>
+            <div className='mb-2'>
               <FormattedMessage
-                id='survey.odk.form.odk.help.xlsform.link'
-                defaultMessage='Click here to see more about XLSForm' />
-            </a>
+                id='survey.odk.form.xform.file.help'
+                defaultMessage={`
+                  XLSForm is a form standard created to help simplify the authoring of forms in Excel.
+                  Authoring is done in a human readable format using a familiar tool that almost
+                  everyone knows - Excel. XLSForms provide a practical standard for sharing and
+                  collaborating on authoring forms.
+                `} />
+              <br />
+              <a href='http://xlsform.org/' target='_blank'>
+                <FormattedMessage
+                  id='survey.odk.form.odk.help.xlsform.link'
+                  defaultMessage='Click here to see more about XLSForm' />
+              </a>
+            </div>
+            <div>
+              <FormattedMessage
+                id='survey.odk.form.xform.odk.help'
+                defaultMessage={`
+                  The ODK XForms specification is used by tools in the Open Data Kit ecosystem.
+                  It is a subset of the far larger W3C XForms 1.0 specification and
+                  also contains a few additional features not found in the W3C XForms specification.
+                `} />
+              <br />
+              <a href='http://opendatakit.github.io/xforms-spec/' target='_blank'>
+                <FormattedMessage
+                  id='survey.odk.form.odk.help.xform.link'
+                  defaultMessage='Click here to see more about XForm specification' />
+              </a>
+            </div>
           </HelpMessage>
         </div>
 
