@@ -156,13 +156,12 @@ case "$1" in
 
     test)
         test_lint
+        test_coverage
         test_js
 
         # remove previous files
         rm -r -f /code/gather/assets/bundles/*
         npm run webpack
-
-        test_coverage "${@:2}"
     ;;
 
     test_lint)

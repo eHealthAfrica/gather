@@ -46,6 +46,4 @@ def tokens_required(function=None, redirect_field_name=None, login_url=None):
         login_url=login_url or '/~tokens',
         redirect_field_name=redirect_field_name,
     )
-    if function:  # pragma: no cover
-        return actual_decorator(function)
-    return actual_decorator  # pragma: no cover
+    return actual_decorator(function) if function else actual_decorator

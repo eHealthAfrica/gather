@@ -32,7 +32,7 @@ def gather_context(request):
         'kernel_url': settings.AETHER_APPS['kernel']['url'],
     }
 
-    if settings.AETHER_ODK:  # pragma: no cover
+    if settings.AETHER_ODK:
         context['odk_url'] = settings.AETHER_APPS['odk']['url']
 
     return context
