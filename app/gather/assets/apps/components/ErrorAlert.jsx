@@ -20,6 +20,8 @@
 
 import React, { Component } from 'react'
 
+import { getType } from '../utils/types'
+
 /**
  * ErrorAlert component.
  *
@@ -30,14 +32,17 @@ import React, { Component } from 'react'
 export default class ErrorAlert extends Component {
   render () {
     const {errors} = this.props
-    if (!errors || !errors.length) {
+
+    const eType = getType(errors)
+    if (!eType) {
       return <div />
     }
+    const list = (eType !== 'array') ? [errors] : errors
 
     return (
       <div data-qa='data-erred' className='form-error'>
         {
-          errors.map((error, index) => (
+          list.map((error, index) => (
             <p key={index} data-qa={`data-erred-${index}`} className='error'>
               { error }
             </p>

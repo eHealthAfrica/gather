@@ -27,8 +27,18 @@ import ErrorAlert from './ErrorAlert'
 
 describe('ErrorAlert', () => {
   it('should render nothing without the error list', () => {
-    const component = mount(<ErrorAlert />)
-    expect(component.find('[data-qa="data-erred"]').exists()).toBeFalsy()
+    expect(mount(<ErrorAlert />).find('[data-qa="data-erred"]').exists()).toBeFalsy()
+    expect(mount(<ErrorAlert errors='' />).find('[data-qa="data-erred"]').exists()).toBeFalsy()
+    expect(mount(<ErrorAlert errors={[]} />).find('[data-qa="data-erred"]').exists()).toBeFalsy()
+  })
+
+  it('should render the error', () => {
+    const errors = 'error 1'
+    const component = mount(<ErrorAlert errors={errors} />)
+    expect(component.find('[data-qa="data-erred"]').exists()).toBeTruthy()
+
+    expect(component.find('[data-qa="data-erred-0"]').exists()).toBeTruthy()
+    expect(component.find('[data-qa="data-erred-0"]').text()).toEqual('error 1')
   })
 
   it('should render the error list', () => {
