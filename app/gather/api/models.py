@@ -28,6 +28,32 @@ from django.utils.translation import ugettext as _
 
 from ..settings import AETHER_APPS
 
+'''
+
+Data model schema:
+
+
+    +------------------+       +------------------+
+    | Survey / Project |       | Mask             |
+    +==================+       +==================+
+    | project_id       |<--+   | id               |
+    | name             |   |   | name             |
+    +------------------+   |   | columns          |
+                           |   +::::::::::::::::::+
+                           +--<| survey           |
+                               +------------------+
+
+
+    +------------------+
+    | UserTokens       |
+    +==================+
+    | user (User)      |
+    | kernel_token     |
+    | odk_token        |
+    +------------------+
+
+'''
+
 
 '''
 Named tuple to pass together the app base url and the user auth token
@@ -38,6 +64,29 @@ UserAppToken = namedtuple('UserAppToken', ['base_url', 'token'])
 class UserTokens(models.Model):
     '''
     User auth tokens to connect to the different apps.
+
+
+    ----------------------------------------------------------------------------
+
+            Table "public.gather_usertokens"
+
+        Column    |         Type          | Modifiers
+    --------------+-----------------------+-----------
+     user_id      | integer               | not null
+     kernel_token | character varying(40) |
+     odk_token    | character varying(40) |
+
+    Indexes:
+        "gather_usertokens_pkey" PRIMARY KEY, btree (user_id)
+
+    Foreign-key constraints:
+        "gather_usertokens_user_id_###_fk_auth_user_id"
+            FOREIGN KEY (user_id)
+            REFERENCES auth_user(id)
+            DEFERRABLE INITIALLY DEFERRED
+
+    ----------------------------------------------------------------------------
+
     '''
 
     user = models.OneToOneField(
@@ -196,6 +245,29 @@ class UserTokens(models.Model):
 class Survey(models.Model):
     '''
     Database link of a Aether Kernel Project
+
+
+    ----------------------------------------------------------------------------
+
+            Table "public.gather_survey"
+
+       Column   | Type | Modifiers
+    ------------+------+-----------
+     project_id | uuid | not null
+     name       | text |
+
+    Indexes:
+        "gather_survey_pkey" PRIMARY KEY, btree (project_id)
+
+    Referenced by:
+        TABLE "gather_mask"
+            CONSTRAINT "gather_mask_survey_id_###_fk_gather_survey_project_id"
+                FOREIGN KEY (survey_id)
+                REFERENCES gather_survey(project_id)
+                DEFERRABLE INITIALLY DEFERRED
+
+    ----------------------------------------------------------------------------
+
     '''
 
     # This is needed to match data with kernel
@@ -227,6 +299,32 @@ class Mask(models.Model):
     Survey submissions mask.
 
     Indicates the submission columns to display in all views and downloads.
+
+
+    ----------------------------------------------------------------------------
+
+            Table "public.gather_mask"
+
+      Column   |  Type   |                        Modifiers
+    -----------+---------+----------------------------------------------------------
+     id        | integer | not null default nextval('gather_mask_id_seq'::regclass)
+     name      | text    | not null
+     columns   | text[]  | not null
+     survey_id | uuid    | not null
+
+    Indexes:
+        "gather_mask_pkey" PRIMARY KEY, btree (id)
+        "gather_mask_survey_id_name_###_uniq" UNIQUE CONSTRAINT, btree (survey_id, name)
+        "gather_mask_survey_id_###" btree (survey_id)
+
+    Foreign-key constraints:
+        "gather_mask_survey_id_###_fk_gather_survey_project_id"
+            FOREIGN KEY (survey_id)
+            REFERENCES gather_survey(project_id)
+            DEFERRABLE INITIALLY DEFERRED
+
+    ----------------------------------------------------------------------------
+
     '''
 
     survey = models.ForeignKey(to=Survey, on_delete=models.CASCADE, verbose_name=_('survey'))
