@@ -297,6 +297,45 @@ describe('request utils', () => {
     })
   })
 
+  describe('CSRF Token', () => {
+    beforeEach(() => {
+      nock.cleanAll()
+    })
+
+    afterEach(() => {
+      nock.isDone()
+      nock.cleanAll()
+    })
+
+    it('should do a GET request with the indicated CSRF token', () => {
+      const tokenValue = 'CSRF-Token-Value'
+
+      const element = document.createElement('div')
+      element.value = tokenValue
+
+      nock('http://localhost', {
+        reqheaders: {
+          'X-CSRFToken': tokenValue,
+          'X-METHOD': 'GET'
+        }
+      })
+        .get('/get')
+        .reply(200, {get: true})
+
+      document.querySelector = (selector) => {
+        assert.equal(selector, '[name=csrfmiddlewaretoken]')
+        return element
+      }
+
+      return getData('http://localhost/get')
+        .then(
+          (body) => { assert(body.get, 'GET request should work') },
+          handleUnexpectedError
+        )
+        .catch(handleUnexpectedError)
+    })
+  })
+
   describe('forceGetData', () => {
     beforeEach(() => {
       nock.cleanAll()
