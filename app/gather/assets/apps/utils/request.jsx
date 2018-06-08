@@ -19,9 +19,8 @@
  */
 
 const buildFetchOptions = (method, payload, multipart) => {
-  /* global jQuery */
   // See: https://docs.djangoproject.com/en/2.0/ref/csrf/
-  const csrfToken = jQuery('[name=csrfmiddlewaretoken]').val()
+  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')
   const options = {
     method,
     credentials: 'same-origin',
