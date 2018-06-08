@@ -95,7 +95,7 @@ module.exports = (custom) => ({
       AETHER_ODK_URL: null,
       CSV_HEADER_RULES: 'remove-prefix:payload.,remove-prefix:None.',
       CSV_HEADER_RULES_SEP: ':',
-      CSV_MAX_ROWS_SIZE: '10000'
+      CSV_MAX_ROWS_SIZE: null
     }),
 
     // extract styles as a CSS file not JS file
