@@ -61,6 +61,8 @@ of the most common ones with non default values. For more info take a look at th
 
 #### Gather
 
+- Gather specific:
+  - `INSTANCE_NAME`: `Gather on Aether` identifies the current instance among others.
 - CSV export:
   - `CSV_MAX_ROWS_SIZE`: `1048575` indicates the maximum number of rows to include in the CSV file.
   - `CSV_HEADER_RULES`: `remove-prefix;payload.,remove-prefix;None.,replace;.;:;`
