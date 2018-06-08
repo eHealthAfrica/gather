@@ -33,7 +33,7 @@ class SettingsTest(TestCase):
 
         self.assertEqual(settings.ROOT_URLCONF, 'gather.urls')
         self.assertEqual(settings.WSGI_APPLICATION, 'gather.wsgi.application')
-        self.assertEqual(settings.APP_NAME, 'Gather2')
+        self.assertEqual(settings.APP_NAME, 'Gather')
         self.assertEqual(settings.INSTANCE_NAME, 'Gather on Aether')
         self.assertEqual(settings.AETHER_MODULES, ['kernel', 'odk'])
 

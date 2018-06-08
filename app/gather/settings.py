@@ -246,7 +246,7 @@ if not TESTING and DEBUG:  # pragma: no cover
 ROOT_URLCONF = 'gather.urls'
 WSGI_APPLICATION = 'gather.wsgi.application'
 
-APP_NAME = 'Gather2'
+APP_NAME = 'Gather'
 INSTANCE_NAME = os.environ.get('INSTANCE_NAME', 'Gather on Aether')
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
