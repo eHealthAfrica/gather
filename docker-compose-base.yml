@@ -30,7 +30,7 @@ services:
   # ---------------------------------
 
   kernel-base:
-    image: ehealthafrica/aether-kernel:0.6.1
+    image: ehealthafrica/aether-kernel:0.7.0
     stdin_open: true
     tty: true
     environment:
@@ -58,7 +58,7 @@ services:
   # ---------------------------------
 
   odk-base:
-    image: ehealthafrica/aether-odk:0.6.1
+    image: ehealthafrica/aether-odk:0.7.0
     stdin_open: true
     tty: true
     environment:
