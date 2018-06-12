@@ -31,6 +31,10 @@ describe('Common components', () => {
     expect(components.ConfirmButton).toBeTruthy()
   })
 
+  it('DownloadButton should be declared', () => {
+    expect(components.DownloadButton).toBeTruthy()
+  })
+
   it('EmptyAlert should be declared', () => {
     expect(components.EmptyAlert).toBeTruthy()
   })

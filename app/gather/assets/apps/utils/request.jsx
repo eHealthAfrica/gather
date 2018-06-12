@@ -18,6 +18,8 @@
  * under the License.
  */
 
+import { downloadFile } from './download'
+
 const buildFetchOptions = (method, payload, multipart) => {
   // See: https://docs.djangoproject.com/en/2.0/ref/csrf/
   const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]') || {}
@@ -71,20 +73,6 @@ const buildFetchOptions = (method, payload, multipart) => {
   return options
 }
 
-const downloadLink = (content, fileName = 'download') => {
-  // triggers a file download by creating
-  // a link object and simulating a click event.
-  const link = document.createElement('a')
-  link.style = 'display: none'
-  link.download = fileName
-  link.href = window.URL.createObjectURL(content)
-
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  window.URL.revokeObjectURL(link.href)
-}
-
 const inspectResponse = ({download, fileName}, resolve, reject, response) => {
   // According to fetch docs: https://github.github.io/fetch/
   // Note that the promise won't be rejected in case of HTTP 4xx or 5xx server responses.
@@ -103,7 +91,7 @@ const inspectResponse = ({download, fileName}, resolve, reject, response) => {
       return response
         .blob()
         .then(content => {
-          downloadLink(content, fileName)
+          downloadFile(content, fileName)
           return resolve() // NO-CONTENT response
         })
     }

@@ -95,13 +95,9 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
 - Gather specific:
   - `INSTANCE_NAME`: `Gather 3` identifies the current instance among others.
 
-- CSV export:
-  - `CSV_MAX_ROWS_SIZE`: `1048575` indicates the maximum number of rows to include in the CSV file.
-  - `CSV_HEADER_RULES`: `remove-prefix;payload.,remove-prefix;None.,replace;.;:;`
-    CSV header labels parser rules, transforms header from `payload.None.a.b.c` to `a:b:c`.
-    Default rules are `remove-prefix;payload.,remove-prefix;None.,`, removes `payload.None.` prefixes.
-  - `CSV_HEADER_RULES_SEP`: `;` rules divider. Default `:`. Include it if any of the rules uses `:`.
-    See more in `aether.common.drf.renderers.CustomCSVRenderer`.
+- Data export:
+  - `EXPORT_FORMAT`: `xlsx` the default export format. Possible values: `xlsx` or `csv`.
+  - `CSV_SEPARATOR`: `,` fields separator in the CSV format.
 
 - Authentication (Central Authentication Service):
   - `CAS_SERVER_URL`: `https://your.cas.server`.

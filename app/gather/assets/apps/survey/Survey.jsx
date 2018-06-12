@@ -21,11 +21,10 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { FetchUrlsContainer, PaginationContainer } from '../components'
-import { range } from '../utils'
-import { MAX_PAGE_SIZE, GATHER_APP } from '../utils/constants'
+import { FetchUrlsContainer, PaginationContainer, DownloadButton } from '../components'
+import { GATHER_APP } from '../utils/constants'
 import { getSurveysPath, getSurveysAPIPath, getEntitiesAPIPath } from '../utils/paths'
-import { postData } from '../utils/request'
+import { filterByPaths } from '../utils/types'
 import { extractPathDocs } from '../utils/avro-utils'
 
 import SurveyDetail from './SurveyDetail'
@@ -184,95 +183,26 @@ export default class Survey extends Component {
 
   renderDownloadButton () {
     const {survey} = this.props
-    const {
-      CSV_HEADER_RULES,
-      CSV_HEADER_RULES_SEP,
-      CSV_MAX_ROWS_SIZE
-    } = this.props.settings
-    const {total, allPaths, selectedPaths} = this.state
-
-    const pageSize = CSV_MAX_ROWS_SIZE || MAX_PAGE_SIZE
-    const params = {
+    const downloadUrl = getEntitiesAPIPath({
       ordering: '-modified',
       project: survey.id,
-      fields: 'modified,payload',
-      action: 'fetch', // this will build the "post as get" API path
-      format: 'csv',
-      pageSize
-    }
-    const payload = {
-      parse_columns: CSV_HEADER_RULES,
-      rule_sep: CSV_HEADER_RULES_SEP
-    }
+      fields: 'id,payload'
+    })
 
-    // restrict the columns to export with the selected columns
-    if (selectedPaths.length !== allPaths.length) {
-      payload.columns = 'modified,' + selectedPaths
-        .map(key => 'payload.' + key)
-        .join(',')
-    }
-
-    const download = (options, fileName) => {
-      postData(getEntitiesAPIPath(options), payload, {download: true, fileName})
-    }
-
-    if (total < pageSize) {
-      return (
-        <button
-          type='button'
-          className='tab'
-          onClick={() => { download(params, `${survey.name}.csv`) }}
-        >
-          <i className='fas fa-download mr-2' />
-          <FormattedMessage
-            id='survey.view.action.download'
-            defaultMessage='Download' />
-        </button>
-      )
-    }
-
-    const dropdown = 'downloadLinkChoices'
-    const pages = range(1, Math.ceil(total / pageSize) + 1)
-      .map(index => ({
-        key: index,
-        options: { ...params, page: index },
-        fileName: `${survey.name}-${index}.csv`
-      }))
+    const rowsParser = (row) => ({
+      // include `id` as attribute to be included in all rows
+      '@id': row.id,
+      // remove masked columns
+      ...filterByPaths(row.payload, this.state.selectedPaths)
+    })
 
     return (
-      <div className='dropdown'>
-        <button
-          type='button'
-          className='tab'
-          id={dropdown}
-          data-toggle='dropdown'
-        >
-          <i className='fas fa-download mr-2' />
-          <FormattedMessage
-            id='survey.view.action.download'
-            defaultMessage='Download' />
-        </button>
-
-        <div
-          className='dropdown-menu'
-          aria-labelledby={dropdown}
-        >
-          <div className='dropdown-list'>
-            {
-              pages.map(page => (
-                <button
-                  key={page.key}
-                  type='button'
-                  className='dropdown-item'
-                  onClick={() => { download(page.options, page.fileName) }}
-                >
-                  { page.fileName }
-                </button>
-              ))
-            }
-          </div>
-        </div>
-      </div>
+      <DownloadButton
+        className='tab'
+        filePrefix={survey.name}
+        parser={rowsParser}
+        url={downloadUrl}
+      />
     )
   }
 

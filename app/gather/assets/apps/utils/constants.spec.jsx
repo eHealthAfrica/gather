@@ -28,8 +28,11 @@ describe('constants', () => {
   it('should define app constants', () => {
     assert(constants.MAX_PAGE_SIZE > 0)
 
-    assert.deepEqual(constants.KERNEL_APP, 'kernel')
-    assert.deepEqual(constants.ODK_APP, 'odk')
-    assert.deepEqual(constants.GATHER_APP, 'gather')
+    assert.equal(constants.EXPORT_CSV_FORMAT, 'csv')
+    assert.equal(constants.EXPORT_EXCEL_FORMAT, 'xlsx')
+
+    assert.equal(constants.KERNEL_APP, 'kernel')
+    assert.equal(constants.ODK_APP, 'odk')
+    assert.equal(constants.GATHER_APP, 'gather')
   })
 })
