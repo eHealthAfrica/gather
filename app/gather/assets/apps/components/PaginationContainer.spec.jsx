@@ -358,6 +358,7 @@ describe('PaginationContainer', () => {
         <PaginationContainer
           listComponent={Foo}
           url={path}
+          sizes={[1, 10, 25]}
 
           search
           showFirst
@@ -426,6 +427,28 @@ describe('PaginationContainer', () => {
 
       expect(component.state('page')).toEqual(1)
       expect(component.state('search')).toEqual('something')
+    })
+
+    it('Set new page size should change the current page to 1, but not search', () => {
+      const component = buildPaginationComponent('/paginate-actions-set-page-size')
+      const paginationBar = component.find(PaginationBar)
+
+      const select = paginationBar.find('[data-qa="data-pagination-sizes"]').find('select')
+      expect(select.exists()).toBeTruthy()
+
+      nock('http://localhost')
+        .get('/paginate-actions-set-page-size')
+        .query({page: 1, page_size: 10, search: 'bla'})
+        .reply(200, {
+          count: 100,
+          results: global.range(0, 10)
+        })
+
+      select.simulate('change', {target: {value: '10'}})
+
+      expect(component.state('page')).toEqual(1)
+      expect(component.state('pageSize')).toEqual(10)
+      expect(component.state('search')).toEqual('bla')
     })
 
     it('Navigation buttons should change the current page, but not search', () => {

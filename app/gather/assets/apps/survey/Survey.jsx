@@ -34,7 +34,9 @@ import SurveyMasks from './SurveyMasks'
 import SubmissionsList from '../submission/SubmissionsList'
 import SubmissionItem from '../submission/SubmissionItem'
 
-const TABLE_SIZE = 10
+const TABLE_VIEW = 'table'
+const SINGLE_VIEW = 'single'
+const TABLE_SIZES = [ 10, 25, 50, 100 ]
 const SEPARATOR = '¬¬¬' // very uncommon string
 
 export default class Survey extends Component {
@@ -42,7 +44,7 @@ export default class Survey extends Component {
     super(props)
 
     this.state = {
-      pageSize: TABLE_SIZE,
+      viewMode: TABLE_VIEW,
       total: props.submissions.count,
       allColumns: [],
       selectedColumns: []
@@ -95,8 +97,8 @@ export default class Survey extends Component {
       return ''
     }
 
-    const {pageSize} = this.state
-    const SubmissionComponent = (pageSize === 1 ? SubmissionItem : SubmissionsList)
+    const {viewMode} = this.state
+    const SubmissionComponent = (viewMode === SINGLE_VIEW ? SubmissionItem : SubmissionsList)
     const extras = {
       separator: SEPARATOR,
       columns: this.state.selectedColumns
@@ -109,8 +111,9 @@ export default class Survey extends Component {
             <li>
               <button
                 type='button'
-                className={`tab ${pageSize !== 1 ? 'active' : ''}`}
-                onClick={() => { this.setState({ pageSize: TABLE_SIZE }) }}
+                disabled={viewMode === TABLE_VIEW}
+                className={`tab ${viewMode === TABLE_VIEW ? 'active' : ''}`}
+                onClick={() => { this.setState({ viewMode: TABLE_VIEW }) }}
               >
                 <i className='fas fa-th-list mr-2' />
                 <FormattedMessage
@@ -121,8 +124,9 @@ export default class Survey extends Component {
             <li>
               <button
                 type='button'
-                className={`tab ${pageSize === 1 ? 'active' : ''}`}
-                onClick={() => { this.setState({ pageSize: 1 }) }}
+                disabled={viewMode === SINGLE_VIEW}
+                className={`tab ${viewMode === SINGLE_VIEW ? 'active' : ''}`}
+                onClick={() => { this.setState({ viewMode: SINGLE_VIEW }) }}
               >
                 <i className='fas fa-file mr-2' />
                 <FormattedMessage
@@ -139,7 +143,8 @@ export default class Survey extends Component {
           </ul>
         </div>
         <PaginationContainer
-          pageSize={pageSize}
+          pageSize={viewMode === SINGLE_VIEW ? 1 : TABLE_SIZES[0]}
+          sizes={viewMode === SINGLE_VIEW ? [] : TABLE_SIZES}
           url={getSubmissionsAPIPath({project: survey.id, ordering: '-created'})}
           position='top'
           listComponent={SubmissionComponent}

@@ -21,14 +21,14 @@
 /* global describe, it, expect */
 
 import React from 'react'
-import { mountWithIntl, shallowWithIntl } from 'enzyme-react-intl'
+import { mountComponent } from '../../tests/enzyme-helpers'
 
 import FilteredMultiSelect from 'react-filtered-multiselect'
 import MultiSelect from './MultiSelect'
 
 describe('MultiSelect', () => {
   it('should render the multi select component', () => {
-    const multiSelect = (
+    const component = mountComponent(
       <MultiSelect
         selected={[
           {id: 2, name: '2'}
@@ -42,8 +42,6 @@ describe('MultiSelect', () => {
       />
     )
 
-    const component = mountWithIntl(shallowWithIntl(multiSelect).get(0))
-
     expect(component.state()).toBeTruthy()
     expect(component.state('valueProp')).toEqual('id')
     expect(component.state('textProp')).toEqual('name')
@@ -53,14 +51,13 @@ describe('MultiSelect', () => {
   })
 
   it('should render the multi select component with custom properties', () => {
-    const multiSelect = (
+    const component = mountComponent(
       <MultiSelect
         valueProp='key'
         textProp='label'
         onChange={() => {}}
       />
     )
-    const component = mountWithIntl(shallowWithIntl(multiSelect).get(0))
 
     expect(component.state()).toBeTruthy()
     expect(component.state('valueProp')).toEqual('key')
@@ -72,7 +69,7 @@ describe('MultiSelect', () => {
 
   it('should select/deselect the options', () => {
     let changed = false
-    const multiSelect = (
+    const component = mountComponent(
       <MultiSelect
         selected={[
           {id: 2, name: '2'}
@@ -88,8 +85,6 @@ describe('MultiSelect', () => {
         onChange={() => { changed = true }}
       />
     )
-
-    const component = mountWithIntl(shallowWithIntl(multiSelect).get(0))
 
     // select new selected values
     expect(component.state('selected')).toEqual([

@@ -140,4 +140,25 @@
       }
     }
   }
+
+  .sizes {
+    margin: 0;
+    border-radius: 0;
+    display: flex;
+    align-items: baseline;
+    padding-left: .75rem;
+    border-left: 1px solid $white;
+
+    select {
+      background: rgba($white, .3);
+      border-radius: 1rem;
+      margin: 0 .5rem;
+      padding: .3rem .5rem .2rem 1rem;
+      border: 0;
+      color: inherit;
+      font: $font-size-s $nav-font-family;
+      font-weight: 500;
+      text-align: right;
+    }
+  }
 }
