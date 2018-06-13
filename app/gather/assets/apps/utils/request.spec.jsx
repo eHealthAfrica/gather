@@ -36,6 +36,10 @@ import {
 const handleUnexpectedBody = (body) => { assert(!body, `Unexpected response ${body}`) }
 const handleUnexpectedError = (error) => { assert(!error, `Unexpected error ${error}`) }
 
+const WINDOW_URL = window.URL
+const DOCUMENT_BODY_APPEND = document.body.appendChild
+const DOCUMENT_BODY_REMOVE = document.body.removeChild
+
 describe('request utils', () => {
   describe('request', () => {
     describe('implemented HTTP methods', () => {
@@ -152,6 +156,10 @@ describe('request utils', () => {
       afterEach(() => {
         nock.isDone()
         nock.cleanAll()
+
+        window.URL = WINDOW_URL
+        document.body.appendChild = DOCUMENT_BODY_APPEND
+        document.body.removeChild = DOCUMENT_BODY_REMOVE
       })
 
       it('should do a GET request and download response', () => {

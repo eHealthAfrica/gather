@@ -57,9 +57,6 @@ const parseValue = (value) => {
     case 'date':
       return moment(value).format('YYYY-MM-DD')
 
-    case 'time':
-      return moment(value).format('HH:mm:ss.SSSSSSZZ')
-
     default:
       return value.toString()
   }
@@ -133,13 +130,15 @@ const downloadCsv = (content, filename) => {
 const downloadExcel = (content, filename) => {
   const workBook = XLSX.utils.book_new()
 
-  // create one sheet per property
-  Object.keys(content).forEach(key => {
-    const workSheet = XLSX.utils.aoa_to_sheet(
-      parseContentRows(content[key].headers, content[key].data)
-    )
-    XLSX.utils.book_append_sheet(workBook, workSheet, key)
-  })
+  // create one sheet per content property
+  Object.keys(content)
+    .filter(key => content[key].data.length)
+    .forEach(key => {
+      const workSheet = XLSX.utils.aoa_to_sheet(
+        parseContentRows(content[key].headers, content[key].data)
+      )
+      XLSX.utils.book_append_sheet(workBook, workSheet, key)
+    })
 
   XLSX.writeFile(workBook, buildFileName(filename, 'xlsx'))
 }
@@ -154,12 +153,14 @@ export const downloadContent = (content, name = 'data') => {
   if (EXPORT_FORMAT === EXPORT_EXCEL_FORMAT) {
     downloadExcel(content, name)
   } else {
-    // create one file per property
-    Object.keys(content).forEach(key => {
-      const rows = parseContentRows(content[key].headers, content[key].data)
-      const filename = key === '$' ? name : name + '-' + key.replace('$.', '')
-      downloadCsv(rows, filename)
-    })
+    // create one file per content property
+    Object.keys(content)
+      .filter(key => content[key].data.length)
+      .forEach(key => {
+        const rows = parseContentRows(content[key].headers, content[key].data)
+        const filename = key === '$' ? name : name + '-' + key.replace('$.', '')
+        downloadCsv(rows, filename)
+      })
   }
 }
 
@@ -178,7 +179,7 @@ export const downloadContent = (content, name = 'data') => {
  * @param {string} group   - where to push the parsed results
  *                           use '$' for root values and named entries for array keys
  */
-export const generateFileContent = (results, content, group = '$') => {
+export const generateFileContent = (results, content = {}, group = '$') => {
   if (!content[group]) {
     content[group] = {
       data: [],
@@ -206,13 +207,21 @@ export const generateFileContent = (results, content, group = '$') => {
       .filter(key => key.charAt(0) !== '@')
       .forEach(key => {
         const value = item[key]
-        if (getType(value) === 'array') {
+        if (Object.prototype.toString.call(value) === '[object Array]') {
           // create new group and include array items there
-          const entries = value.map(entry => ({
-            ...attributes, // always include attributes
-            ...entry
-          }))
-          generateFileContent(entries, content, group + '.' + key)
+          const nestedGroup = group + '.' + key
+          const entries = value.map((entry, index) => {
+            const base = {
+              ...attributes, // always include attributes
+              ['@' + nestedGroup]: index
+            }
+            if (getType(entry) === 'object') {
+              return { ...base, ...entry }
+            } else {
+              return { ...base, value: entry }
+            }
+          })
+          generateFileContent(entries, content, nestedGroup)
         } else {
           data[key] = parseValue(value)
           if (current.headers.indexOf(key) === -1) {
