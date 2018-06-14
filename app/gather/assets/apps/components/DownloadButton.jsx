@@ -29,6 +29,8 @@ import { buildQueryString } from '../utils/paths'
 import { isMounted } from '../utils/dom'
 import { generateFileContent, downloadContent } from '../utils/download'
 
+const PAGE_SIZE = 5000
+
 /**
  * DownloadButton component.
  *
@@ -103,9 +105,17 @@ export default class DownloadButton extends Component {
                     </p>
                     <p className='mt-2'>
                       <FormattedMessage
-                        id='download.action.records'
-                        defaultMessage='Records fetched:' />
-                      <b>{ this.state.records }</b>
+                        id='download.action.page'
+                        defaultMessage='Processing page: {page}'
+                        values={{page: this.state.page}}
+                      />
+                    </p>
+                    <p className='mt-2'>
+                      <FormattedMessage
+                        id='download.action.page.size'
+                        defaultMessage='Page size: {size} records'
+                        values={{size: PAGE_SIZE}}
+                      />
                     </p>
                   </div>
                 }
@@ -138,16 +148,14 @@ export default class DownloadButton extends Component {
       inProgress: true,
       page: 1,
       content: {},
-      records: 0,
       error: null
     }, this.loadData)
   }
 
   loadData () {
     const {page} = this.state
-    const pageSize = 10000
     const urlSep = this.props.url.indexOf('?') > -1 ? '&' : '?'
-    const url = `${this.props.url}${urlSep}${buildQueryString({page, pageSize})}`
+    const url = `${this.props.url}${urlSep}${buildQueryString({page, pageSize: PAGE_SIZE})}`
 
     return getData(url)
       .then(response => {
@@ -158,7 +166,6 @@ export default class DownloadButton extends Component {
 
         isMounted(this) && this.setState({
           content,
-          records: this.state.records + results.length,
           page: page + 1, // next bunch of records
           inProgress: response.next !== null, // something else?
           error: null

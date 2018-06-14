@@ -134,13 +134,17 @@ const downloadExcel = (content, filename) => {
   Object.keys(content)
     .filter(key => content[key].data.length)
     .forEach((key, index) => {
-      const rows = parseContentRows(content[key].headers, content[key].data)
-      const workSheet = XLSX.utils.aoa_to_sheet(rows)
-      const sheetname = index ? `#-${index}` : '#'
+      const workSheet = XLSX.utils.json_to_sheet(content[key].data, {header: content[key].headers})
+      const sheetname = key === '$' ? '#' : `#-${index}`
       XLSX.utils.book_append_sheet(workBook, workSheet, sheetname)
     })
 
-  XLSX.writeFile(workBook, buildFileName(filename, 'xlsx'))
+  XLSX.writeFile(workBook, buildFileName(filename, 'xlsx'), {
+    compression: true,
+    type: 'binary',
+    bookType: 'xlsx',
+    Props: { Author: 'Gather on AETHER' }
+  })
 }
 
 /**

@@ -401,13 +401,13 @@ describe('download utils', () => {
 
         document.body.appendChild = (element) => {
           addedElement = element
+          assert(element.download.startsWith(filename + '-'))
           if (appendChildCalled === 0) {
             // the main file
-            assert(element.download.startsWith(filename + '-'))
-            assert(!element.download.startsWith(filename + '-f-'))
+            assert(!element.download.startsWith(filename + '-1-'))
           } else {
             // the array file
-            assert(element.download.startsWith(filename + '-f-'))
+            assert(element.download.startsWith(filename + '-1-'))
           }
           assert(element.download.endsWith('.csv'))
           assert(element.download.indexOf('$') === -1)
@@ -416,13 +416,13 @@ describe('download utils', () => {
 
         document.body.removeChild = (element) => {
           assert.equal(element, addedElement)
+          assert(element.download.startsWith(filename + '-'))
           if (removeChildCalled === 0) {
             // the main file
-            assert(element.download.startsWith(filename + '-'))
-            assert(!element.download.startsWith(filename + '-f-'))
+            assert(!element.download.startsWith(filename + '-1-'))
           } else {
             // the array file
-            assert(element.download.startsWith(filename + '-f-'))
+            assert(element.download.startsWith(filename + '-1-'))
           }
           assert(element.download.endsWith('.csv'))
           assert(element.download.indexOf('$') === -1)
@@ -458,7 +458,7 @@ describe('download utils', () => {
 
       it('should create an XLS file with the content', () => {
         let mockBookNewCalled = 0
-        let mockAoaToSheet = 0
+        let mockJsonToSheet = 0
         let mockBookAppendSheet = 0
         let mockWriteFileCalled = 0
 
@@ -467,8 +467,8 @@ describe('download utils', () => {
             book_new: jest.fn(() => {
               mockBookNewCalled++
             }),
-            aoa_to_sheet: jest.fn(() => {
-              mockAoaToSheet++
+            json_to_sheet: jest.fn(() => {
+              mockJsonToSheet++
             }),
             book_append_sheet: jest.fn(() => {
               mockBookAppendSheet++
@@ -482,7 +482,7 @@ describe('download utils', () => {
         downloadContent(CONTENT)
 
         assert.equal(mockBookNewCalled, 1, 'book_new was called once')
-        assert.equal(mockAoaToSheet, 2, 'aoa_to_sheet was called twice')
+        assert.equal(mockJsonToSheet, 2, 'json_to_sheet was called twice')
         assert.equal(mockBookAppendSheet, 2, 'book_append_sheet was called twice')
         assert.equal(mockWriteFileCalled, 1, 'writeFile was called once')
       })
