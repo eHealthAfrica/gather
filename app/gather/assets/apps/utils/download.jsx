@@ -133,11 +133,11 @@ const downloadExcel = (content, filename) => {
   // create one sheet per content property
   Object.keys(content)
     .filter(key => content[key].data.length)
-    .forEach(key => {
-      const workSheet = XLSX.utils.aoa_to_sheet(
-        parseContentRows(content[key].headers, content[key].data)
-      )
-      XLSX.utils.book_append_sheet(workBook, workSheet, key)
+    .forEach((key, index) => {
+      const rows = parseContentRows(content[key].headers, content[key].data)
+      const workSheet = XLSX.utils.aoa_to_sheet(rows)
+      const sheetname = index ? `#-${index}` : '#'
+      XLSX.utils.book_append_sheet(workBook, workSheet, sheetname)
     })
 
   XLSX.writeFile(workBook, buildFileName(filename, 'xlsx'))
@@ -156,9 +156,9 @@ export const downloadContent = (content, name = 'data') => {
     // create one file per content property
     Object.keys(content)
       .filter(key => content[key].data.length)
-      .forEach(key => {
+      .forEach((key, index) => {
         const rows = parseContentRows(content[key].headers, content[key].data)
-        const filename = key === '$' ? name : name + '-' + key.replace('$.', '')
+        const filename = index ? `${name}-${index}` : name
         downloadCsv(rows, filename)
       })
   }
