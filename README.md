@@ -201,7 +201,7 @@ The list of the main containers:
 | ----------------- | --------------------------------------------------------------- |
 | db                | [PostgreSQL](https://www.postgresql.org/) database              |
 | **kernel**        | Aether Kernel app                                               |
-| **ui**            | Aether Kernel UI app (not needed by nice to have)               |
+| **ui**            | Aether Kernel UI app (not needed but nice to have)              |
 | **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)  |
 | **gather**        | Gather app                                                      |
 | kernel-test       | Aether Kernel TESTING app (used only in e2e testss)             |
