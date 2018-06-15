@@ -41,13 +41,12 @@ git clone git@github.com:eHealthAfrica/{repository-name}.git
 cd {repository-name}
 
 docker-compose build
-
 ```
 
 Include this entry in your `/etc/hosts` file:
 
 ```
-127.0.0.1    kernel.aether.local odk.aether.local gather.local
+127.0.0.1    kernel.aether.local odk.aether.local ui.aether.local gather.local
 ```
 
 *[Return to TOC](#table-of-contents)*
@@ -75,13 +74,13 @@ of the most common ones with non default values. For more info take a look at th
   - `HOSTNAME`: `gather.local`.
 - Django specific:
   - `RDS_DB_NAME`: `gather` Postgres database name.
-  - `WEB_SERVER_PORT`: `8080` Web server port.
+  - `WEB_SERVER_PORT`: `8005` Web server port.
 - Aether specific:
   - `AETHER_MODULES`: `odk,` Comma separated list with the available modules.
     To avoid confusion, the values will match the container name, `odk`.
   - Aether Kernel:
     - `AETHER_KERNEL_TOKEN`: `a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24` Token to connect to Aether Kernel Server.
-    - `AETHER_KERNEL_URL`: `http://kernel:8001` Aether Kernel Server url.
+    - `AETHER_KERNEL_URL`: `http://kernel:8000` Aether Kernel Server url.
     - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9001` Aether Kernel Testing Server url.
   - Aether ODK:
     - `AETHER_ODK_TOKEN`: `d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1` Token to connect to Aether ODK Server.
@@ -101,15 +100,17 @@ _verify you are logged into docker and have permission to the repository._
 
 This will start:
 
-- **gather** on `http://gather.local:8000`
+- **gather** on `http://gather.local:8005`
   and create a superuser `admin-gather`.
 
-- **aether-kernel** on `http://kernel.aether.local:8001`
+- **aether-kernel** on `http://kernel.aether.local:8000`
   and create a superuser `admin-kernel` with the needed TOKEN.
 
 - **aether-odk** on `http://odk.aether.local:8443`
   and create a superuser `admin-odk` with the needed TOKEN.
 
+- **aether-ui** on `http://ui.aether.local:8004`
+  and create a superuser `admin-ui` with the needed TOKEN.
 
 All the created superusers have password `adminadmin` in each container.
 
@@ -117,6 +118,7 @@ If the `nginx` container is also started the url ports can be removed.
 - `http://gather.local`
 - `http://kernel.aether.local`
 - `http://odk.aether.local`
+- `http://ui.aether.local`
 
 
 *[Return to TOC](#table-of-contents)*
@@ -166,6 +168,14 @@ track the user actions.
 All development should be tested within the container, but developed in the host folder.
 Read the [docker-compose-base.yml](docker-compose-base.yml) file to see how it's mounted.
 
+If you want to develop with your local Aether images use the file
+[docker-compose-local.yml](docker-compose-local.yml) and change the container
+paths to your current paths.
+
+```bash
+docker-compose -f docker-compose-local.yml up
+```
+
 *[Return to TOC](#table-of-contents)*
 
 
@@ -191,6 +201,7 @@ The list of the main containers:
 | ----------------- | --------------------------------------------------------------- |
 | db                | [PostgreSQL](https://www.postgresql.org/) database              |
 | **kernel**        | Aether Kernel app                                               |
+| **ui**            | Aether Kernel UI app (not needed by nice to have)               |
 | **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)  |
 | **gather**        | Gather app                                                      |
 | kernel-test       | Aether Kernel TESTING app (used only in e2e testss)             |
@@ -227,7 +238,6 @@ or
 
 ```bash
 docker-compose run gather test
-
 ```
 
 or
@@ -250,7 +260,7 @@ docker-compose -f docker-compose-test.yml up -d <container-name>-test
 **WARNING**
 
 Never run `gather` tests against any PRODUCTION server.
-The tests clean up will **DELETE ALL PROJECTS!!!**
+The tests clean up could **DELETE ALL PROJECTS!!!**
 
 Look into [docker-compose-base.yml](docker-compose-base.yml), the variable
 `AETHER_KERNEL_URL_TEST` indicates the Aether Kernel Server used in tests.
