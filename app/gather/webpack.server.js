@@ -22,7 +22,7 @@ const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const buildConfig = require('./webpack.common')
 
-const WEBPACK_PORT = 3005 // avoid conflict with aether-ui webpack port
+const WEBPACK_PORT = 3005
 const WEBPACK_URL = `http://localhost:${WEBPACK_PORT}`
 
 const hmrEntry = [
@@ -64,7 +64,7 @@ new WebpackDevServer(webpack(config), {
   inline: true,
   historyApiFallback: true,
   // Fixes:
-  //    Access to XXX at 'http://localhost:3000/static/ZZZ' from origin
+  //    Access to XXX at 'http://localhost:{port}/static/ZZZ' from origin
   //    has been blocked by CORS policy
   headers: { 'Access-Control-Allow-Origin': '*' },
   https: false,
