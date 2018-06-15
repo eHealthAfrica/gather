@@ -176,7 +176,6 @@ services:
 
       STATIC_ROOT: /code/aether/ui/assets/bundles
       WEB_SERVER_PORT: 8004
-
     volumes: &ui-volumes
       - ../aether/aether-ui/conf:/code/conf
       - ../aether/aether-ui/aether:/code/aether

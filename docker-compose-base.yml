@@ -31,17 +31,7 @@ services:
   # ---------------------------------
 
   kernel-base:
-    #################################################
-    #                    WARNING                    #
-    #                                               #
-    # uncomment this to use your local instance     #
-    #                                               #
-    #################################################
-    image: ehealthafrica/aether-kernel:0.7.0
-    # build: ../aether/aether-kernel
-
-    stdin_open: true
-    tty: true
+    image: ehealthafrica/aether-kernel:0.7.1
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
@@ -57,14 +47,6 @@ services:
 
       WEB_SERVER_PORT: 8000
     volumes:
-      #################################################
-      #                    WARNING                    #
-      #                                               #
-      # uncomment this to use your local instance     #
-      #                                               #
-      #################################################
-      #- ../aether/aether-kernel:/code
-
       # media folder
       - ./tmp/kernel:/media
     ports:
@@ -77,17 +59,7 @@ services:
   # ---------------------------------
 
   odk-base:
-    #################################################
-    #                    WARNING                    #
-    #                                               #
-    # uncomment this to use your local instance     #
-    #                                               #
-    #################################################
-    image: ehealthafrica/aether-odk:0.7.0
-    # build: ../aether/aether-odk-module
-
-    stdin_open: true
-    tty: true
+    image: ehealthafrica/aether-odk:0.7.1
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
@@ -107,14 +79,6 @@ services:
 
       WEB_SERVER_PORT: 8443
     volumes:
-      #################################################
-      #                    WARNING                    #
-      #                                               #
-      # uncomment this to use your local instance     #
-      #                                               #
-      #################################################
-      #- ../aether/aether-odk-module:/code
-
       # media folder
       - ./tmp/odk:/media
     ports:
@@ -127,19 +91,8 @@ services:
   # ---------------------------------
 
   ui-base:
-    image: ui
-    stdin_open: true
-    tty: true
-
-    #################################################
-    #                    WARNING                    #
-    #                                               #
-    # change this value to your real aether-ui path #
-    #                                               #
-    #################################################
-    build: ../aether/aether-ui
-
-    environment: &ui-environment
+    image: ehealthafrica/aether-ui:0.7.1
+    environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
       DEBUG: "true"
@@ -158,36 +111,9 @@ services:
 
       STATIC_ROOT: /code/aether/ui/assets/bundles
       WEB_SERVER_PORT: 8004
-    volumes: &ui-volumes
-      ##################################################
-      #                     WARNING                    #
-      #                                                #
-      # change these paths to your real aether-ui path #
-      #                                                #
-      ##################################################
-
-      - ../aether/aether-ui/conf:/code/conf
-      - ../aether/aether-ui/aether:/code/aether
-
-      - ../aether/aether-ui/entrypoint.sh:/code/entrypoint.sh
-      - ../aether/aether-ui/manage.py:/code/manage.py
-      - ../aether/aether-ui/setup.py:/code/setup.py
-      - ../aether/aether-ui/package.json:/code/package.json
     ports:
       - "8004:8004"
     command: start_dev
-
-  # ---------------------------------
-  # Webpack container
-  # ---------------------------------
-
-  webpack-ui-base:
-    image: ui
-    environment: *ui-environment
-    volumes: *ui-volumes
-    ports:
-      - "3000:3000"
-    command: start_webpack
 
 
   # ---------------------------------
@@ -249,13 +175,13 @@ services:
     command: start_dev
 
   # ---------------------------------
-  # Webpack container
+  # Gather Webpack container
   # ---------------------------------
 
-  webpack-gather-base:
+  gather-webpack-base:
     image: gather
     environment: *gather-environment
     volumes: *gather-volumes
     ports:
-      - "3005:3005" # avoid conflict with aether-ui webpack port
+      - "3005:3005"
     command: start_webpack
