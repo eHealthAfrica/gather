@@ -1,6 +1,7 @@
 #
 # USE THIS ONLY FOR LOCAL DEV
-# This config mimics the production config and is meant for testing the production setup.
+# This config mimics the production config and
+# is meant for testing the production setup.
 #
 
 
@@ -16,7 +17,7 @@ server {
 
   location / {
     # use docker network alias (is used by UMS as service name)
-    proxy_pass http://gather.local:8000;
+    proxy_pass http://gather.local:8005;
     include    /etc/nginx/uwsgi_params;
   }
 }
@@ -40,7 +41,7 @@ server {
 
   location / {
     # use docker network alias (is used by UMS as service name)
-    proxy_pass http://kernel.aether.local:8001;
+    proxy_pass http://kernel.aether.local:8000;
     include    /etc/nginx/uwsgi_params;
   }
 }
@@ -65,6 +66,23 @@ server {
   location / {
     # use docker network alias (is used by UMS as service name)
     proxy_pass http://odk.aether.local:8443;
+    include    /etc/nginx/uwsgi_params;
+  }
+}
+
+# ------------------------------------------------------------------------------
+# Aether UI
+# ------------------------------------------------------------------------------
+
+server {
+  listen                    80;
+  charset                   utf-8;
+  server_name               ui.aether.local;
+  client_max_body_size      75M;
+
+  location / {
+    # use docker network alias (is used by UMS as service name)
+    proxy_pass http://ui.aether.local:8004;
     include    /etc/nginx/uwsgi_params;
   }
 }

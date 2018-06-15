@@ -22,7 +22,8 @@ const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const buildConfig = require('./webpack.common')
 
-const WEBPACK_URL = 'http://localhost:3000'
+const WEBPACK_PORT = 3005 // avoid conflict with aether-ui webpack port
+const WEBPACK_URL = `http://localhost:${WEBPACK_PORT}`
 
 const hmrEntry = [
   // bundle the client for webpack-dev-server
@@ -83,6 +84,6 @@ new WebpackDevServer(webpack(config), {
     chunkModules: false
   }
 })
-  .listen(3000, '0.0.0.0', () => {
+  .listen(WEBPACK_PORT, '0.0.0.0', () => {
     console.log('Listening at', WEBPACK_URL)
   })

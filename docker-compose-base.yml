@@ -25,12 +25,21 @@ services:
     ports:
       - "80:80"
 
+
   # ---------------------------------
   # Aether kernel container
   # ---------------------------------
 
   kernel-base:
+    #################################################
+    #                    WARNING                    #
+    #                                               #
+    # uncomment this to use your local instance     #
+    #                                               #
+    #################################################
     image: ehealthafrica/aether-kernel:0.7.0
+    # build: ../aether/aether-kernel
+
     stdin_open: true
     tty: true
     environment:
@@ -46,20 +55,37 @@ services:
       RDS_PORT: 5432
       RDS_USERNAME: postgres
 
-      WEB_SERVER_PORT: 8001
+      WEB_SERVER_PORT: 8000
     volumes:
+      #################################################
+      #                    WARNING                    #
+      #                                               #
+      # uncomment this to use your local instance     #
+      #                                               #
+      #################################################
+      #- ../aether/aether-kernel:/code
+
       # media folder
       - ./tmp/kernel:/media
     ports:
-      - "8001:8001"
+      - "8000:8000"
     command: start_dev
+
 
   # ---------------------------------
   # ODK Adapter container
   # ---------------------------------
 
   odk-base:
+    #################################################
+    #                    WARNING                    #
+    #                                               #
+    # uncomment this to use your local instance     #
+    #                                               #
+    #################################################
     image: ehealthafrica/aether-odk:0.7.0
+    # build: ../aether/aether-odk-module
+
     stdin_open: true
     tty: true
     environment:
@@ -70,7 +96,7 @@ services:
       HOSTNAME: odk.aether.local
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
-      AETHER_KERNEL_URL: http://kernel:8001
+      AETHER_KERNEL_URL: http://kernel:8000
       AETHER_KERNEL_URL_TEST: http://kernel-test:9001
 
       RDS_DB_NAME: aether-odk
@@ -81,11 +107,88 @@ services:
 
       WEB_SERVER_PORT: 8443
     volumes:
+      #################################################
+      #                    WARNING                    #
+      #                                               #
+      # uncomment this to use your local instance     #
+      #                                               #
+      #################################################
+      #- ../aether/aether-odk-module:/code
+
       # media folder
       - ./tmp/odk:/media
     ports:
       - "8443:8443"
     command: start_dev
+
+
+  # ---------------------------------
+  # Aether UI module
+  # ---------------------------------
+
+  ui-base:
+    image: ui
+    stdin_open: true
+    tty: true
+
+    #################################################
+    #                    WARNING                    #
+    #                                               #
+    # change this value to your real aether-ui path #
+    #                                               #
+    #################################################
+    build: ../aether/aether-ui
+
+    environment: &ui-environment
+      CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
+      CSRF_COOKIE_DOMAIN: .aether.local
+      DEBUG: "true"
+      DJANGO_SECRET_KEY: "secret"
+      HOSTNAME: ui.aether.local
+
+      AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
+      AETHER_KERNEL_URL: http://kernel:8000
+      AETHER_KERNEL_URL_TEST: http://kernel-test:9001
+
+      RDS_DB_NAME: aether-ui
+      RDS_HOSTNAME: db
+      RDS_PASSWORD: ""
+      RDS_PORT: 5432
+      RDS_USERNAME: postgres
+
+      STATIC_ROOT: /code/aether/ui/assets/bundles
+      WEB_SERVER_PORT: 8004
+    volumes: &ui-volumes
+      ##################################################
+      #                     WARNING                    #
+      #                                                #
+      # change these paths to your real aether-ui path #
+      #                                                #
+      ##################################################
+
+      - ../aether/aether-ui/conf:/code/conf
+      - ../aether/aether-ui/aether:/code/aether
+
+      - ../aether/aether-ui/entrypoint.sh:/code/entrypoint.sh
+      - ../aether/aether-ui/manage.py:/code/manage.py
+      - ../aether/aether-ui/setup.py:/code/setup.py
+      - ../aether/aether-ui/package.json:/code/package.json
+    ports:
+      - "8004:8004"
+    command: start_dev
+
+  # ---------------------------------
+  # Webpack container
+  # ---------------------------------
+
+  webpack-ui-base:
+    image: ui
+    environment: *ui-environment
+    volumes: *ui-volumes
+    ports:
+      - "3000:3000"
+    command: start_webpack
+
 
   # ---------------------------------
   # Gather container
@@ -106,7 +209,7 @@ services:
       STATIC_ROOT: /code/gather/assets/bundles
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
-      AETHER_KERNEL_URL: http://kernel:8001
+      AETHER_KERNEL_URL: http://kernel:8000
       AETHER_KERNEL_URL_TEST: http://kernel-test:9001
 
       AETHER_MODULES: "kernel,odk,"
@@ -125,7 +228,7 @@ services:
       CSV_HEADER_RULES_SEP: ;
       CSV_MAX_ROWS_SIZE: 1000
 
-      WEB_SERVER_PORT: 8000
+      WEB_SERVER_PORT: 8005
     volumes: &gather-volumes
       #################################################
       #                    WARNING                    #
@@ -142,17 +245,17 @@ services:
       - ./app/manage.py:/code/manage.py
       - ./app/package.json:/code/package.json
     ports:
-      - "8000:8000"
+      - "8005:8005"
     command: start_dev
 
   # ---------------------------------
   # Webpack container
   # ---------------------------------
 
-  webpack-base:
+  webpack-gather-base:
     image: gather
     environment: *gather-environment
     volumes: *gather-volumes
     ports:
-      - "3000:3000"
+      - "3005:3005" # avoid conflict with aether-ui webpack port
     command: start_webpack
