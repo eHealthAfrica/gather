@@ -75,6 +75,7 @@ services:
 
   kernel:
     build: ../aether/aether-kernel
+    image: local-aether-kernel
     stdin_open: true
     tty: true
     environment:
@@ -112,6 +113,7 @@ services:
 
   odk:
     build: ../aether/aether-odk-module
+    image: local-aether-odk
     stdin_open: true
     tty: true
     environment:
@@ -154,7 +156,7 @@ services:
 
   ui:
     build: ../aether/aether-ui
-    image: ui
+    image: local-aether-ui
     stdin_open: true
     tty: true
     environment: &ui-environment
@@ -197,7 +199,7 @@ services:
           - ui.aether.local
 
   ui-webpack:
-    image: ui
+    image: local-aether-ui
     environment: *ui-environment
     volumes: *ui-volumes
     ports:
