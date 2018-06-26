@@ -80,6 +80,10 @@ server {
   server_name               ui.aether.local;
   client_max_body_size      75M;
 
+  location /static/ {
+    alias /var/www/static/;
+  }
+
   location / {
     # use docker network alias (is used by UMS as service name)
     proxy_pass http://ui.aether.local:8004;

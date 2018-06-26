@@ -59,10 +59,18 @@ services:
     depends_on:
       - db
       - kernel
+      - ui-webpack
     networks:
       internal:
         aliases:
           - ui.aether.local
+
+  ui-webpack:
+    extends:
+      file: docker-compose-base.yml
+      service: ui-webpack-base
+    networks:
+      - internal
 
   # ---------------------------------
   # Gather container

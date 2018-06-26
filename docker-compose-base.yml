@@ -35,7 +35,6 @@ services:
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: "true"
       DJANGO_SECRET_KEY: "secret"
       HOSTNAME: kernel.aether.local
 
@@ -63,7 +62,6 @@ services:
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: "true"
       DJANGO_SECRET_KEY: "secret"
       HOSTNAME: odk.aether.local
 
@@ -92,16 +90,16 @@ services:
 
   ui-base:
     image: ehealthafrica/aether-ui:0.7.1
-    environment:
+    environment: &ui-environment
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: "true"
       DJANGO_SECRET_KEY: "secret"
       HOSTNAME: ui.aether.local
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
       AETHER_KERNEL_URL: http://kernel:8000
       AETHER_KERNEL_URL_TEST: http://kernel-test:9001
+      ADMIN_PASSWORD: secretsecret
 
       RDS_DB_NAME: aether-ui
       RDS_HOSTNAME: db
@@ -114,6 +112,13 @@ services:
     ports:
       - "8004:8004"
     command: start_dev
+
+  ui-webpack-base:
+    image: ehealthafrica/aether-ui:0.7.1
+    environment: *ui-environment
+    ports:
+      - "3000:3000"
+    command: start_webpack
 
 
   # ---------------------------------

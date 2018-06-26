@@ -176,7 +176,7 @@ services:
       RDS_PORT: 5432
       RDS_USERNAME: postgres
 
-      STATIC_ROOT: /code/aether/ui/assets/bundles
+      # STATIC_ROOT: /code/aether/ui/assets/bundles
       WEB_SERVER_PORT: 8004
     volumes: &ui-volumes
       - ../aether/aether-ui/conf:/code/conf
@@ -192,7 +192,7 @@ services:
     depends_on:
       - db
       - kernel
-      - ui-webpack
+      # - ui-webpack
     networks:
       internal:
         aliases:
