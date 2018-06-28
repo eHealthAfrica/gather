@@ -81,7 +81,7 @@ server {
   client_max_body_size      75M;
 
   location /static/ {
-    alias /var/www/static/;
+    alias /static/ui/;
   }
 
   location / {

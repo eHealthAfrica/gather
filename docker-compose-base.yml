@@ -22,6 +22,7 @@ services:
       # media folders per container
       - ./tmp/kernel:/media/kernel
       - ./tmp/odk:/media/odk
+      - ./tmp/ui/bundles:/static/ui
     ports:
       - "80:80"
 
@@ -99,7 +100,6 @@ services:
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
       AETHER_KERNEL_URL: http://kernel:8000
       AETHER_KERNEL_URL_TEST: http://kernel-test:9001
-      ADMIN_PASSWORD: secretsecret
 
       RDS_DB_NAME: aether-ui
       RDS_HOSTNAME: db
@@ -109,6 +109,9 @@ services:
 
       STATIC_ROOT: /code/aether/ui/assets/bundles
       WEB_SERVER_PORT: 8004
+    volumes:
+      - ./tmp/ui/bundles:/code/aether/ui/assets/bundles
+      - ./tmp/ui/static:/var/www/static
     ports:
       - "8004:8004"
     command: start_dev
