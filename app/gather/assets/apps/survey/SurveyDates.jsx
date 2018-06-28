@@ -44,10 +44,10 @@ export default class SurveyDates extends Component {
               day='numeric' />
           </span>
 
-          { survey.submission_count === 0 && this.renderNoSubmissions() }
-          { survey.submission_count > 0 && this.renderSubmissions() }
+          { survey.submissions_count === 0 && this.renderNoSubmissions() }
+          { survey.submissions_count > 0 && this.renderSubmissions() }
           {
-            survey.submission_count > 0 &&
+            survey.submissions_count > 0 &&
             this.props.showDuration &&
             this.renderSubmissionsDuration()
           }
