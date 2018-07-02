@@ -181,8 +181,13 @@ export default class JSONViewer extends Component {
   }
 
   renderArray (values) {
-    console.log(values)
-    return <JSONArrayViewer values={values} labels={this.props.labels} />
+    return (
+      <JSONArrayViewer
+        values={values}
+        labels={this.props.labels}
+        labelRoot={(this.props.labelRoot || '') + '#.'}
+      />
+    )
   }
 
   renderObject (value) {
@@ -192,10 +197,14 @@ export default class JSONViewer extends Component {
           Object.keys(value).map(key => (
             <div key={key} className={`property ${getType(value[key]) || ''}`}>
               <div className={`property-title ${getType(value[key]) ? '' : 'empty'}`}>
-                { getLabel(key, this.props.labels) }
+                { getLabel((this.props.labelRoot || '') + key, this.props.labels) }
               </div>
               <div className='property-value'>
-                { this.renderValue(value[key]) }
+                <JSONViewer
+                  data={value[key]}
+                  labels={this.props.labels}
+                  labelRoot={(this.props.labelRoot || '') + key + '.'}
+                />
               </div>
             </div>
           ))
@@ -246,7 +255,11 @@ class JSONArrayViewer extends Component {
           {
             values.map((value, index) => (
               <li key={index} className='property-item'>
-                <JSONViewer data={value} labels={this.props.labels} />
+                <JSONViewer
+                  data={value}
+                  labels={this.props.labels}
+                  labelRoot={this.props.labelRoot}
+                />
               </li>
             ))
           }

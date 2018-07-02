@@ -185,10 +185,10 @@ export const unflatten = (object, separator = '.') => {
 export const filterByPaths = (object, paths, separator = '.') => {
   const flattenObject = flatten(object, separator)
   const filteredFlattenObject = {}
-  Object.keys(flattenObject)
-    .filter(key => paths.find(path => key.indexOf(path) === 0))
+  paths
+    .filter(key => flattenObject[key] !== null)
     .forEach(key => { filteredFlattenObject[key] = flattenObject[key] })
-  return unflatten(filteredFlattenObject, separator)
+  return unflatten(filteredFlattenObject)
 }
 
 /**

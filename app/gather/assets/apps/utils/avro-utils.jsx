@@ -99,7 +99,7 @@ export const extractPathDocs = (schema, options = {}) => {
       // indicate that the next property can be any int
       // if "items" type is not a leaf and continue with them
       if (!isLeaf(current.items)) {
-        walk(current.items, `${jsonpath}.#`)
+        walk({...current.items, name: '#'}, jsonpath)
       }
     }
 

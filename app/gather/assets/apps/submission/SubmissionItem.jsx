@@ -21,7 +21,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { flatten } from '../utils/types'
+import { filterByPaths } from '../utils/types'
 import { JSONViewer, LinksList, normalizeLinksList } from '../components'
 
 export default class SubmissionItem extends Component {
@@ -36,12 +36,6 @@ export default class SubmissionItem extends Component {
     const submission = list[0]
     const {paths, labels} = this.props
     const links = normalizeLinksList(submission.attachments)
-
-    const flattenPayload = flatten({...submission.payload})
-    const filteredPayload = {}
-    paths
-      .filter(key => flattenPayload[key] !== null)
-      .forEach(key => { filteredPayload[key] = flattenPayload[key] })
 
     return (
       <div data-qa={`submission-item-${submission.id}`} className='x-2'>
@@ -72,7 +66,7 @@ export default class SubmissionItem extends Component {
 
           <div>
             <JSONViewer
-              data={filteredPayload}
+              data={filterByPaths({...submission.payload}, paths)}
               labels={labels}
               links={links}
             />

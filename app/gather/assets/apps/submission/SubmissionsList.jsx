@@ -168,6 +168,7 @@ export default class SubmissionsList extends Component {
               <JSONViewer
                 data={flattenPayload[key]}
                 labels={labels}
+                labelRoot={key + '.'}
                 links={links}
               />
             </td>
