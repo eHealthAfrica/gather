@@ -261,7 +261,7 @@ class SurveyMasks extends Component {
                 onClick={() => toggleColumn(column)}>
                 <div className='marker' />
                 <span>
-                  { cleanPropertyName(column.split(this.props.separator).join(' - ')) }
+                  { cleanPropertyName(column.split('.').join(' - ')) }
                 </span>
               </li>
             ))

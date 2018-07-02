@@ -18,7 +18,13 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+
 set -e
 
-docker-compose kill
-docker-compose -f docker-compose-test.yml kill
+for dc_file in $(find docker-compose*.yml 2> /dev/null)
+do
+  :
+
+  echo "Killing $dc_file containers"
+  docker-compose -f $dc_file kill
+done

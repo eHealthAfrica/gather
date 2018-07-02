@@ -71,13 +71,23 @@ export const getMediaFileAPIPath = ({id, ...params}) => {
 }
 
 /**
- * Returns the API url to get the Submissions data by Survey
+ * Returns the API url to get the Entities data by Survey
  *
- * @param {number}  id          - Submission id
+ * @param {number}  id          - Entity id
  * @param {object}  params      - query string parameters
  */
-export const getSubmissionsAPIPath = ({id, ...params}) => {
-  return buildAPIPath(KERNEL_APP, 'submissions', id, params)
+export const getEntitiesAPIPath = ({id, ...params}) => {
+  return buildAPIPath(KERNEL_APP, 'entities', id, params)
+}
+
+/**
+ * Returns the API url to get the Schemas data
+ *
+ * @param {number}  id          - schema id
+ * @param {object}  params      - query string parameters
+ */
+export const getSchemasAPIPath = ({id, ...params}) => {
+  return buildAPIPath(KERNEL_APP, 'schemas', id, params)
 }
 
 /**
