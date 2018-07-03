@@ -23,9 +23,10 @@
 import assert from 'assert'
 import {
   buildQueryString,
+  getEntitiesAPIPath,
   getMasksAPIPath,
   getMediaFileAPIPath,
-  getSubmissionsAPIPath,
+  getSchemasAPIPath,
   getSurveyorsAPIPath,
   getSurveyorsPath,
   getSurveysAPIPath,
@@ -112,15 +113,27 @@ describe('paths utils', () => {
     })
   })
 
-  describe('getSubmissionsAPIPath', () => {
+  describe('getEntitiesAPIPath', () => {
     const prefix = '/kernel/'
 
-    it('should return the Submissions API path', () => {
-      assert.equal(getSubmissionsAPIPath({}), prefix + 'submissions.json')
+    it('should return the Entities API path', () => {
+      assert.equal(getEntitiesAPIPath({}), prefix + 'entities.json')
     })
 
-    it('should return the Survey Submissions API path', () => {
-      assert.equal(getSubmissionsAPIPath({project: 1}), prefix + 'submissions.json?project=1')
+    it('should return the Survey Entities API path', () => {
+      assert.equal(getEntitiesAPIPath({project: 1}), prefix + 'entities.json?project=1')
+    })
+  })
+
+  describe('getSchemasAPIPath', () => {
+    const prefix = '/kernel/'
+
+    it('should return the Schemas API path', () => {
+      assert.equal(getSchemasAPIPath({}), prefix + 'schemas.json')
+    })
+
+    it('should return the Survey Schemas API path', () => {
+      assert.equal(getSchemasAPIPath({project: 1}), prefix + 'schemas.json?project=1')
     })
   })
 
