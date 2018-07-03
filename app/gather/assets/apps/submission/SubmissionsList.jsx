@@ -21,7 +21,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { flatten, inflate } from '../utils/types'
+import { flatten, inflate, getLabel } from '../utils/types'
 import { JSONViewer, LinksList, normalizeLinksList } from '../components'
 
 export default class SubmissionsList extends Component {
@@ -117,7 +117,7 @@ export default class SubmissionsList extends Component {
                     title={row[column].path}
                     rowSpan={row[column].isLeaf ? rows : 1}
                     colSpan={row[column].siblings}>
-                    { labels[row[column].path] || row[column].label }
+                    { getLabel(row[column].path, labels) }
                   </th>
                 ))
               ))
@@ -136,7 +136,7 @@ export default class SubmissionsList extends Component {
                       title={row[column].path}
                       rowSpan={row[column].isLeaf ? (rows - index - 1) : 1}
                       colSpan={row[column].siblings}>
-                      { labels[row[column].path] || row[column].label }
+                      { getLabel(row[column].path, labels) }
                     </th>
                   ))
                 }

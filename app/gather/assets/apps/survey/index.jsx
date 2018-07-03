@@ -91,7 +91,8 @@ export default class SurveyDispatcher extends Component {
             url: getSurveysAPIPath({id: surveyId, withStats: true})
           },
           {
-            // take the last 10 schemas to extract the paths and labels
+            // take the last schemas to extract the paths and labels
+            // TODO: let the user choose the schema and fetch only entities of that one
             name: 'schemas',
             url: getSchemasAPIPath({project: surveyId, ordering: '-modified', pageSize: 10})
           }

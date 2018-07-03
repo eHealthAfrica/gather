@@ -66,7 +66,7 @@ export default class SubmissionItem extends Component {
 
           <div>
             <JSONViewer
-              data={filterByPaths({...submission.payload}, paths)}
+              data={filterByPaths(submission.payload, paths)}
               labels={labels}
               links={links}
             />
