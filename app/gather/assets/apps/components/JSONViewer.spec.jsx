@@ -143,6 +143,29 @@ describe('JSONViewer', () => {
         expect(node.find('.property-value').text()).toEqual('–')
       })
     })
+
+    it('should collapse nested properties', () => {
+      const component = mountWithIntl(
+        <JSONViewer
+          data={{
+            property_0: {property_1: 1}
+          }}
+        />
+      )
+
+      expect(component.find('.property').length).toEqual(1)
+      expect(component.find('.property-title').text()).toEqual('property 0')
+      // by default nested property is collapsed
+      expect(component.find('.property-value').text()).toEqual('…')
+      component.find('button').simulate('click')
+
+      const properties = component.find('.property')
+      expect(properties.length).toEqual(2)
+      properties.forEach((node, index) => {
+        expect(node.find('.property-title').first().text()).toEqual(`property ${index}`) // cleaned key name
+        expect(node.find('.property-value').first().text()).not.toEqual('…')
+      })
+    })
   })
 
   describe('Array', () => {
@@ -192,6 +215,42 @@ describe('JSONViewer', () => {
       properties.forEach((node, index) => {
         expect(node.text()).toEqual('–')
       })
+    })
+  })
+
+  describe('Labels', () => {
+    it('should use the given labels to render the titles', () => {
+      const component = mountWithIntl(
+        <JSONViewer
+          data={{a: 1}}
+          labels={{a: 'Root'}}
+        />
+      )
+      expect(component.find('.property-title').text()).toEqual('Root')
+    })
+
+    it('should detect array properties', () => {
+      const component = mountWithIntl(
+        <JSONViewer
+          data={[{e: 1}]}
+          labels={{'a.d.#.e': 'The indexed E'}}
+          labelRoot='a.d.'
+        />
+      )
+      // by default array is collapsed
+      component.find('button').simulate('click')
+      expect(component.find('.property-title').text()).toEqual('The indexed E')
+    })
+
+    it('should detect map properties', () => {
+      const component = mountWithIntl(
+        <JSONViewer
+          data={{c: 1}}
+          labels={{'a.*.c': 'The Big C'}}
+          labelRoot='a.x.'
+        />
+      )
+      expect(component.find('.property-title').text()).toEqual('The Big C')
     })
   })
 })
