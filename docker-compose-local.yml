@@ -108,7 +108,7 @@ services:
 
 
   # ---------------------------------
-  # ODK Adapter container
+  # ODK container
   # ---------------------------------
 
   odk:
@@ -151,7 +151,7 @@ services:
 
 
   # ---------------------------------
-  # Aether UI module
+  # Aether UI container
   # ---------------------------------
 
   ui:
@@ -159,7 +159,7 @@ services:
     image: local-aether-ui
     stdin_open: true
     tty: true
-    environment: &ui-environment
+    environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
       DEBUG: "true"
@@ -178,32 +178,15 @@ services:
 
       STATIC_ROOT: /code/aether/ui/assets/bundles
       WEB_SERVER_PORT: 8004
-    volumes: &ui-volumes
-      - ../aether/aether-ui/conf:/code/conf
-      - ../aether/aether-ui/aether:/code/aether
-
-      - ../aether/aether-ui/entrypoint.sh:/code/entrypoint.sh
-      - ../aether/aether-ui/manage.py:/code/manage.py
-      - ../aether/aether-ui/setup.py:/code/setup.py
-      - ../aether/aether-ui/package.json:/code/package.json
+    volumes:
+      - ../aether/aether-ui:/code
     ports:
       - "8004:8004"
     command: start_dev
     depends_on:
       - db
       - kernel
-      - ui-webpack
     networks:
       internal:
         aliases:
           - ui.aether.local
-
-  ui-webpack:
-    image: local-aether-ui
-    environment: *ui-environment
-    volumes: *ui-volumes
-    ports:
-      - "3004:3004"
-    command: start_webpack
-    networks:
-      - internal
