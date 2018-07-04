@@ -65,6 +65,7 @@ const MESSAGES = defineMessages({
  *
  * Renders the bar with:
  *  - the search input (optional),
+ *  - the list with the available page sizes,
  *  - the current page, an interactive input to go to the indicated page, and
  *  - the pagination buttons:
  *     - FIRST,
@@ -84,34 +85,51 @@ class PaginationBar extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.currentPage !== this.state.currentPage) {
-      this.setState({ currentPage: nextProps.currentPage })
+      this.setState({ currentPage: Math.min(Math.max(1, nextProps.currentPage), this.getNumberOfPages()) })
     }
   }
 
-  render (list) {
-    if (this.getNumberOfPages() < 2 && !this.props.search) {
+  render () {
+    const showNavigationButtons = (this.props.records > this.props.pageSize)
+    const showPageSizesSelect = (
+      this.props.sizes &&
+      this.props.sizes.length > 1 &&
+      this.props.records > this.props.sizes[0]
+    )
+
+    const componentShouldRender = () => {
+      if (this.props.search && this.state.search) {
+        return true // searching, no matter the number of records
+      }
+
+      if (this.props.records === 0) {
+        return false // nothing to display, we do not need the bar
+      }
+
+      return this.props.search || showNavigationButtons || showPageSizesSelect
+    }
+
+    if (!componentShouldRender()) {
       return <div />
     }
 
     return (
       <nav data-qa='data-pagination' className='pagination-bar'>
         { /* render SEARCH */ }
-        { this.renderSearchBar() }
+        { this.props.search && this.renderSearchBar() }
         { /* render NAVIGATION BUTTONS and CURRENT PAGE input */ }
-        { this.renderNavigationButtons() }
+        { showNavigationButtons && this.renderNavigationButtons() }
+        { /* render PAGE SIZE options */ }
+        { showPageSizesSelect && this.renderPageSizes() }
       </nav>
     )
   }
 
   getNumberOfPages () {
-    return Math.ceil(this.props.records / this.props.pageSize) || 0
+    return Math.ceil(this.props.records / this.props.pageSize)
   }
 
   renderSearchBar () {
-    if (!this.props.search) {
-      return ''
-    }
-
     const onChange = (event) => {
       this.setState({ [event.target.name]: event.target.value })
     }
@@ -137,11 +155,8 @@ class PaginationBar extends Component {
       </div>
     )
   }
-  renderNavigationButtons () {
-    if (this.getNumberOfPages() < 2) {
-      return ''
-    }
 
+  renderNavigationButtons () {
     return (
       <ul data-qa='data-pagination-buttons' className='pagination'>
         { /* go to FIRST page */}
@@ -183,8 +198,25 @@ class PaginationBar extends Component {
 
     // indicates if the value in the input reflects the current page or
     // if it is still pending.
-    // (only after losing the focus, `onBlur` event, will request a new page)
     const isPending = (this.state.currentPage !== this.props.currentPage)
+
+    const onChangePage = (event) => {
+      const newPage = parseInt(event.target.value || 0, 10)
+      const currentPage = Math.min(Math.max(1, newPage), numberOfPages)
+      this.setState({ currentPage })
+    }
+
+    const onBlurPage = () => {
+      if (this.state.currentPage !== this.props.currentPage) {
+        this.props.goToPage(this.state.currentPage)
+      }
+    }
+
+    const onKeyPress = (event) => {
+      if (event.charCode === 13) { // Enter
+        onBlurPage()
+      }
+    }
 
     return (
       <span
@@ -197,30 +229,12 @@ class PaginationBar extends Component {
           maxLength={Math.ceil(numberOfPages / 10) + 1}
           min={1}
           max={numberOfPages}
-          onChange={this.onChangePage.bind(this)}
-          onBlur={this.onBlurPage.bind(this)}
+          onChange={onChangePage}
+          onKeyPress={onKeyPress}
+          onBlur={onBlurPage}
         />
       </span>
     )
-  }
-
-  onChangePage (event) {
-    const numberOfPages = this.getNumberOfPages()
-    const newPage = parseInt(event.target.value || 0, 10)
-
-    if (newPage < 1) {
-      this.setState({ currentPage: 1 })
-    } else if (newPage > numberOfPages) {
-      this.setState({ currentPage: numberOfPages })
-    } else {
-      this.setState({ currentPage: newPage })
-    }
-  }
-
-  onBlurPage () {
-    if (this.state.currentPage !== this.props.currentPage) {
-      this.props.goToPage(this.state.currentPage)
-    }
   }
 
   renderLinkToPage (pageName) {
@@ -277,6 +291,35 @@ class PaginationBar extends Component {
           <FormattedMessage {...MESSAGES[pageName]} />
         </button>
       </li>
+    )
+  }
+
+  renderPageSizes () {
+    const onChange = (event) => {
+      const newPageSize = parseInt(event.target.value, 10)
+
+      if (newPageSize !== this.props.pageSize) {
+        this.props.setPageSize(newPageSize)
+      }
+    }
+
+    return (
+      <div data-qa='data-pagination-sizes' className='sizes'>
+        <FormattedMessage
+          id='pagination.sizes.select'
+          defaultMessage='Choose size'
+        />
+        <select value={this.props.pageSize} onChange={onChange}>
+          { this.props.sizes.map(size => (
+            <option
+              key={size}
+              value={size}
+              data-qa={`data-pagination-size-${size}`}>
+              {size}
+            </option>
+          )) }
+        </select>
+      </div>
     )
   }
 }

@@ -34,14 +34,16 @@ import SurveyMasks from './mask/SurveyMasks'
 import EntitiesList from './entity/EntitiesList'
 import EntityItem from './entity/EntityItem'
 
-const TABLE_SIZE = 10
+const TABLE_VIEW = 'table'
+const SINGLE_VIEW = 'single'
+const TABLE_SIZES = [ 10, 25, 50, 100 ]
 
 export default class Survey extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      pageSize: TABLE_SIZE,
+      viewMode: TABLE_VIEW,
       total: props.survey.entities_count,
       labels: {},
       allPaths: [],
@@ -121,8 +123,8 @@ export default class Survey extends Component {
     }
 
     const {survey} = this.props
-    const {pageSize} = this.state
-    const listComponent = (pageSize === 1 ? EntityItem : EntitiesList)
+    const {viewMode} = this.state
+    const listComponent = (viewMode === SINGLE_VIEW ? EntityItem : EntitiesList)
     const extras = {
       labels: this.state.labels,
       paths: this.state.selectedPaths
@@ -135,8 +137,9 @@ export default class Survey extends Component {
             <li>
               <button
                 type='button'
-                className={`tab ${pageSize !== 1 ? 'active' : ''}`}
-                onClick={() => { this.setState({ pageSize: TABLE_SIZE }) }}
+                disabled={viewMode === TABLE_VIEW}
+                className={`tab ${viewMode === TABLE_VIEW ? 'active' : ''}`}
+                onClick={() => { this.setState({ viewMode: TABLE_VIEW }) }}
               >
                 <i className='fas fa-th-list mr-2' />
                 <FormattedMessage
@@ -147,8 +150,9 @@ export default class Survey extends Component {
             <li>
               <button
                 type='button'
-                className={`tab ${pageSize === 1 ? 'active' : ''}`}
-                onClick={() => { this.setState({ pageSize: 1 }) }}
+                disabled={viewMode === SINGLE_VIEW}
+                className={`tab ${viewMode === SINGLE_VIEW ? 'active' : ''}`}
+                onClick={() => { this.setState({ viewMode: SINGLE_VIEW }) }}
               >
                 <i className='fas fa-file mr-2' />
                 <FormattedMessage
@@ -165,7 +169,8 @@ export default class Survey extends Component {
           </ul>
         </div>
         <PaginationContainer
-          pageSize={pageSize}
+          pageSize={viewMode === SINGLE_VIEW ? 1 : TABLE_SIZES[0]}
+          sizes={viewMode === SINGLE_VIEW ? [] : TABLE_SIZES}
           url={getEntitiesAPIPath({project: survey.id, ordering: '-modified'})}
           position='top'
           listComponent={listComponent}

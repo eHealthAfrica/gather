@@ -21,17 +21,18 @@
 /* global describe, it, expect */
 
 import React from 'react'
-import { mountWithIntl } from 'enzyme-react-intl'
+import { mountComponent } from '../../tests/enzyme-helpers'
 
 import PaginationBar from './PaginationBar'
 
 describe('PaginationBar', () => {
-  it('should NOT render with less than 2 pages and without active "search"', () => {
-    const component = mountWithIntl(
+  it('should NOT render with no records and no active "search"', () => {
+    const component = mountComponent(
       <PaginationBar
         currentPage={1}
         pageSize={10}
-        records={5}
+        records={0}
+        sizes={[1, 5, 10, 25]}
         goToPage={() => {}}
       />
     )
@@ -40,8 +41,8 @@ describe('PaginationBar', () => {
     expect(component.text()).toEqual('')
   })
 
-  it('should render with less than 2 pages but with "search"', () => {
-    const component = mountWithIntl(
+  it('should render with no records but with an active "search"', () => {
+    const component = mountComponent(
       <PaginationBar
         currentPage={1}
         pageSize={10}
@@ -57,11 +58,45 @@ describe('PaginationBar', () => {
     expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
     expect(component.find('[data-qa="data-pagination-search"]').exists()).toBeTruthy()
     expect(component.find('[data-qa="data-pagination-buttons"]').exists()).toBeFalsy()
+    expect(component.find('[data-qa="data-pagination-sizes"]').exists()).toBeFalsy()
+  })
+
+  it('should render with at least 2 pages', () => {
+    const component = mountComponent(
+      <PaginationBar
+        currentPage={1}
+        pageSize={10}
+        records={11}
+        goToPage={() => {}}
+      />
+    )
+
+    expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
+    expect(component.find('[data-qa="data-pagination-search"]').exists()).toBeFalsy()
+    expect(component.find('[data-qa="data-pagination-buttons"]').exists()).toBeTruthy()
+    expect(component.find('[data-qa="data-pagination-sizes"]').exists()).toBeFalsy()
+  })
+
+  it('should render with 1 page but there is a page size smaller than the current records', () => {
+    const component = mountComponent(
+      <PaginationBar
+        currentPage={1}
+        pageSize={10}
+        sizes={[5, 10, 25]}
+        records={6}
+        goToPage={() => {}}
+      />
+    )
+
+    expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
+    expect(component.find('[data-qa="data-pagination-search"]').exists()).toBeFalsy()
+    expect(component.find('[data-qa="data-pagination-buttons"]').exists()).toBeFalsy()
+    expect(component.find('[data-qa="data-pagination-sizes"]').exists()).toBeTruthy()
   })
 
   describe('Search bar', () => {
     it('should NOT render the search bar without "search"', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={3}
           pageSize={10}
@@ -75,7 +110,7 @@ describe('PaginationBar', () => {
     })
 
     it('should render the search bar with "search"', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={3}
           pageSize={10}
@@ -91,7 +126,7 @@ describe('PaginationBar', () => {
 
     it('should trigger "onSearch" after pressing "Enter"', () => {
       let text = null
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={3}
           pageSize={10}
@@ -119,9 +154,100 @@ describe('PaginationBar', () => {
     })
   })
 
+  describe('Page sizes select', () => {
+    it('should NOT render the page sizes select without "sizes"', () => {
+      const component = mountComponent(
+        <PaginationBar
+          currentPage={3}
+          pageSize={10}
+          records={50}
+          goToPage={() => {}}
+        />
+      )
+
+      expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
+      expect(component.find('[data-qa="data-pagination-sizes"]').exists()).toBeFalsy()
+    })
+
+    it('should NOT render the page sizes select with less than two "sizes"', () => {
+      const component = mountComponent(
+        <PaginationBar
+          currentPage={3}
+          pageSize={10}
+          sizes={[10]}
+          records={50}
+          goToPage={() => {}}
+        />
+      )
+
+      expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
+      expect(component.find('[data-qa="data-pagination-sizes"]').exists()).toBeFalsy()
+    })
+
+    it('should render the page sizes select with more than one "sizes"', () => {
+      const component = mountComponent(
+        <PaginationBar
+          currentPage={3}
+          pageSize={10}
+          sizes={[10, 25]}
+          records={50}
+          goToPage={() => {}}
+        />
+      )
+
+      expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
+      expect(component.find('[data-qa="data-pagination-sizes"]').exists()).toBeTruthy()
+      expect(component.find('[data-qa="data-pagination-size-10"]').exists()).toBeTruthy()
+      expect(component.find('[data-qa="data-pagination-size-25"]').exists()).toBeTruthy()
+    })
+
+    it('should trigger "setPageSize" after changing size value', () => {
+      let changed = 0
+      const component = mountComponent(
+        <PaginationBar
+          currentPage={3}
+          pageSize={10}
+          sizes={[10, 25]}
+          records={50}
+          goToPage={() => {}}
+          setPageSize={(value) => { changed = value }}
+        />
+      )
+
+      expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
+
+      const select = component.find('[data-qa="data-pagination-sizes"]').find('select')
+      expect(select.exists()).toBeTruthy()
+
+      select.simulate('change', {target: {value: '10'}})
+      expect(changed).toEqual(0) // same pageSize does not trigger method
+
+      select.simulate('change', {target: {value: '25'}})
+      expect(changed).toEqual(25) // same pageSize does trigger method
+    })
+  })
+
   describe('Navigation buttons', () => {
+    it('should NOT render the navigation buttons with 1 page', () => {
+      const component = mountComponent(
+        <PaginationBar
+          currentPage={1}
+          pageSize={10}
+          records={8}
+          sizes={[1, 5, 10]}
+          goToPage={() => {}}
+        />
+      )
+
+      expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
+      expect(component.find('[data-qa="data-pagination-search"]').exists()).toBeFalsy()
+      expect(component.find('[data-qa="data-pagination-buttons"]').exists()).toBeFalsy()
+      expect(component.find('[data-qa="data-pagination-page"]').exists()).toBeFalsy()
+      expect(component.find('[data-qa="data-pagination-total"]').exists()).toBeFalsy()
+    })
+
     it('should render the navigation buttons with more than 1 page', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={1}
           pageSize={10}
@@ -139,7 +265,7 @@ describe('PaginationBar', () => {
     })
 
     it('should render "Record" with page size 1', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={1}
           pageSize={1}
@@ -152,7 +278,7 @@ describe('PaginationBar', () => {
     })
 
     it('should render "Page" with page size greater than 1', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={1}
           pageSize={2}
@@ -165,7 +291,7 @@ describe('PaginationBar', () => {
     })
 
     it('should NOT render the ANY navigation button without "showXXX" only currentPage', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={4}
           pageSize={10}
@@ -182,7 +308,7 @@ describe('PaginationBar', () => {
     })
 
     it('should render the navigation button with "showXXX"', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={1}
           pageSize={10}
@@ -238,7 +364,7 @@ describe('PaginationBar', () => {
     })
 
     it('should render the PREVIOUS button if "currentPage" = 2 without "showFirst"', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={2}
           pageSize={10}
@@ -253,7 +379,7 @@ describe('PaginationBar', () => {
     })
 
     it('should render the NEXT button if "nextPage" = "lastPage" without "showLast"', () => {
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={1}
           pageSize={10}
@@ -271,7 +397,7 @@ describe('PaginationBar', () => {
     it('should navigate with buttons', () => {
       const currentPage = 3
       let page = 0
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={currentPage}
           pageSize={10}
@@ -306,7 +432,7 @@ describe('PaginationBar', () => {
     it('should navigate with current page input', () => {
       const currentPage = 3
       let page = 0
-      const component = mountWithIntl(
+      const component = mountComponent(
         <PaginationBar
           currentPage={currentPage}
           pageSize={10}
@@ -333,6 +459,10 @@ describe('PaginationBar', () => {
       input.simulate('click')
       expect(page).toEqual(0)
 
+      // "onKeyPress" not Enter does trigger `goToPage`
+      input.simulate('keypress', {charCode: 50}) // char '2'
+      expect(page).toEqual(0)
+
       // "change" event does not trigger `goToPage`
       // negative numbers are replaced with first page
       input.simulate('change', {target: {value: '-2'}})
@@ -353,8 +483,8 @@ describe('PaginationBar', () => {
       expect(component.find('[name="currentPage"]').props().value).toEqual(2)
       expect(page).toEqual(0)
 
-      // "blur" event does trigger `goToPage`
-      input.simulate('blur')
+      // "onKeyPress" Enter does trigger `goToPage` too
+      input.simulate('keypress', {charCode: 13})
       expect(page).toEqual(2)
     })
   })

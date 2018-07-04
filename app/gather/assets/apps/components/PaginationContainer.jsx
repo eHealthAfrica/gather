@@ -38,6 +38,7 @@ import RefreshSpinner from './RefreshSpinner'
  *
  * Properties:
  *   `url`:               The url to fetch, should allow `page` and `page_size` parameters.
+ *   `sizes`:             The list of available page sizes. Default to [].
  *   `pageSize`:          The page size. Default to 25.
  *   `listComponent`:     The rendered component after a sucessful request.
  *                        It's going to received as properties the list of results,
@@ -61,6 +62,13 @@ export default class PaginationContainer extends Component {
       isLoading: true,
       pageSize: props.pageSize || 25,
       page: 1
+    }
+
+    if (props.sizes) {
+      // clean sizes, only ints and current pageSize must be included in list
+      const sizes = [...props.sizes]
+      sizes.push(this.state.pageSize)
+      this.state.sizes = [ ...(new Set(sizes)) ] // sort and remove duplicates
     }
   }
 
@@ -163,10 +171,12 @@ export default class PaginationContainer extends Component {
       <PaginationBar
         currentPage={this.state.page}
         pageSize={this.state.pageSize}
+        sizes={this.state.sizes}
         records={(this.state.list && this.state.list.count) || 0}
 
         goToPage={(page) => { this.setState({ page, isRefreshing: true }) }}
         onSearch={(search) => { this.setState({ search, page: 1, isRefreshing: true }) }}
+        setPageSize={(pageSize) => { this.setState({ pageSize, page: 1, isRefreshing: true }) }}
 
         search={this.props.search}
         showFirst={this.props.showFirst}
