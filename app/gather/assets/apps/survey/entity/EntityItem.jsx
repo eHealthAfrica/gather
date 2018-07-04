@@ -21,10 +21,10 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { filterByPaths } from '../utils/types'
-import { JSONViewer, LinksList, normalizeLinksList } from '../components'
+import { filterByPaths } from '../../utils/types'
+import { JSONViewer, LinksList, normalizeLinksList } from '../../components'
 
-export default class SubmissionItem extends Component {
+export default class EntityItem extends Component {
   render () {
     const {list} = this.props
 
@@ -33,29 +33,28 @@ export default class SubmissionItem extends Component {
     }
 
     // assumption: there is only one item
-    const submission = list[0]
-    const {paths, labels} = this.props
-    const links = normalizeLinksList(submission.attachments)
+    const entity = list[0]
+    const links = normalizeLinksList(entity.attachments)
 
     return (
-      <div data-qa={`submission-item-${submission.id}`} className='x-2'>
+      <div data-qa={`entity-item-${entity.id}`} className='x-2'>
         <div className='survey-content single'>
           <div className='property'>
             <h5 className='property-title'>
               <FormattedMessage
-                id='submission.view.status'
+                id='entity.view.status'
                 defaultMessage='Status' />
             </h5>
             <div className='property-value'>
-              {submission.status}
+              {entity.status}
             </div>
           </div>
 
-          { submission.attachments.length > 0 &&
+          { entity.attachments.length > 0 &&
             <div className='property'>
               <h5 className='property-title'>
                 <FormattedMessage
-                  id='submission.view.attachments'
+                  id='entity.view.attachments'
                   defaultMessage='Attachments' />
               </h5>
               <div className='property-value'>
@@ -66,8 +65,8 @@ export default class SubmissionItem extends Component {
 
           <div>
             <JSONViewer
-              data={filterByPaths(submission.payload, paths)}
-              labels={labels}
+              data={filterByPaths(entity.payload, this.props.paths)}
+              labels={this.props.labels}
               links={links}
             />
           </div>

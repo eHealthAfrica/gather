@@ -21,24 +21,24 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { flatten, inflate, getLabel } from '../utils/types'
-import { JSONViewer, LinksList, normalizeLinksList } from '../components'
+import { flatten, inflate, getLabel } from '../../utils/types'
+import { JSONViewer, LinksList, normalizeLinksList } from '../../components'
 
-export default class SubmissionsList extends Component {
+export default class EntitiesList extends Component {
   render () {
     const {list} = this.props
 
     if (list.length === 0) {
-      return <div data-qa='submissions-list-empty' />
+      return <div data-qa='entities-list-empty' />
     }
 
     return (
-      <div data-qa='submissions-list' className='x-0'>
+      <div data-qa='entities-list' className='x-0'>
         <div className='survey-content'>
           <table className='table table-sm'>
             { this.renderHeader() }
             <tbody>
-              { list.map((submission, index) => this.renderSubmission(submission, index)) }
+              { list.map((entity, index) => this.renderEntity(entity, index)) }
             </tbody>
           </table>
         </div>
@@ -98,12 +98,12 @@ export default class SubmissionsList extends Component {
           <th rowSpan={rows || 1} />
           <th rowSpan={rows || 1}>
             <FormattedMessage
-              id='submission.list.table.status'
+              id='entity.list.table.status'
               defaultMessage='Status' />
           </th>
           <th rowSpan={rows || 1}>
             <FormattedMessage
-              id='submission.list.table.attachments'
+              id='entity.list.table.attachments'
               defaultMessage='Attachments' />
           </th>
 
@@ -147,16 +147,16 @@ export default class SubmissionsList extends Component {
     )
   }
 
-  renderSubmission (submission, index) {
+  renderEntity (entity, index) {
     const {paths, labels} = this.props
-    const flattenPayload = flatten({...submission.payload})
-    const links = normalizeLinksList(submission.attachments)
+    const flattenPayload = flatten({...entity.payload})
+    const links = normalizeLinksList(entity.attachments)
 
     return (
-      <tr data-qa={`submission-row-${submission.id}`} key={submission.id}>
+      <tr data-qa={`entity-row-${entity.id}`} key={entity.id}>
         <td scope='row'>{this.props.start + index}</td>
         <td>
-          {submission.status}
+          {entity.status}
         </td>
         <td>
           <LinksList list={links} />
