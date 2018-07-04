@@ -22,9 +22,29 @@
 
 import assert from 'assert'
 
-import { isLeaf, extractPathDocs } from './avro-utils'
+import { isNullable, isLeaf, extractPathDocs } from './avro-utils'
 
 describe('AVRO utils', () => {
+  describe('isNullable', () => {
+    it('should return false if type is not a union', () => {
+      assert(!isNullable({type: 'array', items: 'another_type'}))
+      assert(!isNullable({type: 'record'}))
+      assert(!isNullable({type: 'map'}))
+      assert(!isNullable('null'))
+      assert(!isNullable({type: 'null'}))
+    })
+
+    it('should return true only if type is a union fo two elements, one of them "null"', () => {
+      assert(!isNullable(['boolean', 'int']))
+      assert(!isNullable(['float', {type: 'enum'}]))
+      assert(!isNullable(['string', 'int', {type: 'record'}]))
+      assert(!isNullable(['null', 'int', {type: 'record'}]))
+
+      assert(isNullable(['null', 'int']))
+      assert(isNullable(['null', {type: 'enum'}]))
+    })
+  })
+
   describe('isLeaf', () => {
     it('should flag basic primitives as leaf', () => {
       assert(isLeaf('null'))
@@ -67,8 +87,8 @@ describe('AVRO utils', () => {
   })
 
   describe('extractPathDocs', () => {
-    it('should get take the "doc" property', () => {
-      const docs = extractPathDocs({
+    it('should get take the "doc" property as label', () => {
+      const schema = {
         name: 'root',
         doc: 'The root',
         type: 'record',
@@ -76,27 +96,342 @@ describe('AVRO utils', () => {
           {
             name: 'first',
             doc: 'The first',
-            type: 'boolean'
+            // nullable primitive
+            type: ['null', 'boolean']
           }
         ]
-      })
-      const expected = {first: 'The first'}
-      assert.deepEqual(docs, expected)
+      }
+      const expected = {
+        labels: {first: 'The first'},
+        paths: ['first']
+      }
+      assert.deepEqual(extractPathDocs(schema), expected)
+      // using extracted paths and docs as initial state
+      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
     })
-    it('should no create any entry if no "doc"', () => {
-      const docs = extractPathDocs({
+
+    it('should no create any label entry if no "doc"', () => {
+      const schema = {
         name: 'root',
         doc: 'The root',
         type: 'record',
         fields: [
           {
             name: 'first',
-            type: 'boolean'
+            // "enum" types are handled as primitives
+            type: {
+              name: 'coords',
+              doc: '3D axes', // this is ignored
+              type: 'enum',
+              symbols: ['x', 'y', 'z']
+            }
           }
         ]
-      })
-      const expected = {}
-      assert.deepEqual(docs, expected)
+      }
+      const expected = {
+        labels: {},
+        paths: ['first']
+      }
+      assert.deepEqual(extractPathDocs(schema), expected)
+      // using extracted paths and docs as initial state
+      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+    })
+
+    it('should build nested paths', () => {
+      const schema = {
+        name: 'root',
+        doc: 'The root',
+        type: 'record',
+        fields: [
+          {
+            name: 'first',
+            type: 'record',
+            fields: [
+              {
+                name: 'second',
+                doc: 'leaf',
+                type: ['null', 'boolean']
+              },
+              {
+                name: 'fourth',
+                type: [
+                  'null',
+                  {
+                    name: 'fourth', // it's the same name because it's nullable
+                    type: 'record',
+                    fields: [
+                      {
+                        name: 'fifth',
+                        type: 'string'
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+      const expected = {
+        labels: {
+          'first.second': 'leaf'
+        },
+        paths: ['first', 'first.second', 'first.fourth', 'first.fourth.fifth']
+      }
+      assert.deepEqual(extractPathDocs(schema), expected)
+      // using extracted paths and docs as initial state
+      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+    })
+
+    it('should build map paths with "*"', () => {
+      const schema = {
+        name: 'root',
+        doc: 'The root',
+        type: 'record',
+        fields: [
+          {
+            name: 'a',
+            type: 'record',
+            fields: [
+              {
+                name: 'b',
+                doc: 'Dictionary I',
+                type: [
+                  'null',
+                  {
+                    name: 'b', // it's the same name because it's nullable
+                    type: 'map',
+                    values: 'long'
+                  }
+                ]
+              },
+              {
+                name: 'c',
+                doc: 'Dictionary II',
+                type: 'map',
+                values: {
+                  name: 'nullable_string',
+                  type: ['null', 'string']
+                }
+              },
+              {
+                name: 'd',
+                doc: 'Dictionary III (with children)',
+                type: 'map',
+                values: {
+                  name: 'it_does_not_matter',
+                  type: 'record',
+                  fields: [
+                    {
+                      name: 'e',
+                      doc: 'child',
+                      type: 'string'
+                    }
+                  ]
+                }
+              },
+              {
+                name: 'f',
+                doc: 'Dictionary IV',
+                type: 'map',
+                values: 'named_type'
+              }
+            ]
+          }
+        ]
+      }
+      const expected = {
+        labels: {
+          'a.b': 'Dictionary I',
+          'a.c': 'Dictionary II',
+          'a.d': 'Dictionary III (with children)',
+          'a.d.*.e': 'child',
+          'a.f': 'Dictionary IV'
+        },
+        paths: [
+          'a',
+          'a.b',
+          'a.b.*',
+          'a.c',
+          'a.c.*',
+          'a.d',
+          'a.d.*',
+          'a.d.*.e',
+          'a.f',
+          'a.f.*'
+        ]
+      }
+      assert.deepEqual(extractPathDocs(schema), expected)
+      // using extracted paths and docs as initial state
+      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+    })
+
+    it('should build array paths with "#"', () => {
+      const schema = {
+        name: 'root',
+        doc: 'The root',
+        type: 'record',
+        fields: [
+          {
+            name: 'a',
+            type: 'record',
+            fields: [
+              {
+                name: 'b',
+                doc: 'List I',
+                type: [
+                  'null',
+                  {
+                    name: 'b', // it's the same name because it's nullable
+                    type: 'array',
+                    items: 'long'
+                  }
+                ]
+              },
+              {
+                name: 'c',
+                doc: 'List II',
+                type: 'array',
+                items: {
+                  name: 'nullable_string',
+                  type: ['null', 'string']
+                }
+              },
+              {
+                name: 'd',
+                doc: 'List III (with children)',
+                type: 'array',
+                items: {
+                  name: 'it_does_not_matter',
+                  type: 'record',
+                  fields: [
+                    {
+                      name: 'e',
+                      doc: 'child',
+                      type: 'string'
+                    }
+                  ]
+                }
+              },
+              {
+                name: 'f',
+                doc: 'List IV',
+                type: 'array',
+                items: 'named_type'
+              }
+            ]
+          }
+        ]
+      }
+      const expected = {
+        labels: {
+          'a.b': 'List I',
+          'a.c': 'List II',
+          'a.d': 'List III (with children)',
+          'a.d.#.e': 'child',
+          'a.f': 'List IV'
+        },
+        paths: [
+          'a',
+          'a.b',
+          // 'a.b.#', // array of primitives are treated as leafs
+          'a.c',
+          // 'a.c.#', // array of primitives are treated as leafs
+          'a.d',
+          'a.d.#',
+          'a.d.#.e',
+          'a.f',
+          'a.f.#'
+        ]
+      }
+      assert.deepEqual(extractPathDocs(schema), expected)
+      // using extracted paths and docs as initial state
+      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+    })
+
+    it('should not scream with union types', () => {
+      // but I would do it
+      const schema = {
+        name: 'root',
+        doc: 'The root',
+        type: 'record',
+        fields: [
+          {
+            name: 'a',
+            type: 'record',
+            fields: [
+              {
+                name: 'b',
+                doc: 'Union I',
+                type: [
+                  'null',
+                  'long',
+                  'string',
+                  {name: 'axes', type: 'enum', symbols: ['x', 'y', 'z']},
+                  {type: 'map', values: 'int'}
+                ]
+              }
+            ]
+          }
+        ]
+      }
+      const expected = {
+        labels: {
+          'a.b': 'Union I'
+        },
+        paths: [
+          'a',
+          'a.b',
+          'a.b.long',
+          'a.b.string',
+          'a.b.axes',
+          'a.b.map',
+          'a.b.map.*'
+        ]
+      }
+      assert.deepEqual(extractPathDocs(schema), expected)
+      // using extracted paths and docs as initial state
+      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+    })
+
+    it('should not overwrite initial state', () => {
+      const schema = {
+        name: 'root',
+        doc: 'The root',
+        type: 'record',
+        fields: [
+          {
+            name: 'first',
+            doc: 'The first',
+            type: ['null', 'boolean']
+          },
+          {
+            name: 'second',
+            doc: 'The first',
+            type: 'string'
+          }
+        ]
+      }
+      const initial = {
+        labels: {
+          unknow: 'who knows?',
+          first: 'The Second'
+        },
+        paths: ['unknown', 'first']
+      }
+      const expected = {
+        labels: {
+          unknow: 'who knows?',
+          first: 'The Second', // not replaced
+          second: 'The first' // added
+        },
+        paths: [
+          'unknown',
+          'first',
+          'second' // added
+        ]
+      }
+      assert.deepEqual(extractPathDocs(schema, initial), expected)
     })
   })
 })
