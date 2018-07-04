@@ -26,7 +26,8 @@ import {
   deepEqual,
   generateRandomId,
   range,
-  sortBy
+  sortBy,
+  sortNumericArray
 } from './index'
 
 describe('utils', () => {
@@ -140,6 +141,24 @@ describe('utils', () => {
           { a: 12 }
         ]
       )
+    })
+  })
+
+  describe('sortNumericArray', () => {
+    it('should sort numeric arrays numerically not lexicographically', () => {
+      const expected = [1, 10, 11, 100, 111]
+
+      // numerically sorted
+      const array1 = [1, 10, 11, 100, 111]
+      assert.deepEqual(sortNumericArray(array1), expected)
+
+      // lexicographically sorted
+      const array2 = [1, 10, 100, 11, 111]
+      assert.deepEqual(sortNumericArray(array2), expected)
+
+      // not sorted
+      const array3 = [10, 1, 111, 11, 100]
+      assert.deepEqual(sortNumericArray(array3), expected)
     })
   })
 })

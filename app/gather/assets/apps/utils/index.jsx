@@ -100,3 +100,15 @@ export const sortBy = (array, key) => array.sort((a, b) => {
  * Creates a random id
  */
 export const generateRandomId = () => Math.random().toString(36).slice(2)
+
+/**
+ * Sorts a numeric array, the default order in JS is lexicographic
+ *
+ * @param {Array of Number} array - the array of numeric values
+ */
+export const sortNumericArray = (array) => {
+  // default sort is lexicographic!!!
+  // [1, 10, 11, 100, 111].sort() ->  [1, 10, 100, 11, 111]
+  array.sort((a, b) => a - b)
+  return array
+}

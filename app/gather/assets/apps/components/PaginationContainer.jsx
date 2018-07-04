@@ -21,6 +21,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
+import { sortNumericArray } from '../utils'
 import { getData } from '../utils/request'
 import { buildQueryString } from '../utils/paths'
 import { isMounted } from '../utils/dom'
@@ -61,21 +62,23 @@ export default class PaginationContainer extends Component {
       // default status variables
       isLoading: true,
       pageSize: props.pageSize || 25,
-      page: 1
-    }
-
-    if (props.sizes) {
-      // clean sizes, only ints and current pageSize must be included in list
-      const sizes = [...props.sizes]
-      sizes.push(this.state.pageSize)
-      this.state.sizes = [ ...(new Set(sizes)) ] // sort and remove duplicates
+      page: 1,
+      sizes: this.buildSizes(props.sizes, props.pageSize)
     }
   }
 
+  buildSizes (sizes = [], pageSize = 25) {
+    return sortNumericArray([...new Set([...sizes, pageSize])]) // sort and remove duplicates
+  }
+
   componentWillReceiveProps (nextProps) {
-    if (nextProps.pageSize !== this.state.pageSize) {
-      this.setState({ pageSize: nextProps.pageSize, page: 1 })
-    }
+    this.setState({
+      sizes: this.buildSizes(nextProps.sizes, nextProps.pageSize)
+    }, () => {
+      if (nextProps.pageSize !== this.state.pageSize) {
+        this.setState({ pageSize: nextProps.pageSize, page: 1 })
+      }
+    })
   }
 
   componentDidMount () {

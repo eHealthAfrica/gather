@@ -51,10 +51,12 @@ describe('PaginationContainer', () => {
         <PaginationContainer
           listComponent={Foo}
           url={url}
+          sizes={[25]}
         />
       )
 
       expect(component.state('isLoading')).toBeTruthy()
+      expect(component.state('sizes')).toEqual([25])
       return component
     }
 
@@ -217,10 +219,13 @@ describe('PaginationContainer', () => {
       component.setState({ page: 14, pageSize: 100 })
       expect(component.state('page')).toEqual(14)
       expect(component.state('pageSize')).toEqual(100)
+      // change state does not update sizes
+      expect(component.state('sizes')).toEqual([25])
 
-      component.setProps({ pageSize: 100 })
+      component.setProps({ pageSize: 100, sizes: [1] })
       expect(component.state('page')).toEqual(14)
       expect(component.state('pageSize')).toEqual(100)
+      expect(component.state('sizes')).toEqual([1, 100])
 
       nock('http://localhost')
         .get('/paginate-page-size')
@@ -230,9 +235,14 @@ describe('PaginationContainer', () => {
           results: global.range(0, 10)
         })
 
-      component.setProps({ pageSize: 10 })
+      component.setProps({ sizes: [100] })
+      expect(component.state('pageSize')).toEqual(100)
+      expect(component.state('sizes')).toEqual([100])
+
+      component.setProps({ pageSize: 10, sizes: [100] })
       expect(component.state('page')).toEqual(1)
       expect(component.state('pageSize')).toEqual(10)
+      expect(component.state('sizes')).toEqual([10, 100])
     })
   })
 
