@@ -30,9 +30,9 @@ import { postData } from '../utils/request'
 import { extractPathDocs } from '../utils/avro-utils'
 
 import SurveyDetail from './SurveyDetail'
-import SurveyMasks from './SurveyMasks'
-import SubmissionsList from '../submission/SubmissionsList'
-import SubmissionItem from '../submission/SubmissionItem'
+import SurveyMasks from './mask/SurveyMasks'
+import EntitiesList from './entity/EntitiesList'
+import EntityItem from './entity/EntityItem'
 
 const TABLE_SIZE = 10
 
@@ -55,37 +55,38 @@ export default class Survey extends Component {
         paths: []
       }
 
-      // use the schemas to extract the possible columns
+      // use the schemas to extract the possible paths
       results.forEach(result => {
         extractPathDocs(result.definition, pathsAndLabels)
       })
 
       // not desired paths
-      const forbiddenPath = (jsonpath) => (
+      const forbiddenPath = (jsonPath) => (
         // attributes "@attr"
-        (jsonpath.charAt(0) === '@') ||
+        (jsonPath.charAt(0) === '@') ||
         // internal xForm properties
         ([
           '_id', '_version',
           'starttime', 'endtime', 'deviceid',
           'meta'
-        ].indexOf(jsonpath) > -1) ||
+        ].indexOf(jsonPath) > -1) ||
         // "meta" children
-        (jsonpath.indexOf('meta.') === 0) ||
+        (jsonPath.indexOf('meta.') === 0) ||
         // array/ map properties
-        (jsonpath.indexOf('.#') > -1 || jsonpath.indexOf('.*') > -1)
+        (jsonPath.indexOf('#') > -1 || jsonPath.indexOf('*') > -1)
       )
+      // ["a", "a.b", "a.c"] => ["a.b", "a.c"]
+      const isLeaf = (jsonPath, _, array) => array.filter(
+        anotherPath => anotherPath.indexOf(jsonPath + '.') === 0
+      ).length === 0
 
       this.state.labels = pathsAndLabels.labels
       this.state.allPaths = pathsAndLabels.paths
         // remove undesired paths
-        .filter(jsonpath => !forbiddenPath(jsonpath))
-        // remove intermediate paths, keep only the leafs
-        // ["a", "a.b", "a.c"] => ["a.b", "a.c"]
-        .filter((jsonpath, _, array) => array.filter(
-          anotherPath => anotherPath.indexOf(jsonpath + '.') === 0
-        ).length === 0)
-      this.state.selectedPaths = [ ...this.state.allPaths ]
+        .filter(jsonPath => !forbiddenPath(jsonPath))
+        // keep only the leafs
+        .filter(isLeaf)
+      this.state.selectedPaths = this.state.allPaths
     }
   }
 
@@ -121,7 +122,7 @@ export default class Survey extends Component {
 
     const {survey} = this.props
     const {pageSize} = this.state
-    const listComponent = (pageSize === 1 ? SubmissionItem : SubmissionsList)
+    const listComponent = (pageSize === 1 ? EntityItem : EntitiesList)
     const extras = {
       labels: this.state.labels,
       paths: this.state.selectedPaths
@@ -273,6 +274,8 @@ export default class Survey extends Component {
     const handleResponse = (response) => ({
       ...response,
       columns: this.state.allPaths,
+      initialSelected: this.state.selectedPaths,
+      labels: this.state.labels,
       onChange: (selectedPaths) => { this.setState({ selectedPaths }) }
     })
 

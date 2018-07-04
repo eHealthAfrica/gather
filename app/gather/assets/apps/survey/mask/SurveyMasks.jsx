@@ -21,7 +21,7 @@
 import React, { Component } from 'react'
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
-import { cleanPropertyName, getLabel } from '../../utils/types'
+import { getLabelTree } from '../../utils/types'
 import { deleteData, postData } from '../../utils/request'
 import { getMasksAPIPath } from '../../utils/paths'
 import { ConfirmButton, Portal } from '../../components'
@@ -122,7 +122,9 @@ class SurveyMasks extends Component {
 
     if (includeColumns) {
       newState.columns = {}
-      props.columns.forEach(column => { newState.columns[column] = true })
+      props.columns.forEach(column => {
+        newState.columns[column] = props.initialSelected.indexOf(column) > -1
+      })
     }
 
     return newState
@@ -261,9 +263,7 @@ class SurveyMasks extends Component {
                 onClick={() => toggleColumn(column)}>
                 <div className='marker' />
                 <span>
-                  <b>{ getLabel(column, this.props.labels) }</b>
-                  <br />
-                  { cleanPropertyName(column.split('.').join(' - ')) }
+                  { getLabelTree(column, this.props.labels) }
                 </span>
               </li>
             ))

@@ -21,7 +21,15 @@
 /* global describe, it */
 
 import assert from 'assert'
-import { getType, flatten, unflatten, inflate, filterByPaths } from './types'
+import {
+  filterByPaths,
+  flatten,
+  getLabel,
+  getLabelTree,
+  getType,
+  inflate,
+  unflatten
+} from './types'
 
 describe('types', () => {
   describe('getType', () => {
@@ -173,18 +181,18 @@ describe('types', () => {
 
       const expectedValue = [
         {
-          'a': { key: 'a', path: 'a', label: 'a', siblings: 4, hasChildren: true, isLeaf: false },
-          'h': { key: 'h', path: 'h', label: 'h', siblings: 1, hasChildren: false, isLeaf: true }
+          'a': { key: 'a', path: 'a', siblings: 4, hasChildren: true, isLeaf: false },
+          'h': { key: 'h', path: 'h', siblings: 1, hasChildren: false, isLeaf: true }
         },
         {
-          'a|b': { key: 'a|b', path: 'a.b', label: 'b', siblings: 2, hasChildren: true, isLeaf: false },
-          'a|e': { key: 'a|e', path: 'a.e', label: 'e', siblings: 1, hasChildren: true, isLeaf: false },
-          'a|g': { key: 'a|g', path: 'a.g', label: 'g', siblings: 1, hasChildren: false, isLeaf: true }
+          'a|b': { key: 'a|b', path: 'a.b', siblings: 2, hasChildren: true, isLeaf: false },
+          'a|e': { key: 'a|e', path: 'a.e', siblings: 1, hasChildren: true, isLeaf: false },
+          'a|g': { key: 'a|g', path: 'a.g', siblings: 1, hasChildren: false, isLeaf: true }
         },
         {
-          'a|b|c': { key: 'a|b|c', path: 'a.b.c', label: 'c', siblings: 1, hasChildren: false, isLeaf: true },
-          'a|b|d': { key: 'a|b|d', path: 'a.b.d', label: 'd', siblings: 1, hasChildren: false, isLeaf: true },
-          'a|e|f': { key: 'a|e|f', path: 'a.e.f', label: 'f', siblings: 1, hasChildren: false, isLeaf: true }
+          'a|b|c': { key: 'a|b|c', path: 'a.b.c', siblings: 1, hasChildren: false, isLeaf: true },
+          'a|b|d': { key: 'a|b|d', path: 'a.b.d', siblings: 1, hasChildren: false, isLeaf: true },
+          'a|e|f': { key: 'a|e|f', path: 'a.e.f', siblings: 1, hasChildren: false, isLeaf: true }
         }
       ]
 
@@ -195,16 +203,16 @@ describe('types', () => {
   describe('filterByPaths', () => {
     it('should include only the indicated paths', () => {
       const entry = {
+        x: {
+          y: {
+            z: 2
+          }
+        },
         a: {
           b: {
             c: {
               d: 1
             }
-          }
-        },
-        x: {
-          y: {
-            z: 2
           }
         }
       }
@@ -212,10 +220,38 @@ describe('types', () => {
       assert.deepEqual(flatten(filterByPaths(entry, [])), {})
       assert.deepEqual(flatten(filterByPaths(entry, ['b'])), {})
 
-      assert.deepEqual(flatten(filterByPaths(entry, ['a'])), { 'a.b.c.d': 1 })
-      assert.deepEqual(flatten(filterByPaths(entry, ['a.b'])), { 'a.b.c.d': 1 })
-      assert.deepEqual(flatten(filterByPaths(entry, ['a.b.c'])), { 'a.b.c.d': 1 })
       assert.deepEqual(flatten(filterByPaths(entry, ['a.b.c.d'])), { 'a.b.c.d': 1 })
+      assert.deepEqual(flatten(filterByPaths(entry, ['a.b.c'])), { 'a.b.c.d': 1 })
+      assert.deepEqual(flatten(filterByPaths(entry, ['a.b'])), { 'a.b.c.d': 1 })
+      assert.deepEqual(flatten(filterByPaths(entry, ['a'])), { 'a.b.c.d': 1 })
+    })
+  })
+
+  describe('getLabel', () => {
+    const labels = {
+      'a': 'Root',
+      'a.d.#.e': 'The indexed E',
+      'a.*.c': 'The Big C'
+    }
+
+    it('should find simple nested properties', () => {
+      assert.equal(getLabel('a', labels), 'Root')
+      assert.equal(getLabel('a.d.#.e', labels), 'The indexed E')
+      assert.equal(getLabel('a.b'), 'b')
+    })
+
+    it('should detect map properties', () => {
+      assert.equal(getLabel('a.x.c', labels), 'The Big C')
+      assert.equal(getLabel('a.x_x.c', labels), 'The Big C')
+      assert.equal(getLabel('a.x__1_x.c', labels), 'The Big C')
+      assert.equal(getLabel('a.x__1._x.c', labels), 'c')
+    })
+  })
+
+  describe('getLabelTree', () => {
+    it('should concatenate jsonpath pieces labels', () => {
+      assert.equal(getLabelTree('a.b.c.d.e'), 'a – b – c – d – e')
+      assert.equal(getLabelTree('a:b:c:d:e', {}, ':', '$'), 'a$b$c$d$e')
     })
   })
 })

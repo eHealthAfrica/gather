@@ -115,19 +115,6 @@ export const getType = (value) => {
 }
 
 /**
- * Converts property name into sentence case
- * - `my_name_is` into `my name is` (snake case)
- * - `myNameIs` into `my Name Is` (camel case)
- *
- * @param {string} key
- */
-export const cleanPropertyName = (key) => (key
-  .replace(/_/g, ' ') //             convert `my_name_is` into `my name is`
-  .replace(/([A-Z]+)/g, ' $1') //    convert `myNameIs` into `my Name Is`
-  .replace(/([A-Z][a-z])/g, ' $1')
-)
-
-/**
  * Flatten a deep object into a one level object with it’s path as key
  *
  * @param {object} object     - The object to be flattened
@@ -185,9 +172,13 @@ export const unflatten = (object, separator = '.') => {
 export const filterByPaths = (object, paths, separator = '.') => {
   const flattenObject = flatten(object, separator)
   const filteredFlattenObject = {}
-  paths
-    .filter(key => flattenObject[key] !== null)
-    .forEach(key => { filteredFlattenObject[key] = flattenObject[key] })
+  paths.forEach(path => {
+    Object.keys(flattenObject)
+      .filter(key => key.indexOf(path) === 0)
+      .forEach(key => {
+        filteredFlattenObject[key] = flattenObject[key]
+      })
+  })
   return unflatten(filteredFlattenObject)
 }
 
@@ -230,20 +221,20 @@ export const filterByPaths = (object, paths, separator = '.') => {
  * [
  *   // level 0
  *   {
- *     'a': { key: 'a', label: 'A', siblings: 4, hasChildren: true, isLeaf: false },
- *     'h': { key: 'h', label: 'H', siblings: 1, hasChildren: false, isLeaf: true }
+ *     'a': { key: 'a', siblings: 4, hasChildren: true, isLeaf: false },
+ *     'h': { key: 'h', siblings: 1, hasChildren: false, isLeaf: true }
  *   },
  *   // level 1
  *   {
- *     'a.b': { key: 'a.b', label: 'B', siblings: 2, hasChildren: true, isLeaf: false },
- *     'a.e': { key: 'a.e', label: 'E', siblings: 1, hasChildren: true, isLeaf: false },
- *     'a.g': { key: 'a.g', label: 'G', siblings: 1, hasChildren: false, isLeaf: true }
+ *     'a.b': { key: 'a.b', siblings: 2, hasChildren: true, isLeaf: false },
+ *     'a.e': { key: 'a.e', siblings: 1, hasChildren: true, isLeaf: false },
+ *     'a.g': { key: 'a.g', siblings: 1, hasChildren: false, isLeaf: true }
  *   },
  *   // level 2
  *   {
- *     'a.b.c': { key: 'a.b.c', label: 'C', siblings: 1, hasChildren: false, isLeaf: true },
- *     'a.b.d': { key: 'a.b.d', label: 'D', siblings: 1, hasChildren: false, isLeaf: true },
- *     'a.e.f': { key: 'a.e.f', label: 'F', siblings: 1, hasChildren: false, isLeaf: true }
+ *     'a.b.c': { key: 'a.b.c', siblings: 1, hasChildren: false, isLeaf: true },
+ *     'a.b.d': { key: 'a.b.d', siblings: 1, hasChildren: false, isLeaf: true },
+ *     'a.e.f': { key: 'a.e.f', siblings: 1, hasChildren: false, isLeaf: true }
  *   }
  * ]
  *
@@ -262,27 +253,26 @@ export const filterByPaths = (object, paths, separator = '.') => {
  * +---+---+---+----+---+
  *
  *
- * @param {array}  flatKeys  - The flat object keys
- * @param {string} separator - The properties separator used
+ * @param {array}  jsonPaths - The flat object paths
+ * @param {string} separator - The properties separator
  */
-export const inflate = (flatKeys, separator = '.') => {
+export const inflate = (jsonPaths, separator = '.') => {
   // assumption: no property names contain `separator`
 
-  const depth = flatKeys.reduce((acc, curr) => Math.max(acc, curr.split(separator).length), 0)
+  const depth = jsonPaths.reduce((acc, curr) => Math.max(acc, curr.split(separator).length), 0)
   const tree = []
   for (let level = 0; level < depth; level++) {
     tree.push({})
 
     // which headers are available at this level
-    flatKeys
-      .filter(flatKey => flatKey.split(separator).length > level)
-      .map(flatKey => {
-        const keys = flatKey.split(separator)
+    jsonPaths
+      .filter(jsonPath => jsonPath.split(separator).length > level)
+      .map(jsonPath => {
+        const keys = jsonPath.split(separator)
         const key = keys.filter((_, i) => i <= level).join(separator)
 
         return {
           key,
-          label: cleanPropertyName(keys[level]),
 
           // replace `separator` with the common `.`
           path: key.replace(new RegExp('\\' + separator, 'g'), '.'),
@@ -294,7 +284,7 @@ export const inflate = (flatKeys, separator = '.') => {
           // count the properties that start with this one (siblings at this tree level)
           // adding suffix `separator` skips the edge case
           // { a: 1, ab: { c: 1 } } -> { 'a': 1, 'ab.c': 1 }
-          siblings: flatKeys.filter(c => c.indexOf(key + separator) === 0).length || 1
+          siblings: jsonPaths.filter(c => c.indexOf(key + separator) === 0).length || 1
         }
       })
       .forEach(column => {
@@ -305,3 +295,75 @@ export const inflate = (flatKeys, separator = '.') => {
 
   return tree
 }
+
+/**
+ * Return the jsonpath label contained in the labels dictionary
+ * otherwise return the last piece of the path (prettified)
+ *
+ * @param {string} jsonPath  - The jsonpath
+ * @param {object} labels    - The labels dictionary
+ * @param {string} separator - The properties separator
+ *
+ * @return {string}          - The label
+ */
+export const getLabel = (jsonPath, labels = {}, separator = '.') => {
+  if (labels[jsonPath]) {
+    return labels[jsonPath]
+  }
+
+  // if there are "map" properties
+  const mapKeys = Object.keys(labels)
+    .filter(key => key.indexOf(`${separator}*`) > -1)
+  for (let i = 0; i < mapKeys.length; i++) {
+    const current = mapKeys[i]
+    // create the regular expression with the key value
+    // "a.b.*.c.d.*.e" => /^a\.b\.([A-Za-z0-9_]+)\.c\.d\.([A-Za-z0-9_]+)\.e/g
+    const reStr = current
+      .split(separator)
+      .map(piece => piece === '*' ? '([A-Za-z0-9_]+)' : piece)
+      .join(`\\${separator}`)
+    const regexpKey = new RegExp('^' + reStr, 'g')
+    if (regexpKey.test(jsonPath)) {
+      return labels[current]
+    }
+  }
+
+  // split the compounded key into pieces and take the last one
+  const pieces = jsonPath.split(separator)
+  return sentenceCase(pieces[pieces.length - 1])
+}
+
+/**
+ * Return the jsonpath tree labels "a.b.c.d" => "A – B – C – D"
+ *
+ * @param {string} jsonPath       - The jsonpath
+ * @param {Object} labels         - The labels dictionary
+ * @param {string} separator      - The properties separator
+ * @param {string} labelSeparator - The separator between path labels
+ *
+ * @return {string}               - The tree labels
+ */
+export const getLabelTree = (jsonPath, labels = {}, separator = '.', labelSeparator = ' – ') => {
+  const pieces = jsonPath.split(separator)
+  return pieces
+    // build the jsonpath based on current index
+    // [a0, a1, a2, ...aI, ... aN] => a0.a1.___.aI
+    .map((_, index, array) => getLabel(array.slice(0, index + 1).join(separator), labels, separator))
+    .join(labelSeparator)
+}
+
+/**
+ * Converts property name into sentence case
+ *
+ * - `my_name_is` into `my name is` (snake case)
+ * - `myNameIs` into `my Name Is` (camel case)
+ *
+ * @param {string} name      - The uggly name
+ *
+ * @return {string}          - The prettified name (in sentence case)
+ */
+const sentenceCase = (name) => (name
+  .replace(/_/g, ' ') //             convert `my_name_is` into `my name is`
+  .replace(/([A-Z]+)/g, ' $1') //    convert `myNameIs` into `my Name Is`
+  .replace(/([A-Z][a-z])/g, ' $1')
+)
