@@ -21,10 +21,10 @@
 import React, { Component } from 'react'
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
-import { cleanPropertyName } from '../utils/types'
-import { deleteData, postData } from '../utils/request'
-import { getMasksAPIPath } from '../utils/paths'
-import { ConfirmButton, Portal } from '../components'
+import { cleanPropertyName, getLabel } from '../../utils/types'
+import { deleteData, postData } from '../../utils/request'
+import { getMasksAPIPath } from '../../utils/paths'
+import { ConfirmButton, Portal } from '../../components'
 
 const MESSAGES = defineMessages({
   all: {
@@ -172,20 +172,20 @@ class SurveyMasks extends Component {
           </button>
         </div>
 
-        { this.renderColumnsMask() }
+        { this.renderMasks() }
         { this.renderMessage() }
       </div>
     )
   }
 
-  renderColumnsMask () {
+  renderMasks () {
     if (!this.state.showColumns) {
       return <div className='filter-container' />
     }
 
     return (
       <div className='filter-container active'>
-        { this.renderMasksList() }
+        { this.renderMaskNames() }
         { this.renderColumnsList() }
 
         <button
@@ -199,7 +199,7 @@ class SurveyMasks extends Component {
     )
   }
 
-  renderMasksList () {
+  renderMaskNames () {
     const {formatMessage} = this.props.intl
     const getClassName = (mask) => (this.isMaskSelected(mask) ? 'active' : '')
     const selectMaskColumns = (mask) => {
@@ -216,7 +216,7 @@ class SurveyMasks extends Component {
         <ul className='filter-presets'>
           {
             this.state.masks.map(mask => (
-              <li key={mask.id} className={`badge column-preset ${getClassName(mask)} ${mask.id > 0 ? 'custom' : ''}`}>
+              <li key={mask.id} className={`badge mask-preset ${getClassName(mask)} ${mask.id > 0 ? 'custom' : ''}`}>
                 <button
                   type='button'
                   className='preset-action'
@@ -251,16 +251,18 @@ class SurveyMasks extends Component {
     const getClassName = (key) => this.state.columns[key] ? 'not-masked' : 'masked'
 
     return (
-      <div className='columns-filter'>
+      <div className='items-filter'>
         <ul>
           {
             this.props.columns.map(column => (
               <li
                 key={column}
-                className={`column-title ${getClassName(column)}`}
+                className={`item-title ${getClassName(column)}`}
                 onClick={() => toggleColumn(column)}>
                 <div className='marker' />
                 <span>
+                  <b>{ getLabel(column, this.props.labels) }</b>
+                  <br />
                   { cleanPropertyName(column.split('.').join(' - ')) }
                 </span>
               </li>

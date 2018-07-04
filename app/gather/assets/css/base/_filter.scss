@@ -132,7 +132,7 @@
     flex-wrap: wrap;
   }
 
-  .column-preset {
+  .mask-preset {
     margin: .2em .4rem;
     background: rgba($action-color, .5);
     transition: all .3s;
@@ -215,7 +215,7 @@
   }
 }
 
-.columns-filter {
+.items-filter {
   position: relative;
   overflow: auto;
   overflow-y: scroll;
@@ -236,7 +236,7 @@
     counter-reset: item;
   }
 
-  .column-title {
+  .item-title {
     list-style: none;
     padding: .3rem;
     font-style: italic;
