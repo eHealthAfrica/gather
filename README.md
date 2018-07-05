@@ -37,8 +37,8 @@
 ### Installation
 
 ```bash
-git clone git@github.com:eHealthAfrica/{repository-name}.git
-cd {repository-name}
+git clone git@github.com:eHealthAfrica/gather.git
+cd gather
 
 docker-compose build
 ```
