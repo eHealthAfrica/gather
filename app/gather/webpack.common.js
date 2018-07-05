@@ -22,8 +22,9 @@ const path = require('path')
 const BundleTracker = require('webpack-bundle-tracker')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
-
 const buildEntries = require('./webpack.apps')
+
+const BUNDLES_DIR = path.resolve(__dirname, './assets/bundles/')
 
 module.exports = (custom) => ({
   mode: (custom.production ? 'production' : 'development'),
@@ -35,7 +36,7 @@ module.exports = (custom) => ({
     filename: '[name]-[hash].js',
     library: ['gather', '[name]'],
     libraryTarget: 'var',
-    path: path.resolve(__dirname, './assets/bundles/')
+    path: BUNDLES_DIR
   }, custom.output),
 
   optimization: {
@@ -79,8 +80,8 @@ module.exports = (custom) => ({
 
     // needed by `django-webpack-loader`
     new BundleTracker({
-      path: __dirname,
-      filename: './assets/bundles/webpack-stats.json'
+      path: BUNDLES_DIR,
+      filename: 'webpack-stats.json'
     }),
 
     // Environment variables

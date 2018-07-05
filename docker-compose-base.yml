@@ -31,7 +31,7 @@ services:
   # ---------------------------------
 
   kernel-base:
-    image: ehealthafrica/aether-kernel:0.7.1
+    image: ehealthafrica/aether-kernel:0.8.0-rc
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
@@ -58,7 +58,7 @@ services:
   # ---------------------------------
 
   odk-base:
-    image: ehealthafrica/aether-odk:0.7.1
+    image: ehealthafrica/aether-odk:0.8.0-rc
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
@@ -67,7 +67,7 @@ services:
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
       AETHER_KERNEL_URL: http://kernel:8000
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9001
+      AETHER_KERNEL_URL_TEST: http://kernel-test:9000
 
       RDS_DB_NAME: aether-odk
       RDS_HOSTNAME: db
@@ -89,7 +89,7 @@ services:
   # ---------------------------------
 
   ui-base:
-    image: ehealthafrica/aether-ui:0.7.1
+    image: ehealthafrica/aether-ui:0.8.0-rc
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
@@ -98,7 +98,7 @@ services:
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
       AETHER_KERNEL_URL: http://kernel:8000
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9001
+      AETHER_KERNEL_URL_TEST: http://kernel-test:9000
 
       RDS_DB_NAME: aether-ui
       RDS_HOSTNAME: db
@@ -106,7 +106,9 @@ services:
       RDS_PORT: 5432
       RDS_USERNAME: postgres
 
-      STATIC_ROOT: /code/aether/ui/assets/bundles
+      # this is the right value with "start_dev" command
+      # comment it out when using "start" command
+      STATIC_ROOT: /code/aether/ui/static
       WEB_SERVER_PORT: 8004
     ports:
       - "8004:8004"
@@ -133,13 +135,13 @@ services:
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
       AETHER_KERNEL_URL: http://kernel:8000
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9001
+      AETHER_KERNEL_URL_TEST: http://kernel-test:9000
 
       AETHER_MODULES: "kernel,odk,"
 
       AETHER_ODK_TOKEN: d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1
       AETHER_ODK_URL: http://odk:8443
-      AETHER_ODK_URL_TEST: http://odk-test:9002
+      AETHER_ODK_URL_TEST: http://odk-test:9443
 
       RDS_DB_NAME: gather
       RDS_HOSTNAME: db

@@ -125,7 +125,7 @@ services:
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
       AETHER_KERNEL_URL: http://kernel:8000
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9001
+      AETHER_KERNEL_URL_TEST: http://kernel-test:9000
 
       RDS_DB_NAME: aether-odk
       RDS_HOSTNAME: db
@@ -151,7 +151,7 @@ services:
 
 
   # ---------------------------------
-  # Aether UI container
+  # Aether UI module
   # ---------------------------------
 
   ui:
@@ -168,7 +168,7 @@ services:
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
       AETHER_KERNEL_URL: http://kernel:8000
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9001
+      AETHER_KERNEL_URL_TEST: http://kernel-test:9000
 
       RDS_DB_NAME: aether-ui
       RDS_HOSTNAME: db
@@ -190,3 +190,29 @@ services:
       internal:
         aliases:
           - ui.aether.local
+
+
+  # ---------------------------------
+  # Aether UI webpack
+  # ---------------------------------
+
+  ui-webpack-base:
+    image: local-aether-ui-webpack
+    build:
+      context: ../aether/aether-ui
+      dockerfile: Dockerfile.webpack
+    stdin_open: true
+    tty: true
+    volumes:
+      - ../aether/aether-ui/conf:/code/conf
+      - ../aether/aether-ui/aether:/code/aether
+
+      - ../aether/aether-ui/entrypoint.webpack.sh:/code/entrypoint.sh
+      - ../aether/aether-ui/package.json:/code/package.json
+    command: build
+    # # This is only necessary to have HMR with JS assets
+    # ports:
+    #   - "3004:3004"
+    # command: start_dev
+    # networks:
+    #   - internal
