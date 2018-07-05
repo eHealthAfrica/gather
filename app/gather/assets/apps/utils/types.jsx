@@ -343,7 +343,7 @@ export const getLabel = (jsonPath, labels = {}, separator = '.') => {
  *
  * @return {string}               - The tree labels
  */
-export const getLabelTree = (jsonPath, labels = {}, separator = '.', labelSeparator = ' – ') => {
+export const getLabelTree = (jsonPath, labels = {}, separator = '.', labelSeparator = ' / ') => {
   const pieces = jsonPath.split(separator)
   return pieces
     // build the jsonpath based on current index

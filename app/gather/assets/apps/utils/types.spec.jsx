@@ -250,7 +250,7 @@ describe('types', () => {
 
   describe('getLabelTree', () => {
     it('should concatenate jsonpath pieces labels', () => {
-      assert.equal(getLabelTree('a.b.c.d.e'), 'a – b – c – d – e')
+      assert.equal(getLabelTree('a.b.c.d.e'), 'a / b / c / d / e')
       assert.equal(getLabelTree('a:b:c:d:e', {}, ':', '$'), 'a$b$c$d$e')
     })
   })
