@@ -10,8 +10,8 @@
 version: "2"
 
 networks:
-    internal:
-        driver: bridge
+  internal:
+    driver: bridge
 
 services:
 
