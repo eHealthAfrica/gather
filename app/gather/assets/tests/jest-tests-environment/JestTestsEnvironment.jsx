@@ -51,8 +51,8 @@ class JestTestsEnvironment extends JSDOMEnvironment {
       process.env,
       {
         AETHER_MODULES: 'kernel,odk',
-        AETHER_KERNEL_URL: 'http://kernel-test:9001',
-        AETHER_ODK_URL: 'http://odk-test:9002',
+        AETHER_KERNEL_URL: 'http://kernel-test:9000',
+        AETHER_ODK_URL: 'http://odk-test:9443',
 
         CSV_HEADER_RULES: 'replace;.;:;',
         CSV_HEADER_RULES_SEP: ';'

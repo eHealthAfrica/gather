@@ -80,8 +80,8 @@ class TokenModelsTests(TestCase):
 
     def test__user_tokens__get_app_url(self):
         user_tokens, _ = UserTokens.objects.get_or_create(user=self.user)
-        self.assertEqual(user_tokens.get_app_url('kernel'), 'http://kernel-test:9001')
-        self.assertEqual(user_tokens.get_app_url('odk'), 'http://odk-test:9002')
+        self.assertEqual(user_tokens.get_app_url('kernel'), 'http://kernel-test:9000')
+        self.assertEqual(user_tokens.get_app_url('odk'), 'http://odk-test:9443')
         self.assertEqual(user_tokens.get_app_url('other'), None)
 
     def test__user_tokens__unknown_app(self):

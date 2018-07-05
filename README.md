@@ -81,11 +81,11 @@ of the most common ones with non default values. For more info take a look at th
   - Aether Kernel:
     - `AETHER_KERNEL_TOKEN`: `a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24` Token to connect to Aether Kernel Server.
     - `AETHER_KERNEL_URL`: `http://kernel:8000` Aether Kernel Server url.
-    - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9001` Aether Kernel Testing Server url.
+    - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9000` Aether Kernel Testing Server url.
   - Aether ODK:
     - `AETHER_ODK_TOKEN`: `d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1` Token to connect to Aether ODK Server.
     - `AETHER_ODK_URL`: `http://odk:8443` Aether ODK Server url.
-    - `AETHER_ODK_URL_TEST`: `http://odk-test:9002` Aether ODK Testing Server url.
+    - `AETHER_ODK_URL_TEST`: `http://odk-test:9443` Aether ODK Testing Server url.
 
 
 ## Usage

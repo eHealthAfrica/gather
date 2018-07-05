@@ -36,8 +36,8 @@ describe('environment constants', () => {
         process.env,
         {
           AETHER_MODULES: 'kernel,odk',
-          AETHER_KERNEL_URL: 'http://kernel-test:9001',
-          AETHER_ODK_URL: 'http://odk-test:9002',
+          AETHER_KERNEL_URL: 'http://kernel-test:9000',
+          AETHER_ODK_URL: 'http://odk-test:9443',
 
           CSV_HEADER_RULES: 'replace;.;:;',
           CSV_HEADER_RULES_SEP: ';',
@@ -55,8 +55,8 @@ describe('environment constants', () => {
 
       assert(envWithODK.ODK_ACTIVE)
 
-      assert.deepEqual(envWithODK.AETHER_KERNEL_URL, 'http://kernel-test:9001')
-      assert.deepEqual(envWithODK.AETHER_ODK_URL, 'http://odk-test:9002')
+      assert.deepEqual(envWithODK.AETHER_KERNEL_URL, 'http://kernel-test:9000')
+      assert.deepEqual(envWithODK.AETHER_ODK_URL, 'http://odk-test:9443')
 
       assert.deepEqual(envWithODK.CSV_HEADER_RULES, 'replace;.;:;')
       assert.deepEqual(envWithODK.CSV_HEADER_RULES_SEP, ';')
@@ -75,8 +75,8 @@ describe('environment constants', () => {
         process.env,
         {
           AETHER_MODULES: null,
-          AETHER_KERNEL_URL: 'http://kernel-test:9001',
-          AETHER_ODK_URL: 'http://odk-test:9002',
+          AETHER_KERNEL_URL: 'http://kernel-test:9000',
+          AETHER_ODK_URL: 'http://odk-test:9443',
 
           CSV_HEADER_RULES: 'replace¬.¬:¬',
           CSV_HEADER_RULES_SEP: '¬',
@@ -94,7 +94,7 @@ describe('environment constants', () => {
 
       assert(!envWithoutODK.ODK_ACTIVE)
 
-      assert.deepEqual(envWithoutODK.AETHER_KERNEL_URL, 'http://kernel-test:9001')
+      assert.deepEqual(envWithoutODK.AETHER_KERNEL_URL, 'http://kernel-test:9000')
       assert.deepEqual(envWithoutODK.AETHER_ODK_URL, null)
 
       assert.deepEqual(envWithoutODK.CSV_HEADER_RULES, 'replace¬.¬:¬')
