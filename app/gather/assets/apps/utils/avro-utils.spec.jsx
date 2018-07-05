@@ -414,19 +414,19 @@ describe('AVRO utils', () => {
       }
       const initial = {
         labels: {
-          unknow: 'who knows?',
+          unknown: 'who knows?', // there is no path for it but...
           first: 'The Second'
         },
-        paths: ['unknown', 'first']
+        paths: ['zero', 'first']
       }
       const expected = {
         labels: {
-          unknow: 'who knows?',
+          unknown: 'who knows?',
           first: 'The Second', // not replaced
           second: 'The first' // added
         },
         paths: [
-          'unknown',
+          'zero',
           'first',
           'second' // added
         ]
