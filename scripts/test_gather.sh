@@ -62,7 +62,7 @@ $DC_TEST up -d kernel-test odk-test
 prepare_and_test_container gather
 
 # kill ALL containers
-echo "_____________________________________________ Killing auxiliary containers"
+echo "_____________________________________________ Killing TEST containers"
 $DC_TEST kill
 
 echo "_____________________________________________ END"
