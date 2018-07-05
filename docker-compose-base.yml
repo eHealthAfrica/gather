@@ -35,7 +35,6 @@ services:
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: "true"
       DJANGO_SECRET_KEY: "secret"
       HOSTNAME: kernel.aether.local
 
@@ -63,7 +62,6 @@ services:
     environment:
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: "true"
       DJANGO_SECRET_KEY: "secret"
       HOSTNAME: odk.aether.local
 
@@ -92,10 +90,9 @@ services:
 
   ui-base:
     image: ehealthafrica/aether-ui:0.7.1
-    environment:
+    environment: &ui-environment
       CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: "true"
       DJANGO_SECRET_KEY: "secret"
       HOSTNAME: ui.aether.local
 
