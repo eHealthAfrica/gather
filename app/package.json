@@ -74,7 +74,7 @@
   },
   "jest": {
     "collectCoverage": true,
-    "coverageDirectory": "<rootDir>/test/.coverage",
+    "coverageDirectory": "<rootDir>/tests/.coverage",
     "rootDir": "./gather/assets",
     "setupFiles": ["<rootDir>/tests/jest.setup.jsx"],
     "testEnvironment": "<rootDir>/tests/jest-tests-environment",
