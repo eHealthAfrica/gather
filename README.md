@@ -197,15 +197,15 @@ This also applies to Aether ODK module.
 The list of the main containers:
 
 
-| Container         | Description                                                     |
-| ----------------- | --------------------------------------------------------------- |
-| db                | [PostgreSQL](https://www.postgresql.org/) database              |
-| **kernel**        | Aether Kernel app                                               |
-| **ui**            | Aether Kernel UI app (not needed but nice to have)              |
-| **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)  |
-| **gather**        | Gather app                                                      |
-| kernel-test       | Aether Kernel TESTING app (used only in e2e testss)             |
-| odk-test          | Aether ODK TESTING app (used only in e2e testss)                |
+| Container         | Description                                                       |
+| ----------------- | ----------------------------------------------------------------- |
+| db                | [PostgreSQL](https://www.postgresql.org/) database                |
+| **kernel**        | Aether Kernel app                                                 |
+| **ui**            | Aether Kernel UI (only needed for advanced mapping functionality) |
+| **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)    |
+| **gather**        | Gather app                                                        |
+| kernel-test       | Aether Kernel TESTING app (used only in e2e testss)               |
+| odk-test          | Aether ODK TESTING app (used only in e2e testss)                  |
 
 
 All of the containers definition for development can be found in the
