@@ -9,20 +9,15 @@
     "url": "https://ehealthafrica.org"
   },
 
-  "engines": {
-    "node": ">=6.0.0",
-    "npm": ">=3.0.0"
-  },
-
   "scripts": {
-    "test-lint-js": "standard './gather/assets/apps/**/*.jsx'",
-    "test-lint-scss": "sass-lint --config ./conf/extras/sass-lint.yml --verbose",
+    "test-lint-js": "standard './apps/**/*.jsx'",
+    "test-lint-scss": "sass-lint --config ./conf/sass-lint.yml --verbose",
     "test-lint": "npm run test-lint-js && npm run test-lint-scss",
     "test-js": "jest --expand",
     "test-js-verbose": "TERM=dumb && jest --expand --colors --maxWorkers=1",
     "test": "npm run test-lint && npm run test-js",
-    "webpack": "webpack --config ./gather/webpack.prod.js",
-    "webpack-server": "node ./gather/webpack.server.js"
+    "webpack": "webpack --config ./conf/webpack.prod.js",
+    "webpack-server": "node ./conf/webpack.server.js"
   },
 
   "dependencies": {
@@ -72,10 +67,13 @@
       "react-hot-loader/babel"
     ]
   },
+  "standard": {
+    "verbose": true
+  },
   "jest": {
     "collectCoverage": true,
     "coverageDirectory": "<rootDir>/tests/.coverage",
-    "rootDir": "./gather/assets",
+    "rootDir": ".",
     "setupFiles": ["<rootDir>/tests/jest.setup.jsx"],
     "testEnvironment": "<rootDir>/tests/jest-tests-environment",
     "verbose": true

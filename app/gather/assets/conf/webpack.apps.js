@@ -22,19 +22,19 @@
 const apps = [
   {
     name: 'styles',
-    path: './assets/css/index.scss'
+    path: '../css/index.scss'
   },
   {
     name: 'home',
-    path: './assets/apps/home'
+    path: '../apps/home'
   },
   {
     name: 'surveys',
-    path: './assets/apps/surveys'
+    path: '../apps/surveys'
   },
   {
     name: 'surveyors',
-    path: './assets/apps/surveyors'
+    path: '../apps/surveyors'
   }
 ]
 
