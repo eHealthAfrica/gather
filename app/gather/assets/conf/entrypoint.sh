@@ -18,7 +18,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-set -Eeuox pipefail
+set -e
 
 
 # Define help message
@@ -26,6 +26,7 @@ show_help() {
   echo """
   Commands
   ----------------------------------------------------------------------------
+
   bash          : run bash
   eval          : eval shell command
 
@@ -33,8 +34,9 @@ show_help() {
   test_lint     : run standardjs and sass lint tests
   test_js       : run js tests with enzyme and jest
 
-  build         : create distributed app
-  start_dev     : start webpack server (only in DEV mode)
+  build         : create distributed assets
+  start_dev     : start webpack server (use only in DEV mode)
+
   """
 }
 
@@ -77,10 +79,6 @@ case "$1" in
 
   start_dev)
     npm run webpack-server
-  ;;
-
-  help)
-    show_help
   ;;
 
   *)

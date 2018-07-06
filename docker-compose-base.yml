@@ -43,7 +43,7 @@ services:
       HOSTNAME: kernel.aether.local
       DEBUG: "true"
 
-      DJANGO_SECRET_KEY: "secret"
+      DJANGO_SECRET_KEY: "T7cyDESETLHDz43xf3Spx9NN6UdbDkpeREfy6fwATcckcwXUUvnqfHcwyNLHrXAZ"
 
       # mandatory with "start" command
       # ADMIN_PASSWORD: adminadmin
@@ -78,7 +78,7 @@ services:
       HOSTNAME: odk.aether.local
       DEBUG: "true"
 
-      DJANGO_SECRET_KEY: "secret"
+      DJANGO_SECRET_KEY: "T7cyDESETLHDz43xf3Spx9NN6UdbDkpeREfy6fwATcckcwXUUvnqfHcwyNLHrXAZ"
 
       # mandatory with "start" command
       # ADMIN_PASSWORD: adminadmin
@@ -117,7 +117,7 @@ services:
       HOSTNAME: ui.aether.local
       DEBUG: "true"
 
-      DJANGO_SECRET_KEY: "secret"
+      DJANGO_SECRET_KEY: "T7cyDESETLHDz43xf3Spx9NN6UdbDkpeREfy6fwATcckcwXUUvnqfHcwyNLHrXAZ"
 
       # this is the right value with "start_dev" command
       # comment it out when using "start" command
@@ -164,7 +164,7 @@ services:
       HOSTNAME: gather.local
       DEBUG: "true"
 
-      DJANGO_SECRET_KEY: "secret"
+      DJANGO_SECRET_KEY: "T7cyDESETLHDz43xf3Spx9NN6UdbDkpeREfy6fwATcckcwXUUvnqfHcwyNLHrXAZ"
 
       # use this value with "start_dev" command and webpack
       STATIC_ROOT: /code/gather/assets/bundles
@@ -172,8 +172,7 @@ services:
       # use this value with "start_dev" command and without webpack
       # STATIC_ROOT: /code/gather/static
 
-      # mandatory with "start" command
-      # ADMIN_PASSWORD: adminadmin
+      ADMIN_PASSWORD: adminadmin
 
       AETHER_KERNEL_TOKEN: a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24
       AETHER_KERNEL_URL: http://kernel:8000

@@ -20,8 +20,6 @@
 #
 set -e
 
-# Production specific functions
-
 check_variable() {
   if [ -n "$1" ];
   then
@@ -34,19 +32,23 @@ check_variable() {
 
 check_kernel() {
   # check if KERNEL env variables were set
-  check_variable $AETHER_KERNEL_URL   "KERNEL url"
-  check_variable $AETHER_KERNEL_TOKEN "KERNEL token"
+  check_variable $AETHER_KERNEL_URL   "Aether KERNEL url (AETHER_KERNEL_URL)"
+  check_variable $AETHER_KERNEL_TOKEN "Aether KERNEL token (AETHER_KERNEL_TOKEN)"
 }
 
 check_odk() {
   if [[ "$AETHER_MODULES" == *odk* ]];
   then
     # check if ODK env variables were set only if it's included in the modules list.
-    check_variable $AETHER_ODK_URL   "ODK url"
-    check_variable $AETHER_ODK_TOKEN "ODK token"
+    check_variable $AETHER_ODK_URL   "Aether ODK url (AETHER_ODK_URL)"
+    check_variable $AETHER_ODK_TOKEN "Aether ODK token (AETHER_ODK_TOKEN)"
   fi
 }
 
+# Django requirements
+check_variable $DJANGO_SECRET_KEY "Django secret key (DJANGO_SECRET_KEY)"
+check_variable $ADMIN_PASSWORD    "Admin user password (ADMIN_PASSWORD)"
+
+# Aether requirements
 check_kernel
 check_odk
-check_variable $ADMIN_PASSWORD "ADMIN password"

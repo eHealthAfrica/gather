@@ -26,22 +26,25 @@ show_help() {
     echo """
     Commands
     ----------------------------------------------------------------------------
+
     bash          : run bash
     eval          : eval shell command
     manage        : invoke django manage.py commands
 
-    pip_freeze    : freeze pip dependencies and write to requirements.txt
+    pip_freeze    : freeze pip dependencies and write to 'requirements.txt'
 
-    setupproddb   : create/migrate database for production
-    setuplocaldb  : create/migrate database for development (creates superuser)
+    setup         : check required environment variables,
+                    create/migrate database and,
+                    create/update 'admin-gather' superuser using 'ADMIN_PASSWORD'
+
+    start         : start webserver behind nginx
+    start_dev     : start webserver for development
 
     test          : run tests
     test_lint     : run flake8 tests
     test_coverage : run python tests with coverage output
     test_py       : alias of test_coverage
 
-    start         : start webserver behind nginx
-    start_dev     : start webserver for development
     """
 }
 
@@ -52,11 +55,15 @@ pip_freeze() {
     virtualenv -p python3 /tmp/env/
     /tmp/env/bin/pip install -f ./conf/pip/dependencies -r ./conf/pip/primary-requirements.txt --upgrade
 
-    cat /code/conf/pip/requirements_header.txt | tee conf/pip/requirements.txt
+    cat conf/pip/requirements_header.txt | tee conf/pip/requirements.txt
     /tmp/env/bin/pip freeze --local | grep -v appdir | tee -a conf/pip/requirements.txt
 }
 
-setup_db() {
+setup() {
+    # check if required environment variables exist
+    ./conf/check_vars.sh
+
+    # wait for database
     export PGPASSWORD=$RDS_PASSWORD
     export PGHOST=$RDS_HOSTNAME
     export PGUSER=$RDS_USERNAME
@@ -75,33 +82,33 @@ setup_db() {
 
     # migrate data model if needed
     ./manage.py migrate --noinput
-}
 
-setup_initial_data() {
-    # create initial superuser
-    ./manage.py loaddata /code/conf/extras/initial.json
-}
+    # create admin user
+    # arguments:
+    #    -u=admin
+    #    -p=secretsecret
+    #    -e=admin@gather2.org
+    #    -t=01234656789abcdefghij
+    ./manage.py setup_admin -u="admin-gather" -p=$ADMIN_PASSWORD
 
-setup_prod() {
-  # check if vars exist
-  /code/conf/check_vars.sh
-  # arguments: -u=admin -p=secretsecret -e=admin@gather2.org -t=01234656789abcdefghij
-  ./manage.py setup_admin -p=$ADMIN_PASSWORD
+    # copy assets bundles folder into static folder
+    rm -r -f ./gather/static/*.*
+    cp -r ./gather/assets/bundles/* ./gather/static/
 }
 
 test_lint() {
-    flake8 /code/. --config=/code/conf/extras/flake8.cfg
+    flake8 . --config=./conf/extras/flake8.cfg
 }
 
 test_coverage() {
-    export RCFILE=/code/conf/extras/coverage.rc
+    export RCFILE=./conf/extras/coverage.rc
     export TESTING=true
 
     coverage run    --rcfile="$RCFILE" manage.py test "${@:1}"
     coverage report --rcfile="$RCFILE"
     coverage erase
 
-    cat /code/conf/extras/good_job.txt
+    cat ./conf/extras/good_job.txt
 }
 
 
@@ -122,69 +129,46 @@ case "$1" in
         pip_freeze
     ;;
 
-    setuplocaldb )
-        setup_db
-        setup_initial_data
-    ;;
-
-    setuptestdb )
-        setup_db
-        setup_initial_data
-    ;;
-
-    setupproddb )
-        setup_db
-    ;;
-
-    test)
-        test_lint
-        test_coverage
-    ;;
-
-    test_lint)
-        test_lint
-    ;;
-
-    test_coverage)
-        test_coverage "${@:2}"
-    ;;
-
-    test_py)
-        test_coverage "${@:2}"
+    setup )
+        setup
     ;;
 
     start )
-        setup_db
-        setup_prod
+        setup
 
-         # create static assets
-        rm -r -f ./gather/static/*.*
-        cp -r ./gather/assets/bundles/* ./gather/static/
+        # create static assets
         ./manage.py collectstatic --noinput
         chmod -R 755 /var/www/static
 
         # media assets
         chown gather: /media
 
-        /usr/local/bin/uwsgi --ini /code/conf/uwsgi.ini
+        /usr/local/bin/uwsgi --ini ./conf/uwsgi.ini
     ;;
 
     start_dev )
-        setup_db
-        setup_initial_data
-
-        # copy assets bundles folder into static folder
-        rm -r -f ./gather/static/*.*
-        cp -r ./gather/assets/bundles/* ./gather/static/
-
+        setup
         ./manage.py runserver 0.0.0.0:$WEB_SERVER_PORT
     ;;
 
-    help)
-        show_help
+    test )
+        test_lint
+        test_coverage
     ;;
 
-    *)
+    test_lint )
+        test_lint
+    ;;
+
+    test_coverage )
+        test_coverage "${@:2}"
+    ;;
+
+    test_py )
+        test_coverage "${@:2}"
+    ;;
+
+    * )
         show_help
     ;;
 esac
