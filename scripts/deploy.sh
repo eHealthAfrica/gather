@@ -33,6 +33,10 @@ else
   DOCKER_TAG=$TRAVIS_BRANCH
 fi
 
+# Build and distribute the JS assets
+docker-compose build gather-assets
+docker-compose run   gather-assets build
+
 # Build and push docker
 docker-compose build $APP
 docker tag $APP ${DOCKER_REPO}/${APP}:${DOCKER_TAG}

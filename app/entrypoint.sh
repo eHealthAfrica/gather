@@ -39,11 +39,9 @@ show_help() {
     test_lint     : run flake8 tests
     test_coverage : run python tests with coverage output
     test_py       : alias of test_coverage
-    test_js       : run js tests
 
     start         : start webserver behind nginx
     start_dev     : start webserver for development
-    start_webpack : start webpack server (only in DEV mode)
     """
 }
 
@@ -92,7 +90,6 @@ setup_prod() {
 }
 
 test_lint() {
-    npm run test-lint
     flake8 /code/. --config=/code/conf/extras/flake8.cfg
 }
 
@@ -106,21 +103,6 @@ test_coverage() {
 
     cat /code/conf/extras/good_job.txt
 }
-
-test_js() {
-    npm run test-js "${@:1}"
-}
-
-
-# --------------------------------
-# set DJANGO_SECRET_KEY if needed
-if [ "$DJANGO_SECRET_KEY" = "" ]
-then
-   export DJANGO_SECRET_KEY=$(
-        cat /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | fold -w 64 | head -n 4
-    )
-fi
-# --------------------------------
 
 
 case "$1" in
@@ -157,11 +139,6 @@ case "$1" in
     test)
         test_lint
         test_coverage
-        test_js
-
-        # remove previous files
-        rm -r -f /code/gather/assets/bundles/*
-        npm run webpack
     ;;
 
     test_lint)
@@ -176,21 +153,14 @@ case "$1" in
         test_coverage "${@:2}"
     ;;
 
-    test_js)
-        test_js "${@:2}"
-    ;;
-
     start )
         setup_db
         setup_prod
 
-        # remove previous files
-        rm -r -f /code/gather/assets/bundles/*
-        npm run webpack
-
          # create static assets
+        rm -r -f ./gather/static/*.*
+        cp -r ./gather/assets/bundles/* ./gather/static/
         ./manage.py collectstatic --noinput
-        cp -r /code/gather/assets/bundles/* /var/www/static/
         chmod -R 755 /var/www/static
 
         # media assets
@@ -203,13 +173,11 @@ case "$1" in
         setup_db
         setup_initial_data
 
-        ./manage.py runserver 0.0.0.0:$WEB_SERVER_PORT
-    ;;
+        # copy assets bundles folder into static folder
+        rm -r -f ./gather/static/*.*
+        cp -r ./gather/assets/bundles/* ./gather/static/
 
-    start_webpack )
-        # remove previous files
-        rm -r -f /code/gather/assets/bundles/*
-        npm run webpack-server
+        ./manage.py runserver 0.0.0.0:$WEB_SERVER_PORT
     ;;
 
     help)

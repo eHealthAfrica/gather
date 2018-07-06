@@ -103,6 +103,9 @@ This will start:
 - **gather** on `http://gather.local:8005`
   and create a superuser `admin-gather`.
 
+- **gather-assets** on `http://localhost:3005`
+  only needed for HMR during assets development (`/app/gather/assets/).
+
 - **aether-kernel** on `http://kernel.aether.local:8000`
   and create a superuser `admin-kernel` with the needed TOKEN.
 
@@ -200,10 +203,11 @@ The list of the main containers:
 | Container         | Description                                                       |
 | ----------------- | ----------------------------------------------------------------- |
 | db                | [PostgreSQL](https://www.postgresql.org/) database                |
-| **kernel**        | Aether Kernel app                                                 |
-| **ui**            | Aether Kernel UI (only needed for advanced mapping functionality) |
-| **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)    |
 | **gather**        | Gather app                                                        |
+| **gather-assets** | Gather Assets HRM module                                          |
+| **kernel**        | Aether Kernel app                                                 |
+| **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)    |
+| **ui**            | Aether Kernel UI (only needed for advanced mapping functionality) |
 | kernel-test       | Aether Kernel TESTING app (used only in e2e testss)               |
 | odk-test          | Aether ODK TESTING app (used only in e2e testss)                  |
 
@@ -238,14 +242,17 @@ or
 
 ```bash
 docker-compose run gather test
+docker-compose run gather-assets test
 ```
 
 or
 
 ```bash
 docker-compose run gather test_lint
-docker-compose run gather test_js
 docker-compose run gather test_coverage
+
+docker-compose run gather-assets test_lint
+docker-compose run gather-assets test_js
 ```
 
 The e2e tests are run against different containers, the config file used

@@ -33,6 +33,10 @@ server {
   server_name               kernel.aether.local;
   client_max_body_size      75M;
 
+  location /static/ {
+    alias /static/kernel/;
+  }
+
   # Protected media
   location /media-internal/ {
     internal;  # Cannot be accessed from external calls
@@ -57,6 +61,10 @@ server {
   server_name               odk.aether.local;
   client_max_body_size      75M;
 
+  location /static/ {
+    alias /static/odk/;
+  }
+
   # Protected media
   location /media-internal/ {
     internal;  # Cannot be accessed from external calls
@@ -79,6 +87,10 @@ server {
   charset                   utf-8;
   server_name               ui.aether.local;
   client_max_body_size      75M;
+
+  location /static/ {
+    alias /static/ui/;
+  }
 
   location / {
     # use docker network alias (is used by UMS as service name)

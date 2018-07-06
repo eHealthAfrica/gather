@@ -31,10 +31,10 @@ function prepare_container() {
 function prepare_and_test_container() {
   container="$1"-test
 
-  echo "_____________________________________________ Starting $1 tasks"
   prepare_container $1
+  echo "_____________________________________________ Testing $1"
   $DC_TEST run $container test --noinput
-  echo "_____________________________________________ $1 tasks done"
+  echo "_____________________________________________ $1 Done"
 }
 
 DC_TEST="docker-compose -f docker-compose-test.yml"
@@ -57,6 +57,11 @@ prepare_container odk
 
 echo "_____________________________________________ Starting kernel and odk"
 $DC_TEST up -d kernel-test odk-test
+
+# test a clean Gather Assets TEST container
+prepare_and_test_container gather-assets
+# build assets and distribute into Gather Django container
+$DC_TEST run gather-assets-test build
 
 # test a clean Gather TEST container
 prepare_and_test_container gather

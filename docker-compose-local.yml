@@ -53,7 +53,6 @@ services:
       service: gather-base
     depends_on:
       - db
-      - gather-webpack
       - kernel
       - odk
     networks:
@@ -61,10 +60,14 @@ services:
         aliases:
           - gather.local
 
-  gather-webpack:
+  # ---------------------------------
+  # Gather Assets container
+  # ---------------------------------
+
+  gather-assets:
     extends:
       file: docker-compose-base.yml
-      service: gather-webpack-base
+      service: gather-assets-base
     networks:
       - internal
 
