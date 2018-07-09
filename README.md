@@ -15,6 +15,7 @@
     - [UMS settings for local development](#ums-settings-for-local-development)
     - [Token Authentication](#token-authentication)
 - [Development](#development)
+  - [Frontend assets](#frontend-assets)
 - [Deployment](#deployment)
 - [Containers and services](#containers-and-services)
 - [Run commands in the containers](#run-commands-in-the-containers)
@@ -186,6 +187,15 @@ paths to your current paths.
 ```bash
 docker-compose -f docker-compose-local.yml up
 ```
+
+*[Return to TOC](#table-of-contents)*
+
+
+### Frontend assets
+
+Frontend assets include JS, CSS, and fonts. They are all handled by webpack.
+
+See more in [Assets README](app/gather/assets/README.md)
 
 *[Return to TOC](#table-of-contents)*
 
