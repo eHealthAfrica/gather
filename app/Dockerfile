@@ -18,7 +18,8 @@ WORKDIR /code
 COPY ./conf/pip /code/conf/pip
 RUN pip install -f /code/conf/pip/dependencies -r /code/conf/pip/requirements.txt
 
-COPY ./ /code
+COPY ./app /code
+COPY ./conf /code/conf
 
 ################################################################################
 ## copy application version and create git revision
