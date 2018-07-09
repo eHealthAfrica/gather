@@ -259,9 +259,11 @@ WEBPACK_LOADER = {
     },
 }
 
-INSTALLED_APPS += [
-    'webpack_loader',
+# gather must be first because of template overrides
+INSTALLED_APPS = [
     'gather',
+    *INSTALLED_APPS,
+    'webpack_loader',
 ]
 
 TEMPLATES[0]['OPTIONS']['context_processors'] += [
