@@ -202,6 +202,7 @@ export default class Survey extends Component {
         filePrefix={survey.name}
         parser={rowsParser}
         url={downloadUrl}
+        labels={this.state.labels}
       />
     )
   }

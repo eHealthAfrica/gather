@@ -171,7 +171,7 @@ export default class DownloadButton extends Component {
           error: null
         }, () => {
           if (!this.state.inProgress) {
-            downloadContent(this.state.content, this.props.filePrefix)
+            downloadContent(this.state.content, this.props.filePrefix, this.props.labels)
           } else {
             this.loadData()
           }

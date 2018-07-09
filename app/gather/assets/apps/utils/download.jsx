@@ -23,7 +23,7 @@ import moment from 'moment'
 
 import { EXPORT_EXCEL_FORMAT } from './constants'
 import { EXPORT_FORMAT, CSV_SEPARATOR } from './env'
-import { getType, flatten, cleanPropertyName } from './types'
+import { getType, flatten, getLabelTree } from './types'
 
 /**
  * Parses the value to string format based on locale and type.
@@ -66,8 +66,8 @@ const parseValue = (value) => {
  * Includes cleaned headers as first row, appends the data
  * (filling the gaps in the data columns).
  */
-const parseContentRows = (headers, data) => ([
-  headers.map(name => name.replace('.', ' ')).map(cleanPropertyName),
+const parseContentRows = (headers, data, labels = {}) => ([
+  headers.map(name => getLabelTree(name, labels)),
   ...data.map(row => headers.map(key => (row[key] || '')))
 ])
 
@@ -153,7 +153,7 @@ const downloadExcel = (content, filename) => {
  * @param {object} content - The extracted and parsed content.
  * @param {string} name    - File name.
   */
-export const downloadContent = (content, name = 'data') => {
+export const downloadContent = (content, name = 'data', labels = {}) => {
   if (EXPORT_FORMAT === EXPORT_EXCEL_FORMAT) {
     downloadExcel(content, name)
   } else {
@@ -161,7 +161,7 @@ export const downloadContent = (content, name = 'data') => {
     Object.keys(content)
       .filter(key => content[key].data.length)
       .forEach((key, index) => {
-        const rows = parseContentRows(content[key].headers, content[key].data)
+        const rows = parseContentRows(content[key].headers, content[key].data, labels)
         const filename = index ? `${name}-${index}` : name
         downloadCsv(rows, filename)
       })
