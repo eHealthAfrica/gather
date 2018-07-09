@@ -247,7 +247,7 @@ ROOT_URLCONF = 'gather.urls'
 WSGI_APPLICATION = 'gather.wsgi.application'
 
 APP_NAME = 'Gather'
-INSTANCE_NAME = os.environ.get('INSTANCE_NAME', 'Gather on Aether')
+INSTANCE_NAME = os.environ.get('INSTANCE_NAME', 'Gather 3')
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
 
