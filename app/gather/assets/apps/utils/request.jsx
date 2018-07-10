@@ -18,8 +18,6 @@
  * under the License.
  */
 
-import { downloadFile } from './download'
-
 const buildFetchOptions = (method, payload, multipart) => {
   // See: https://docs.djangoproject.com/en/2.0/ref/csrf/
   const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]') || {}
@@ -71,6 +69,26 @@ const buildFetchOptions = (method, payload, multipart) => {
   }
 
   return options
+}
+
+/**
+ * Downloads blob content as a file.
+ *
+ * @param {Blob}   blob     - Blob content.
+ * @param {string} filename - File name.
+ */
+const downloadFile = (blob, filename = 'download') => {
+  // triggers a file download by creating
+  // a link object and simulating a click event.
+  const link = document.createElement('a')
+  link.style = 'display: none'
+  link.download = filename
+  link.href = window.URL.createObjectURL(blob)
+
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  window.URL.revokeObjectURL(link.href)
 }
 
 const inspectResponse = ({download, fileName}, resolve, reject, response) => {

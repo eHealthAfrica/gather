@@ -231,7 +231,9 @@ describe('types', () => {
     const labels = {
       'a': 'Root',
       'a.d.#.e': 'The indexed E',
-      'a.*.c': 'The Big C'
+      'a.*.c': 'The Big C',
+      'a.*.c.?.u': 'Join',
+      'x.y.?.z': 'Union'
     }
 
     it('should find simple nested properties', () => {
@@ -245,6 +247,20 @@ describe('types', () => {
       assert.equal(getLabel('a.x_x.c', labels), 'The Big C')
       assert.equal(getLabel('a.x__1_x.c', labels), 'The Big C')
       assert.equal(getLabel('a.x__1._x.c', labels), 'c')
+
+      assert.equal(getLabel('a.x.c.z', labels), 'z')
+      assert.equal(getLabel('a.x_x.c.z', labels), 'z')
+      assert.equal(getLabel('a.x__1_x.c.z', labels), 'z')
+    })
+
+    it('should detect union properties', () => {
+      assert.equal(getLabel('a.x.c.u', labels), 'Join')
+      assert.equal(getLabel('a.x_x.c.u', labels), 'Join')
+      assert.equal(getLabel('a.x__1_x.c.u', labels), 'Join')
+      assert.equal(getLabel('a.x__1._x.c.u', labels), 'u')
+
+      assert.equal(getLabel('x.y.z', labels), 'Union')
+      assert.equal(getLabel('x.y.a.z', labels), 'z')
     })
   })
 

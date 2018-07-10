@@ -21,7 +21,6 @@
 // import all components
 import AppIntl from './AppIntl'
 import ConfirmButton from './ConfirmButton'
-import DownloadButton from './DownloadButton'
 import EmptyAlert from './EmptyAlert'
 import ErrorAlert from './ErrorAlert'
 import FetchErrorAlert from './FetchErrorAlert'
@@ -42,7 +41,6 @@ import WarningAlert from './WarningAlert'
 export {
   AppIntl,
   ConfirmButton,
-  DownloadButton,
   EmptyAlert,
   ErrorAlert,
   FetchErrorAlert,

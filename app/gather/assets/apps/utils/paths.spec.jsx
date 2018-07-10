@@ -26,7 +26,6 @@ import {
   getEntitiesAPIPath,
   getMasksAPIPath,
   getMediaFileAPIPath,
-  getSchemasAPIPath,
   getSurveyorsAPIPath,
   getSurveyorsPath,
   getSurveysAPIPath,
@@ -38,7 +37,9 @@ describe('paths utils', () => {
   describe('getMasksAPIPath', () => {
     it('should return the Mask API path', () => {
       assert.equal(getMasksAPIPath({}), '/gather/masks.json')
+      assert.equal(getMasksAPIPath({format: ''}), '/gather/masks')
       assert.equal(getMasksAPIPath({id: 1}), '/gather/masks/1.json')
+      assert.equal(getMasksAPIPath({id: 1, format: ''}), '/gather/masks/1')
     })
   })
 
@@ -122,18 +123,6 @@ describe('paths utils', () => {
 
     it('should return the Survey Entities API path', () => {
       assert.equal(getEntitiesAPIPath({project: 1}), prefix + 'entities.json?project=1')
-    })
-  })
-
-  describe('getSchemasAPIPath', () => {
-    const prefix = '/kernel/'
-
-    it('should return the Schemas API path', () => {
-      assert.equal(getSchemasAPIPath({}), prefix + 'schemas.json')
-    })
-
-    it('should return the Survey Schemas API path', () => {
-      assert.equal(getSchemasAPIPath({project: 1}), prefix + 'schemas.json?project=1')
     })
   })
 
