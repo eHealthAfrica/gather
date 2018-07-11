@@ -67,6 +67,9 @@ services:
       RDS_DB_NAME: gather-test
       RDS_HOSTNAME: db-test
       WEB_SERVER_PORT: 9005
+    volumes:
+      # uwsgi.ini using port 9005 (use only with "start" command)
+      - ./conf/uwsgi.test.ini:/code/conf/uwsgi.ini
     ports:
       - "9005:9005"
     depends_on:
