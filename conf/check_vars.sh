@@ -47,6 +47,7 @@ check_odk() {
 
 # Django requirements
 check_variable $DJANGO_SECRET_KEY "Django secret key (DJANGO_SECRET_KEY)"
+check_variable $ADMIN_USERNAME    "Admin user username (ADMIN_USERNAME)"
 check_variable $ADMIN_PASSWORD    "Admin user password (ADMIN_PASSWORD)"
 
 # Aether requirements

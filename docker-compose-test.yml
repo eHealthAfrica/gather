@@ -28,6 +28,7 @@ services:
       - "9000:9000"
     depends_on:
       - db-test
+    command: start_dev
 
   # ---------------------------------
   # ODK Adapter container
@@ -48,6 +49,7 @@ services:
     depends_on:
       - db-test
       - kernel-test
+    command: start_dev
 
   # ---------------------------------
   # Gather container

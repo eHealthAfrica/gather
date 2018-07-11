@@ -35,7 +35,7 @@ show_help() {
 
     setup         : check required environment variables,
                     create/migrate database and,
-                    create/update 'admin-gather' superuser using 'ADMIN_PASSWORD'
+                    create/update superuser using 'ADMIN_USERNAME' and 'ADMIN_PASSWORD'
 
     start         : start webserver behind nginx
     start_dev     : start webserver for development
@@ -89,7 +89,7 @@ setup() {
     #    -p=secretsecret
     #    -e=admin@gather2.org
     #    -t=01234656789abcdefghij
-    ./manage.py setup_admin -u="admin-gather" -p=$ADMIN_PASSWORD
+    ./manage.py setup_admin -u=$ADMIN_USERNAME -p=$ADMIN_PASSWORD
 
     # copy assets bundles folder into static folder
     rm -r -f ./gather/static/*.*

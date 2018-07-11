@@ -110,19 +110,19 @@ docker-compose up --build    # this will update the cointainers if needed
 This will start:
 
 - **gather** on `http://gather.local:8005`
-  and create a superuser `admin-gather`.
+  and create a superuser `${ADMIN_USERNAME}`.
 
 - **gather-assets** on `http://localhost:3005`
   only needed for HMR during assets development (`/app/gather/assets/).
 
 - **aether-kernel** on `http://kernel.aether.local:8000`
-  and create a superuser `admin-kernel` with the needed TOKEN.
+  and create a superuser `admin` with the needed TOKEN.
 
 - **aether-odk** on `http://odk.aether.local:8443`
-  and create a superuser `admin-odk` with the needed TOKEN.
+  and create a superuser `admin` with the needed TOKEN.
 
 - **aether-ui** on `http://ui.aether.local:8004`
-  and create a superuser `admin-ui` with the needed TOKEN.
+  and create a superuser `admin` with the needed TOKEN.
 
 All the created superusers have password `${ADMIN_PASSWORD}` in each container.
 
