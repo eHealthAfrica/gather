@@ -25,6 +25,10 @@ const apps = [
     path: '../css/index.scss'
   },
   {
+    name: 'styles-login',
+    path: '../css/login.scss'
+  },
+  {
     name: 'home',
     path: '../apps/home'
   },

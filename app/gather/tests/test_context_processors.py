@@ -30,7 +30,7 @@ class ContextProcessorsTests(TestCase):
         self.assertEqual(gather_context(request), {
             'dev_mode': False,
             'app_name': 'Gather',
-            'instance_name': 'Gather on Aether',
+            'instance_name': 'Gather 3',
             'navigation_list': ['surveys', 'surveyors', ],
             'kernel_url': 'http://kernel-test:9000',
             'odk_url': 'http://odk-test:9443'
