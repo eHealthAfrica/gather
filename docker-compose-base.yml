@@ -38,7 +38,8 @@ services:
   kernel-base:
     image: ehealthafrica/aether-kernel:0.8.0
     environment:
-      CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
+      # Uncomment this line to enable single sign on if you use CAS
+      # CAS_SERVER_URL: https://your.cas.server
       CSRF_COOKIE_DOMAIN: .aether.local
       HOSTNAME: kernel.aether.local
       DEBUG: "true"
@@ -73,7 +74,8 @@ services:
   odk-base:
     image: ehealthafrica/aether-odk:0.8.0
     environment:
-      CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
+      # Uncomment this line to enable single sign on if you use CAS
+      # CAS_SERVER_URL: https://your.cas.server
       CSRF_COOKIE_DOMAIN: .aether.local
       HOSTNAME: odk.aether.local
       DEBUG: "true"
@@ -112,7 +114,8 @@ services:
   ui-base:
     image: ehealthafrica/aether-ui:0.8.0
     environment:
-      CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
+      # Uncomment this line to enable single sign on if you use CAS
+      # CAS_SERVER_URL: https://your.cas.server
       CSRF_COOKIE_DOMAIN: .aether.local
       HOSTNAME: ui.aether.local
       DEBUG: "true"
@@ -159,7 +162,8 @@ services:
     stdin_open: true
     tty: true
     environment:
-      CAS_SERVER_URL: https://ums-dev.ehealthafrica.org
+      # Uncomment this line to enable single sign on if you use CAS
+      # CAS_SERVER_URL: https://your.cas.server
       CSRF_COOKIE_DOMAIN: gather.local
       HOSTNAME: gather.local
       DEBUG: "true"
