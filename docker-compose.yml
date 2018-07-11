@@ -1,4 +1,4 @@
-version: "2"
+version: "2.1"
 
 networks:
   internal:
@@ -12,7 +12,7 @@ services:
 
   db:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: postgres-base
     networks:
       - internal
@@ -23,7 +23,7 @@ services:
 
   kernel:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: kernel-base
     depends_on:
       - db
@@ -38,7 +38,7 @@ services:
 
   odk:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: odk-base
     depends_on:
       - db
@@ -54,7 +54,7 @@ services:
 
   ui:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: ui-base
     depends_on:
       - db
@@ -70,7 +70,7 @@ services:
 
   gather:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: gather-base
     depends_on:
       - db
@@ -88,7 +88,7 @@ services:
 
   gather-webpack:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: gather-webpack-base
     networks:
       - internal
@@ -99,7 +99,7 @@ services:
 
   nginx:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: nginx-base
     depends_on:
       - gather

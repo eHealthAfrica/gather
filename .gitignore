@@ -125,6 +125,8 @@ tmp
 .terraform
 terraform.tfstate.backup
 
+# docker-compose variables
+.env
 
 # Webpack build files
 **/assets/bundles/

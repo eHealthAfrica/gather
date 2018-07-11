@@ -1,4 +1,4 @@
-version: "2"
+version: "2.1"
 
 services:
 
@@ -8,7 +8,7 @@ services:
 
   db-test:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: postgres-base
 
   # ---------------------------------
@@ -17,7 +17,7 @@ services:
 
   kernel-test:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: kernel-base
     environment:
       TESTING: "true"
@@ -35,7 +35,7 @@ services:
 
   odk-test:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: odk-base
     environment:
       TESTING: "true"
@@ -55,7 +55,7 @@ services:
 
   gather-test:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: gather-base
     environment:
       TESTING: "true"
