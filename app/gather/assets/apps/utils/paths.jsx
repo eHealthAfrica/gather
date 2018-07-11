@@ -115,7 +115,7 @@ const buildAPIPath = (app, type, id, {format = 'json', action, ...params}) => {
     (id ? '/' + id : '') +
     // indicates the action suffix like "details", "csv", "xlsx" or "propagates"
     (action ? '/' + action : ''))
-  const formatSuffix = (format === '' ? '' : '.' + format)
+  const formatSuffix = (format === '' ? '/' : '.' + format)
   const url = `${API_PREFIX}/${app}/${type}${suffix}${formatSuffix}`
   const queryString = id ? '' : buildQueryString(params)
 

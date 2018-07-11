@@ -37,9 +37,9 @@ describe('paths utils', () => {
   describe('getMasksAPIPath', () => {
     it('should return the Mask API path', () => {
       assert.equal(getMasksAPIPath({}), '/gather/masks.json')
-      assert.equal(getMasksAPIPath({format: ''}), '/gather/masks')
+      assert.equal(getMasksAPIPath({format: ''}), '/gather/masks/')
       assert.equal(getMasksAPIPath({id: 1}), '/gather/masks/1.json')
-      assert.equal(getMasksAPIPath({id: 1, format: ''}), '/gather/masks/1')
+      assert.equal(getMasksAPIPath({id: 1, format: ''}), '/gather/masks/1/')
     })
   })
 
