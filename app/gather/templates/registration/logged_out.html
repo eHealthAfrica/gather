@@ -1,4 +1,25 @@
 {% extends "admin/base_site.html" %}
+
+{% comment 'LICENSE' %}
+Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
+
+See the NOTICE file distributed with this work for additional information
+regarding copyright ownership.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+{% endcomment %}
+
 {% load i18n %}
 {% load render_bundle from webpack_loader %}
 {% load static %}
@@ -7,74 +28,24 @@
   {% if dev_mode %}
     {# this is for CSS Hot reloading in development (render as another JS file) #}
     {% render_bundle 'styles' %}
+    {% render_bundle 'styles-login' %}
   {% else %}
     {# render as CSS file #}
     {% render_bundle 'styles' 'css' %}
+    {% render_bundle 'styles-login' 'css' %}
   {% endif %}
-  <style>
-    body {
-      background: #4f6b81;
-      font: 15px Quicksand, Arial, sans-serif;
-      color: white;
-    }
-    .logo-container, .front, .back {
-      border-radius: 50%;
-      height: 48px;
-      width: 48px;
-    }
-    .top-nav-logo {
-      margin: 4rem 0 2rem;
-    }
-    .top-nav-logo span {
-      display: inline-block;
-      font-weight: 700;
-      font-size: 32px;
-      margin: 0 60px;
-      line-height: 46px;
-      color: white;
-    }
-    .btn-primary {
-      background: #5eb1f2;
-      background-image: linear-gradient(to right, transparent, #49b1cf);
-      color: #fff;
-      border-radius: 2px;
-      box-shadow: 1px 1px 1px rgba(74, 74, 74, 0.2), 1px 1px 0 rgba(255, 255, 255, 0.1) inset;
-      padding: 1.1rem 2rem;
-      transition: background 1s;
-      margin-top: 1.5rem;
-    }
-    .btn:hover {
-      box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.1) inset, -1px -1px 0 rgba(45, 49, 70, 0.3) inset, 0 0 4px rgba(45, 49, 70, 0.1);
-    }
-    #header {
-      display: none;
-    }
-    .logout-info a, .logout-info a:visited {
-      color: white;
-      text-decoration: underline;
-    }
-
-  </style>
 {% endblock %}
 
-{% block breadcrumbs %}
-{% endblock %}
-{% block content_title %}
-{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block content_title %}{% endblock %}
 
 
 {% block content %}
-  <div class="top-nav-logo" title="gather" href="#/">
-    <div class="logo-container">
-      <div class="flipper">
-        <div class="front"></div>
-        <div class="back"></div>
-      </div>
-    </div>
-    <span data-app-name="app-name">Gather</span>
-  </div>
+  {% include 'branding.html' with classname='top-nav-logo' %}
+
   <div class="logout-info">
-    <p>Thank you for using Gather.</p>
-    <p><a href="/accounts/login/?next=/">Log in again</a></p>
+    <p>{% blocktrans %}Thank you for using {{app_name}}.{% endblocktrans %}</p>
+    <p><a href="{% url 'rest_framework:login' %}?next=/">{% trans 'Log in again' %}</a></p>
   </div>
 {% endblock %}

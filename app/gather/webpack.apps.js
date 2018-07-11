@@ -35,6 +35,10 @@ const apps = [
   {
     name: 'surveyors',
     path: './assets/apps/surveyors'
+  },
+  {
+    name: 'styles-login',
+    path: './assets/css/login.scss'
   }
 ]
 

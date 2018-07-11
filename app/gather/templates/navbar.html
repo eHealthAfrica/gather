@@ -24,15 +24,7 @@ under the License.
 <div class="m-b-1">
   <nav class="navbar navbar-expand-md">
 
-    <a class="navbar-brand" href="/" title="{{app_name}}">
-      <div class="logo-container">
-        <div class="flipper">
-          <div class="front"></div>
-          <div class="back"></div>
-        </div>
-      </div>
-      <span data-app-name="app-name">{{app_name}}</span>
-    </a>
+    {% include 'branding.html' with classname='navbar-brand' %}
 
     <button type="button"
       class="navbar-toggler navbar-toggler-right"
@@ -69,7 +61,7 @@ under the License.
               data-user-id="{{ request.user.id }}">
               {{ request.user|get_fullname }}
             </span>
-            <a class="logout" href="{% url 'rest_framework:logout' %}">
+            <a class="logout" href="{% url 'rest_framework:logout' %}?next=/">
               <i class="fas fa-sign-out-alt" title="{% trans 'Sign Out' %}" aria-hidden="true"></i>
             </a>
           </li>
