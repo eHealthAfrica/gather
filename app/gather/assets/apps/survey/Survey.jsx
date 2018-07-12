@@ -176,7 +176,7 @@ export default class Survey extends Component {
 
   renderDownloadButton () {
     const {survey} = this.props
-    const {total, allPaths, selectedPaths} = this.state
+    const {total} = this.state
 
     const pageSize = Math.min(EXPORT_MAX_ROWS_SIZE || MAX_PAGE_SIZE, MAX_PAGE_SIZE)
     const params = {
@@ -192,15 +192,11 @@ export default class Survey extends Component {
       separator: CSV_SEPARATOR
     }
 
-    // restrict the columns to export with the selected columns
-    if (selectedPaths.length !== allPaths.length) {
-      payload.columns = 'modified,' + selectedPaths
-        .map(key => 'payload.' + key)
-        .join(',')
-    }
-
-    const download = (options, fileName) => {
-      postData(getEntitiesAPIPath(options), payload, {download: true, fileName})
+    const download = (options, filename) => {
+      postData(
+        getEntitiesAPIPath(options),
+        {...payload, filename},
+        {download: true, filename: `${filename}.${EXPORT_FORMAT}`})
     }
 
     if (total < pageSize) {
@@ -208,7 +204,7 @@ export default class Survey extends Component {
         <button
           type='button'
           className='tab'
-          onClick={() => { download(params, `${survey.name}.${EXPORT_FORMAT}`) }}
+          onClick={() => { download(params, survey.name) }}
         >
           <i className='fas fa-download mr-2' />
           <FormattedMessage
@@ -223,7 +219,7 @@ export default class Survey extends Component {
       .map(index => ({
         key: index,
         options: { ...params, page: index },
-        fileName: `${survey.name}-${index}.${EXPORT_FORMAT}`
+        filename: `${survey.name}-${index}`
       }))
 
     return (
@@ -251,9 +247,9 @@ export default class Survey extends Component {
                   key={page.key}
                   type='button'
                   className='dropdown-item'
-                  onClick={() => { download(page.options, page.fileName) }}
+                  onClick={() => { download(page.options, page.filename) }}
                 >
-                  { page.fileName }
+                  { page.filename }
                 </button>
               ))
             }
