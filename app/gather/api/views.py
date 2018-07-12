@@ -142,7 +142,6 @@ class TokenProxyView(View):
         # not hosted on that server. The webserver
         # should add the correct Host based on the request.
         # this problem might not be exposed running on localhost
-
         if 'Host' in headers:  # pragma: no cover
             del headers['Host']
 
@@ -156,7 +155,11 @@ class TokenProxyView(View):
                                     headers=headers,
                                     *args,
                                     **kwargs)
-        return HttpResponse(response, status=response.status_code)
+        http_response = HttpResponse(response, status=response.status_code)
+        # copy the response headers
+        for key in response.headers.keys():
+            http_response[key] = response.headers.get(key)
+        return http_response
 
 
 class SurveyViewSet(viewsets.ModelViewSet):
