@@ -91,7 +91,7 @@ const downloadFile = (blob, filename = 'download') => {
   window.URL.revokeObjectURL(link.href)
 }
 
-const inspectResponse = ({download, fileName}, resolve, reject, response) => {
+const inspectResponse = ({download, filename}, resolve, reject, response) => {
   // According to fetch docs: https://github.github.io/fetch/
   // Note that the promise won't be rejected in case of HTTP 4xx or 5xx server responses.
   // The promise will be resolved just as it would be for HTTP 2xx.
@@ -109,7 +109,16 @@ const inspectResponse = ({download, fileName}, resolve, reject, response) => {
       return response
         .blob()
         .then(content => {
-          downloadFile(content, fileName)
+          // Content-Disposition Header = 'attachment; filename="looooong file name.ext"'
+          const contentDisposition = response.headers.get('Content-Disposition')
+          if (contentDisposition) {
+            filename = contentDisposition
+              .split(';')[1]
+              .trim()
+              .split('=')[1]
+              .replace(/"/g, '')
+          }
+          downloadFile(content, filename)
           return resolve() // NO-CONTENT response
         })
     }
@@ -140,12 +149,12 @@ const request = (
     payload, //   in case of POST, PUT, PATCH the payload
     multipart, // in case of POST, PUT, PATCH indicates if send as FormData
     download, //  indicates if download the response as a file
-    fileName //   in case of "download" the file name
+    filename //   in case of "download" the file name
   }
 ) => new Promise((resolve, reject) => {
   window
     .fetch(url, buildFetchOptions(method, payload, multipart))
-    .then(inspectResponse.bind(null, {download, fileName}, resolve, reject))
+    .then(inspectResponse.bind(null, {download, filename}, resolve, reject))
 })
 
 /**
