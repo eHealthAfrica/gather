@@ -69,7 +69,7 @@ services:
 
   gather-assets:
     extends:
-      file: docker-compose-base.yml
+      file: ./docker-compose-base.yml
       service: gather-assets-base
     networks:
       - internal
@@ -83,6 +83,9 @@ services:
     extends:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: kernel-base
+    volumes:
+      - ./.persistent_data/kernel/media:/media
+      - ./.persistent_data/kernel/static:/var/www/static
     depends_on:
       - db
     networks:
@@ -99,6 +102,9 @@ services:
     extends:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: odk-base
+    volumes:
+      - ./.persistent_data/odk/media:/media
+      - ./.persistent_data/odk/static:/var/www/static
     depends_on:
       - db
       - kernel
@@ -116,6 +122,8 @@ services:
     extends:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: ui-base
+    volumes:
+      - ./.persistent_data/ui/static:/var/www/static
     depends_on:
       - db
       - kernel
