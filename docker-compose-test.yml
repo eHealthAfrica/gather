@@ -43,9 +43,9 @@ services:
       AETHER_KERNEL_URL: http://kernel-test:9000
       RDS_DB_NAME: aether-odk-test
       RDS_HOSTNAME: db-test
-      WEB_SERVER_PORT: 9443
+      WEB_SERVER_PORT: 9001
     ports:
-      - "9443:9443"
+      - "9001:9001"
     depends_on:
       - db-test
       - kernel-test
@@ -63,7 +63,7 @@ services:
       TESTING: "true"
       AETHER_MODULES: "kernel,odk,"
       AETHER_KERNEL_URL: http://kernel-test:9000
-      AETHER_ODK_URL: http://odk-test:9443
+      AETHER_ODK_URL: http://odk-test:9001
       RDS_DB_NAME: gather-test
       RDS_HOSTNAME: db-test
       WEB_SERVER_PORT: 9005
@@ -86,5 +86,5 @@ services:
     environment:
       AETHER_MODULES: "kernel,odk,"
       AETHER_KERNEL_URL: http://kernel-test:9000
-      AETHER_ODK_URL: http://odk-test:9443
+      AETHER_ODK_URL: http://odk-test:9001
     command: test

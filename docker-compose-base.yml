@@ -32,6 +32,7 @@ services:
       - ./.persistent_data/gather/static:/static/gather
     ports:
       - "80:80"
+      - "8443:8443"
 
 
   # ---------------------------------
@@ -91,12 +92,12 @@ services:
       RDS_PORT: 5432
       RDS_USERNAME: postgres
 
-      WEB_SERVER_PORT: 8443
+      WEB_SERVER_PORT: 8001
     volumes:
       - ./.persistent_data/odk/media:/media
       - ./.persistent_data/odk/static:/var/www/static
     ports:
-      - "8443:8443"
+      - "8001:8001"
     command: start
 
 
@@ -169,8 +170,8 @@ services:
       AETHER_MODULES: "kernel,odk,"
 
       AETHER_ODK_TOKEN: d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1
-      AETHER_ODK_URL: http://odk:8443
-      AETHER_ODK_URL_TEST: http://odk-test:9443
+      AETHER_ODK_URL: http://odk:8001
+      AETHER_ODK_URL_TEST: http://odk-test:9001
 
       RDS_DB_NAME: gather
       RDS_HOSTNAME: db
@@ -202,7 +203,7 @@ services:
     environment:
       AETHER_MODULES: "kernel,odk,"
       AETHER_KERNEL_URL: http://kernel:8000
-      AETHER_ODK_URL: http://odk:8443
+      AETHER_ODK_URL: http://odk:8001
 
       CSV_HEADER_RULES: remove-prefix;payload.,remove-prefix;None.,replace;.;:;
       CSV_HEADER_RULES_SEP: ;

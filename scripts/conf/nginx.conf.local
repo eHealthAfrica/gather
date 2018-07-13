@@ -21,7 +21,6 @@ server {
 
   location / {
     proxy_pass http://gather.local:8005;
-    include    /etc/nginx/uwsgi_params;
   }
 }
 
@@ -48,7 +47,6 @@ server {
 
   location / {
     proxy_pass http://kernel.aether.local:8000;
-    include    /etc/nginx/uwsgi_params;
   }
 }
 
@@ -59,6 +57,7 @@ server {
 
 server {
   listen                    80;
+  listen                    8443; # required by ODK Collect
   charset                   utf-8;
   server_name               odk.aether.local;
   client_max_body_size      75M;
@@ -74,8 +73,7 @@ server {
   }
 
   location / {
-    proxy_pass http://odk.aether.local:8443;
-    include    /etc/nginx/uwsgi_params;
+    proxy_pass http://odk.aether.local:8001;
   }
 }
 
@@ -95,6 +93,5 @@ server {
 
   location / {
     proxy_pass http://ui.aether.local:8004;
-    include    /etc/nginx/uwsgi_params;
   }
 }

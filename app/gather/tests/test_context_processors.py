@@ -33,7 +33,7 @@ class ContextProcessorsTests(TestCase):
             'instance_name': 'Gather 3',
             'navigation_list': ['surveys', 'surveyors', ],
             'kernel_url': 'http://kernel-test:9000',
-            'odk_url': 'http://odk-test:9443'
+            'odk_url': 'http://odk-test:9001'
         })
 
     @mock.patch('gather.context_processors.settings.AETHER_ODK', False)
