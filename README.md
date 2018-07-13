@@ -97,8 +97,8 @@ of the most common ones with non default values. For more info take a look at th
   - Aether ODK:
     - `AETHER_ODK_TOKEN`: `d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1`
       Token to connect to Aether ODK Server.
-    - `AETHER_ODK_URL`: `http://odk:8001` Aether ODK Server url.
-    - `AETHER_ODK_URL_TEST`: `http://odk-test:9001` Aether ODK Testing Server url.
+    - `AETHER_ODK_URL`: `http://odk:8002` Aether ODK Server url.
+    - `AETHER_ODK_URL_TEST`: `http://odk-test:9002` Aether ODK Testing Server url.
 
 
 ## Usage
@@ -118,7 +118,7 @@ This will start:
 - **aether-kernel** on `http://kernel.aether.local:8000`
   and create a superuser `admin` with the needed TOKEN.
 
-- **aether-odk** on `http://odk.aether.local:8001`
+- **aether-odk** on `http://odk.aether.local:8002`
   and create a superuser `admin` with the needed TOKEN.
 
 - **aether-ui** on `http://ui.aether.local:8004`
