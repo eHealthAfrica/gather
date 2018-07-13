@@ -145,9 +145,6 @@ case "$1" in
         # add git revision (if exists)
         cp ./REVISION /var/www/static/REVISION 2>/dev/null || :
 
-        # media assets
-        chown gather: /media
-
         [ -z "$DEBUG" ] && LOGGING="--disable-logging" || LOGGING=""
         /usr/local/bin/uwsgi \
             --ini /code/conf/uwsgi.ini \
