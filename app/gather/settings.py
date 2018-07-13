@@ -244,7 +244,6 @@ if not TESTING and DEBUG:  # pragma: no cover
 # ------------------------------------------------------------------------------
 
 ROOT_URLCONF = 'gather.urls'
-WSGI_APPLICATION = 'gather.wsgi.application'
 
 APP_NAME = 'Gather'
 INSTANCE_NAME = os.environ.get('INSTANCE_NAME', 'Gather 3')
