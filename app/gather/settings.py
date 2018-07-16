@@ -173,7 +173,7 @@ HOSTNAME = os.environ.get('HOSTNAME', '')
 
 if CAS_SERVER_URL:  # pragma: no cover
     INSTALLED_APPS += [
-        # UMS apps
+        # CAS apps
         'django_cas_ng',
         'ums_client',
     ]
@@ -181,7 +181,7 @@ if CAS_SERVER_URL:  # pragma: no cover
         'ums_client.backends.UMSRoleBackend',
     ]
 else:  # pragma: no cover
-    logger.info('No UMS enable!')
+    logger.info('No CAS enable!')
 
 
 # Sentry Configuration
@@ -253,7 +253,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
 # Javascript/CSS Files:
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': '/',  # used in prod
+        'BUNDLE_DIR_NAME': '/',
         'STATS_FILE': os.path.join(STATIC_ROOT, 'webpack-stats.json'),
     },
 }

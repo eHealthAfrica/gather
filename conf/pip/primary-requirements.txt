@@ -16,10 +16,9 @@ django-webpack-loader
 djangorestframework
 psycopg2-binary
 requests
-uwsgi
 
 
-# UMS
+# CAS client
 django-cas-ng
 django-ums-client
 
@@ -30,6 +29,7 @@ django-debug-toolbar
 
 # Server side
 raven    # Sentry
+uwsgi    # Server behind NGINX
 
 
 # Test libraries

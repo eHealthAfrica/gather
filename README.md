@@ -12,11 +12,9 @@
     - [Gather](#gather)
 - [Usage](#usage)
   - [Users & Authentication](#users--authentication)
-    - [UMS settings for local development](#ums-settings-for-local-development)
     - [Token Authentication](#token-authentication)
 - [Development](#development)
   - [Frontend assets](#frontend-assets)
-- [Deployment](#deployment)
 - [Containers and services](#containers-and-services)
 - [Run commands in the containers](#run-commands-in-the-containers)
   - [Run tests](#run-tests)
@@ -72,8 +70,8 @@ of the most common ones with non default values. For more info take a look at th
   - `CSV_HEADER_RULES_SEP`: `;` rules divider. Default `:`. Include it if any of the rules uses `:`.
     See more in `aether.common.drf.renderers.CustomCSVRenderer`.
 
-- Authentication (UMS):
-  - `CAS_SERVER_URL`: `https://ums-dev.ehealthafrica.org`.
+- Authentication (Central Authentication Service):
+  - `CAS_SERVER_URL`: `https://your.cas.server`.
   - `HOSTNAME`: `gather.local`.
 
 - Django specific:
@@ -89,13 +87,13 @@ of the most common ones with non default values. For more info take a look at th
     To avoid confusion, the values will match the container name, `odk`.
 
   - Aether Kernel:
-    - `AETHER_KERNEL_TOKEN`: `a2d6bc20ad16ec8e715f2f42f54eb00cbbea2d24`
+    - `AETHER_KERNEL_TOKEN`: `aether_kernel_admin_user_auth_token`
       Token to connect to Aether Kernel Server.
     - `AETHER_KERNEL_URL`: `http://kernel:8000` Aether Kernel Server url.
     - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9000` Aether Kernel Testing Server url.
 
   - Aether ODK:
-    - `AETHER_ODK_TOKEN`: `d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1`
+    - `AETHER_ODK_TOKEN`: `aether_odk_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_ODK_URL`: `http://odk:8002` Aether ODK Server url.
     - `AETHER_ODK_URL_TEST`: `http://odk-test:9002` Aether ODK Testing Server url.
@@ -113,7 +111,7 @@ This will start:
   and create a superuser `${ADMIN_USERNAME}`.
 
 - **gather-assets** on `http://localhost:3005`
-  only needed for HMR during assets development (`/app/gather/assets/).
+  only needed for HMR during assets development (`/app/gather/assets/`).
 
 - **aether-kernel** on `http://kernel.aether.local:8000`
   and create a superuser `admin` with the needed TOKEN.
@@ -138,25 +136,11 @@ If the `nginx` container is also started the url ports can be removed.
 
 ### Users & Authentication
 
-The app defers part of the users management to
-[eHA UMS tool](https://github.com/eHealthAfrica/ums).
-
 Set the `HOSTNAME` and `CAS_SERVER_URL` environment variables if you want to
-activate the UMS integration in each container.
+activate the CAS integration in the app.
+See more in [Django CAS client](https://github.com/mingchen/django-cas-ng).
 
-
-#### UMS settings for local development
-
-The project is `gather-aether` **Gather&Aether**.
-
-The client services are:
-
-  - **Gather & Aether (local)**  for `gather.local`.
-
-
-Other options are to log in via token, via basic authentication or via the
-standard django authentication process in the admin section.
-The available options depend on each container.
+The other option is the standard django authentication.
 
 *[Return to TOC](#table-of-contents)*
 
@@ -197,19 +181,6 @@ docker-compose -f docker-compose-local.yml up
 Frontend assets include JS, CSS, and fonts. They are all handled by webpack.
 
 See more in [Assets README](app/gather/assets/README.md)
-
-*[Return to TOC](#table-of-contents)*
-
-
-## Deployment
-
-Set the `HOSTNAME` and `CAS_SERVER_URL` environment variables if you want to
-activate the UMS integration in each container.
-
-If a valid `AETHER_KERNEL_TOKEN` and `AETHER_KERNEL_URL` combination is not set,
-the server will still start, but all connections to Aether Kernel Server will fail.
-
-This also applies to Aether ODK module.
 
 *[Return to TOC](#table-of-contents)*
 
