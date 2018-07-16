@@ -98,6 +98,7 @@ class Command(BaseCommand):
 
             # delete previous token
             Token.objects.filter(user=admin).delete()
+            self.stdout.write(_('Deleted previous token of admin user "{username}"').format(username=username))
             # assign token value
             Token.objects.create(user=admin, key=token_key)
             self.stdout.write(_('Created token for admin user "{username}"').format(username=username))
