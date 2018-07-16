@@ -22,7 +22,7 @@ services:
       - ./scripts/conf/nginx.conf.local:/etc/nginx/conf.d/default.conf
 
       # media folders per container
-      - ./.persistent_data/kernel/static:/media/kernel
+      - ./.persistent_data/kernel/media:/media/kernel
       - ./.persistent_data/odk/media:/media/odk
 
       # static folders per container
