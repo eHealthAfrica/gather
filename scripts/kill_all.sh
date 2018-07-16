@@ -18,8 +18,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-
-set -e
+set -Eeuox pipefail
 
 for dc_file in $(find docker-compose*.yml 2> /dev/null)
 do

@@ -18,8 +18,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-set -e
-set -x
+set -Eeuox pipefail
 
 
 ################################################################################
@@ -35,9 +34,6 @@ if [ -f "$PACKAGE_LIST" ]; then
     apt-get update -qq
     apt-get -qq --yes --force-yes install `cat $PACKAGE_LIST`
 fi
-
-# upgrade pip
-pip install --upgrade pip
 
 
 ################################################################################
