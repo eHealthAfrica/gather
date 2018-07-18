@@ -67,6 +67,7 @@ setup() {
     export PGPASSWORD=$RDS_PASSWORD
     export PGHOST=$RDS_HOSTNAME
     export PGUSER=$RDS_USERNAME
+    export PGPORT=$RDS_PORT
 
     until pg_isready -q; do
       >&2 echo "Waiting for postgres..."
