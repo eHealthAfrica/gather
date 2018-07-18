@@ -23,6 +23,7 @@ import ReactDOM from 'react-dom'
 import { hot } from 'react-hot-loader'
 
 import { AppIntl } from './components'
+import { getSettings } from './utils/settings'
 import SurveyDispatcher from './survey'
 
 /*
@@ -31,17 +32,23 @@ This is the projects/surveys app.
 An Aether "Project" is equivalent to a Gather "Survey".
 */
 
-const appElement = document.getElementById('surveys-app')
-const surveyId = appElement.getAttribute('data-survey-id')
-const action = appElement.getAttribute('data-action')
+getSettings().then(settings => {
+  const appElement = document.getElementById('surveys-app')
+  const surveyId = appElement.getAttribute('data-survey-id')
+  const action = appElement.getAttribute('data-action')
 
-const dispatcher = (
-  <AppIntl>
-    <SurveyDispatcher action={action} surveyId={surveyId} />
-  </AppIntl>
-)
+  const dispatcher = (
+    <AppIntl>
+      <SurveyDispatcher
+        settings={settings}
+        action={action}
+        surveyId={surveyId}
+      />
+    </AppIntl>
+  )
 
-ReactDOM.render(dispatcher, appElement)
+  ReactDOM.render(dispatcher, appElement)
 
-// Include this to enable HMR for this module
-hot(module)(dispatcher)
+  // Include this to enable HMR for this module
+  hot(module)(dispatcher)
+})

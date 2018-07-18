@@ -26,7 +26,6 @@ import {
   getSurveyorsAPIPath,
   getSurveysAPIPath
 } from '../utils/paths'
-import { ODK_ACTIVE } from '../utils/env'
 import { ODK_APP } from '../utils/constants'
 
 import Survey from './Survey'
@@ -36,6 +35,9 @@ import SurveysList from './SurveysList'
 export default class SurveyDispatcher extends Component {
   render () {
     const {action, surveyId} = this.props
+    const {ODK_ACTIVE} = this.props.settings
+    // include settings in response
+    const handleResponse = (response) => ({...response, settings: this.props.settings})
 
     switch (action) {
       case 'add':
@@ -52,7 +54,13 @@ export default class SurveyDispatcher extends Component {
           odkAddUrls.forEach(url => addUrls.push(url))
         }
 
-        return <FetchUrlsContainer urls={addUrls} targetComponent={SurveyForm} />
+        return (
+          <FetchUrlsContainer
+            urls={addUrls}
+            targetComponent={SurveyForm}
+            handleResponse={handleResponse}
+          />
+        )
 
       case 'edit':
         const editUrls = [
@@ -82,7 +90,13 @@ export default class SurveyDispatcher extends Component {
           odkEditUrls.forEach(url => editUrls.push(url))
         }
 
-        return <FetchUrlsContainer urls={editUrls} targetComponent={SurveyForm} />
+        return (
+          <FetchUrlsContainer
+            urls={editUrls}
+            targetComponent={SurveyForm}
+            handleResponse={handleResponse}
+          />
+        )
 
       case 'view':
         const viewUrls = [
@@ -98,7 +112,13 @@ export default class SurveyDispatcher extends Component {
           }
         ]
 
-        return <FetchUrlsContainer urls={viewUrls} targetComponent={Survey} />
+        return (
+          <FetchUrlsContainer
+            urls={viewUrls}
+            targetComponent={Survey}
+            handleResponse={handleResponse}
+          />
+        )
 
       default:
         return (

@@ -23,7 +23,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { AETHER_KERNEL_URL, AETHER_ODK_URL } from '../utils/env'
 import { Link, LinksList, normalizeLinksList } from './Link'
 
 describe('Link components', () => {
@@ -103,34 +102,20 @@ describe('Link components', () => {
       expect(normalizeLinksList([], 'app')).toEqual([])
     })
 
-    it('should prepend the Kernel url', () => {
+    it('should prepend the given base url', () => {
+      const baseUrl = 'http://localhost'
       const list = [
         {url: '/link-1', name: 'click here 1', useless: 1},
         {url: '/link-2', name: 'click here 2', to_be_ignored: 2},
         {url: '/link-3', name: 'click here 3', nothing: 'important'}
       ]
       const expected = [
-        {url: AETHER_KERNEL_URL + '/link-1', name: 'click here 1'},
-        {url: AETHER_KERNEL_URL + '/link-2', name: 'click here 2'},
-        {url: AETHER_KERNEL_URL + '/link-3', name: 'click here 3'}
-      ]
-      expect(normalizeLinksList(list)).toEqual(expected)
-      expect(normalizeLinksList(list, 'kernel')).toEqual(expected)
-    })
-
-    it('should prepend the ODK url', () => {
-      const list = [
-        {url: '/link-1', name: 'click here 1', useless: 1},
-        {url: '/link-2', name: 'click here 2', to_be_ignored: 2},
-        {url: '/link-3', name: 'click here 3', nothing: 'important'}
-      ]
-      const expected = [
-        {url: AETHER_ODK_URL + '/link-1', name: 'click here 1'},
-        {url: AETHER_ODK_URL + '/link-2', name: 'click here 2'},
-        {url: AETHER_ODK_URL + '/link-3', name: 'click here 3'}
+        {url: 'http://localhost/link-1', name: 'click here 1'},
+        {url: 'http://localhost/link-2', name: 'click here 2'},
+        {url: 'http://localhost/link-3', name: 'click here 3'}
       ]
 
-      expect(normalizeLinksList(list, 'odk')).toEqual(expected)
+      expect(normalizeLinksList(list, baseUrl)).toEqual(expected)
     })
 
     it('should not prepend anything', () => {
@@ -145,7 +130,7 @@ describe('Link components', () => {
         {url: '/link-3', name: 'click here 3'}
       ]
 
-      expect(normalizeLinksList(list, 'zzz')).toEqual(expected)
+      expect(normalizeLinksList(list)).toEqual(expected)
     })
   })
 })

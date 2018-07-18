@@ -26,7 +26,9 @@ body {
   color: $white;
 }
 
-.logo-container, .front, .back {
+.logo-container,
+.front,
+.back {
   border-radius: 50%;
   height: 48px;
   width: 48px;
@@ -50,21 +52,22 @@ body {
   background-image: linear-gradient(to right, transparent, #49b1cf);
   color: $white;
   border-radius: 2px;
-  box-shadow: 1px 1px 1px rgba(74, 74, 74, 0.2), 1px 1px 0 rgba(255, 255, 255, 0.1) inset;
+  box-shadow: 1px 1px 1px rgba(74, 74, 74, .2), 1px 1px 0 rgba(255, 255, 255, .1) inset;
   padding: 1.1rem 2rem;
   transition: background 1s;
   margin-top: 1.5rem;
 }
 
 .btn:hover {
-  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.1) inset, -1px -1px 0 rgba(45, 49, 70, 0.3) inset, 0 0 4px rgba(45, 49, 70, 0.1);
+  box-shadow: 1px 1px 0 rgba(255, 255, 255, .1) inset, -1px -1px 0 rgba(45, 49, 70, .3) inset, 0 0 4px rgba(45, 49, 70, .1);
 }
 
 #header {
   display: none;
 }
 
-.logout-info a, .logout-info a:visited {
+.logout-info a,
+.logout-info a:visited {
   color: $white;
   text-decoration: underline;
 }

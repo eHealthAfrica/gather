@@ -29,7 +29,7 @@ import {
   getSurveysPath,
   getXFormsAPIPath
 } from '../utils/paths'
-import { ODK_ACTIVE } from '../utils/env'
+
 import { ODK_APP, GATHER_APP } from '../utils/constants'
 
 import { ConfirmButton, ErrorAlert, Portal } from '../components'
@@ -123,7 +123,7 @@ class SurveyForm extends Component {
       actionsInProgress: []
     }
 
-    if (ODK_ACTIVE) {
+    if (props.settings.ODK_ACTIVE) {
       this.state.odk = {...clone(props.odkSurvey || {})}
     }
   }
@@ -146,10 +146,11 @@ class SurveyForm extends Component {
         <form onSubmit={this.onSubmit.bind(this)} encType='multipart/form-data'>
           { this.renderName() }
           {
-            ODK_ACTIVE &&
+            this.props.settings.ODK_ACTIVE &&
             <SurveyODKForm
               survey={this.state.odk}
               surveyors={this.props.surveyors}
+              settings={this.props.settings}
               onChange={(odk) => this.setState({ odk })}
               errors={errors.odk}
             />
@@ -314,7 +315,7 @@ class SurveyForm extends Component {
     }
 
     const afterGatherDelete = () => {
-      if (!ODK_ACTIVE) {
+      if (!this.props.settings.ODK_ACTIVE) {
         return afterDelete()
       }
 
@@ -383,7 +384,7 @@ class SurveyForm extends Component {
             formatMessage(MESSAGES.handleDone)
           ]
         }, () => {
-          if (!ODK_ACTIVE) {
+          if (!this.props.settings.ODK_ACTIVE) {
             return this.backToView()
           }
 
