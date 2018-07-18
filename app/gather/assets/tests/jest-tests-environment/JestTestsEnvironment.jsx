@@ -45,20 +45,6 @@ class JestTestsEnvironment extends JSDOMEnvironment {
       { value: 'en', configurable: true }
     )
 
-    // assign default environment variables
-    process.env = Object.assign(
-      {},
-      process.env,
-      {
-        AETHER_MODULES: 'kernel,odk',
-        AETHER_KERNEL_URL: 'http://kernel-test:9000',
-        AETHER_ODK_URL: 'http://odk-test:9443',
-
-        CSV_HEADER_RULES: 'replace;.;:;',
-        CSV_HEADER_RULES_SEP: ';'
-      }
-    )
-
     // Issue that solves in tests: change window.location
     // https://github.com/jsdom/jsdom#reconfiguring-the-jsdom-with-reconfiguresettings
     this.global.jsdom = this.dom

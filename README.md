@@ -98,12 +98,18 @@ of the most common ones with non default values. For more info take a look at th
       Token to connect to Aether Kernel Server.
     - `AETHER_KERNEL_URL`: `http://kernel:8000` Aether Kernel Server url.
     - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9000` Aether Kernel Testing Server url.
+    - `AETHER_KERNEL_URL_ASSETS`: `http://kernel.aether.local` Aether Kernel url used in NGINX.
+      This url is being used in the frontend to display the linked attachment files
+      served by NGINX. Defaults to `AETHER_KERNEL_URL` value.
 
   - Aether ODK:
     - `AETHER_ODK_TOKEN`: `d5184a044bb5acff89a76ec4e67d0fcddd5cd3a1`
       Token to connect to Aether ODK Server.
     - `AETHER_ODK_URL`: `http://odk:8443` Aether ODK Server url.
     - `AETHER_ODK_URL_TEST`: `http://odk-test:9443` Aether ODK Testing Server url.
+    - `AETHER_ODK_URL_ASSETS`: `http://odk.aether.local` Aether ODK url used in NGINX.
+      This url is being used in the frontend to display the linked media files
+      served by NGINX. Defaults to `AETHER_ODK_URL` value.
 
 
 ## Usage

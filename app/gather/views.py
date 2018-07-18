@@ -16,6 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from django.conf import settings
 from django.http import JsonResponse
 
 
@@ -25,3 +26,20 @@ def health(*args, **kwargs):
     '''
 
     return JsonResponse({})
+
+
+def assets_settings(*args, **kwargs):
+    '''
+    Returns the list of settings needed by the assets
+    '''
+
+    return JsonResponse({
+        # media links
+        'kernel_url': settings.AETHER_APPS['kernel']['assets'],
+        'odk_url': settings.AETHER_APPS['odk']['assets'] if settings.AETHER_ODK else None,
+
+        # CSV export
+        'csv_header_rules': settings.CSV_HEADER_RULES,
+        'csv_header_rules_sep': settings.CSV_HEADER_RULES_SEP,
+        'csv_max_rows_size': int(settings.CSV_MAX_ROWS_SIZE),
+    })

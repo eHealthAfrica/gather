@@ -83,8 +83,4 @@ services:
     extends:
       file: docker-compose-base.yml
       service: gather-assets-base
-    environment:
-      AETHER_MODULES: "kernel,odk,"
-      AETHER_KERNEL_URL: http://kernel-test:9000
-      AETHER_ODK_URL: http://odk-test:9443
     command: test

@@ -290,11 +290,12 @@ AETHER_MODULES = [
 
 # KERNEL is always a linked module
 kernel = {
-    'token': os.environ.get('AETHER_KERNEL_TOKEN', ''),
-    'url': os.environ.get('AETHER_KERNEL_URL', ''),
+    'token': os.environ.get('AETHER_KERNEL_TOKEN'),
+    'url': os.environ.get('AETHER_KERNEL_URL'),
+    'assets': os.environ.get('AETHER_KERNEL_URL_ASSETS', os.environ.get('AETHER_KERNEL_URL')),
 }
 if TESTING:  # pragma: no cover
-    kernel['url'] = os.environ.get('AETHER_KERNEL_URL_TEST', '')
+    kernel['url'] = os.environ.get('AETHER_KERNEL_URL_TEST')
 
 if kernel['url'].strip() and kernel['token'].strip():  # pragma: no cover
     AETHER_APPS['kernel'] = kernel
@@ -304,15 +305,24 @@ if kernel['url'].strip() and kernel['token'].strip():  # pragma: no cover
 AETHER_ODK = False
 if 'odk' in AETHER_MODULES:  # pragma: no cover
     odk = {
-        'token': os.environ.get('AETHER_ODK_TOKEN', ''),
-        'url': os.environ.get('AETHER_ODK_URL', ''),
+        'token': os.environ.get('AETHER_ODK_TOKEN'),
+        'url': os.environ.get('AETHER_ODK_URL'),
+        'assets': os.environ.get('AETHER_ODK_URL_ASSETS', os.environ.get('AETHER_ODK_URL')),
     }
     if TESTING:
-        odk['url'] = os.environ.get('AETHER_ODK_URL_TEST', '')
+        odk['url'] = os.environ.get('AETHER_ODK_URL_TEST')
 
     if odk['url'].strip() and odk['token'].strip():
         AETHER_APPS['odk'] = odk
         AETHER_ODK = True
+
+# Asset settings
+CSV_HEADER_RULES = os.environ.get(
+    'CSV_HEADER_RULES',
+    'remove-prefix;payload.,remove-prefix;None.,replace;.;:;'
+)
+CSV_HEADER_RULES_SEP = os.environ.get('CSV_HEADER_RULES_SEP', ';')
+CSV_MAX_ROWS_SIZE = os.environ.get('CSV_MAX_ROWS_SIZE', '0')
 
 
 # ------------------------------------------------------------------------------

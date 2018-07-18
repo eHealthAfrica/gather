@@ -29,10 +29,10 @@ def gather_context(request):
         'app_name': settings.APP_NAME,
         'instance_name': settings.INSTANCE_NAME,
         'navigation_list': navigation_list,
-        'kernel_url': settings.AETHER_APPS['kernel']['url'],
+        'kernel_url': settings.AETHER_APPS['kernel']['assets'],
     }
 
     if settings.AETHER_ODK:
-        context['odk_url'] = settings.AETHER_APPS['odk']['url']
+        context['odk_url'] = settings.AETHER_APPS['odk']['assets']
 
     return context
