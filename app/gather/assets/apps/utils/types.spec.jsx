@@ -265,9 +265,20 @@ describe('types', () => {
   })
 
   describe('getLabelTree', () => {
+    const labels = {
+      'a': 'Root',
+      'a.d.#.e': 'The indexed E',
+      'a.*.c': 'The Big C',
+      'a.*.c.?.u': 'Join',
+      'x.y.?.z': 'Union'
+    }
+
     it('should concatenate jsonpath pieces labels', () => {
       assert.equal(getLabelTree('a.b.c.d.e'), 'a / b / c / d / e')
+      assert.equal(getLabelTree('a.b.c.d.e', labels), 'Root / b / The Big C / d / e')
+
       assert.equal(getLabelTree('a:b:c:d:e', {}, ':', '$'), 'a$b$c$d$e')
+      assert.equal(getLabelTree('a.b.c.d.e', labels, '.', '$'), 'Root$b$The Big C$d$e')
     })
   })
 })

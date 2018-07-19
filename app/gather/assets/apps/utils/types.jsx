@@ -332,7 +332,7 @@ export const getLabel = (jsonPath, labels = {}, separator = '.') => {
   for (let i = 0; i < mapKeys.length; i++) {
     const current = mapKeys[i]
     // create the regular expression with the key value
-    // "a.b.*.c.?.d.*.e" => /^a\.b\.([A-Za-z0-9_]+)\.c\.d\.([A-Za-z0-9_]+)\.e/g
+    // "a.b.*.c.?.d.*.e" => /^a\.b\.([A-Za-z0-9_]+)\.c\.d\.([A-Za-z0-9_]+)\.e$/
     const re = current
       .replace(`${separator}${PATH_UNION}`, '') // remove union marks
       .split(separator)
