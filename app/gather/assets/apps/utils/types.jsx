@@ -382,3 +382,46 @@ const sentenceCase = (name) => (name
   .replace(/([A-Z]+)/g, ' $1') //    convert `myNameIs` into `my Name Is`
   .replace(/([A-Z][a-z])/g, ' $1')
 )
+
+// not desired paths
+const forbiddenPath = (jsonPath) => (
+  // attributes "@attr"
+  (jsonPath.charAt(0) === '@') ||
+  // internal xForm properties
+  ([
+    '_id', '_version',
+    'starttime', 'endtime', 'deviceid',
+    'meta'
+  ].indexOf(jsonPath) > -1) ||
+  // "meta" children
+  (jsonPath.indexOf('meta.') === 0) ||
+  // AVRO array/ map/ union properties
+  (
+    jsonPath.indexOf(PATH_ARRAY) > -1 ||
+    jsonPath.indexOf(PATH_MAP) > -1 ||
+    jsonPath.indexOf(PATH_UNION) > -1
+  )
+)
+// ["a", "a.b", "a.c"] => ["a.b", "a.c"]
+const isLeaf = (jsonPath, _, array) => array.filter(
+  anotherPath => anotherPath.indexOf(jsonPath + '.') === 0
+).length === 0
+
+/**
+ * Return the cleaned list of jsonpaths.
+ *
+ * Remove paths like:
+ *   - attributes, "@xxx"
+ *   - xForm internal, "_id", "_version", ...
+ *   - paths with AVRO internal flags, "#", "?", "*"
+ *   - intermmediate paths, ["a", "a.b", "a.c"] => ["a.b", "a.c"]
+ *
+ * @param {array} jsonPaths  - The list of jsonpaths
+ *
+ * @return {array}           - The cleaned list
+ */
+export const cleanJsonPaths = (jsonPaths) => jsonPaths
+  // remove undesired paths
+  .filter(jsonPath => !forbiddenPath(jsonPath))
+  // keep only the leafs
+  .filter(isLeaf)

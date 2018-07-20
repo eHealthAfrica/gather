@@ -22,6 +22,7 @@
 
 import assert from 'assert'
 import {
+  cleanJsonPaths,
   filterByPaths,
   flatten,
   getLabel,
@@ -279,6 +280,36 @@ describe('types', () => {
 
       assert.equal(getLabelTree('a:b:c:d:e', {}, ':', '$'), 'a$b$c$d$e')
       assert.equal(getLabelTree('a.b.c.d.e', labels, '.', '$'), 'Root$b$The Big C$d$e')
+    })
+  })
+
+  describe('cleanJsonPaths', () => {
+    it('should remove undesired jsonpaths and keep only leafs', () => {
+      const paths = [
+        'a',
+        'a.b',
+        'a.b.*',
+        'a.b.*.#',
+        'a.b.*.#.x',
+        'a.c',
+        'a.c.#',
+        'a.c.#.y',
+        'a.d',
+        'a.d.?',
+        'a.d.?.e',
+        'a.f',
+        'a.f.g',
+        'z'
+      ]
+      const expected = [
+        'a.b',
+        'a.c',
+        'a.d',
+        'a.f.g',
+        'z'
+      ]
+
+      assert.deepEqual(cleanJsonPaths(paths), expected)
     })
   })
 })
