@@ -181,7 +181,7 @@ if CAS_SERVER_URL:  # pragma: no cover
         'ums_client.backends.UMSRoleBackend',
     ]
 else:  # pragma: no cover
-    logger.info('No CAS enable!')
+    logger.info('No CAS enabled!')
 
 
 # Sentry Configuration
@@ -202,7 +202,7 @@ if SENTRY_DSN:  # pragma: no cover
         'raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware',
     ] + MIDDLEWARE
 else:  # pragma: no cover
-    logger.info('No SENTRY enable!')
+    logger.info('No SENTRY enabled!')
 
 
 # Security Configuration
