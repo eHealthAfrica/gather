@@ -39,23 +39,29 @@ export default class EntitiesDownload extends Component {
   }
 
   render () {
-    const {survey, total, paths} = this.props
+    const {survey, total} = this.props
 
     const pageSize = Math.min(EXPORT_MAX_ROWS_SIZE || MAX_PAGE_SIZE, MAX_PAGE_SIZE)
     const params = {
       ordering: '-modified',
       project: survey.id,
-      fields: 'modified,payload',
       format: '',
       action: EXPORT_FORMAT,
       pageSize
     }
-    const payload = { paths, separator: CSV_SEPARATOR }
 
-    const download = (options, filename) => {
+    const download = (page, filename) => {
       this.setState({preparing: true, error: null})
 
-      return postData(getEntitiesAPIPath(options), {...payload, filename}, {download: true})
+      return postData(
+        getEntitiesAPIPath({ ...params, page }),
+        {
+          separator: CSV_SEPARATOR,
+          paths: this.props.paths,
+          filename
+        },
+        { download: true }
+      )
         .then(() => {
           this.setState({preparing: false, error: null})
         })
@@ -76,7 +82,7 @@ export default class EntitiesDownload extends Component {
             type='button'
             className='tab'
             disabled={this.state.preparing}
-            onClick={() => { download(params, survey.name) }}
+            onClick={() => { download(1, survey.name) }}
           >
             { icon }
             <FormattedMessage
@@ -90,8 +96,7 @@ export default class EntitiesDownload extends Component {
     const dropdown = 'downloadLinkChoices'
     const pages = range(1, Math.ceil(total / pageSize) + 1)
       .map(index => ({
-        key: index,
-        options: { ...params, page: index },
+        currentPage: index,
         filename: `${survey.name}-${index}`
       }))
 
@@ -117,14 +122,14 @@ export default class EntitiesDownload extends Component {
         >
           <div className='dropdown-list'>
             {
-              pages.map(page => (
+              pages.map(pageOptions => (
                 <button
-                  key={page.key}
+                  key={pageOptions.currentPage}
                   type='button'
                   className='dropdown-item'
-                  onClick={() => { download(page.options, page.filename) }}
+                  onClick={() => { download(pageOptions.currentPage, pageOptions.filename) }}
                 >
-                  { page.filename }
+                  { pageOptions.filename }
                 </button>
               ))
             }

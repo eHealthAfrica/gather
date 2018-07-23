@@ -123,7 +123,7 @@ export default class Survey extends Component {
               <EntitiesDownload
                 survey={this.props.survey}
                 total={this.state.total}
-                paths={this.props.selectedPaths}
+                paths={this.state.selectedPaths}
               />
             </li>
             <li className='toolbar-filter'>
