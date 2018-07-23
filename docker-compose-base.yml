@@ -29,7 +29,11 @@ services:
       - ./.persistent_data/kernel/static:/static/kernel
       - ./.persistent_data/odk/static:/static/odk
       - ./.persistent_data/ui/static:/static/ui
-      - ./.persistent_data/gather/static:/static/gather
+
+      # use this volume with `start` command
+      # - ./.persistent_data/gather/static:/static/gather
+      # use this volume with `start_dev` command
+      - ./app/gather/static:/static/gather
     ports:
       - "80:80"
       - "8443:8443"
@@ -150,15 +154,11 @@ services:
       # CAS_SERVER_URL: https://your.cas.server
       CSRF_COOKIE_DOMAIN: gather.local
       HOSTNAME: gather.local
+
+      # Comment this out with `start` command
       DEBUG: "true"
 
       DJANGO_SECRET_KEY: "T7cyDESETLHDz43xf3Spx9NN6UdbDkpeREfy6fwATcckcwXUUvnqfHcwyNLHrXAZ"
-
-      # use this value with "start_dev" command and webpack
-      STATIC_ROOT: /code/gather/assets/bundles
-
-      # use this value with "start_dev" command and without webpack
-      # STATIC_ROOT: /code/gather/static
 
       ADMIN_USERNAME: admin-gather
       ADMIN_PASSWORD: adminadmin
@@ -184,9 +184,16 @@ services:
       CSV_MAX_ROWS_SIZE: 1000
 
       WEB_SERVER_PORT: 8005
+
+      # Comment `STATIC_ROOT` out with `start` command
+      # Use this value with `start_dev` command and "webpack"
+      STATIC_ROOT: /code/gather/assets/bundles
+      # Use this value with `start_dev` command and without "webpack"
+      # STATIC_ROOT: /code/gather/static
     volumes:
       - ./app:/code
       - ./conf:/code/conf
+      # Use this volume with `start` command and comment out `STATIC_ROOT`
       # - ./.persistent_data/gather/static:/var/www/static
     ports:
       - "8005:8005"
