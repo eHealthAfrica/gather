@@ -170,7 +170,7 @@ The other option is the standard django authentication.
 
 #### Token Authentication
 
-The communication with Aether the servers is done via
+The communication with the Aether servers is done via
 [token authentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication).
 
 In `gather` there are tokens per user to connect to other servers.
