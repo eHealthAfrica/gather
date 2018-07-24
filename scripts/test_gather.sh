@@ -20,15 +20,13 @@
 #
 set -Eeuo pipefail
 
-function prepare_container() {
-  echo "_____________________________________________ Preparing $1"
-  $DC_TEST build "$1"-test
-}
-
 function prepare_and_test_container() {
-  prepare_container $1
+  container="$1"-test
+
+  echo "_____________________________________________ Building $1"
+  $DC_TEST build $container
   echo "_____________________________________________ Testing $1"
-  $DC_TEST run "$1"-test test --noinput
+  $DC_TEST run "$1"-test test
   echo "_____________________________________________ $1 Done"
 }
 
@@ -36,33 +34,19 @@ DC_TEST="docker-compose -f docker-compose-test.yml"
 
 echo "_____________________________________________ TESTING"
 
-# kill ALL containers and clean TEST ones
 echo "_____________________________________________ Killing ALL containers"
 docker-compose kill
 $DC_TEST kill
 $DC_TEST down
 
-# test a clean Gather Assets TEST container
 prepare_and_test_container gather-assets
-# build assets and distribute into Gather Django container
 $DC_TEST run gather-assets-test build
 
-# start database
-echo "_____________________________________________ Starting databases"
-$DC_TEST up -d db-test
+echo "_____________________________________________ Starting database, kernel and odk"
+$DC_TEST up -d db-test kernel-test odk-test
 
-echo "_____________________________________________ Preparing kernel and odk"
-prepare_container kernel
-prepare_container odk
-
-echo "_____________________________________________ Starting kernel and odk"
-$DC_TEST up -d kernel-test odk-test
-
-
-# test a clean Gather TEST container
 prepare_and_test_container gather
 
-# kill ALL containers
 echo "_____________________________________________ Killing TEST containers"
 $DC_TEST kill
 
