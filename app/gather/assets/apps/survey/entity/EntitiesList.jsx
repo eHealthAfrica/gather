@@ -148,9 +148,9 @@ export default class EntitiesList extends Component {
   }
 
   renderEntity (entity, index) {
-    const {paths, labels} = this.props
+    const {paths, labels, settings} = this.props
     const flattenPayload = flatten({...entity.payload})
-    const links = normalizeLinksList(entity.attachments)
+    const links = normalizeLinksList(entity.attachments, settings.AETHER_KERNEL_URL)
 
     return (
       <tr data-qa={`entity-row-${entity.id}`} key={entity.id}>

@@ -22,7 +22,6 @@ import React, { Component } from 'react'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { getSurveyorsAPIPath } from '../utils/paths'
-import { ODK_ACTIVE } from '../utils/env'
 
 import SurveyorForm from './SurveyorForm'
 import SurveyorsList from './SurveyorsList'
@@ -30,12 +29,6 @@ import SurveyorsList from './SurveyorsList'
 export default class SurveyorDispatcher extends Component {
   render () {
     const {action, surveyorId} = this.props
-
-    // ODK check
-    if (!ODK_ACTIVE) {
-      // blank page
-      return <div />
-    }
 
     switch (action) {
       case 'add':

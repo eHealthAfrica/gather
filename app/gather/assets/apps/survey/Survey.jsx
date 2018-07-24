@@ -24,7 +24,6 @@ import { FormattedMessage } from 'react-intl'
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { range } from '../utils'
 import { MAX_PAGE_SIZE, GATHER_APP } from '../utils/constants'
-import { CSV_HEADER_RULES, CSV_HEADER_RULES_SEP, CSV_MAX_ROWS_SIZE } from '../utils/env'
 import { getSurveysPath, getSurveysAPIPath, getEntitiesAPIPath } from '../utils/paths'
 import { postData } from '../utils/request'
 import { extractPathDocs } from '../utils/avro-utils'
@@ -126,6 +125,7 @@ export default class Survey extends Component {
     const {viewMode} = this.state
     const listComponent = (viewMode === SINGLE_VIEW ? EntityItem : EntitiesList)
     const extras = {
+      settings: this.props.settings,
       labels: this.state.labels,
       paths: this.state.selectedPaths
     }
@@ -184,6 +184,11 @@ export default class Survey extends Component {
 
   renderDownloadButton () {
     const {survey} = this.props
+    const {
+      CSV_HEADER_RULES,
+      CSV_HEADER_RULES_SEP,
+      CSV_MAX_ROWS_SIZE
+    } = this.props.settings
     const {total, allPaths, selectedPaths} = this.state
 
     const pageSize = CSV_MAX_ROWS_SIZE || MAX_PAGE_SIZE

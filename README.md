@@ -5,6 +5,7 @@
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
+- [Introduction](#introduction)
 - [Setup](#Setup)
   - [Dependencies](#dependencies)
   - [Installation](#installation)
@@ -22,6 +23,10 @@
     - [Check outdated dependencies](#check-outdated-dependencies)
     - [Update requirements file](#update-requirements-file)
 
+
+## Introduction
+
+Gather is an ODK-compatible data collection tool. It is built on top of the [Aether framework](https://aether.ehealthafrica.org). If you want to try it out, the easiest way is to follow the [instructions](https://gather.ehealthafrica.org/documentation/try/) on the [Gather microsite](https://gather.ehealthafrica.org).
 
 ## Setup
 
@@ -91,12 +96,31 @@ of the most common ones with non default values. For more info take a look at th
       Token to connect to Aether Kernel Server.
     - `AETHER_KERNEL_URL`: `http://kernel:8000` Aether Kernel Server url.
     - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9000` Aether Kernel Testing Server url.
+    - `AETHER_KERNEL_URL_ASSETS`: `http://kernel.aether.local` Aether Kernel url used in NGINX.
+      This url is being used in the frontend to display the linked attachment files
+      served by NGINX. Defaults to `AETHER_KERNEL_URL` value.
 
   - Aether ODK:
     - `AETHER_ODK_TOKEN`: `aether_odk_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_ODK_URL`: `http://odk:8002` Aether ODK Server url.
     - `AETHER_ODK_URL_TEST`: `http://odk-test:9002` Aether ODK Testing Server url.
+    - `AETHER_ODK_URL_ASSETS`: `http://odk.aether.local` Aether ODK url used in NGINX.
+      This url is being used in the frontend to display the linked media files
+      served by NGINX. Defaults to `AETHER_ODK_URL` value.
+
+
+##### AETHER_XXX_URL vs AETHER_XXX_URL_ASSETS
+
+The difference between these two variables is quite obscure.
+If we are using docker-compose and running the containers together,
+the first one is the container name with the port, `http://kernel:8000`, and the
+second one is the one provided by NGINX, using the network name, and serves the
+protected media, `http://kernel.aether.local`.
+For an unexpected reason `gather` container cannot communicate with
+`kernel` container using the network name.
+If we are running the containers separately (with kubernetes, in AWS...)
+both urls are external to the gather container and should be the same.
 
 
 ## Usage
@@ -146,7 +170,7 @@ The other option is the standard django authentication.
 
 #### Token Authentication
 
-The communication between the servers is done via
+The communication with Aether the servers is done via
 [token authentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication).
 
 In `gather` there are tokens per user to connect to other servers.
@@ -154,7 +178,7 @@ This means that every time a logged in user tries to visit any page that require
 to fetch data from any of the other apps, `aether-kernel` and/or `aether-odk`,
 the system will verify that the user token for that app is valid or will request
 a new one using the global tokens, `AETHER_KERNEL_TOKEN` and/or `AETHER_ODK_TOKEN`;
-that's going to be used for all requests and will allow the system to better
+that token is going to be used for all requests and will allow the system to better
 track the user actions.
 
 *[Return to TOC](#table-of-contents)*

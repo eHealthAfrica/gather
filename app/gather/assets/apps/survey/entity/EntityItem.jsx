@@ -26,7 +26,7 @@ import { JSONViewer, LinksList, normalizeLinksList } from '../../components'
 
 export default class EntityItem extends Component {
   render () {
-    const {list} = this.props
+    const {list, settings} = this.props
 
     if (list.length !== 1) {
       return <div />
@@ -34,7 +34,7 @@ export default class EntityItem extends Component {
 
     // assumption: there is only one item
     const entity = list[0]
-    const links = normalizeLinksList(entity.attachments)
+    const links = normalizeLinksList(entity.attachments, settings.AETHER_KERNEL_URL)
 
     return (
       <div data-qa={`entity-item-${entity.id}`} className='x-2'>

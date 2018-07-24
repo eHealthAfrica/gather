@@ -25,7 +25,7 @@ from django.views.generic import TemplateView
 # Any entry here needs the decorator `tokens_required` if it's going to execute
 # AJAX request to any of the other apps
 from .api.decorators import tokens_required
-from .views import health
+from .views import health, assets_settings
 
 
 auth_urls = 'rest_framework.urls'
@@ -42,6 +42,9 @@ urlpatterns = [
 
     # `health` endpoint
     path('health', health, name='health'),
+
+    # assets settings
+    path('assets-settings', assets_settings, name='assets-settings'),
 
     # `admin` section
     path('admin/', admin.site.urls),

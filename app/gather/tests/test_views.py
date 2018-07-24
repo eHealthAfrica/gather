@@ -25,6 +25,19 @@ from rest_framework import status
 class ViewsTest(TestCase):
 
     def test__health(self):
+        self.assertEqual(reverse('health'), '/health')
         response = self.client.get(reverse('health'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), {})
+
+    def test__settings(self):
+        self.assertEqual(reverse('assets-settings'), '/assets-settings')
+        response = self.client.get(reverse('assets-settings'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json(), {
+            'kernel_url': 'http://kernel.aether.local',
+            'odk_url': 'http://odk.aether.local',
+            'csv_header_rules': 'remove-prefix;payload.,remove-prefix;None.,replace;.;:;',
+            'csv_header_rules_sep': ';',
+            'csv_max_rows_size': 0,
+        })
