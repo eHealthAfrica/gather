@@ -124,6 +124,7 @@ export default class Survey extends Component {
                 survey={this.props.survey}
                 total={this.state.total}
                 paths={this.state.selectedPaths}
+                labels={this.state.labels}
               />
             </li>
             <li className='toolbar-filter'>

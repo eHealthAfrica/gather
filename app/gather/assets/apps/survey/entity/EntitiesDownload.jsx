@@ -58,6 +58,7 @@ export default class EntitiesDownload extends Component {
         {
           separator: CSV_SEPARATOR,
           paths: this.props.paths,
+          headers: this.props.labels,
           filename
         },
         { download: true }
