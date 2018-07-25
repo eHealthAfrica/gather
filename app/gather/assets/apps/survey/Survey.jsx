@@ -135,7 +135,7 @@ export default class Survey extends Component {
         <PaginationContainer
           pageSize={viewMode === SINGLE_VIEW ? 1 : TABLE_SIZES[0]}
           sizes={viewMode === SINGLE_VIEW ? [] : TABLE_SIZES}
-          url={getEntitiesAPIPath({project: survey.id, ordering: '-modified'})}
+          url={getEntitiesAPIPath({project: survey.id})}
           position='top'
           listComponent={listComponent}
           showPrevious

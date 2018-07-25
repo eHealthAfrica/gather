@@ -43,7 +43,6 @@ export default class EntitiesDownload extends Component {
 
     const pageSize = Math.min(EXPORT_MAX_ROWS_SIZE || MAX_PAGE_SIZE, MAX_PAGE_SIZE)
     const params = {
-      ordering: '-modified',
       project: survey.id,
       format: '',
       action: EXPORT_FORMAT,
