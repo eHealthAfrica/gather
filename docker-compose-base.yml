@@ -75,6 +75,7 @@ services:
     volumes:
       - ./.persistent_data/media/kernel:/media
       - ./.persistent_data/static/kernel:/var/www/static
+      - ./.persistent_data/tmp/kernel:/tmp
     ports:
       - "8000:8000"
     command: start

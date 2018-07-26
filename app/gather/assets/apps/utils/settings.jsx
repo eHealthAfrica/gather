@@ -20,6 +20,14 @@
 
 import { getData } from './request'
 
+const DEFAULT_SETTINGS = {
+  AETHER_KERNEL_URL: '/kernel',
+  AETHER_ODK_URL: '/odk',
+  ODK_ACTIVE: true,
+  EXPORT_FORMAT: 'xlsx',
+  EXPORT_MAX_ROWS_SIZE: 0
+}
+
 export const getSettings = () => new Promise(resolve => {
   getData('/assets-settings')
     .then(response => {
@@ -27,22 +35,12 @@ export const getSettings = () => new Promise(resolve => {
         AETHER_KERNEL_URL: response.kernel_url,
         AETHER_ODK_URL: response.odk_url,
         ODK_ACTIVE: !!response.odk_url,
-
-        CSV_HEADER_RULES: response.csv_header_rules,
-        CSV_HEADER_RULES_SEP: response.csv_header_rules_sep,
-        CSV_MAX_ROWS_SIZE: response.csv_max_rows_size
+        EXPORT_FORMAT: response.export_format || DEFAULT_SETTINGS.EXPORT_FORMAT,
+        EXPORT_MAX_ROWS_SIZE: response.export_max_rows_size || DEFAULT_SETTINGS.EXPORT_MAX_ROWS_SIZE
       })
     })
     .catch(() => {
       // use default values
-      resolve({
-        AETHER_KERNEL_URL: '/kernel',
-        AETHER_ODK_URL: '/odk',
-        ODK_ACTIVE: true,
-
-        CSV_HEADER_RULES: 'remove-prefix;payload.,remove-prefix;None.,replace;.;:;',
-        CSV_HEADER_RULES_SEP: ';',
-        CSV_MAX_ROWS_SIZE: 0
-      })
+      resolve(DEFAULT_SETTINGS)
     })
 })

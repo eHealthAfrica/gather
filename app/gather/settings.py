@@ -320,13 +320,9 @@ if 'odk' in AETHER_MODULES:
     else:
         raise RuntimeError('Aether ODK configuration was not properly set!')
 
-# Asset settings
-CSV_HEADER_RULES = os.environ.get(
-    'CSV_HEADER_RULES',
-    'remove-prefix;payload.,remove-prefix;None.,replace;.;:;'
-)
-CSV_HEADER_RULES_SEP = os.environ.get('CSV_HEADER_RULES_SEP', ';')
-CSV_MAX_ROWS_SIZE = os.environ.get('CSV_MAX_ROWS_SIZE', '0')
+# Assets settings
+EXPORT_FORMAT = os.environ.get('EXPORT_FORMAT', 'csv')
+EXPORT_MAX_ROWS_SIZE = os.environ.get('EXPORT_MAX_ROWS_SIZE', '0')
 
 
 # ------------------------------------------------------------------------------

@@ -96,9 +96,8 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
   - `INSTANCE_NAME`: `Gather 3` identifies the current instance among others.
 
 - Data export:
-  - `EXPORT_FORMAT`: `xlsx` the default export format. Possible values: `xlsx` or `csv`.
+  - `EXPORT_FORMAT`: `csv` the default export format. Possible values: `xlsx` or `csv`.
   - `EXPORT_MAX_ROWS_SIZE`: `1048575` indicates the maximum number of rows to include in the export file.
-  - `CSV_SEPARATOR`: `,` fields separator in the CSV format.
 
 - Authentication (Central Authentication Service):
   - `CAS_SERVER_URL`: `https://your.cas.server`.

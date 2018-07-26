@@ -38,8 +38,7 @@ def assets_settings(*args, **kwargs):
         'kernel_url': settings.AETHER_APPS['kernel']['assets'],
         'odk_url': settings.AETHER_APPS['odk']['assets'] if settings.AETHER_ODK else None,
 
-        # CSV export
-        'csv_header_rules': settings.CSV_HEADER_RULES,
-        'csv_header_rules_sep': settings.CSV_HEADER_RULES_SEP,
-        'csv_max_rows_size': int(settings.CSV_MAX_ROWS_SIZE),
+        # export
+        'export_format': settings.EXPORT_FORMAT,
+        'export_max_rows_size': int(settings.EXPORT_MAX_ROWS_SIZE),
     })

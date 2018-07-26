@@ -25,7 +25,6 @@ import { Portal } from '../../components'
 
 import { range } from '../../utils'
 import { MAX_PAGE_SIZE } from '../../utils/constants'
-import { CSV_SEPARATOR, EXPORT_MAX_ROWS_SIZE, EXPORT_FORMAT } from '../../utils/env'
 import { getEntitiesAPIPath } from '../../utils/paths'
 import { postData } from '../../utils/request'
 
@@ -40,6 +39,7 @@ export default class EntitiesDownload extends Component {
 
   render () {
     const {survey, total} = this.props
+    const { EXPORT_FORMAT, EXPORT_MAX_ROWS_SIZE } = this.props.settings
 
     const pageSize = Math.min(EXPORT_MAX_ROWS_SIZE || MAX_PAGE_SIZE, MAX_PAGE_SIZE)
     const params = {
@@ -55,7 +55,6 @@ export default class EntitiesDownload extends Component {
       return postData(
         getEntitiesAPIPath({ ...params, page }),
         {
-          separator: CSV_SEPARATOR,
           paths: this.props.paths,
           headers: this.props.labels,
           filename
