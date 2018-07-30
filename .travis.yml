@@ -7,35 +7,16 @@ services:
   - docker
 
 
-before_script:
-  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
-
 script:
   - ./scripts/test_gather.sh
 
 
-# before_deploy:
-#   - pip install awscli
-
 # deploy:
 #   - provider: script
-#     script: ./scripts/deploy.sh
+#     script: ./scripts/release.sh
 #     skip_cleanup: true
 #     on:
 #       branch: develop
-
-#   - provider: script
-#     script: ./scripts/deploy.sh
-#     skip_cleanup: true
-#     on:
-#       branch: ^\d+\.\d+(\.\d+)?(-\S*)?$
-#       tags: true
-
-#   - provider: script
-#     script: ./scripts/deploy.sh
-#     skip_cleanup: true
-#     on:
-#       branch: ^release-\d+\.\d+(\.\d+)?(-\S*)?$
 
 
 after_failure:
