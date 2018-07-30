@@ -29,7 +29,7 @@ else
     DOCKER_TAG=$TRAVIS_BRANCH
 fi
 
-DOCKER_STR=${DOCKER_REPO}/${APP}:${DOCKER_TAG}
+DOCKER_IMAGE=${DOCKER_REPO}/${APP}:${DOCKER_TAG}
 
 # Login in docker hub
 docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
@@ -40,5 +40,5 @@ docker-compose run   gather-assets build
 
 # Build and push docker image to docker hub
 docker-compose build $APP
-docker tag  $APP ${DOCKER_STR}
-docker push      ${DOCKER_STR}
+docker tag  $APP ${DOCKER_IMAGE}
+docker push      ${DOCKER_IMAGE}

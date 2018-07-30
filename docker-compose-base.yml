@@ -30,7 +30,7 @@ services:
       # aether favicon
       - ./local-setup/aether.ico:/media/aether.ico
       # gather favicon
-      - ./local-setup/gether.ico:/media/gather.ico
+      - ./local-setup/gather.ico:/media/gather.ico
 
       # media folders per container
       - ./.persistent_data/media:/media

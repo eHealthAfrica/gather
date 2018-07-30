@@ -26,7 +26,12 @@
 
 ## Introduction
 
-Gather is an ODK-compatible data collection tool. It is built on top of the [Aether framework](https://aether.ehealthafrica.org). If you want to try it out, the easiest way is to follow the [instructions](https://gather.ehealthafrica.org/documentation/try/) on the [Gather microsite](https://gather.ehealthafrica.org).
+Gather is an ODK-compatible data collection tool.
+It is built on top of the [Aether framework](https://aether.ehealthafrica.org).
+If you want to try it out, the easiest way is to follow the
+[instructions](https://gather.ehealthafrica.org/documentation/try/)
+on the [Gather microsite](https://gather.ehealthafrica.org).
+
 
 ## Setup
 

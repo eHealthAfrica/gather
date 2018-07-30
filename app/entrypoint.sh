@@ -22,7 +22,7 @@ set -Eeuo pipefail
 
 
 # Define help message
-show_help() {
+show_help () {
     echo """
     Commands
     ----------------------------------------------------------------------------
@@ -48,7 +48,7 @@ show_help() {
     """
 }
 
-pip_freeze() {
+pip_freeze () {
     pip install virtualenv
     rm -rf /tmp/env
 
@@ -59,11 +59,11 @@ pip_freeze() {
     /tmp/env/bin/pip freeze --local | grep -v appdir | tee -a conf/pip/requirements.txt
 }
 
-setup() {
+setup () {
     # check if required environment variables exist
     ./conf/check_vars.sh
 
-    # wait for database
+    # check database
     pg_isready
 
     if psql -c "" $DB_NAME; then
@@ -89,11 +89,11 @@ setup() {
     cp -r ./gather/assets/bundles/* ./gather/static/
 }
 
-test_lint() {
+test_lint () {
     flake8 . --config=./conf/extras/flake8.cfg
 }
 
-test_coverage() {
+test_coverage () {
     export RCFILE=./conf/extras/coverage.rc
     export TESTING=true
 
