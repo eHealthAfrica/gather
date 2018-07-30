@@ -30,27 +30,27 @@ check_variable() {
 
 check_kernel() {
     # check if KERNEL env variables were set
-    check_variable $AETHER_KERNEL_URL   "Aether KERNEL url (AETHER_KERNEL_URL)"
-    check_variable $AETHER_KERNEL_TOKEN "Aether KERNEL token (AETHER_KERNEL_TOKEN)"
+    check_variable "$AETHER_KERNEL_URL"   "Aether KERNEL url (AETHER_KERNEL_URL)"
+    check_variable "$AETHER_KERNEL_TOKEN" "Aether KERNEL token (AETHER_KERNEL_TOKEN)"
 }
 
 check_odk() {
     if [[ "$AETHER_MODULES" == *odk* ]];
     then
         # check if ODK env variables were set only if it's included in the modules list.
-        check_variable $AETHER_ODK_URL   "Aether ODK url (AETHER_ODK_URL)"
-        check_variable $AETHER_ODK_TOKEN "Aether ODK token (AETHER_ODK_TOKEN)"
+        check_variable "$AETHER_ODK_URL"   "Aether ODK url (AETHER_ODK_URL)"
+        check_variable "$AETHER_ODK_TOKEN" "Aether ODK token (AETHER_ODK_TOKEN)"
     fi
 }
 
 # Django requirements
-check_variable $DJANGO_SECRET_KEY "Django secret key (DJANGO_SECRET_KEY)"
-check_variable $ADMIN_USERNAME    "Admin user username (ADMIN_USERNAME)"
-check_variable $ADMIN_PASSWORD    "Admin user password (ADMIN_PASSWORD)"
+check_variable "$DJANGO_SECRET_KEY" "Django secret key (DJANGO_SECRET_KEY)"
+check_variable "$ADMIN_USERNAME"    "Admin user username (ADMIN_USERNAME)"
+check_variable "$ADMIN_PASSWORD"    "Admin user password (ADMIN_PASSWORD)"
 
 # Aether requirements
 check_kernel
 check_odk
 
 # set default value for DEBUG if missing
-DEBUG="$DEBUG"
+export DEBUG="$DEBUG"
