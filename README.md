@@ -79,6 +79,7 @@ of the most common ones with non default values. For more info take a look at th
 [docker-compose-base.yml](docker-compose-base.yml) and
 [/scripts/generate-credentials.sh](/scripts/generate-credentials.sh).
 
+See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
 
 #### Gather
 
@@ -102,8 +103,6 @@ of the most common ones with non default values. For more info take a look at th
     with this username. There is no default value.
   - `ADMIN_PASSWORD`: `secresecret` the setup script will create the superuser
     with this password. There is no default value.
-  - `DJANGO_SECRET_KEY`: `any_long_and_secret_key_you_can_imagine`.
-    See more in [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-SECRET_KEY)
   - `DB_NAME`: `gather` Postgres database name.
   - `WEB_SERVER_PORT`: `8005` Web server port.
 

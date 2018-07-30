@@ -48,7 +48,6 @@ check_variable "$ADMIN_USERNAME"    "Admin user username (ADMIN_USERNAME)"
 check_variable "$ADMIN_PASSWORD"    "Admin user password (ADMIN_PASSWORD)"
 
 check_variable "$DB_NAME"           "Database name (DB_NAME)"
-check_variable "$DJANGO_SECRET_KEY" "Django secret key (DJANGO_SECRET_KEY)"
 check_variable "$WEB_SERVER_PORT"   "Web server port (WEB_SERVER_PORT)"
 
 # Aether requirements
