@@ -105,6 +105,11 @@ test_coverage () {
 }
 
 
+# set DEBUG if missing
+set +u
+DEBUG="$DEBUG"
+set -u
+
 case "$1" in
     bash )
         bash
@@ -151,6 +156,8 @@ case "$1" in
     ;;
 
     test )
+        echo "DEBUG=$DEBUG"
+        setup
         test_lint
         test_coverage
     ;;
