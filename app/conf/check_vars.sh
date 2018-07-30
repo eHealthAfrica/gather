@@ -21,28 +21,26 @@
 set -Eeuo pipefail
 
 check_variable() {
-  if [ -n "$1" ];
-  then
-    echo "$2 in Ordnung!"
-  else
-    echo "Missing $2"
-    exit -1
-  fi
+    if [ -z "$1" ];
+    then
+        echo "Missing $2 in Gather!"
+        exit 1
+    fi
 }
 
 check_kernel() {
-  # check if KERNEL env variables were set
-  check_variable $AETHER_KERNEL_URL   "Aether KERNEL url (AETHER_KERNEL_URL)"
-  check_variable $AETHER_KERNEL_TOKEN "Aether KERNEL token (AETHER_KERNEL_TOKEN)"
+    # check if KERNEL env variables were set
+    check_variable $AETHER_KERNEL_URL   "Aether KERNEL url (AETHER_KERNEL_URL)"
+    check_variable $AETHER_KERNEL_TOKEN "Aether KERNEL token (AETHER_KERNEL_TOKEN)"
 }
 
 check_odk() {
-  if [[ "$AETHER_MODULES" == *odk* ]];
-  then
-    # check if ODK env variables were set only if it's included in the modules list.
-    check_variable $AETHER_ODK_URL   "Aether ODK url (AETHER_ODK_URL)"
-    check_variable $AETHER_ODK_TOKEN "Aether ODK token (AETHER_ODK_TOKEN)"
-  fi
+    if [[ "$AETHER_MODULES" == *odk* ]];
+    then
+        # check if ODK env variables were set only if it's included in the modules list.
+        check_variable $AETHER_ODK_URL   "Aether ODK url (AETHER_ODK_URL)"
+        check_variable $AETHER_ODK_TOKEN "Aether ODK token (AETHER_ODK_TOKEN)"
+    fi
 }
 
 # Django requirements

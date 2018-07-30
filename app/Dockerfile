@@ -4,7 +4,7 @@ FROM python:3.6-slim-jessie
 ## setup container
 ################################################################################
 
-COPY ./conf/docker/* /tmp/
+COPY ./app/conf/docker/* /tmp/
 RUN /tmp/setup.sh
 
 
@@ -15,11 +15,10 @@ RUN /tmp/setup.sh
 
 WORKDIR /code
 
-COPY ./conf/pip /code/conf/pip
+COPY ./app/conf/pip /code/conf/pip
 RUN pip install -f /code/conf/pip/dependencies -r /code/conf/pip/requirements.txt
 
 COPY ./app /code
-COPY ./conf /code/conf
 
 
 ################################################################################
