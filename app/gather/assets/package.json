@@ -76,6 +76,7 @@
     "rootDir": ".",
     "setupFiles": ["<rootDir>/tests/jest.setup.jsx"],
     "testEnvironment": "<rootDir>/tests/jest-tests-environment",
+    "testURL": "http://localhost/",
     "verbose": true
   }
 }

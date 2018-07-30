@@ -63,15 +63,20 @@ cat << EOF
 
 # ------------------------------------------------------------------
 # Aether
+# ==================================================================
+
 AETHER_VERSION=0.9.0-rc
 
 # used in docker-compose-local.yml
-AETHER_PATH=-../aether
+AETHER_PATH=../aether
+
 # ------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------
 # Aether Kernel
+# ==================================================================
+
 KERNEL_ADMIN_USERNAME=admin
 KERNEL_ADMIN_PASSWORD=adminadmin
 KERNEL_ADMIN_TOKEN=$(gen_random_string)
@@ -92,11 +97,14 @@ TEST_KERNEL_DB_PASSWORD=$(gen_random_string)
 
 TEST_KERNEL_READONLY_DB_USERNAME=readonlytest
 TEST_KERNEL_READONLY_DB_PASSWORD=$(gen_random_string)
+
 # ------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------
 # Aether ODK Module
+# ==================================================================
+
 ODK_ADMIN_USERNAME=admin
 ODK_ADMIN_PASSWORD=adminadmin
 ODK_ADMIN_TOKEN=$(gen_random_string)
@@ -111,20 +119,27 @@ TEST_ODK_ADMIN_TOKEN=$(gen_random_string)
 
 TEST_ODK_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
 TEST_ODK_DB_PASSWORD=$(gen_random_string)
+
 # ------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------
 # Aether UI
+# ==================================================================
+
 UI_ADMIN_USERNAME=admin
 UI_ADMIN_PASSWORD=adminadmin
 
 UI_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
 UI_DB_PASSWORD=$(gen_random_string)
+
 # ------------------------------------------------------------------
+
 
 # ------------------------------------------------------------------
 # Gather
+# ==================================================================
+
 GATHER_ADMIN_USERNAME=admin
 GATHER_ADMIN_PASSWORD=adminadmin
 
@@ -137,6 +152,7 @@ TEST_GATHER_ADMIN_PASSWORD=testingtesting
 
 TEST_GATHER_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
 TEST_GATHER_DB_PASSWORD=$(gen_random_string)
+
 # ------------------------------------------------------------------
 
 EOF
