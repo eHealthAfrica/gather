@@ -10,7 +10,7 @@
 version: "2.1"
 
 networks:
-  internal:
+  gather_local:
     driver: bridge
 
 services:
@@ -24,7 +24,7 @@ services:
       file: ./docker-compose-base.yml
       service: postgres-base
     networks:
-      - internal
+      - gather_local
 
   # ---------------------------------
   # NGINX container
@@ -34,45 +34,8 @@ services:
     extends:
       file: ./docker-compose-base.yml
       service: nginx-base
-    depends_on:
-      - gather
-      - kernel
-      - odk
-      - ui
     networks:
-      - internal
-
-
-  # ---------------------------------
-  # Gather container
-  # ---------------------------------
-
-  gather:
-    extends:
-      file: ./docker-compose-base.yml
-      service: gather-base
-    environment:
-      AETHER_KERNEL_TOKEN: ${AETHER_KERNEL_TOKEN}
-      AETHER_ODK_TOKEN: ${AETHER_ODK_TOKEN}
-    depends_on:
-      - db
-      - kernel
-      - odk
-    networks:
-      internal:
-        aliases:
-          - gather.local
-
-  # ---------------------------------
-  # Gather Assets container
-  # ---------------------------------
-
-  gather-assets:
-    extends:
-      file: ./docker-compose-base.yml
-      service: gather-assets-base
-    networks:
-      - internal
+      - gather_local
 
 
   # ---------------------------------
@@ -84,12 +47,13 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: kernel-base
     volumes:
-      - ./.persistent_data/kernel/media:/media
-      - ./.persistent_data/kernel/static:/var/www/static
+      - ./.persistent_data/media/kernel:/media
+      - ./.persistent_data/static/kernel:/var/www/static
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
-      internal:
+      gather_local:
         aliases:
           - kernel.aether.local
 
@@ -103,13 +67,15 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: odk-base
     volumes:
-      - ./.persistent_data/odk/media:/media
-      - ./.persistent_data/odk/static:/var/www/static
+      - ./.persistent_data/media/odk:/media
+      - ./.persistent_data/static/odk:/var/www/static
     depends_on:
-      - db
-      - kernel
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
     networks:
-      internal:
+      gather_local:
         aliases:
           - odk.aether.local
 
@@ -123,11 +89,45 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: ui-base
     volumes:
-      - ./.persistent_data/ui/static:/var/www/static
+      - ./.persistent_data/static/ui:/var/www/static
     depends_on:
-      - db
-      - kernel
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
     networks:
-      internal:
+      gather_local:
         aliases:
           - ui.aether.local
+
+
+  # ---------------------------------
+  # Gather container
+  # ---------------------------------
+
+  gather:
+    extends:
+      file: ./docker-compose-base.yml
+      service: gather-base
+    depends_on:
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
+      odk:
+        condition: service_started
+    networks:
+      gather_local:
+        aliases:
+          - gather.local
+
+  # ---------------------------------
+  # Gather Assets container
+  # ---------------------------------
+
+  gather-assets:
+    extends:
+      file: ./docker-compose-base.yml
+      service: gather-assets-base
+    networks:
+      - gather_local

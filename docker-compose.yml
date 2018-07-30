@@ -1,7 +1,7 @@
 version: "2.1"
 
 networks:
-  internal:
+  gather_net:
     driver: bridge
 
 services:
@@ -14,11 +14,24 @@ services:
     extends:
       file: ./docker-compose-base.yml
       service: postgres-base
+    volumes:
+      - ./.persistent_data/db/data:/var/lib/postgresql/data
     networks:
-      - internal
+      - gather_net
 
   # ---------------------------------
-  # Aether kernel container
+  # NGINX container
+  # ---------------------------------
+
+  nginx:
+    extends:
+      file: ./docker-compose-base.yml
+      service: nginx-base
+    networks:
+      - gather_net
+
+  # ---------------------------------
+  # Aether Kernel container
   # ---------------------------------
 
   kernel:
@@ -26,14 +39,15 @@ services:
       file: ./docker-compose-base.yml
       service: kernel-base
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
-      internal:
+      gather_net:
         aliases:
           - kernel.aether.local
 
   # ---------------------------------
-  # ODK Adapter container
+  # Aether ODK container
   # ---------------------------------
 
   odk:
@@ -41,10 +55,12 @@ services:
       file: ./docker-compose-base.yml
       service: odk-base
     depends_on:
-      - db
-      - kernel
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
     networks:
-      internal:
+      gather_net:
         aliases:
           - odk.aether.local
 
@@ -57,10 +73,12 @@ services:
       file: ./docker-compose-base.yml
       service: ui-base
     depends_on:
-      - db
-      - kernel
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
     networks:
-      internal:
+      gather_net:
         aliases:
           - ui.aether.local
 
@@ -73,11 +91,14 @@ services:
       file: ./docker-compose-base.yml
       service: gather-base
     depends_on:
-      - db
-      - kernel
-      - odk
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
+      odk:
+        condition: service_started
     networks:
-      internal:
+      gather_net:
         aliases:
           - gather.local
 
@@ -90,20 +111,4 @@ services:
       file: ./docker-compose-base.yml
       service: gather-assets-base
     networks:
-      - internal
-
-  # ---------------------------------
-  # NGINX container
-  # ---------------------------------
-
-  nginx:
-    extends:
-      file: ./docker-compose-base.yml
-      service: nginx-base
-    depends_on:
-      - gather
-      - kernel
-      - odk
-      - ui
-    networks:
-      - internal
+      - gather_net
