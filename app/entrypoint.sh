@@ -64,21 +64,13 @@ setup() {
     ./conf/check_vars.sh
 
     # wait for database
-    export PGPASSWORD=$RDS_PASSWORD
-    export PGHOST=$RDS_HOSTNAME
-    export PGUSER=$RDS_USERNAME
-    export PGPORT=$RDS_PORT
+    pg_isready
 
-    until pg_isready -q; do
-        >&2 echo "Waiting for postgres..."
-        sleep 1
-    done
-
-    if psql -c "" $RDS_DB_NAME; then
-        echo "$RDS_DB_NAME database exists!"
+    if psql -c "" $DB_NAME; then
+        echo "$DB_NAME database exists!"
     else
-        createdb -e $RDS_DB_NAME -e ENCODING=UTF8
-        echo "$RDS_DB_NAME database created!"
+        createdb -e $DB_NAME -e ENCODING=UTF8
+        echo "$DB_NAME database created!"
     fi
 
     # migrate data model if needed
