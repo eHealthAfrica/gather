@@ -176,7 +176,7 @@ services:
     tty: true
     environment:
       CSRF_COOKIE_DOMAIN: gather.local
-      DEBUG: "true" # Change to "" with `start` command
+      DEBUG: "true" # Comment it out with `start` command
       DJANGO_SECRET_KEY: ${GATHER_DJANGO_SECRET_KEY}
 
       # Uncomment these lines to enable single sign on if you use CAS

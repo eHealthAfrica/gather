@@ -6,6 +6,8 @@ python:
 services:
   - docker
 
+before_script:
+  - ./scripts/generate-credentials.sh > .env
 
 script:
   - ./scripts/test_gather.sh

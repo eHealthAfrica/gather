@@ -18,7 +18,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-set -Eeuo pipefail
+set -Eeo pipefail
 
 check_variable() {
     if [ -z "$1" ];
@@ -51,3 +51,6 @@ check_variable $ADMIN_PASSWORD    "Admin user password (ADMIN_PASSWORD)"
 # Aether requirements
 check_kernel
 check_odk
+
+# set default value for DEBUG if missing
+DEBUG="$DEBUG"

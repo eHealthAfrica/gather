@@ -50,16 +50,29 @@ docker-compose build
 Include this entry in your `/etc/hosts` file:
 
 ```
-127.0.0.1    kernel.aether.local odk.aether.local ui.aether.local gather.local
+# gather
+127.0.0.1    gather.local
+
+# aether
+127.0.0.1    kernel.aether.local odk.aether.local ui.aether.local
 ```
+
+Generate credentials for local development with docker-compose.
+
+```bash
+./scripts/generate-credentials.sh > .env
+```
+
+**Note:** Make sure you have `openssl` installed in your system.
 
 *[Return to TOC](#table-of-contents)*
 
 ### Environment Variables
 
 Most of the environment variables are set to default values. This is the short list
-of the most common ones with non default values. For more info take a look at the file
-[docker-compose-base.yml](docker-compose-base.yml)
+of the most common ones with non default values. For more info take a look at the files
+[docker-compose-base.yml](docker-compose-base.yml) and
+[/scripts/generate-credentials.sh](/scripts/generate-credentials.sh).
 
 
 #### Gather
