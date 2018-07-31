@@ -27,17 +27,15 @@ services:
       - ./local-setup/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./local-setup/nginx/sites-enabled:/etc/nginx/sites-enabled
 
+      # media folders per container
+      - ./.persistent_data/media:/media
       # aether favicon
       - ./local-setup/aether.ico:/media/aether.ico
       # gather favicon
       - ./local-setup/gather.ico:/media/gather.ico
 
-      # media folders per container
-      - ./.persistent_data/media:/media
-
       # static folders per container
       - ./.persistent_data/static:/static
-
       # comment this out with `start` command
       # use this volume with `start_dev` command
       - ./app/gather/static:/static/gather

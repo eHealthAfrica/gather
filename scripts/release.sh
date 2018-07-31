@@ -39,6 +39,10 @@ docker-compose build gather-assets
 docker-compose run   gather-assets build
 
 # Build and push docker image to docker hub
-docker-compose build $APP
+docker-compose build \
+    --build-arg GIT_REVISION=$TRAVIS_COMMIT \
+    --build-arg VERSION=$DOCKER_TAG \
+    $APP
+
 docker tag  $APP ${DOCKER_IMAGE}
 docker push      ${DOCKER_IMAGE}

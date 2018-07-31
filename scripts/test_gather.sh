@@ -21,13 +21,13 @@
 set -Eeuo pipefail
 
 function prepare_and_test_container() {
-  container="$1"-test
+    container="$1"-test
 
-  echo "_____________________________________________ Building $1"
-  $DC_TEST build $container
-  echo "_____________________________________________ Testing $1"
-  $DC_TEST run "$1"-test test
-  echo "_____________________________________________ $1 Done"
+    echo "_____________________________________________ Building $1"
+    $DC_TEST build $container
+    echo "_____________________________________________ Testing $1"
+    $DC_TEST run "$1"-test test
+    echo "_____________________________________________ $1 Done"
 }
 
 DC_TEST="docker-compose -f docker-compose-test.yml"
@@ -43,7 +43,9 @@ prepare_and_test_container gather-assets
 $DC_TEST run gather-assets-test build
 
 echo "_____________________________________________ Starting database, kernel and odk"
-$DC_TEST up -d db-test kernel-test odk-test
+$DC_TEST up -d db-test
+$DC_TEST up -d kernel-test
+$DC_TEST up -d odk-test
 
 prepare_and_test_container gather
 
