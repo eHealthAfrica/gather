@@ -20,9 +20,9 @@
 
 import moment from 'moment'
 
-export const PATH_ARRAY = '#'
-export const PATH_MAP = '*'
-export const PATH_UNION = '?'
+const PATH_ARRAY = '#'
+const PATH_MAP = '*'
+const PATH_UNION = '?'
 
 const DATE_FORMAT = 'YYYY-MM-DD'
 const DATE_REGEXP = /^(\d{4})-(\d{2})-(\d{2})$/
