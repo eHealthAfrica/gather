@@ -198,11 +198,9 @@ services:
 
       DB_NAME: gather
       PGHOST: db # This matches the DB service name
-      PGPASSWORD: ${TEST_GATHER_DB_PASSWORD}
+      PGPASSWORD: ${GATHER_DB_PASSWORD}
       PGPORT: 5432
       PGUSER: postgres
-
-      WEB_SERVER_PORT: 8005
 
       # assets variables
       CSV_HEADER_RULES: remove-prefix;payload.,remove-prefix;None.,replace;.;:;
