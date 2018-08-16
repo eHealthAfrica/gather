@@ -11,7 +11,7 @@ services:
     environment:
       PGUSER: postgres
     healthcheck:
-      test: ["CMD", "pg_isready"]
+      test: pg_isready
       interval: 1s
       timeout: 3s
       retries: 30
@@ -21,27 +21,33 @@ services:
   # ---------------------------------
 
   nginx-base:
-    image: nginx:stable-alpine
+    image: nginx:alpine
     volumes:
       # local setup
       - ./local-setup/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./local-setup/nginx/sites-enabled:/etc/nginx/sites-enabled
-
-      # media folders per container
-      - ./.persistent_data/media:/media
-      # aether favicon
-      - ./local-setup/aether.ico:/media/aether.ico
-      # gather favicon
-      - ./local-setup/gather.ico:/media/gather.ico
 
       # static folders per container
       - ./.persistent_data/static:/static
       # comment this out with `start` command
       # use this volume with `start_dev` command
       - ./app/gather/static:/static/gather
+
+      # aether favicon
+      - ./local-setup/aether.ico:/static/aether.ico
+      # gather favicon
+      - ./local-setup/gather.ico:/static/gather.ico
+
+      # media folders per container
+      - ./.persistent_data/media:/media
     ports:
       - "80:80"
       - "8443:8443"
+    healthcheck:
+      test: nginx -t
+      interval: 5s
+      timeout: 3s
+      retries: 30
 
 
   # ---------------------------------
@@ -52,7 +58,6 @@ services:
     image: ehealthafrica/aether-kernel:${AETHER_VERSION:-latest}
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: ""
       DJANGO_SECRET_KEY: ${KERNEL_DJANGO_SECRET_KEY}
 
       # Uncomment these lines to enable single sign on if you use CAS
@@ -79,6 +84,11 @@ services:
     ports:
       - "8000:8000"
     command: start
+    healthcheck:
+      test: /code/entrypoint.sh health
+      interval: 5s
+      timeout: 3s
+      retries: 30
 
 
   # ---------------------------------
@@ -89,7 +99,6 @@ services:
     image: ehealthafrica/aether-odk:${AETHER_VERSION:-latest}
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: ""
       DJANGO_SECRET_KEY: ${ODK_DJANGO_SECRET_KEY}
 
       # Uncomment these lines to enable single sign on if you use CAS
@@ -123,6 +132,11 @@ services:
       # standalone (without nginx)
       # - "8443:8443"
     command: start
+    healthcheck:
+      test: /code/entrypoint.sh health
+      interval: 5s
+      timeout: 3s
+      retries: 30
 
 
   # ---------------------------------
@@ -133,7 +147,6 @@ services:
     image: ehealthafrica/aether-ui:${AETHER_VERSION:-latest}
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
-      DEBUG: ""
       DJANGO_SECRET_KEY: ${UI_DJANGO_SECRET_KEY}
 
       # Uncomment these lines to enable single sign on if you use CAS
@@ -159,6 +172,11 @@ services:
     ports:
       - "8004:8004"
     command: start
+    healthcheck:
+      test: /code/entrypoint.sh health
+      interval: 5s
+      timeout: 3s
+      retries: 30
 
 
   # ---------------------------------
@@ -221,6 +239,11 @@ services:
     ports:
       - "8005:8005"
     command: start_dev
+    healthcheck:
+      test: /code/entrypoint.sh health
+      interval: 5s
+      timeout: 3s
+      retries: 30
 
   # ---------------------------------
   # Gather Assets container
@@ -247,3 +270,8 @@ services:
     ports:
       - "3005:3005"
     command: start_dev
+    healthcheck:
+      test: curl -s http://localhost:3005
+      interval: 5s
+      timeout: 3s
+      retries: 30

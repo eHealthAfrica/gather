@@ -4,6 +4,9 @@ networks:
   gather_net:
     driver: bridge
 
+volumes:
+  gather_database_data: {}
+
 services:
 
   # ---------------------------------
@@ -15,7 +18,7 @@ services:
       file: ./docker-compose-base.yml
       service: postgres-base
     volumes:
-      - ./.persistent_data/db/data:/var/lib/postgresql/data
+      - gather_database_data:/var/lib/postgresql/data
     networks:
       - gather_net
 
@@ -27,6 +30,15 @@ services:
     extends:
       file: ./docker-compose-base.yml
       service: nginx-base
+    depends_on:
+      kernel:
+        condition: service_healthy
+      odk:
+        condition: service_healthy
+      ui:
+        condition: service_healthy
+      gather:
+        condition: service_healthy
     networks:
       - gather_net
 
@@ -58,7 +70,7 @@ services:
       db:
         condition: service_healthy
       kernel:
-        condition: service_started
+        condition: service_healthy
     networks:
       gather_net:
         aliases:
@@ -76,7 +88,7 @@ services:
       db:
         condition: service_healthy
       kernel:
-        condition: service_started
+        condition: service_healthy
     networks:
       gather_net:
         aliases:
@@ -94,9 +106,9 @@ services:
       db:
         condition: service_healthy
       kernel:
-        condition: service_started
+        condition: service_healthy
       odk:
-        condition: service_started
+        condition: service_healthy
     networks:
       gather_net:
         aliases:

@@ -34,6 +34,15 @@ services:
     extends:
       file: ./docker-compose-base.yml
       service: nginx-base
+    depends_on:
+      kernel:
+        condition: service_healthy
+      odk:
+        condition: service_healthy
+      ui:
+        condition: service_healthy
+      gather:
+        condition: service_healthy
     networks:
       - gather_local
 
@@ -73,7 +82,7 @@ services:
       db:
         condition: service_healthy
       kernel:
-        condition: service_started
+        condition: service_healthy
     networks:
       gather_local:
         aliases:
@@ -94,7 +103,7 @@ services:
       db:
         condition: service_healthy
       kernel:
-        condition: service_started
+        condition: service_healthy
     networks:
       gather_local:
         aliases:
@@ -113,9 +122,9 @@ services:
       db:
         condition: service_healthy
       kernel:
-        condition: service_started
+        condition: service_healthy
       odk:
-        condition: service_started
+        condition: service_healthy
     networks:
       gather_local:
         aliases:

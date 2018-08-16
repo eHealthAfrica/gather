@@ -21,7 +21,6 @@ services:
       service: kernel-base
     environment:
       TESTING: "true"
-      DEBUG: ""  # set to null to remove previous value
       MEDIA_ROOT: /tmp/
       DJANGO_SECRET_KEY: ${TEST_KERNEL_DJANGO_SECRET_KEY}
 
@@ -40,7 +39,8 @@ services:
     ports:
       - "9000:9000"
     depends_on:
-      - db-test
+      db-test:
+        condition: service_healthy
     command: start
 
   # ---------------------------------
@@ -53,7 +53,6 @@ services:
       service: odk-base
     environment:
       TESTING: "true"
-      DEBUG: ""  # set to null to remove previous value
       MEDIA_ROOT: /tmp/
       DJANGO_SECRET_KEY: ${TEST_ODK_DJANGO_SECRET_KEY}
 
@@ -72,8 +71,10 @@ services:
     ports:
       - "9002:9002"
     depends_on:
-      - db-test
-      - kernel-test
+      db-test:
+        condition: service_healthy
+      kernel-test:
+        condition: service_healthy
     command: start
 
   # ---------------------------------
@@ -86,7 +87,7 @@ services:
       service: gather-base
     environment:
       TESTING: "true"
-      DEBUG: ""  # set to null to remove previous value
+      DEBUG: null  # set to null to remove previous value
       DJANGO_SECRET_KEY: ${TEST_GATHER_DJANGO_SECRET_KEY}
 
       ADMIN_USERNAME: ${TEST_GATHER_ADMIN_USERNAME}
@@ -105,9 +106,12 @@ services:
     ports:
       - "9005:9005"
     depends_on:
-      - db-test
-      - kernel-test
-      - odk-test
+      db-test:
+        condition: service_healthy
+      kernel-test:
+        condition: service_healthy
+      odk-test:
+        condition: service_healthy
     command: test
 
   # ---------------------------------
