@@ -19,7 +19,7 @@
 # under the License.
 #
 
-# This script can be used to generate an `.env` for local development with
+# This script can be used to generate an ".env" for local development with
 # docker compose.
 #
 # Example:
@@ -81,7 +81,7 @@ KERNEL_ADMIN_USERNAME=admin
 KERNEL_ADMIN_PASSWORD=adminadmin
 KERNEL_ADMIN_TOKEN=$(gen_random_string)
 
-KERNEL_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
+KERNEL_DJANGO_SECRET_KEY=$(gen_random_string)
 KERNEL_DB_PASSWORD=$(gen_random_string)
 
 KERNEL_READONLY_DB_USERNAME=readonlyuser
@@ -92,7 +92,7 @@ TEST_KERNEL_ADMIN_USERNAME=admin-test
 TEST_KERNEL_ADMIN_PASSWORD=testingtesting
 TEST_KERNEL_ADMIN_TOKEN=$(gen_random_string)
 
-TEST_KERNEL_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
+TEST_KERNEL_DJANGO_SECRET_KEY=$(gen_random_string)
 TEST_KERNEL_DB_PASSWORD=$(gen_random_string)
 
 TEST_KERNEL_READONLY_DB_USERNAME=readonlytest
@@ -109,7 +109,7 @@ ODK_ADMIN_USERNAME=admin
 ODK_ADMIN_PASSWORD=adminadmin
 ODK_ADMIN_TOKEN=$(gen_random_string)
 
-ODK_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
+ODK_DJANGO_SECRET_KEY=$(gen_random_string)
 ODK_DB_PASSWORD=$(gen_random_string)
 
 # TEST Aether ODK Module
@@ -117,7 +117,7 @@ TEST_ODK_ADMIN_USERNAME=admin-test
 TEST_ODK_ADMIN_PASSWORD=testingtesting
 TEST_ODK_ADMIN_TOKEN=$(gen_random_string)
 
-TEST_ODK_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
+TEST_ODK_DJANGO_SECRET_KEY=$(gen_random_string)
 TEST_ODK_DB_PASSWORD=$(gen_random_string)
 
 # ------------------------------------------------------------------
@@ -130,7 +130,7 @@ TEST_ODK_DB_PASSWORD=$(gen_random_string)
 UI_ADMIN_USERNAME=admin
 UI_ADMIN_PASSWORD=adminadmin
 
-UI_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
+UI_DJANGO_SECRET_KEY=$(gen_random_string)
 UI_DB_PASSWORD=$(gen_random_string)
 
 # ------------------------------------------------------------------
@@ -143,14 +143,14 @@ UI_DB_PASSWORD=$(gen_random_string)
 GATHER_ADMIN_USERNAME=admin
 GATHER_ADMIN_PASSWORD=adminadmin
 
-GATHER_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
+GATHER_DJANGO_SECRET_KEY=$(gen_random_string)
 GATHER_DB_PASSWORD=$(gen_random_string)
 
 # TEST Gather
 TEST_GATHER_ADMIN_USERNAME=admin-test
 TEST_GATHER_ADMIN_PASSWORD=testingtesting
 
-TEST_GATHER_DJANGO_SECRET_KEY=$(gen_random_string)$(gen_random_string)
+TEST_GATHER_DJANGO_SECRET_KEY=$(gen_random_string)
 TEST_GATHER_DB_PASSWORD=$(gen_random_string)
 
 # ------------------------------------------------------------------
