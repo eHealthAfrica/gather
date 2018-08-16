@@ -106,11 +106,11 @@ There are a couple of naming/coding conventions followed by the React Components
 
   - Javascript:
     - component names use title case (`TitleCase`)
-    - utility files kebab case (`kebab-case`)
-    - methods and variables camel case (`camelCase`)
+    - utility file names use kebab case (`kebab-case`)
+    - method and variable names use camel case (`camelCase`)
 
   - Python:
-    - file names, methods and variables snake case (`snake_case`)
+    - file, method and variable names use snake case (`snake_case`)
     - class names use title case (`TitleCase`)
 
 * Meaningful suffixes:

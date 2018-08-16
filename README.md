@@ -39,7 +39,6 @@ on the [Gather microsite](https://gather.ehealthafrica.org).
 
 - git
 - [docker-compose](https://docs.docker.com/compose/)
-- Permission to the eHealthAfrica DockerHub repository - contact eHA DevOps
 
 *[Return to TOC](#table-of-contents)*
 
@@ -48,13 +47,20 @@ on the [Gather microsite](https://gather.ehealthafrica.org).
 ```bash
 git clone git@github.com:eHealthAfrica/gather.git
 cd gather
-
-docker-compose build
 ```
 
-Include this entry in your `/etc/hosts` file:
+#### Build containers
 
+```bash
+./scripts/prepare-containers.sh
 ```
+
+**IMPORTANT NOTE**: the docker-compose files are intended to be used exclusively
+for local development. Never deploy these to publicly accessible servers.
+
+#### Include this entry in your `/etc/hosts` file
+
+```text
 # gather
 127.0.0.1    gather.local
 
@@ -62,15 +68,18 @@ Include this entry in your `/etc/hosts` file:
 127.0.0.1    kernel.aether.local odk.aether.local ui.aether.local
 ```
 
-Generate credentials for local development with docker-compose.
+#### Generate credentials for local development with docker-compose
+
+**Note:** Make sure you have `openssl` installed in your system.
 
 ```bash
 ./scripts/generate-credentials.sh > .env
 ```
 
-**Note:** Make sure you have `openssl` installed in your system.
+This instruction is included in the `./scripts/prepare-containers.sh` script.
 
 *[Return to TOC](#table-of-contents)*
+
 
 ### Environment Variables
 
@@ -314,13 +323,13 @@ Look into [docker-compose-base.yml](docker-compose-base.yml), the variable
 #### Check outdated dependencies
 
 ```bash
-docker-compose run gather eval pip list --outdated
+docker-compose run --no-deps gather eval pip list --outdated
 ```
 
 #### Update requirements file
 
 ```bash
-docker-compose run gather pip_freeze
+docker-compose run --no-deps gather pip_freeze
 ```
 
 *[Return to TOC](#table-of-contents)*
