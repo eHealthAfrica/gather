@@ -40,6 +40,8 @@ show_help () {
     start         : start webserver behind nginx
     start_dev     : start webserver for development
 
+    health        : checks the system healthy
+
     test          : run tests
     test_lint     : run flake8 tests
     test_coverage : run python tests with coverage output
@@ -153,6 +155,10 @@ case "$1" in
     start_dev )
         setup
         ./manage.py runserver 0.0.0.0:$WEB_SERVER_PORT
+    ;;
+
+    health )
+        curl -s http://0.0.0.0:$WEB_SERVER_PORT
     ;;
 
     test )
