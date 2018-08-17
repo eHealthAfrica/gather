@@ -1,4 +1,3 @@
-curl
 gcc
 gettext-base
 wget

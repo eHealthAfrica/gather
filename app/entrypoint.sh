@@ -158,7 +158,7 @@ case "$1" in
     ;;
 
     health )
-        curl -s http://0.0.0.0:$WEB_SERVER_PORT
+        ./manage.py check_url --url=http://0.0.0.0:$WEB_SERVER_PORT/health
     ;;
 
     test )
