@@ -31,8 +31,6 @@ services:
       - ./.persistent_data/static:/static
       # aether favicon
       - ./local-setup/aether.ico:/static/aether.ico
-      # gather favicon
-      - ./local-setup/gather.ico:/static/gather.ico
 
       # media folders per container
       - ./.persistent_data/media:/media
