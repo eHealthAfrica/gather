@@ -89,6 +89,18 @@ setup () {
     # copy assets bundles folder into static folder
     rm -r -f ./gather/static/*.*
     cp -r ./gather/assets/bundles/* ./gather/static/
+
+    # copy static files to "/var/www/static" to be served by nginx (even in DEBUG mode)
+    STATIC_ROOT=/var/www/static
+
+    # create static assets
+    ./manage.py collectstatic --noinput --clear --verbosity 0
+    chmod -R 755 $STATIC_ROOT
+
+    # expose version number (if exists)
+    cp ./VERSION $STATIC_ROOT/VERSION   2>/dev/null || :
+    # add git revision (if exists)
+    cp ./REVISION $STATIC_ROOT/REVISION 2>/dev/null || :
 }
 
 test_lint () {
@@ -135,15 +147,6 @@ case "$1" in
 
     start )
         setup
-
-        # create static assets
-        ./manage.py collectstatic --noinput --clear --verbosity 0
-        chmod -R 755 /var/www/static
-
-        # expose version number (if exists)
-        cp ./VERSION /var/www/static/VERSION 2>/dev/null || :
-        # add git revision (if exists)
-        cp ./REVISION /var/www/static/REVISION 2>/dev/null || :
 
         [ -z "$DEBUG" ] && LOGGING="--disable-logging" || LOGGING=""
         /usr/local/bin/uwsgi \
