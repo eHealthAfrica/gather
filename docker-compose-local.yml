@@ -61,8 +61,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      kernel:
-        condition: service_started
     networks:
       gather_local:
         aliases:
@@ -82,12 +80,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      kernel:
-        condition: service_started
     networks:
       gather_local:
         aliases:
           - ui.aether.local
+
+  ui-assets:
+    extends:
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
+      service: ui-assets-base
+
 
   # ---------------------------------
   # Gather Assets container
@@ -112,10 +114,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      kernel:
-        condition: service_started
-      odk:
-        condition: service_started
     networks:
       gather_local:
         aliases:
