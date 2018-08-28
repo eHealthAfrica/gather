@@ -51,6 +51,7 @@ services:
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
       DJANGO_SECRET_KEY: ${KERNEL_DJANGO_SECRET_KEY}
+      DJANGO_STORAGE_BACKEND: filesystem
 
       # Uncomment these lines to enable single sign on if you use CAS
       # CAS_SERVER_URL: https://your.cas.server
@@ -92,6 +93,7 @@ services:
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
       DJANGO_SECRET_KEY: ${ODK_DJANGO_SECRET_KEY}
+      DJANGO_STORAGE_BACKEND: filesystem
 
       # Uncomment these lines to enable single sign on if you use CAS
       # CAS_SERVER_URL: https://your.cas.server
@@ -140,6 +142,7 @@ services:
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
       DJANGO_SECRET_KEY: ${UI_DJANGO_SECRET_KEY}
+      DJANGO_STORAGE_BACKEND: filesystem
 
       # Uncomment these lines to enable single sign on if you use CAS
       # CAS_SERVER_URL: https://your.cas.server
