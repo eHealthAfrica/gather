@@ -19,7 +19,7 @@
  */
 
 .surveyors-list {
-  @extend .page-content;
+  @extend .page-content; // sass-lint:disable-line placeholder-in-extend
 }
 
 .surveyors {
