@@ -38,7 +38,7 @@ export default class EntitiesDownload extends Component {
   }
 
   render () {
-    const {survey, total} = this.props
+    const { survey, total } = this.props
     const { EXPORT_FORMAT, EXPORT_MAX_ROWS_SIZE } = this.props.settings
 
     const pageSize = Math.min(EXPORT_MAX_ROWS_SIZE || MAX_PAGE_SIZE, MAX_PAGE_SIZE)
@@ -50,7 +50,7 @@ export default class EntitiesDownload extends Component {
     }
 
     const download = (page, filename) => {
-      this.setState({preparing: true, error: null})
+      this.setState({ preparing: true, error: null })
 
       return postData(
         getEntitiesAPIPath({ ...params, page }),
@@ -62,10 +62,10 @@ export default class EntitiesDownload extends Component {
         { download: true }
       )
         .then(() => {
-          this.setState({preparing: false, error: null})
+          this.setState({ preparing: false, error: null })
         })
         .catch(error => {
-          this.setState({preparing: false, error})
+          this.setState({ preparing: false, error })
         })
     }
 
@@ -139,7 +139,7 @@ export default class EntitiesDownload extends Component {
   }
 
   renderError () {
-    const {error} = this.state
+    const { error } = this.state
     if (!error) {
       return ''
     }

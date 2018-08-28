@@ -51,14 +51,14 @@ export default class Survey extends Component {
   }
 
   render () {
-    const {survey} = this.props
+    const { survey } = this.props
 
     return (
       <div data-qa={`survey-item-${survey.id}`} className='survey-view'>
         <div className='survey-header'>
           <h2>{survey.name}</h2>
           <a
-            href={getSurveysPath({action: 'edit', id: survey.id})}
+            href={getSurveysPath({ action: 'edit', id: survey.id })}
             role='button'
             className='btn btn-primary btn-icon'>
             <i className='fas fa-pencil-alt invert mr-3' />
@@ -80,8 +80,8 @@ export default class Survey extends Component {
       return ''
     }
 
-    const {survey} = this.props
-    const {viewMode} = this.state
+    const { survey } = this.props
+    const { viewMode } = this.state
     const listComponent = (viewMode === SINGLE_VIEW ? EntityItem : EntitiesList)
     const extras = {
       settings: this.props.settings,
@@ -125,6 +125,7 @@ export default class Survey extends Component {
                 total={this.state.total}
                 paths={this.state.selectedPaths}
                 labels={this.state.labels}
+                settings={this.props.settings}
               />
             </li>
             <li className='toolbar-filter'>
@@ -135,7 +136,7 @@ export default class Survey extends Component {
         <PaginationContainer
           pageSize={viewMode === SINGLE_VIEW ? 1 : TABLE_SIZES[0]}
           sizes={viewMode === SINGLE_VIEW ? [] : TABLE_SIZES}
-          url={getEntitiesAPIPath({project: survey.id})}
+          url={getEntitiesAPIPath({ project: survey.id })}
           position='top'
           listComponent={listComponent}
           showPrevious

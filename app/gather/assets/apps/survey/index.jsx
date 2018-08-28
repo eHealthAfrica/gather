@@ -33,7 +33,7 @@ export default class SurveyDispatcher extends Component {
     const {action, surveyId} = this.props
     const {ODK_ACTIVE} = this.props.settings
     // include settings in response
-    const handleResponse = (response) => ({...response, settings: this.props.settings})
+    const handleResponse = (response) => ({ ...response, settings: this.props.settings })
 
     switch (action) {
       case 'add':
@@ -62,7 +62,7 @@ export default class SurveyDispatcher extends Component {
         const editUrls = [
           {
             name: 'survey',
-            url: getSurveysAPIPath({id: surveyId})
+            url: getSurveysAPIPath({ id: surveyId })
           }
         ]
 
@@ -98,11 +98,11 @@ export default class SurveyDispatcher extends Component {
         const viewUrls = [
           {
             name: 'survey',
-            url: getSurveysAPIPath({id: surveyId, withStats: true})
+            url: getSurveysAPIPath({ id: surveyId, withStats: true })
           },
           {
             name: 'skeleton',
-            url: getSurveysAPIPath({id: surveyId, action: 'schemas-skeleton'})
+            url: getSurveysAPIPath({ id: surveyId, action: 'schemas-skeleton' })
           }
         ]
 
@@ -118,7 +118,7 @@ export default class SurveyDispatcher extends Component {
         return (
           <PaginationContainer
             pageSize={12}
-            url={getSurveysAPIPath({withStats: true})}
+            url={getSurveysAPIPath({ withStats: true })}
             position='top'
             listComponent={SurveysList}
             search
