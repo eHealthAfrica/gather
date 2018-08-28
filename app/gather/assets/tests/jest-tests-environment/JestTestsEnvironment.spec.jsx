@@ -20,7 +20,7 @@
 
 /* global describe, it, expect, beforeEach, afterEach */
 
-import nock from 'nock'
+const nock = require('nock')
 
 describe('Tests Environment', () => {
   it('should set the common global variables', () => {
