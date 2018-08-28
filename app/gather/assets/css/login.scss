@@ -26,6 +26,25 @@ body {
   color: $white;
 }
 
+#container #header { // sass-lint:disable-line no-ids
+  display: none;
+}
+
+.btn-primary {
+  background: #5eb1f2;
+  background-image: linear-gradient(to right, transparent, #49b1cf);
+  color: $white;
+  border-radius: 2px;
+  box-shadow: 1px 1px 1px rgba(74, 74, 74, .2), 1px 1px 0 rgba(255, 255, 255, .1) inset;
+  padding: 1.1rem 2rem;
+  transition: background 1s;
+  margin-top: 1.5rem;
+}
+
+.btn:hover {
+  box-shadow: 1px 1px 0 rgba(255, 255, 255, .1) inset, -1px -1px 0 rgba(45, 49, 70, .3) inset, 0 0 4px rgba(45, 49, 70, .1);
+}
+
 .logo-container,
 .front,
 .back {
@@ -45,25 +64,6 @@ body {
   margin: 0 60px;
   line-height: 46px;
   color: $white;
-}
-
-.btn-primary {
-  background: #5eb1f2;
-  background-image: linear-gradient(to right, transparent, #49b1cf);
-  color: $white;
-  border-radius: 2px;
-  box-shadow: 1px 1px 1px rgba(74, 74, 74, .2), 1px 1px 0 rgba(255, 255, 255, .1) inset;
-  padding: 1.1rem 2rem;
-  transition: background 1s;
-  margin-top: 1.5rem;
-}
-
-.btn:hover {
-  box-shadow: 1px 1px 0 rgba(255, 255, 255, .1) inset, -1px -1px 0 rgba(45, 49, 70, .3) inset, 0 0 4px rgba(45, 49, 70, .1);
-}
-
-#header {
-  display: none;
 }
 
 .logout-info a,
