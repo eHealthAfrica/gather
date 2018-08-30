@@ -26,7 +26,7 @@ import { JSONViewer, LinksList, normalizeLinksList } from '../../components'
 
 export default class EntitiesList extends Component {
   render () {
-    const {list} = this.props
+    const { list } = this.props
 
     if (list.length === 0) {
       return <div data-qa='entities-list-empty' />
@@ -88,7 +88,7 @@ export default class EntitiesList extends Component {
 
     ****************************************************************/
 
-    const {paths, labels} = this.props
+    const { paths, labels } = this.props
     const headers = inflate(paths)
     const rows = headers.length
 
@@ -148,8 +148,8 @@ export default class EntitiesList extends Component {
   }
 
   renderEntity (entity, index) {
-    const {paths, labels, settings} = this.props
-    const flattenPayload = flatten({...entity.payload})
+    const { paths, labels, settings } = this.props
+    const flattenPayload = flatten({ ...entity.payload })
     const links = normalizeLinksList(entity.attachments, settings.AETHER_KERNEL_URL)
 
     return (

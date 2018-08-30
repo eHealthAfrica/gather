@@ -119,14 +119,14 @@ export const extractPathDocs = (schema, state = {}) => {
 
     if (current.type === 'map') {
       // indicate that the next property can be any with "*" name
-      const mapType = current.values.type ? current.values : {type: current.values}
-      walker({...mapType, name: '*'}, jsonPath)
+      const mapType = current.values.type ? current.values : { type: current.values }
+      walker({ ...mapType, name: '*' }, jsonPath)
     }
 
     if (current.type === 'array') {
       // indicate that the next property can be any int with "#"
-      const arrayType = current.items.type ? current.items : {type: current.items}
-      walker({...arrayType, name: '#'}, jsonPath)
+      const arrayType = current.items.type ? current.items : { type: current.items }
+      walker({ ...arrayType, name: '#' }, jsonPath)
     }
 
     // union but not nullable :scream:
@@ -170,5 +170,5 @@ export const extractPathDocs = (schema, state = {}) => {
 
   // assumption: the initial type is "record"
   schema.fields.forEach(field => { walker(field) })
-  return {labels, paths}
+  return { labels, paths }
 }

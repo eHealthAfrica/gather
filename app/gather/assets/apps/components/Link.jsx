@@ -62,7 +62,7 @@ export class LinksList extends Component {
   }
 
   render () {
-    const {list} = this.props
+    const { list } = this.props
 
     if (!list || list.length === 0) {
       return ''

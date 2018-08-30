@@ -26,12 +26,12 @@ import SurveyDates from './SurveyDates'
 
 export default class SurveyCard extends Component {
   render () {
-    const {survey} = this.props
+    const { survey } = this.props
 
     return (
       <a
         data-qa={`survey-card-${survey.id}`}
-        href={getSurveysPath({action: 'view', id: survey.id})}
+        href={getSurveysPath({ action: 'view', id: survey.id })}
         className='card'>
         <h3 className='card-header'>{survey.name}</h3>
         <div className='card-block'>

@@ -28,8 +28,8 @@ describe('constants', () => {
   it('should define app constants', () => {
     assert(constants.MAX_PAGE_SIZE > 0)
 
-    assert.deepEqual(constants.KERNEL_APP, 'kernel')
-    assert.deepEqual(constants.ODK_APP, 'odk')
-    assert.deepEqual(constants.GATHER_APP, 'gather')
+    assert.deepStrictEqual(constants.KERNEL_APP, 'kernel')
+    assert.deepStrictEqual(constants.ODK_APP, 'odk')
+    assert.deepStrictEqual(constants.GATHER_APP, 'gather')
   })
 })

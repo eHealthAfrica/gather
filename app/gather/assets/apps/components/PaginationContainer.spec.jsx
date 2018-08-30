@@ -44,7 +44,7 @@ describe('PaginationContainer', () => {
     const buildStateComponent = (url) => {
       nock('http://localhost')
         .get(url)
-        .query({page: 1, page_size: 25})
+        .query({ page: 1, page_size: 25 })
         .reply(200, {})
 
       const component = mountWithIntl(
@@ -133,7 +133,7 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/paginate-not-found')
-        .query({page: 1, page_size: 25, search: 'something'})
+        .query({ page: 1, page_size: 25, search: 'something' })
         .reply(200, { count: 0, results: [] })
 
       component.setState({
@@ -210,7 +210,7 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/paginate-page-size')
-        .query({page: 14, page_size: 100})
+        .query({ page: 14, page_size: 100 })
         .reply(200, {
           count: 1500,
           results: global.range(0, 100)
@@ -229,7 +229,7 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/paginate-page-size')
-        .query({page: 1, page_size: 10})
+        .query({ page: 1, page_size: 10 })
         .reply(200, {
           count: 1500,
           results: global.range(0, 10)
@@ -250,7 +250,7 @@ describe('PaginationContainer', () => {
     const buildFetchComponent = (url) => {
       nock('http://localhost')
         .get(url)
-        .query({page: 1, page_size: 25})
+        .query({ page: 1, page_size: 25 })
         .reply(200, { count: 0, results: [] })
 
       const component = mountWithIntl(
@@ -283,7 +283,7 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/fetch-warning')
-        .query({page: 1, page_size: 25})
+        .query({ page: 1, page_size: 25 })
         .reply(404)
 
       await component.instance().loadData()
@@ -307,7 +307,7 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/fetch-empty')
-        .query({page: 1, page_size: 25})
+        .query({ page: 1, page_size: 25 })
         .reply(200, { count: 0, results: [] })
 
       await component.instance().loadData()
@@ -332,7 +332,7 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/fetch-list')
-        .query({page: 1, page_size: 25})
+        .query({ page: 1, page_size: 25 })
         .reply(200, { count: 1, results: [1] })
 
       await component.instance().loadData()
@@ -358,7 +358,7 @@ describe('PaginationContainer', () => {
     const buildPaginationComponent = (path) => {
       nock('http://localhost')
         .get(path)
-        .query({page: 1, page_size: 25})
+        .query({ page: 1, page_size: 25 })
         .reply(200, {
           count: 100,
           results: global.range(0, 25)
@@ -383,7 +383,7 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get(path)
-        .query({page: 2, page_size: 25, search: 'bla'})
+        .query({ page: 2, page_size: 25, search: 'bla' })
         .reply(200, {
           count: 100,
           results: global.range(0, 25)
@@ -426,14 +426,14 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/paginate-actions-search')
-        .query({page: 1, page_size: 25, search: 'something'})
+        .query({ page: 1, page_size: 25, search: 'something' })
         .reply(200, {
           count: 100,
           results: global.range(0, 25)
         })
 
-      input.simulate('change', {target: {name: 'search', value: 'something'}})
-      input.simulate('keypress', {charCode: 13})
+      input.simulate('change', { target: { name: 'search', value: 'something' } })
+      input.simulate('keypress', { charCode: 13 })
 
       expect(component.state('page')).toEqual(1)
       expect(component.state('search')).toEqual('something')
@@ -448,13 +448,13 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/paginate-actions-set-page-size')
-        .query({page: 1, page_size: 10, search: 'bla'})
+        .query({ page: 1, page_size: 10, search: 'bla' })
         .reply(200, {
           count: 100,
           results: global.range(0, 10)
         })
 
-      select.simulate('change', {target: {value: '10'}})
+      select.simulate('change', { target: { value: '10' } })
 
       expect(component.state('page')).toEqual(1)
       expect(component.state('pageSize')).toEqual(10)
@@ -469,7 +469,7 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/paginate-actions-buttons')
-        .query({page: 3, page_size: 25, search: 'bla'})
+        .query({ page: 3, page_size: 25, search: 'bla' })
         .reply(200, {
           count: 100,
           results: global.range(0, 25)

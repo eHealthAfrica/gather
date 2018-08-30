@@ -31,12 +31,12 @@ describe('MultiSelect', () => {
     const component = mountComponent(
       <MultiSelect
         selected={[
-          {id: 2, name: '2'}
+          { id: 2, name: '2' }
         ]}
         options={[
-          {id: 1, name: '1'},
-          {id: 2, name: '2'},
-          {id: 3, name: '3'}
+          { id: 1, name: '1' },
+          { id: 2, name: '2' },
+          { id: 3, name: '3' }
         ]}
         onChange={() => {}}
       />
@@ -72,15 +72,15 @@ describe('MultiSelect', () => {
     const component = mountComponent(
       <MultiSelect
         selected={[
-          {id: 2, name: '2'}
+          { id: 2, name: '2' }
         ]}
         options={[
-          {id: 1, name: '1'},
-          {id: 2, name: '2'},
-          {id: 3, name: '3'},
-          {id: 4, name: '4'},
-          {id: 5, name: '5'},
-          {id: 6, name: '6'}
+          { id: 1, name: '1' },
+          { id: 2, name: '2' },
+          { id: 3, name: '3' },
+          { id: 4, name: '4' },
+          { id: 5, name: '5' },
+          { id: 6, name: '6' }
         ]}
         onChange={() => { changed = true }}
       />
@@ -88,39 +88,39 @@ describe('MultiSelect', () => {
 
     // select new selected values
     expect(component.state('selected')).toEqual([
-      {id: 2, name: '2'}
+      { id: 2, name: '2' }
     ])
     expect(changed).toBeFalsy()
     component.instance().onSelect([
-      {id: 4},
-      {id: 1},
-      {id: 2} // already there, will not be duplicated
+      { id: 4 },
+      { id: 1 },
+      { id: 2 } // already there, will not be duplicated
     ])
     expect(changed).toBeTruthy()
     expect(component.state('selected')).toEqual([
-      {id: 1, name: '1'},
-      {id: 2, name: '2'},
-      {id: 4, name: '4'}
+      { id: 1, name: '1' },
+      { id: 2, name: '2' },
+      { id: 4, name: '4' }
     ])
 
     // deselect values
     changed = false
     expect(changed).toBeFalsy()
     component.instance().onDeselect([
-      {id: 4},
-      {id: 5} // not there, will not affect
+      { id: 4 },
+      { id: 5 } // not there, will not affect
     ])
     expect(changed).toBeTruthy()
     expect(component.state('selected')).toEqual([
-      {id: 1, name: '1'},
-      {id: 2, name: '2'}
+      { id: 1, name: '1' },
+      { id: 2, name: '2' }
     ])
 
     // deselect values that are not there
     changed = false
     expect(changed).toBeFalsy()
     component.instance().onDeselect([
-      {id: 8}
+      { id: 8 }
     ])
     expect(changed).toBeFalsy()
   })

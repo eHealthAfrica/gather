@@ -52,7 +52,7 @@ describe('PaginationBar', () => {
       />
     )
 
-    component.setState({search: 'something'})
+    component.setState({ search: 'something' })
     expect(component.state('search')).toEqual('something')
 
     expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
@@ -141,15 +141,15 @@ describe('PaginationBar', () => {
       const input = component.find('[data-qa="data-pagination-search"]').find('input')
 
       // "change" event does not trigger `onSearch`
-      input.simulate('change', {target: {name: 'search', value: 'something'}})
+      input.simulate('change', { target: { name: 'search', value: 'something' } })
       expect(text).toBeNull()
 
       // "onKeyPress" Any key does not trigger `onSearch`
-      input.simulate('keypress', {charCode: 90})
+      input.simulate('keypress', { charCode: 90 })
       expect(text).toBeNull()
 
       // "onKeyPress" Enter does trigger `onSearch`
-      input.simulate('keypress', {charCode: 13})
+      input.simulate('keypress', { charCode: 13 })
       expect(text).toEqual('something')
     })
   })
@@ -219,10 +219,10 @@ describe('PaginationBar', () => {
       const select = component.find('[data-qa="data-pagination-sizes"]').find('select')
       expect(select.exists()).toBeTruthy()
 
-      select.simulate('change', {target: {value: '10'}})
+      select.simulate('change', { target: { value: '10' } })
       expect(changed).toEqual(0) // same pageSize does not trigger method
 
-      select.simulate('change', {target: {value: '25'}})
+      select.simulate('change', { target: { value: '25' } })
       expect(changed).toEqual(25) // same pageSize does trigger method
     })
   })
@@ -330,7 +330,7 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
 
       // SECOND page
-      component.setProps({currentPage: 2})
+      component.setProps({ currentPage: 2 })
       expect(component.find('[name="currentPage"]').props().value).toEqual(2)
 
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
@@ -339,7 +339,7 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
 
       // between SECOND and PREVIOUS LAST page
-      component.setProps({currentPage: 3})
+      component.setProps({ currentPage: 3 })
       expect(component.find('[name="currentPage"]').props().value).toEqual(3)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()
@@ -347,7 +347,7 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
 
       // PREVIOUS LAST
-      component.setProps({currentPage: 4})
+      component.setProps({ currentPage: 4 })
       expect(component.find('[name="currentPage"]').props().value).toEqual(4)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()
@@ -355,7 +355,7 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
 
       // LAST
-      component.setProps({currentPage: 5})
+      component.setProps({ currentPage: 5 })
       expect(component.find('[name="currentPage"]').props().value).toEqual(5)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()
@@ -460,31 +460,31 @@ describe('PaginationBar', () => {
       expect(page).toEqual(0)
 
       // "onKeyPress" not Enter does trigger `goToPage`
-      input.simulate('keypress', {charCode: 50}) // char '2'
+      input.simulate('keypress', { charCode: 50 }) // char '2'
       expect(page).toEqual(0)
 
       // "change" event does not trigger `goToPage`
       // negative numbers are replaced with first page
-      input.simulate('change', {target: {value: '-2'}})
+      input.simulate('change', { target: { value: '-2' } })
       expect(component.find('[name="currentPage"]').props().value).toEqual(1)
       expect(page).toEqual(0)
 
       // too big numbers are replaced with last page
-      input.simulate('change', {target: {value: '20'}})
+      input.simulate('change', { target: { value: '20' } })
       expect(component.find('[name="currentPage"]').props().value).toEqual(5)
       expect(page).toEqual(0)
 
       // no values are replaced with first page
-      input.simulate('change', {target: {}})
+      input.simulate('change', { target: {} })
       expect(component.find('[name="currentPage"]').props().value).toEqual(1)
       expect(page).toEqual(0)
 
-      input.simulate('change', {target: {value: '2'}})
+      input.simulate('change', { target: { value: '2' } })
       expect(component.find('[name="currentPage"]').props().value).toEqual(2)
       expect(page).toEqual(0)
 
       // "onKeyPress" Enter does trigger `goToPage` too
-      input.simulate('keypress', {charCode: 13})
+      input.simulate('keypress', { charCode: 13 })
       expect(page).toEqual(2)
     })
   })

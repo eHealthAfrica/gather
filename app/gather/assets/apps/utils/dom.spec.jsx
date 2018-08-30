@@ -48,13 +48,13 @@ describe('DOM utils', () => {
 
   describe('isMounted', () => {
     it('should return true if the component is in the DOM', () => {
-      const component = mount(<Foo />, {attachTo: element})
+      const component = mount(<Foo />, { attachTo: element })
 
       expect(isMounted(component.instance())).toBeTruthy()
     })
 
     it('should return false if the component is not in the DOM', () => {
-      const component = mount(<Foo />, {attachTo: element})
+      const component = mount(<Foo />, { attachTo: element })
       component.unmount()
       expect(isMounted(component)).toBeFalsy()
     })

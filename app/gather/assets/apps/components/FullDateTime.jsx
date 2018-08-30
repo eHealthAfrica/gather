@@ -34,7 +34,7 @@ import {
 
 export default class FullDateTime extends Component {
   render () {
-    const {date} = this.props
+    const { date } = this.props
     if (!date) {
       return <div />
     }

@@ -25,7 +25,7 @@ import SurveyCard from './SurveyCard'
 
 export default class SurveysList extends Component {
   render () {
-    const {list} = this.props
+    const { list } = this.props
 
     if (list.length === 0) {
       return <div data-qa='surveys-list-empty' />

@@ -26,7 +26,7 @@ import { JSONViewer, LinksList, normalizeLinksList } from '../../components'
 
 export default class EntityItem extends Component {
   render () {
-    const {list, settings} = this.props
+    const { list, settings } = this.props
 
     if (list.length !== 1) {
       return <div />

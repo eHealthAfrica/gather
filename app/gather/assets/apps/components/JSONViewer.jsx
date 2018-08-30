@@ -45,7 +45,7 @@ import { Link } from './Link'
 
 export default class JSONViewer extends Component {
   render () {
-    const {data} = this.props
+    const { data } = this.props
 
     return (
       <div data-qa='json-data' className='data'>
@@ -217,8 +217,8 @@ class JSONObjectViewer extends Component {
   }
 
   render () {
-    const {collapsed} = this.state
-    const {value, collapsible} = this.props
+    const { collapsed } = this.state
+    const { value, collapsible } = this.props
 
     if (collapsible && collapsed) {
       return (
@@ -280,8 +280,8 @@ class JSONArrayViewer extends Component {
   }
 
   render () {
-    const {collapsed} = this.state
-    const {values} = this.props
+    const { collapsed } = this.state
+    const { values } = this.props
 
     if (collapsed) {
       return (

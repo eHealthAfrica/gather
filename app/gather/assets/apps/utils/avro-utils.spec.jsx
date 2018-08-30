@@ -27,21 +27,21 @@ import { isNullable, isLeaf, extractPathDocs } from './avro-utils'
 describe('AVRO utils', () => {
   describe('isNullable', () => {
     it('should return false if type is not a union', () => {
-      assert(!isNullable({type: 'array', items: 'another_type'}))
-      assert(!isNullable({type: 'record'}))
-      assert(!isNullable({type: 'map'}))
+      assert(!isNullable({ type: 'array', items: 'another_type' }))
+      assert(!isNullable({ type: 'record' }))
+      assert(!isNullable({ type: 'map' }))
       assert(!isNullable('null'))
-      assert(!isNullable({type: 'null'}))
+      assert(!isNullable({ type: 'null' }))
     })
 
     it('should return true only if type is a union fo two elements, one of them "null"', () => {
       assert(!isNullable(['boolean', 'int']))
-      assert(!isNullable(['float', {type: 'enum'}]))
-      assert(!isNullable(['string', 'int', {type: 'record'}]))
-      assert(!isNullable(['null', 'int', {type: 'record'}]))
+      assert(!isNullable(['float', { type: 'enum' }]))
+      assert(!isNullable(['string', 'int', { type: 'record' }]))
+      assert(!isNullable(['null', 'int', { type: 'record' }]))
 
       assert(isNullable(['null', 'int']))
-      assert(isNullable(['null', {type: 'enum'}]))
+      assert(isNullable(['null', { type: 'enum' }]))
     })
   })
 
@@ -58,31 +58,31 @@ describe('AVRO utils', () => {
       assert(isLeaf('enum'))
       assert(isLeaf('fixed'))
 
-      assert(isLeaf({type: 'null'}))
-      assert(isLeaf({type: 'boolean'}))
-      assert(isLeaf({type: 'int'}))
-      assert(isLeaf({type: 'long'}))
-      assert(isLeaf({type: 'float'}))
-      assert(isLeaf({type: 'double'}))
-      assert(isLeaf({type: 'bytes'}))
-      assert(isLeaf({type: 'string'}))
-      assert(isLeaf({type: 'enum'}))
-      assert(isLeaf({type: 'fixed'}))
+      assert(isLeaf({ type: 'null' }))
+      assert(isLeaf({ type: 'boolean' }))
+      assert(isLeaf({ type: 'int' }))
+      assert(isLeaf({ type: 'long' }))
+      assert(isLeaf({ type: 'float' }))
+      assert(isLeaf({ type: 'double' }))
+      assert(isLeaf({ type: 'bytes' }))
+      assert(isLeaf({ type: 'string' }))
+      assert(isLeaf({ type: 'enum' }))
+      assert(isLeaf({ type: 'fixed' }))
     })
 
     it('should detect complex types', () => {
-      assert(!isLeaf({type: 'array', items: 'another_type'}))
-      assert(!isLeaf({type: 'record'}))
-      assert(!isLeaf({type: 'map'}))
+      assert(!isLeaf({ type: 'array', items: 'another_type' }))
+      assert(!isLeaf({ type: 'record' }))
+      assert(!isLeaf({ type: 'map' }))
     })
 
     it('should flag as leaf certain complex types', () => {
       assert(isLeaf(['null', 'int']))
-      assert(isLeaf(['null', {type: 'enum'}]))
-      assert(!isLeaf(['null', 'int', {type: 'record'}]))
+      assert(isLeaf(['null', { type: 'enum' }]))
+      assert(!isLeaf(['null', 'int', { type: 'record' }]))
 
-      assert(isLeaf({type: 'array', items: 'long'}))
-      assert(!isLeaf({type: 'array', items: {type: 'map'}}))
+      assert(isLeaf({ type: 'array', items: 'long' }))
+      assert(!isLeaf({ type: 'array', items: { type: 'map' } }))
     })
   })
 
@@ -102,12 +102,12 @@ describe('AVRO utils', () => {
         ]
       }
       const expected = {
-        labels: {first: 'The first'},
+        labels: { first: 'The first' },
         paths: ['first']
       }
-      assert.deepEqual(extractPathDocs(schema), expected)
+      assert.deepStrictEqual(extractPathDocs(schema), expected)
       // using extracted paths and docs as initial state
-      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+      assert.deepStrictEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
     })
 
     it('should no create any label entry if no "doc"', () => {
@@ -132,9 +132,9 @@ describe('AVRO utils', () => {
         labels: {},
         paths: ['first']
       }
-      assert.deepEqual(extractPathDocs(schema), expected)
+      assert.deepStrictEqual(extractPathDocs(schema), expected)
       // using extracted paths and docs as initial state
-      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+      assert.deepStrictEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
     })
 
     it('should build nested paths', () => {
@@ -178,9 +178,9 @@ describe('AVRO utils', () => {
         },
         paths: ['first', 'first.second', 'first.fourth', 'first.fourth.fifth']
       }
-      assert.deepEqual(extractPathDocs(schema), expected)
+      assert.deepStrictEqual(extractPathDocs(schema), expected)
       // using extracted paths and docs as initial state
-      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+      assert.deepStrictEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
     })
 
     it('should build map paths with "*"', () => {
@@ -261,9 +261,9 @@ describe('AVRO utils', () => {
           'a.f.*'
         ]
       }
-      assert.deepEqual(extractPathDocs(schema), expected)
+      assert.deepStrictEqual(extractPathDocs(schema), expected)
       // using extracted paths and docs as initial state
-      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+      assert.deepStrictEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
     })
 
     it('should build array paths with "#"', () => {
@@ -344,9 +344,9 @@ describe('AVRO utils', () => {
           'a.f.#'
         ]
       }
-      assert.deepEqual(extractPathDocs(schema), expected)
+      assert.deepStrictEqual(extractPathDocs(schema), expected)
       // using extracted paths and docs as initial state
-      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+      assert.deepStrictEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
     })
 
     it('should not scream with union types', () => {
@@ -367,8 +367,8 @@ describe('AVRO utils', () => {
                   'null',
                   'long',
                   'string',
-                  {name: 'axes', type: 'enum', symbols: ['x', 'y', 'z']},
-                  {type: 'map', values: 'int'}
+                  { name: 'axes', type: 'enum', symbols: ['x', 'y', 'z'] },
+                  { type: 'map', values: 'int' }
                 ]
               }
             ]
@@ -389,9 +389,9 @@ describe('AVRO utils', () => {
           'a.b.map.*'
         ]
       }
-      assert.deepEqual(extractPathDocs(schema), expected)
+      assert.deepStrictEqual(extractPathDocs(schema), expected)
       // using extracted paths and docs as initial state
-      assert.deepEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
+      assert.deepStrictEqual(extractPathDocs(schema, extractPathDocs(schema)), expected)
     })
 
     it('should not overwrite initial state', () => {
@@ -431,7 +431,7 @@ describe('AVRO utils', () => {
           'second' // added
         ]
       }
-      assert.deepEqual(extractPathDocs(schema, initial), expected)
+      assert.deepStrictEqual(extractPathDocs(schema, initial), expected)
     })
   })
 })

@@ -49,7 +49,7 @@ export default class Survey extends Component {
       selectedPaths: []
     }
 
-    const {results} = props.schemas
+    const { results } = props.schemas
     if (results.length) {
       const pathsAndLabels = {
         labels: {},
@@ -92,14 +92,14 @@ export default class Survey extends Component {
   }
 
   render () {
-    const {survey} = this.props
+    const { survey } = this.props
 
     return (
       <div data-qa={`survey-item-${survey.id}`} className='survey-view'>
         <div className='survey-header'>
           <h2>{survey.name}</h2>
           <a
-            href={getSurveysPath({action: 'edit', id: survey.id})}
+            href={getSurveysPath({ action: 'edit', id: survey.id })}
             role='button'
             className='btn btn-primary btn-icon'>
             <i className='fas fa-pencil-alt invert mr-3' />
@@ -121,8 +121,8 @@ export default class Survey extends Component {
       return ''
     }
 
-    const {survey} = this.props
-    const {viewMode} = this.state
+    const { survey } = this.props
+    const { viewMode } = this.state
     const listComponent = (viewMode === SINGLE_VIEW ? EntityItem : EntitiesList)
     const extras = {
       settings: this.props.settings,
@@ -171,7 +171,7 @@ export default class Survey extends Component {
         <PaginationContainer
           pageSize={viewMode === SINGLE_VIEW ? 1 : TABLE_SIZES[0]}
           sizes={viewMode === SINGLE_VIEW ? [] : TABLE_SIZES}
-          url={getEntitiesAPIPath({project: survey.id, ordering: '-modified'})}
+          url={getEntitiesAPIPath({ project: survey.id, ordering: '-modified' })}
           position='top'
           listComponent={listComponent}
           showPrevious
@@ -183,13 +183,13 @@ export default class Survey extends Component {
   }
 
   renderDownloadButton () {
-    const {survey} = this.props
+    const { survey } = this.props
     const {
       CSV_HEADER_RULES,
       CSV_HEADER_RULES_SEP,
       CSV_MAX_ROWS_SIZE
     } = this.props.settings
-    const {total, allPaths, selectedPaths} = this.state
+    const { total, allPaths, selectedPaths } = this.state
 
     const pageSize = CSV_MAX_ROWS_SIZE || MAX_PAGE_SIZE
     const params = {
@@ -213,7 +213,7 @@ export default class Survey extends Component {
     }
 
     const download = (options, fileName) => {
-      postData(getEntitiesAPIPath(options), payload, {download: true, fileName})
+      postData(getEntitiesAPIPath(options), payload, { download: true, fileName })
     }
 
     if (total < pageSize) {

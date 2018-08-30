@@ -85,7 +85,7 @@ const downloadLink = (content, fileName = 'download') => {
   window.URL.revokeObjectURL(link.href)
 }
 
-const inspectResponse = ({download, fileName}, resolve, reject, response) => {
+const inspectResponse = ({ download, fileName }, resolve, reject, response) => {
   // According to fetch docs: https://github.github.io/fetch/
   // Note that the promise won't be rejected in case of HTTP 4xx or 5xx server responses.
   // The promise will be resolved just as it would be for HTTP 2xx.
@@ -139,7 +139,7 @@ const request = (
 ) => new Promise((resolve, reject) => {
   window
     .fetch(url, buildFetchOptions(method, payload, multipart))
-    .then(inspectResponse.bind(null, {download, fileName}, resolve, reject))
+    .then(inspectResponse.bind(null, { download, fileName }, resolve, reject))
 })
 
 /**
@@ -160,21 +160,21 @@ export const getData = (url, opts = {}) => (
  * Request POST from an url.
  */
 export const postData = (url, payload, opts = {}) => (
-  request('POST', url, {...opts, payload})
+  request('POST', url, { ...opts, payload })
 )
 
 /**
  * Request PUT from an url.
  */
 export const putData = (url, payload, opts = {}) => (
-  request('PUT', url, {...opts, payload})
+  request('PUT', url, { ...opts, payload })
 )
 
 /**
  * Request PATCH from an url.
  */
 export const patchData = (url, payload, opts = {}) => (
-  request('PATCH', url, {...opts, payload})
+  request('PATCH', url, { ...opts, payload })
 )
 
 /**
@@ -218,5 +218,5 @@ export const fetchUrls = (urls) => Promise
     : getData(config.url)
   ))
   .then(responses => responses.reduce((payload, response, index) => {
-    return {...payload, [urls[index].name]: response}
+    return { ...payload, [urls[index].name]: response }
   }, {}))

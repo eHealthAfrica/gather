@@ -48,7 +48,7 @@ describe('Settings utils', () => {
         })
 
       return getSettings().then(settings => {
-        assert.deepEqual(settings, {
+        assert.deepStrictEqual(settings, {
           AETHER_KERNEL_URL: 'http://kernel.server.url',
           AETHER_ODK_URL: 'http://odk.server.url',
           ODK_ACTIVE: true,
@@ -68,7 +68,7 @@ describe('Settings utils', () => {
         })
 
       return getSettings().then(settings => {
-        assert.deepEqual(settings, {
+        assert.deepStrictEqual(settings, {
           AETHER_KERNEL_URL: 'http://kernel.server.url',
           AETHER_ODK_URL: undefined,
           ODK_ACTIVE: false,
@@ -85,7 +85,7 @@ describe('Settings utils', () => {
         .reply(500)
 
       return getSettings().then(settings => {
-        assert.deepEqual(settings, {
+        assert.deepStrictEqual(settings, {
           AETHER_KERNEL_URL: '/kernel',
           AETHER_ODK_URL: '/odk',
           ODK_ACTIVE: true,

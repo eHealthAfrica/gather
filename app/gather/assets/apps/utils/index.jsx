@@ -81,7 +81,7 @@ export const deepEqual = (a, b, ignoreNull = false) => {
  * @param {Number} start - the start point
  * @param {Number} end   - the end point
  */
-export const range = (start, end) => Array.from({length: end - start}, (v, i) => i + start)
+export const range = (start, end) => Array.from({ length: end - start }, (v, i) => i + start)
 
 /**
  * Sorts an array of objects by a given key value
