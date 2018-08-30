@@ -20,11 +20,21 @@ specific language governing permissions and limitations
 under the License.
 {% endcomment %}
 
+{% load i18n %}
 {% load render_bundle from webpack_loader %}
 {% load static %}
 
 {% block title %}{{ app_name }}{% endblock %}
-{% block extrahead %}
+
+{% block meta %}
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="robots" content="NONE,NOARCHIVE" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{% trans 'Survey collection and analytics' %}">
+  <meta name="author" content="eHealthAfrica">
+
   <link rel="shortcut icon" href="{% static 'images/gather-icon.png' %}"/>
 {% endblock %}
 
@@ -35,11 +45,12 @@ under the License.
 {% block style %}
   {% if dev_mode %}
     {# this is for CSS Hot reloading in development (render as another JS file) #}
-    {% render_bundle 'styles' %}
-    {% render_bundle 'styles-login' %}
+    {% render_bundle 'styles'       'js' %}
+    {% render_bundle 'styles-login' 'js' %}
+
   {% else %}
     {# render as CSS file #}
-    {% render_bundle 'styles' 'css' %}
+    {% render_bundle 'styles'       'css' %}
     {% render_bundle 'styles-login' 'css' %}
   {% endif %}
 {% endblock %}
