@@ -26,7 +26,8 @@ from django.urls import reverse
 from ..views import TokenProxyView
 
 
-RESPONSE_MOCK = mock.Mock(status_code=200)
+RESPONSE_MOCK = mock.Mock(status_code=200, headers={})
+RESPONSE_MOCK_WITH_HEADERS = mock.Mock(status_code=200, headers={'a': 'A'})
 APP_TOKEN_MOCK = mock.Mock(base_url='http://test', token='ABCDEFGH')
 
 
@@ -86,11 +87,12 @@ class ViewsTest(TestCase):
 
     @mock.patch('gather.api.models.UserTokens.get_or_create_user_app_token',
                 return_value=APP_TOKEN_MOCK)
-    @mock.patch('requests.request', return_value=RESPONSE_MOCK)
+    @mock.patch('requests.request', return_value=RESPONSE_MOCK_WITH_HEADERS)
     def test_proxy_view_get(self, mock_request, mock_test_conn):
         request = RequestFactory().get('/go_to_proxy')
         request.user = self.user
         response = self.view(request, path='/to-get')
+        self.assertEqual(response['a'], 'A', 'headers are included in proxied response')
 
         self.assertEqual(response.status_code, 200)
         mock_test_conn.assert_called_once()
