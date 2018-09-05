@@ -36,11 +36,14 @@ urlpatterns = [
     path('gather/', include(router.urls)),
 ]
 
-for app_name in settings.AETHER_APPS:
-    urlpatterns.append(
-        path('{}/<path:path>'.format(app_name),
-             login_required(tokens_required(views.TokenProxyView.as_view(app_name=app_name))),
-             name='{}-proxy'.format(app_name))
-    )
+for app in settings.AETHER_APPS:
+    urlpatterns += [
+        path(f'{app}/',
+             login_required(tokens_required(views.TokenProxyView.as_view(app_name=app))),
+             name=f'{app}-proxy-root'),
+        path(f'{app}/<path:path>',
+             login_required(tokens_required(views.TokenProxyView.as_view(app_name=app))),
+             name=f'{app}-proxy-path'),
+    ]
 
 app_name = 'api'

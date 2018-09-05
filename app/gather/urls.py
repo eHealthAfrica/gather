@@ -63,8 +63,8 @@ urlpatterns = [
 
     # ----------------------
     # API
-    path('', include('gather.api.urls', namespace='gather')),
-    path('v1/', include('gather.api.urls', namespace='v1')),
+    path('', include('gather.api.urls', namespace='api')),
+    path('api/', include('gather.api.urls', namespace='api2')),
 
     # ----------------------
     # Welcome page
