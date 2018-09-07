@@ -163,8 +163,9 @@ class TokenProxyView(View):
                                     **kwargs)
         http_response = HttpResponse(response, status=response.status_code)
         # copy the original response headers
-        for key in response.headers.keys():
-            http_response[key] = response.headers.get(key)
+        # comment this out, pending a more precise fix
+        # for key in response.headers.keys():
+        #     http_response[key] = response.headers.get(key)
         return http_response
 
 
