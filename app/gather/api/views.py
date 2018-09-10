@@ -107,7 +107,6 @@ class TokenProxyView(View):
         param_str = request.GET.urlencode()
         url = request.path + ('?{}'.format(param_str) if param_str else '')
         method = request.method
-        log(f'{method}  {url}')
 
         # builds request headers
         headers = {}
@@ -155,6 +154,7 @@ class TokenProxyView(View):
         # this problem might not be exposed running on localhost
         headers.pop('Host', None)
 
+        log(f'{method}  {url}')
         response = requests.request(method=method,
                                     url=url,
                                     data=request.body if request.body else None,
@@ -162,10 +162,13 @@ class TokenProxyView(View):
                                     *args,
                                     **kwargs)
         http_response = HttpResponse(response, status=response.status_code)
-        # copy the original response headers
-        # comment this out, pending a more precise fix
-        # for key in response.headers.keys():
-        #     http_response[key] = response.headers.get(key)
+        # copy from the original response headers the exposed ones
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
+        # https://fetch.spec.whatwg.org/#http-access-control-expose-headers
+        expose_headers = response.headers.get('Access-Control-Expose-Headers', '').split(', ')
+        for key in expose_headers:
+            if key in response.headers:
+                http_response[key] = response.headers.get(key, '')
         return http_response
 
 

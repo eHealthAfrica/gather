@@ -27,7 +27,15 @@ from ..views import TokenProxyView
 
 
 RESPONSE_MOCK = mock.Mock(status_code=200, headers={})
-RESPONSE_MOCK_WITH_HEADERS = mock.Mock(status_code=200, headers={'a': 'A'})
+RESPONSE_MOCK_WITH_HEADERS = mock.Mock(
+    status_code=200,
+    headers={
+        'Access-Control-Expose-Headers': 'a, b, c',
+        'a': 'A',
+        'b': 'B',
+        'z': 'Z',
+    }
+)
 APP_TOKEN_MOCK = mock.Mock(base_url='http://test', token='ABCDEFGH')
 
 
@@ -92,7 +100,13 @@ class ViewsTest(TestCase):
         request = RequestFactory().get('/go_to_proxy')
         request.user = self.user
         response = self.view(request, path='/to-get')
-        self.assertEqual(response['a'], 'A', 'headers are included in proxied response')
+        # Only exposed headers are included in the proxied response
+        self.assertIn('a', response)
+        self.assertEqual(response['a'], 'A')
+        self.assertIn('b', response)
+        self.assertEqual(response['b'], 'B')
+        self.assertNotIn('c', response, 'not in the headers')
+        self.assertNotIn('z', response, 'not in the exposed list')
 
         self.assertEqual(response.status_code, 200)
         mock_test_conn.assert_called_once()
