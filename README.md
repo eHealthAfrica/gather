@@ -1,6 +1,6 @@
 # Gather
 
-> Survey collection and analytics
+> Effortless data collection and curation
 
 ## Table of contents
 
