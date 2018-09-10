@@ -114,7 +114,7 @@ input.hidden-file {
   }
 }
 
-.FilteredMultiSelect {
+.FilteredMultiSelect { // sass-lint:disable-line class-name-format
   border-radius: $border-radius;
   display: flex;
   flex-direction: column;

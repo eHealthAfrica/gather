@@ -185,6 +185,9 @@ if CAS_SERVER_URL:
 else:
     logger.info('No CAS enabled!')
 
+    LOGIN_TEMPLATE = os.environ.get('LOGIN_TEMPLATE', 'pages/login.html')
+    LOGGED_OUT_TEMPLATE = os.environ.get('LOGGED_OUT_TEMPLATE', 'pages/logged_out.html')
+
 
 # Sentry Configuration
 # ------------------------------------------------------------------------------
@@ -251,6 +254,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
 # Javascript/CSS Files:
 WEBPACK_LOADER = {
     'DEFAULT': {
+        'CACHE': not DEBUG,
         'BUNDLE_DIR_NAME': '/',
         'STATS_FILE': os.path.join(STATIC_ROOT, 'webpack-stats.json'),
         'POLL_INTERVAL': 0.1,  # in miliseconds
@@ -259,11 +263,9 @@ WEBPACK_LOADER = {
     },
 }
 
-# gather must be first because of template overrides
-INSTALLED_APPS = [
-    'gather',
-    *INSTALLED_APPS,
+INSTALLED_APPS += [
     'webpack_loader',
+    'gather',
 ]
 
 TEMPLATES[0]['OPTIONS']['context_processors'] += [

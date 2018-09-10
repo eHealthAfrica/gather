@@ -18,12 +18,15 @@
 
 import requests
 
+from datetime import datetime
+
 from django.http import HttpResponse
+from django.utils.translation import ugettext as _
 from django.views import View
 
 from rest_framework import viewsets
 
-from ..settings import AETHER_APPS
+from ..settings import AETHER_APPS, TESTING
 from . import models, serializers
 
 
@@ -37,20 +40,23 @@ class TokenProxyView(View):
     The app that the proxy should forward requests to.
     '''
 
-    def dispatch(self, request, path, *args, **kwargs):
+    def dispatch(self, request, path='', *args, **kwargs):
         '''
         Dispatches the request including/modifying the needed properties
         '''
 
         if self.app_name not in AETHER_APPS:
-            raise RuntimeError('"{}" app is not recognized.'.format(self.app_name))
+            err = _('"{}" app is not recognized.').format(self.app_name)
+            log(err)
+            raise RuntimeError(err)
 
         app_token = models.UserTokens.get_or_create_user_app_token(request.user, self.app_name)
         if app_token is None:
-            raise RuntimeError('User "{}" cannot conenct to app "{}"'
-                               .format(request.user, self.app_name))
+            err = _('User "{}" cannot connect to app "{}"').format(request.user, self.app_name)
+            log(err)
+            raise RuntimeError(err)
 
-        self.path = path
+        self.path = path or ''
         self.original_request_path = request.path
         if not self.path.startswith('/'):
             self.path = '/' + self.path
@@ -97,7 +103,11 @@ class TokenProxyView(View):
                 name == 'CONTENT_TYPE'
             )
 
+        # builds url with the query string
+        param_str = request.GET.urlencode()
+        url = request.path + ('?{}'.format(param_str) if param_str else '')
         method = request.method
+
         # builds request headers
         headers = {}
         for header, value in request.META.items():
@@ -142,13 +152,9 @@ class TokenProxyView(View):
         # not hosted on that server. The webserver
         # should add the correct Host based on the request.
         # this problem might not be exposed running on localhost
-        if 'Host' in headers:  # pragma: no cover
-            del headers['Host']
+        headers.pop('Host', None)
 
-        # builds url with the query string
-        param_str = request.GET.urlencode()
-        url = request.path + ('?{}'.format(param_str) if param_str else '')
-
+        log(f'{method}  {url}')
         response = requests.request(method=method,
                                     url=url,
                                     data=request.body if request.body else None,
@@ -156,9 +162,13 @@ class TokenProxyView(View):
                                     *args,
                                     **kwargs)
         http_response = HttpResponse(response, status=response.status_code)
-        # copy the response headers
-        for key in response.headers.keys():
-            http_response[key] = response.headers.get(key)
+        # copy from the original response headers the exposed ones
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
+        # https://fetch.spec.whatwg.org/#http-access-control-expose-headers
+        expose_headers = response.headers.get('Access-Control-Expose-Headers', '').split(', ')
+        for key in expose_headers:
+            if key in response.headers:
+                http_response[key] = response.headers.get(key, '')
         return http_response
 
 
@@ -182,3 +192,8 @@ class MaskViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.MaskSerializer
     search_fields = ('survey__name', 'name', 'columns',)
     ordering = ('survey', 'name',)
+
+
+def log(message):  # pragma: no cover
+    if not TESTING:
+        print(f'**** [{datetime.now().isoformat()}] -  {message} ****')

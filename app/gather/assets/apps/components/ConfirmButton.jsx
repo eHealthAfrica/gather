@@ -18,7 +18,7 @@
  * under the License.
  */
 
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import Portal from './Portal'

@@ -31,7 +31,7 @@ import { getType } from '../utils/types'
 
 export default class ErrorAlert extends Component {
   render () {
-    const {errors} = this.props
+    const { errors } = this.props
 
     const eType = getType(errors)
     if (!eType) {

@@ -30,8 +30,8 @@ import SurveysList from './SurveysList'
 
 export default class SurveyDispatcher extends Component {
   render () {
-    const {action, surveyId} = this.props
-    const {ODK_ACTIVE} = this.props.settings
+    const { action, surveyId } = this.props
+    const { ODK_ACTIVE } = this.props.settings
     // include settings in response
     const handleResponse = (response) => ({ ...response, settings: this.props.settings })
 

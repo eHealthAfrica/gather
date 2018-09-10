@@ -56,14 +56,14 @@ describe('JSONViewer', () => {
 
     it('should render string values', () => {
       const componentString = mountWithIntl(
-        <JSONViewer data='something' links={[{name: 'image.png', url: '/image'}]} />
+        <JSONViewer data='something' links={[{ name: 'image.png', url: '/image' }]} />
       )
       expect(componentString.text()).toEqual('something')
     })
 
     it('should render string values with links', () => {
       const componentStringLinks = mountWithIntl(
-        <JSONViewer data={'image.png'} links={[{name: 'image.png', url: '/image'}]} />
+        <JSONViewer data='image.png' links={[{ name: 'image.png', url: '/image' }]} />
       )
       expect(componentStringLinks.text()).toEqual('image.png')
 
@@ -148,7 +148,7 @@ describe('JSONViewer', () => {
       const component = mountWithIntl(
         <JSONViewer
           data={{
-            property_0: {property_1: 1}
+            property_0: { property_1: 1 }
           }}
         />
       )
@@ -222,8 +222,8 @@ describe('JSONViewer', () => {
     it('should use the given labels to render the titles', () => {
       const component = mountWithIntl(
         <JSONViewer
-          data={{a: 1}}
-          labels={{a: 'Root'}}
+          data={{ a: 1 }}
+          labels={{ a: 'Root' }}
         />
       )
       expect(component.find('.property-title').text()).toEqual('Root')
@@ -232,8 +232,8 @@ describe('JSONViewer', () => {
     it('should detect array properties', () => {
       const component = mountWithIntl(
         <JSONViewer
-          data={[{e: 1}]}
-          labels={{'a.d.#.e': 'The indexed E'}}
+          data={[{ e: 1 }]}
+          labels={{ 'a.d.#.e': 'The indexed E' }}
           labelRoot='a.d.'
         />
       )
@@ -245,8 +245,8 @@ describe('JSONViewer', () => {
     it('should detect map properties', () => {
       const component = mountWithIntl(
         <JSONViewer
-          data={{c: 1}}
-          labels={{'a.*.c': 'The Big C'}}
+          data={{ c: 1 }}
+          labels={{ 'a.*.c': 'The Big C' }}
           labelRoot='a.x.'
         />
       )

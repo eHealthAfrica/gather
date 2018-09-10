@@ -57,7 +57,7 @@ class SurveyODKForm extends Component {
   constructor (props) {
     super(props)
 
-    let xforms = [...(props.survey.xforms || [])].map(xform => ({...xform, key: xform.id}))
+    let xforms = [...(props.survey.xforms || [])].map(xform => ({ ...xform, key: xform.id }))
     xforms.sort((a, b) => (
       (a.title > b.title) ||
       (a.title === b.title && a.created_at > b.created_at)
@@ -126,7 +126,7 @@ class SurveyODKForm extends Component {
 
   renderSurveyors () {
     const errors = this.props.errors || {}
-    const {surveyors, availableSurveyors} = this.state
+    const { surveyors, availableSurveyors } = this.state
     const selectedSurveyors = availableSurveyors.filter(surveyor => surveyors.indexOf(surveyor.id) > -1)
     const onChange = (surveyors) => this.setState({
       surveyors: surveyors.map(surveyor => surveyor.id)
@@ -152,7 +152,7 @@ class SurveyODKForm extends Component {
   }
 
   renderXForms () {
-    const {xforms, surveyors} = this.state
+    const { xforms, surveyors } = this.state
     const errors = this.props.errors || {}
 
     return (
@@ -243,7 +243,7 @@ class SurveyODKForm extends Component {
   onFileChange (event) {
     event.preventDefault()
     const xforms = []
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
     // https://developer.mozilla.org/en-US/docs/Web/API/FileList
     for (let i = 0; i < event.target.files.length; i++) {
@@ -277,7 +277,7 @@ class XForm extends Component {
   }
 
   render () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     const xform = this.state
     const errors = this.props.errors || {}
 
@@ -338,7 +338,7 @@ class XForm extends Component {
             cancelable
             onConfirm={this.props.onRemove}
             title={title}
-            message={formatMessage(MESSAGES.deleteConfirm, {...xform})}
+            message={formatMessage(MESSAGES.deleteConfirm, { ...xform })}
             buttonLabel={<i className='fas fa-times' />}
           />
 
@@ -404,7 +404,7 @@ class XForm extends Component {
                 id={xform.id}
                 title={title}
                 mediaFiles={xform.media_files}
-                onChange={(mediaFiles) => this.setState({media_files: mediaFiles})}
+                onChange={(mediaFiles) => this.setState({ media_files: mediaFiles })}
               />
             </div>
           }
@@ -438,7 +438,7 @@ class MediaFile extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      mediaFiles: props.mediaFiles.map(mediaFile => ({...mediaFile, key: mediaFile.name}))
+      mediaFiles: props.mediaFiles.map(mediaFile => ({ ...mediaFile, key: mediaFile.name }))
     }
   }
 
@@ -449,7 +449,7 @@ class MediaFile extends Component {
   }
 
   render () {
-    const {mediaFiles} = this.state
+    const { mediaFiles } = this.state
     const inputFileId = `media-files-${this.props.id}`
 
     return (
@@ -489,7 +489,7 @@ class MediaFile extends Component {
   }
 
   renderMediaFile (mediaFile) {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
     return (
       <span key={mediaFile.id || mediaFile.key} className='ml-2 mb-1 badge badge-info'>
@@ -514,7 +514,7 @@ class MediaFile extends Component {
             mediaFiles: this.state.mediaFiles.filter(mf => mf.key !== mediaFile.key)
           })}
           title={this.props.title}
-          message={formatMessage(MESSAGES.deleteMediaConfirm, {...mediaFile})}
+          message={formatMessage(MESSAGES.deleteMediaConfirm, { ...mediaFile })}
           buttonLabel={<i className='fas fa-times' />}
         />
       </span>

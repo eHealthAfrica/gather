@@ -79,7 +79,7 @@ class SurveyorForm extends Component {
   }
 
   render () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     const surveyor = this.state
     const isNew = (surveyor.id === undefined)
 
@@ -217,7 +217,7 @@ class SurveyorForm extends Component {
   }
 
   validatePassword () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
     if (!this.state.id || this.state.password_1) {
       // validate password
@@ -261,7 +261,7 @@ class SurveyorForm extends Component {
     }
 
     const saveMethod = (this.state.id ? putData : postData)
-    const url = getSurveyorsAPIPath({id: this.props.surveyor.id})
+    const url = getSurveyorsAPIPath({ id: this.props.surveyor.id })
 
     return saveMethod(url, surveyor)
       .then(this.goBack)
@@ -269,7 +269,7 @@ class SurveyorForm extends Component {
   }
 
   onDelete () {
-    const url = getSurveyorsAPIPath({id: this.props.surveyor.id})
+    const url = getSurveyorsAPIPath({ id: this.props.surveyor.id })
     return deleteData(url)
       .then(this.goBack)
       .catch(error => { this.handleError(error, 'deleteError') })
@@ -279,9 +279,9 @@ class SurveyorForm extends Component {
     if (error.content) {
       this.setState({ errors: error.content })
     } else {
-      const {formatMessage} = this.props.intl
+      const { formatMessage } = this.props.intl
       const surveyor = this.state
-      const generic = [formatMessage(MESSAGES[action], {...surveyor})]
+      const generic = [formatMessage(MESSAGES[action], { ...surveyor })]
 
       this.setState({ errors: { generic } })
     }
@@ -289,7 +289,7 @@ class SurveyorForm extends Component {
 
   goBack () {
     // navigate to Surveyors list page
-    window.location.assign(getSurveyorsPath({action: 'list'}))
+    window.location.assign(getSurveyorsPath({ action: 'list' }))
   }
 }
 

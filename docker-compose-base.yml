@@ -29,8 +29,6 @@ services:
 
       # static folders per container
       - ./.persistent_data/static:/static
-      # aether favicon
-      - ./local-setup/aether.ico:/static/aether.ico
 
       # media folders per container
       - ./.persistent_data/media:/media

@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %}
+{% extends "rest_framework/login_base.html" %}
 
 {% comment 'LICENSE' %}
 Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
@@ -24,28 +24,33 @@ under the License.
 {% load render_bundle from webpack_loader %}
 {% load static %}
 
-{% block extrastyle %}
-  {% if dev_mode %}
-    {# this is for CSS Hot reloading in development (render as another JS file) #}
-    {% render_bundle 'styles' %}
-    {% render_bundle 'styles-login' %}
-  {% else %}
-    {# render as CSS file #}
-    {% render_bundle 'styles' 'css' %}
-    {% render_bundle 'styles-login' 'css' %}
-  {% endif %}
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block meta %}
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="robots" content="NONE,NOARCHIVE" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{% trans 'Effortless data collection and curation' %}">
+  <meta name="author" content="eHealthAfrica">
+
+  <link rel="shortcut icon" href="{% static 'images/gather-icon.png' %}"/>
 {% endblock %}
 
-
-{% block breadcrumbs %}{% endblock %}
-{% block content_title %}{% endblock %}
-
-
-{% block content %}
+{% block branding %}
   {% include 'branding.html' with classname='top-nav-logo' %}
+{% endblock %}
 
-  <div class="logout-info">
-    <p>{% blocktrans %}Thank you for using {{app_name}}.{% endblocktrans %}</p>
-    <p><a href="{% url 'rest_framework:login' %}?next=/">{% trans 'Log in again' %}</a></p>
-  </div>
+{% block style %}
+  {% if dev_mode %}
+    {# this is for CSS Hot reloading in development (render as another JS file) #}
+    {% render_bundle 'styles'       'js' %}
+    {% render_bundle 'styles-login' 'js' %}
+
+  {% else %}
+    {# render as CSS file #}
+    {% render_bundle 'styles'       'css' %}
+    {% render_bundle 'styles-login' 'css' %}
+  {% endif %}
 {% endblock %}

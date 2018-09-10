@@ -25,7 +25,7 @@ import { getSurveyorsPath } from '../utils/paths'
 
 export default class SurveyorsList extends Component {
   render () {
-    const {list} = this.props
+    const { list } = this.props
 
     if (list.length === 0) {
       return <div data-qa='surveyors-list-empty' />
@@ -47,7 +47,7 @@ export default class SurveyorsList extends Component {
                   <i className='fas fa-user mr-2' />
                   {surveyor.username}
                   <a
-                    href={getSurveyorsPath({action: 'edit', id: surveyor.id})}
+                    href={getSurveyorsPath({ action: 'edit', id: surveyor.id })}
                     role='button'
                     className='btn btn-sm btn-secondary icon-only float-right'>
                     <i className='fas fa-pencil-alt' />

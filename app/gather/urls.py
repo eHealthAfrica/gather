@@ -28,14 +28,23 @@ from .api.decorators import tokens_required
 from .views import health, assets_settings
 
 
-auth_urls = 'rest_framework.urls'
+# `accounts` management
 if settings.CAS_SERVER_URL:  # pragma: no cover
-    import django_cas_ng.views
+    from django_cas_ng import views
 
-    auth_urls = ([
-        path('login/', django_cas_ng.views.login, name='login'),
-        path('logout/', django_cas_ng.views.logout, name='logout'),
-    ], 'rest_framework')
+    login_view = views.login
+    logout_view = views.logout
+
+else:  # pragma: no cover
+    from django.contrib.auth import views
+
+    login_view = views.LoginView.as_view(template_name=settings.LOGIN_TEMPLATE)
+    logout_view = views.LogoutView.as_view(template_name=settings.LOGGED_OUT_TEMPLATE)
+
+auth_urls = ([
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+], 'rest_framework')
 
 
 urlpatterns = [
@@ -54,8 +63,8 @@ urlpatterns = [
 
     # ----------------------
     # API
-    path('', include('gather.api.urls', namespace='gather')),
-    path('v1/', include('gather.api.urls', namespace='v1')),
+    path('', include('gather.api.urls', namespace='api')),
+    path('api/', include('gather.api.urls', namespace='api2')),
 
     # ----------------------
     # Welcome page

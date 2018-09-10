@@ -61,7 +61,7 @@ under the License.
               data-user-id="{{ request.user.id }}">
               {{ request.user|get_fullname }}
             </span>
-            <a class="logout" href="{% url 'rest_framework:logout' %}?next=/">
+            <a class="logout" href="{% url 'rest_framework:logout' %}">
               <i class="fas fa-sign-out-alt" title="{% trans 'Sign Out' %}" aria-hidden="true"></i>
             </a>
           </li>

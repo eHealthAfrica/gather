@@ -33,7 +33,7 @@ import {
 describe('utils', () => {
   describe('clone', () => {
     it('should clone an obj', () => {
-      const a = {foo: 11, bar: {baz: 22}}
+      const a = { foo: 11, bar: { baz: 22 } }
       const b = clone(a)
       assert(a !== b)
       assert(b.foo === a.foo)
@@ -51,8 +51,8 @@ describe('utils', () => {
     })
 
     it('should compare objects', () => {
-      let a = {foo: 11, bar: 22, baz: {y: 4}}
-      let b = {bar: 22, foo: 11, baz: {y: 4}}
+      let a = { foo: 11, bar: 22, baz: { y: 4 } }
+      let b = { bar: 22, foo: 11, baz: { y: 4 } }
       assert(deepEqual(a, b), 'Objects are equal')
       b.baz.y = 5
       assert(!deepEqual(a, b), 'Objects are not equal')
@@ -71,8 +71,8 @@ describe('utils', () => {
     })
 
     it('should ignore null and undefined values', () => {
-      let a = {x: 1, y: null, z: undefined}
-      let b = {x: 1}
+      let a = { x: 1, y: null, z: undefined }
+      let b = { x: 1 }
       assert(deepEqual(a, b, true), 'Should be equal without null values')
       assert(!deepEqual(a, b), 'Should not be equal with null values')
     })
@@ -90,21 +90,21 @@ describe('utils', () => {
 
   describe('range', () => {
     it('should create an array of ints', () => {
-      assert.deepEqual(range(0, 0), [])
-      assert.deepEqual(range(0, 1), [0])
-      assert.deepEqual(range(1, 3), [1, 2])
+      assert.deepStrictEqual(range(0, 0), [])
+      assert.deepStrictEqual(range(0, 1), [0])
+      assert.deepStrictEqual(range(1, 3), [1, 2])
     })
   })
 
   describe('sortBy', () => {
     it('should order an array of objects by the given property value', () => {
-      assert.deepEqual(sortBy([]), [])
-      assert.deepEqual(
+      assert.deepStrictEqual(sortBy([]), [])
+      assert.deepStrictEqual(
         sortBy([ 1, 10, 11, 100, 12, 1 ]),
         [ 1, 1, 10, 100, 11, 12 ]
       )
 
-      assert.deepEqual(
+      assert.deepStrictEqual(
         sortBy([
           { a: '1' },
           { a: '10' },
@@ -123,7 +123,7 @@ describe('utils', () => {
         ]
       )
 
-      assert.deepEqual(
+      assert.deepStrictEqual(
         sortBy([
           { c: 2 },
           { a: 10 },
@@ -150,15 +150,15 @@ describe('utils', () => {
 
       // numerically sorted
       const array1 = [1, 10, 11, 100, 111]
-      assert.deepEqual(sortNumericArray(array1), expected)
+      assert.deepStrictEqual(sortNumericArray(array1), expected)
 
       // lexicographically sorted
       const array2 = [1, 10, 100, 11, 111]
-      assert.deepEqual(sortNumericArray(array2), expected)
+      assert.deepStrictEqual(sortNumericArray(array2), expected)
 
       // not sorted
       const array3 = [10, 1, 111, 11, 100]
-      assert.deepEqual(sortNumericArray(array3), expected)
+      assert.deepStrictEqual(sortNumericArray(array3), expected)
     })
   })
 })

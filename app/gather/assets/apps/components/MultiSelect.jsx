@@ -84,7 +84,7 @@ class MultiSelect extends Component {
   }
 
   renderSelect (options, selected) {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     const buttonText = selected ? MESSAGES.select : MESSAGES.deselect
     const onChange = selected ? this.onSelect : this.onDeselect
 

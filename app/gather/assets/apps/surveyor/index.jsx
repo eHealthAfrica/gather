@@ -28,7 +28,7 @@ import SurveyorsList from './SurveyorsList'
 
 export default class SurveyorDispatcher extends Component {
   render () {
-    const {action, surveyorId} = this.props
+    const { action, surveyorId } = this.props
 
     switch (action) {
       case 'add':
@@ -38,7 +38,7 @@ export default class SurveyorDispatcher extends Component {
         const editUrls = [
           {
             name: 'surveyor',
-            url: getSurveyorsAPIPath({id: surveyorId})
+            url: getSurveyorsAPIPath({ id: surveyorId })
           }
         ]
 

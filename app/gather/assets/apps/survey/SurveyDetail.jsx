@@ -25,7 +25,7 @@ import SurveyDates from './SurveyDates'
 
 export default class SurveyDetail extends Component {
   render () {
-    const {survey} = this.props
+    const { survey } = this.props
 
     return (
       <div data-qa={`survey-detail-${survey.id}`} className='survey-detail'>

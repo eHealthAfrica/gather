@@ -78,7 +78,7 @@ export default class FetchUrlsContainer extends Component {
   loadData () {
     return fetchUrls(this.props.urls)
       .then(response => {
-        const {handleResponse} = this.props
+        const { handleResponse } = this.props
         isMounted(this) && this.setState({
           response: handleResponse ? handleResponse(response) : response,
           isLoading: false,

@@ -1,6 +1,6 @@
 # Gather
 
-> Survey collection and analytics
+> Effortless data collection and curation
 
 ## Table of contents
 
@@ -104,6 +104,11 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
   - `HOSTNAME`: `gather.local`.
   See more in [Django CAS client](https://github.com/mingchen/django-cas-ng).
 
+- Authentication (Django templates):
+  - `LOGIN_TEMPLATE`: `pages/login.html`.
+  - `LOGGED_OUT_TEMPLATE`: `pages/logged_out.html`.
+
+
 - Django specific:
   - `ADMIN_USERNAME`: `admin` the setup script will create a superuser
     with this username. There is no default value.
@@ -191,6 +196,12 @@ activate the CAS integration in the app.
 See more in [Django CAS client](https://github.com/mingchen/django-cas-ng).
 
 The other option is the standard django authentication.
+
+You can indicate your own login and logged out pages with these environment
+variables:
+
+- `LOGIN_TEMPLATE`: `pages/login.html`.
+- `LOGGED_OUT_TEMPLATE`: `pages/logged_out.html`.
 
 *[Return to TOC](#table-of-contents)*
 

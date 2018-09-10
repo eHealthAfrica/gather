@@ -19,11 +19,25 @@
  */
 
 @import 'base/settings';
+@import 'base/mixins';
 
 body {
   background: #4f6b81;
+}
+
+.container-fluid {
   font: 15px $nav-font-family;
   color: $white;
+}
+
+input.btn-primary,
+input.btn-primary:hover {
+  @include bg-gradient;
+
+  border-radius: 2px;
+  box-shadow: 1px 1px 1px rgba($text-color, .2), 1px 1px 0 rgba($white, .1) inset;
+  transition: background 1s;
+  margin-top: .5rem;
 }
 
 .logo-container,
@@ -36,38 +50,23 @@ body {
 
 .top-nav-logo {
   margin: 4rem 0 2rem;
+
+  span {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0 60px;
+    line-height: 46px;
+    color: $white;
+  }
 }
 
-.top-nav-logo span {
-  display: inline-block;
-  font-weight: 700;
-  font-size: 32px;
-  margin: 0 60px;
-  line-height: 46px;
-  color: $white;
-}
+.logout-info {
+  padding-left: 2rem;
 
-.btn-primary {
-  background: #5eb1f2;
-  background-image: linear-gradient(to right, transparent, #49b1cf);
-  color: $white;
-  border-radius: 2px;
-  box-shadow: 1px 1px 1px rgba(74, 74, 74, .2), 1px 1px 0 rgba(255, 255, 255, .1) inset;
-  padding: 1.1rem 2rem;
-  transition: background 1s;
-  margin-top: 1.5rem;
-}
-
-.btn:hover {
-  box-shadow: 1px 1px 0 rgba(255, 255, 255, .1) inset, -1px -1px 0 rgba(45, 49, 70, .3) inset, 0 0 4px rgba(45, 49, 70, .1);
-}
-
-#header {
-  display: none;
-}
-
-.logout-info a,
-.logout-info a:visited {
-  color: $white;
-  text-decoration: underline;
+  a,
+  a:visited {
+    color: $white;
+    text-decoration: underline;
+  }
 }

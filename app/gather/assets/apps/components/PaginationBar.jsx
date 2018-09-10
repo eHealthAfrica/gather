@@ -139,7 +139,7 @@ class PaginationBar extends Component {
         this.state.currentSearch = this.state.search
       }
     }
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
     return (
       <div data-qa='data-pagination-search' className='search'>
@@ -238,8 +238,8 @@ class PaginationBar extends Component {
   }
 
   renderLinkToPage (pageName) {
-    const {formatMessage} = this.props.intl
-    const {currentPage} = this.props
+    const { formatMessage } = this.props.intl
+    const { currentPage } = this.props
     const numberOfPages = this.getNumberOfPages()
     let newPage = currentPage
 

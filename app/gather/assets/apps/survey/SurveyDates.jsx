@@ -24,7 +24,7 @@ import moment from 'moment'
 
 export default class SurveyDates extends Component {
   render () {
-    const {survey} = this.props
+    const { survey } = this.props
 
     return (
       <div
@@ -67,7 +67,7 @@ export default class SurveyDates extends Component {
   }
 
   renderSubmissions () {
-    const {survey} = this.props
+    const { survey } = this.props
     const days = moment(survey.last_submission).diff(moment(survey.first_submission), 'days')
 
     if (days === 0) {
@@ -114,7 +114,7 @@ export default class SurveyDates extends Component {
   }
 
   renderSubmissionsDuration () {
-    const {survey} = this.props
+    const { survey } = this.props
     const days = moment(survey.last_submission).diff(moment(survey.first_submission), 'days') + 1
 
     return (

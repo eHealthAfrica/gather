@@ -1,4 +1,4 @@
-{% extends "rest_framework/login_base.html" %}
+{% extends "base.html" %}
 
 {% comment 'LICENSE' %}
 Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
@@ -21,20 +21,26 @@ under the License.
 {% endcomment %}
 
 {% load render_bundle from webpack_loader %}
-{% load static %}
+{% load i18n %}
 
-{% block branding %}
-  {% include 'branding.html' with classname='top-nav-logo' %}
-{% endblock %}
-
-{% block style %}
+{% block extra_css %}
   {% if dev_mode %}
     {# this is for CSS Hot reloading in development (render as another JS file) #}
-    {% render_bundle 'styles' %}
-    {% render_bundle 'styles-login' %}
+    {% render_bundle 'styles-login' 'js' %}
+
   {% else %}
     {# render as CSS file #}
-    {% render_bundle 'styles' 'css' %}
     {% render_bundle 'styles-login' 'css' %}
   {% endif %}
+{% endblock extra_css %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+  <div class="logout-info">
+    {% include 'branding.html' with classname='top-nav-logo' %}
+
+    <p>{% blocktrans %}Thank you for using {{app_name}}.{% endblocktrans %}</p>
+    <p><a href="{% url 'rest_framework:login' %}?next=/">{% trans 'Log in again' %}</a></p>
+  </div>
 {% endblock %}

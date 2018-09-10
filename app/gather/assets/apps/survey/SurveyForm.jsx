@@ -124,13 +124,13 @@ class SurveyForm extends Component {
     }
 
     if (props.settings.ODK_ACTIVE) {
-      this.state.odk = {...clone(props.odkSurvey || {})}
+      this.state.odk = { ...clone(props.odkSurvey || {}) }
     }
   }
 
   render () {
     const survey = this.state
-    const {errors, isUpdating} = survey
+    const { errors, isUpdating } = survey
     const dataQA = (survey.id === undefined
       ? 'survey-add'
       : `survey-edit-${survey.id}`
@@ -183,7 +183,7 @@ class SurveyForm extends Component {
 
   renderName () {
     const survey = this.state
-    const {errors} = survey
+    const { errors } = survey
 
     return (
       <div className={`form-group big-input ${errors.name ? 'error' : ''}`}>
@@ -206,7 +206,7 @@ class SurveyForm extends Component {
   }
 
   renderButtons () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
     return (
       <div className='actions'>
@@ -217,7 +217,7 @@ class SurveyForm extends Component {
               cancelable
               onConfirm={this.onDelete.bind(this)}
               title={this.renderTitle()}
-              message={formatMessage(MESSAGES.deleteConfirm, {name: this.state.name})}
+              message={formatMessage(MESSAGES.deleteConfirm, { name: this.state.name })}
               buttonLabel={formatMessage(MESSAGES.deleteButton)}
             />
           </div>
@@ -245,7 +245,7 @@ class SurveyForm extends Component {
   }
 
   renderUpdating () {
-    const {actionsInProgress} = this.state
+    const { actionsInProgress } = this.state
     return (
       <Portal>
         <div className='modal show'>
@@ -300,7 +300,7 @@ class SurveyForm extends Component {
   }
 
   onDelete () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     const survey = this.state
 
     const afterDelete = () => {
@@ -323,12 +323,12 @@ class SurveyForm extends Component {
         actionsInProgress: [
           ...this.state.actionsInProgress,
           formatMessage(MESSAGES.handleDone),
-          formatMessage(MESSAGES.deleteODKSurvey, {name: survey.name})
+          formatMessage(MESSAGES.deleteODKSurvey, { name: survey.name })
         ]
       })
 
       // delete ODK survey and continue
-      deleteData(getSurveysAPIPath({app: ODK_APP, id: survey.id}))
+      deleteData(getSurveysAPIPath({ app: ODK_APP, id: survey.id }))
         .then(afterDelete)
         // ignore ODK errors (it might not exist)
         .catch(afterDelete)
@@ -338,15 +338,15 @@ class SurveyForm extends Component {
       errors: {},
       isUpdating: true,
       actionsInProgress: [
-        formatMessage(MESSAGES.deleteKernelSurvey, {name: survey.name})
+        formatMessage(MESSAGES.deleteKernelSurvey, { name: survey.name })
       ]
     })
 
     // delete Kernel survey and continue
-    deleteData(getSurveysAPIPath({id: survey.id}))
+    deleteData(getSurveysAPIPath({ id: survey.id }))
       .then(() => {
         // delete also Gather survey and continue
-        deleteData(getSurveysAPIPath({app: GATHER_APP, id: survey.id}))
+        deleteData(getSurveysAPIPath({ app: GATHER_APP, id: survey.id }))
           .then(afterGatherDelete)
           // ignore Gather errors (it might not exist)
           .catch(afterGatherDelete)
@@ -357,20 +357,20 @@ class SurveyForm extends Component {
   onSubmit (event) {
     event.preventDefault()
 
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     const survey = {
       id: this.state.id,
       name: this.state.name
     }
 
     const saveMethod = (survey.id ? putData : postData)
-    const url = getSurveysAPIPath({id: survey.id})
+    const url = getSurveysAPIPath({ id: survey.id })
 
     this.setState({
       errors: {},
       isUpdating: true,
       actionsInProgress: [
-        formatMessage(MESSAGES.saveKernelSurvey, {name: survey.name})
+        formatMessage(MESSAGES.saveKernelSurvey, { name: survey.name })
       ]
     })
 
@@ -391,7 +391,7 @@ class SurveyForm extends Component {
           if (!this.props.survey) {
             // replace history in address bar in case of adding with the new id
             // https://developer.mozilla.org/en-US/docs/Web/API/History_API#The_replaceState()_method
-            const newUrl = getSurveysPath({action: 'edit', id: response.id})
+            const newUrl = getSurveysPath({ action: 'edit', id: response.id })
             window.history.replaceState(null, '', newUrl)
           }
 
@@ -402,12 +402,12 @@ class SurveyForm extends Component {
   }
 
   onSubmitODK () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     const survey = this.state.odk
 
     // save changes in ODK
     const saveMethod = (survey.project_id ? putData : postData)
-    const saveUrl = getSurveysAPIPath({app: ODK_APP, id: survey.project_id})
+    const saveUrl = getSurveysAPIPath({ app: ODK_APP, id: survey.project_id })
 
     const odkSurvey = {
       project_id: this.state.id,
@@ -418,7 +418,7 @@ class SurveyForm extends Component {
     this.setState({
       actionsInProgress: [
         ...this.state.actionsInProgress,
-        formatMessage(MESSAGES.saveODKSurvey, {name: odkSurvey.name})
+        formatMessage(MESSAGES.saveODKSurvey, { name: odkSurvey.name })
       ]
     })
 
@@ -447,14 +447,14 @@ class SurveyForm extends Component {
         if (error.content) {
           this.setState({ errors: { odk: error.content } })
         } else {
-          const generic = [formatMessage(MESSAGES.submitError, {name: odkSurvey.name})]
+          const generic = [formatMessage(MESSAGES.submitError, { name: odkSurvey.name })]
           this.setState({ errors: { odk: { generic } } })
         }
       })
   }
 
   onSubmitODKXForms () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
     // creates/updates/deletes the xforms+media files sequentially
     const actions = [] // list of actions to execute
@@ -466,7 +466,7 @@ class SurveyForm extends Component {
     currentXForms.forEach(xform => {
       actions.push({
         key: xform.key,
-        message: formatMessage(MESSAGES.saveODKXForm, {name: xform.title}),
+        message: formatMessage(MESSAGES.saveODKXForm, { name: xform.title }),
         method: xform.id ? putData : postData,
         url: getXFormsAPIPath({ id: xform.id }),
         data: {
@@ -490,7 +490,7 @@ class SurveyForm extends Component {
         .forEach(mf => {
           actions.push({
             key: xform.key,
-            message: formatMessage(MESSAGES.saveODKMediaFile, {name: mf.name}),
+            message: formatMessage(MESSAGES.saveODKMediaFile, { name: mf.name }),
             method: postData,
             url: getMediaFileAPIPath({}),
             data: {
@@ -512,7 +512,7 @@ class SurveyForm extends Component {
         .forEach(mf => {
           actions.push({
             key: xform.key,
-            message: formatMessage(MESSAGES.deleteODKMediaFile, {name: mf.name}),
+            message: formatMessage(MESSAGES.deleteODKMediaFile, { name: mf.name }),
             method: deleteData,
             url: getMediaFileAPIPath({ id: mf.id })
           })
@@ -527,7 +527,7 @@ class SurveyForm extends Component {
     deletedXforms.forEach(xform => {
       actions.push({
         key: xform.key,
-        message: formatMessage(MESSAGES.deleteODKXForm, {name: xform.title}),
+        message: formatMessage(MESSAGES.deleteODKXForm, { name: xform.title }),
         method: deleteData,
         url: getXFormsAPIPath({ id: xform.id })
       })
@@ -535,7 +535,7 @@ class SurveyForm extends Component {
 
     // The last action is to propagate ODK Project artefacts to Kernel
     actions.push({
-      message: formatMessage(MESSAGES.propagateODKSurvey, {name: this.state.name}),
+      message: formatMessage(MESSAGES.propagateODKSurvey, { name: this.state.name }),
       method: patchData,
       url: getSurveysAPIPath({ app: ODK_APP, id: this.state.id, action: 'propagates' })
     })
@@ -565,11 +565,11 @@ class SurveyForm extends Component {
         })
         .catch(error => {
           this.setState({ isUpdating: false, actionsInProgress: [] })
-          const generic = [formatMessage(MESSAGES.errorWhile, {action: action.message})]
-          const content = error.content || {generic: [error.message]}
+          const generic = [formatMessage(MESSAGES.errorWhile, { action: action.message })]
+          const content = error.content || { generic: [error.message] }
 
           if (action.key) {
-            this.setState({ errors: { odk: { generic, [action.key]: {...content} } } })
+            this.setState({ errors: { odk: { generic, [action.key]: { ...content } } } })
           } else {
             // this is the propagation error
             this.setState({ errors: { generic, odk: content } })
@@ -580,7 +580,7 @@ class SurveyForm extends Component {
   }
 
   handleError (error, action) {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     this.setState({ isUpdating: false, actionsInProgress: [] })
 
     if (error.content) {
@@ -589,19 +589,19 @@ class SurveyForm extends Component {
       const actionMessage = (action === 'delete')
         ? MESSAGES.deleteError
         : MESSAGES.submitError
-      const generic = [formatMessage(actionMessage, {...this.state})]
+      const generic = [formatMessage(actionMessage, { ...this.state })]
       this.setState({ errors: { generic } })
     }
   }
 
   backToView () {
     // navigate to Survey view page
-    window.location.assign(getSurveysPath({action: 'view', id: this.state.id}))
+    window.location.assign(getSurveysPath({ action: 'view', id: this.state.id }))
   }
 
   backToList () {
     // navigate to Surveys list page
-    window.location.assign(getSurveysPath({action: 'list'}))
+    window.location.assign(getSurveysPath({ action: 'list' }))
   }
 }
 

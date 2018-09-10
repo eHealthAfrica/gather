@@ -94,9 +94,9 @@ export default class PaginationContainer extends Component {
   }
 
   loadData () {
-    const {page, pageSize, search} = this.state
+    const { page, pageSize, search } = this.state
     const sep = this.props.url.indexOf('?') > -1 ? '&' : '?'
-    const url = `${this.props.url}${sep}${buildQueryString({page, pageSize, search})}`
+    const url = `${this.props.url}${sep}${buildQueryString({ page, pageSize, search })}`
 
     return getData(url)
       .then(response => {
@@ -125,7 +125,7 @@ export default class PaginationContainer extends Component {
     }
 
     const position = this.props.position || 'bottom'
-    const {count, results} = this.state.list
+    const { count, results } = this.state.list
     const ListComponent = this.props.listComponent
 
     return (

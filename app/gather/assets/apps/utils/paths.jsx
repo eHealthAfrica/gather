@@ -33,11 +33,11 @@ const APPS = [ KERNEL_APP, ODK_APP, GATHER_APP ]
  * @param {boolean} withStats    - include project/survey stats?
  * @param {object}  params       - query string parameters
  */
-export const getSurveysAPIPath = ({app, id, withStats, ...params}) => {
+export const getSurveysAPIPath = ({ app, id, withStats, ...params }) => {
   const source = (APPS.indexOf(app) === -1 ? KERNEL_APP : app)
   const stats = (source === KERNEL_APP && withStats ? '-stats' : '')
 
-  return buildAPIPath(source, `projects${stats}`, id, {...params})
+  return buildAPIPath(source, `projects${stats}`, id, { ...params })
 }
 
 /**
@@ -46,7 +46,7 @@ export const getSurveysAPIPath = ({app, id, withStats, ...params}) => {
  * @param {number}  id          - surveyor id
  * @param {object}  params      - query string parameters
  */
-export const getSurveyorsAPIPath = ({id, ...params}) => {
+export const getSurveyorsAPIPath = ({ id, ...params }) => {
   return buildAPIPath(ODK_APP, 'surveyors', id, params)
 }
 
@@ -56,7 +56,7 @@ export const getSurveyorsAPIPath = ({id, ...params}) => {
  * @param {number}  id          - xForm id
  * @param {object}  params      - query string parameters
  */
-export const getXFormsAPIPath = ({id, ...params}) => {
+export const getXFormsAPIPath = ({ id, ...params }) => {
   return buildAPIPath(ODK_APP, 'xforms', id, params)
 }
 
@@ -66,7 +66,7 @@ export const getXFormsAPIPath = ({id, ...params}) => {
  * @param {number}  id          - Media file id *
  * @param {object}  params      - query string parameters
  */
-export const getMediaFileAPIPath = ({id, ...params}) => {
+export const getMediaFileAPIPath = ({ id, ...params }) => {
   return buildAPIPath(ODK_APP, 'media-files', id, params)
 }
 
@@ -76,7 +76,7 @@ export const getMediaFileAPIPath = ({id, ...params}) => {
  * @param {number}  id          - Entity id
  * @param {object}  params      - query string parameters
  */
-export const getEntitiesAPIPath = ({id, ...params}) => {
+export const getEntitiesAPIPath = ({ id, ...params }) => {
   return buildAPIPath(KERNEL_APP, 'entities', id, params)
 }
 
@@ -86,7 +86,7 @@ export const getEntitiesAPIPath = ({id, ...params}) => {
  * @param {number}  id          - mask id *
  * @param {object}  params      - query string parameters
  */
-export const getMasksAPIPath = ({id, ...params}) => {
+export const getMasksAPIPath = ({ id, ...params }) => {
   return buildAPIPath(GATHER_APP, 'masks', id, params)
 }
 
@@ -110,7 +110,7 @@ export const getMasksAPIPath = ({id, ...params}) => {
  * @param {string}  action      - special suffix to include before the format
  * @param {object}  params      - query string parameters
  */
-const buildAPIPath = (app, type, id, {format = 'json', action, ...params}) => {
+const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => {
   const suffix = (
     (id ? '/' + id : '') +
     // indicates the action suffix like "details", "csv", "xlsx" or "propagates"
@@ -149,7 +149,7 @@ export const buildQueryString = (params = {}) => (
  * @param {string} action       - action: `list` (default), `view`, `add`, `edit`
  * @param {number} id           - project/survey id
  */
-export const getSurveysPath = ({action, id}) => {
+export const getSurveysPath = ({ action, id }) => {
   switch (action) {
     case 'edit':
       if (id) {
@@ -177,7 +177,7 @@ export const getSurveysPath = ({action, id}) => {
  * @param {string} action       - action: `list` (default), `add`, `edit`
  * @param {number} id           - surveyor id
  */
-export const getSurveyorsPath = ({action, id}) => {
+export const getSurveyorsPath = ({ action, id }) => {
   switch (action) {
     case 'edit':
       if (id) {

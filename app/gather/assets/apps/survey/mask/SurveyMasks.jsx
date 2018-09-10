@@ -101,7 +101,7 @@ class SurveyMasks extends Component {
   }
 
   buildStateWithProps (props, includeColumns = false) {
-    const {formatMessage} = props.intl
+    const { formatMessage } = props.intl
     const newState = {
       masks: [
         {
@@ -131,7 +131,7 @@ class SurveyMasks extends Component {
   }
 
   isMaskSelected (mask) {
-    const {columns} = this.state
+    const { columns } = this.state
     const keys = Object.keys(columns)
     const length = keys.length
 
@@ -152,7 +152,7 @@ class SurveyMasks extends Component {
   }
 
   render () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     const currentMask = this.state.masks.find(mask => this.isMaskSelected(mask)) || {
       id: 0,
       name: formatMessage(MESSAGES.custom)
@@ -202,7 +202,7 @@ class SurveyMasks extends Component {
   }
 
   renderMaskNames () {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
     const getClassName = (mask) => (this.isMaskSelected(mask) ? 'active' : '')
     const selectMaskColumns = (mask) => {
       const columns = {}
@@ -229,7 +229,7 @@ class SurveyMasks extends Component {
                   (mask.id > 0) &&
                   <ConfirmButton
                     className='btn btn-sm icon-only preset-delete'
-                    title={formatMessage(MESSAGES.messageTitle, {...mask})}
+                    title={formatMessage(MESSAGES.messageTitle, { ...mask })}
                     buttonLabel={<i className='fas fa-times' />}
                     cancelable
                     message={formatMessage(MESSAGES.confirmDelete)}
@@ -246,7 +246,7 @@ class SurveyMasks extends Component {
 
   renderColumnsList () {
     const toggleColumn = (key) => {
-      const columns = {...this.state.columns}
+      const columns = { ...this.state.columns }
       columns[key] = !columns[key]
       this.setState({ columns })
     }
@@ -282,7 +282,7 @@ class SurveyMasks extends Component {
       return
     }
 
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
     return (
       <div className='save-presets'>
@@ -312,7 +312,7 @@ class SurveyMasks extends Component {
 
   onSubmit (event) {
     event.preventDefault()
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
     const mask = {
       survey: this.props.survey.project_id,
@@ -321,7 +321,7 @@ class SurveyMasks extends Component {
         .filter(key => this.state.columns[key])
     }
 
-    const errorTitle = formatMessage(MESSAGES.messageTitle, {...mask})
+    const errorTitle = formatMessage(MESSAGES.messageTitle, { ...mask })
     const defaultErrorBody = formatMessage(MESSAGES.submitError)
 
     return postData(getMasksAPIPath({}), mask)
@@ -349,14 +349,14 @@ class SurveyMasks extends Component {
   }
 
   onDelete (mask) {
-    const {formatMessage} = this.props.intl
+    const { formatMessage } = this.props.intl
 
-    return deleteData(getMasksAPIPath({id: mask.id}))
+    return deleteData(getMasksAPIPath({ id: mask.id }))
       .then(this.props.reload)
       .catch(() => {
         this.setState({
           message: {
-            title: formatMessage(MESSAGES.messageTitle, {...mask}),
+            title: formatMessage(MESSAGES.messageTitle, { ...mask }),
             body: formatMessage(MESSAGES.deleteError)
           }
         })
