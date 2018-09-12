@@ -24,9 +24,7 @@ export const getSettings = () => new Promise(resolve => {
   getData('/assets-settings')
     .then(response => {
       resolve({
-        AETHER_KERNEL_URL: response.kernel_url,
-        AETHER_ODK_URL: response.odk_url,
-        ODK_ACTIVE: !!response.odk_url,
+        ODK_ACTIVE: !!response.odk_active,
 
         CSV_HEADER_RULES: response.csv_header_rules,
         CSV_HEADER_RULES_SEP: response.csv_header_rules_sep,
@@ -36,8 +34,6 @@ export const getSettings = () => new Promise(resolve => {
     .catch(() => {
       // use default values
       resolve({
-        AETHER_KERNEL_URL: '/kernel',
-        AETHER_ODK_URL: '/odk',
         ODK_ACTIVE: true,
 
         CSV_HEADER_RULES: 'remove-prefix;payload.,remove-prefix;None.,replace;.;:;',

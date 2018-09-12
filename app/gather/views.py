@@ -34,9 +34,7 @@ def assets_settings(*args, **kwargs):
     '''
 
     return JsonResponse({
-        # media links
-        'kernel_url': settings.AETHER_APPS['kernel']['assets'],
-        'odk_url': settings.AETHER_APPS['odk']['assets'] if settings.AETHER_ODK else None,
+        'odk_active': settings.AETHER_ODK,
 
         # CSV export
         'csv_header_rules': settings.CSV_HEADER_RULES,

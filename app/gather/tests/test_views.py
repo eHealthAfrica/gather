@@ -35,8 +35,7 @@ class ViewsTest(TestCase):
         response = self.client.get(reverse('assets-settings'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), {
-            'kernel_url': 'http://kernel.aether.local',
-            'odk_url': 'http://odk.aether.local',
+            'odk_active': True,
             'csv_header_rules': 'remove-prefix;payload.,remove-prefix;None.,replace;.;:;',
             'csv_header_rules_sep': ';',
             'csv_max_rows_size': 0,

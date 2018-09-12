@@ -40,8 +40,7 @@ describe('Settings utils', () => {
       nock('http://localhost')
         .get('/assets-settings')
         .reply(200, {
-          kernel_url: 'http://kernel.server.url',
-          odk_url: 'http://odk.server.url',
+          odk_active: true,
           csv_header_rules: 'rules#rules#more-rules',
           csv_header_rules_sep: '#',
           csv_max_rows_size: 10000
@@ -49,8 +48,6 @@ describe('Settings utils', () => {
 
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
-          AETHER_KERNEL_URL: 'http://kernel.server.url',
-          AETHER_ODK_URL: 'http://odk.server.url',
           ODK_ACTIVE: true,
           CSV_HEADER_RULES: 'rules#rules#more-rules',
           CSV_HEADER_RULES_SEP: '#',
@@ -63,14 +60,11 @@ describe('Settings utils', () => {
       nock('http://localhost')
         .get('/assets-settings')
         .reply(200, {
-          kernel_url: 'http://kernel.server.url',
           csv_max_rows_size: 10000
         })
 
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
-          AETHER_KERNEL_URL: 'http://kernel.server.url',
-          AETHER_ODK_URL: undefined,
           ODK_ACTIVE: false,
           CSV_HEADER_RULES: undefined,
           CSV_HEADER_RULES_SEP: undefined,
@@ -86,8 +80,6 @@ describe('Settings utils', () => {
 
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
-          AETHER_KERNEL_URL: '/kernel',
-          AETHER_ODK_URL: '/odk',
           ODK_ACTIVE: true,
           CSV_HEADER_RULES: 'remove-prefix;payload.,remove-prefix;None.,replace;.;:;',
           CSV_HEADER_RULES_SEP: ';',
