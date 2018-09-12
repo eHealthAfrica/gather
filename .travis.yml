@@ -12,14 +12,10 @@ before_script:
 script:
   - ./scripts/test_gather.sh
 
-
-# deploy:
-#   - provider: script
-#     script: ./scripts/release.sh
-#     skip_cleanup: true
-#     on:
-#       branch: develop
-
+deploy:
+  - provider: script
+    script: ./scripts/release.sh
+    skip_cleanup: true
 
 after_failure:
   - ./scripts/kill_all.sh
