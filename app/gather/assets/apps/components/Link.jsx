@@ -21,19 +21,6 @@
 import React, { Component } from 'react'
 
 /**
- * Normalize a list of links with the complete url depending on the baseUrl
- *
- * @param {Array}  list    - a list of links (name, url).
- * @param {String} baseUrl - base url
- */
-export const normalizeLinksList = (list = [], baseUrl = '') => list
-  .map(link => ({
-    name: link.name,
-    url: `${baseUrl}${link.url}`
-  }))
-  .sort((a, b) => a.name.localeCompare(b.name))
-
-/**
  * Link component.
  *
  * Renders a link.

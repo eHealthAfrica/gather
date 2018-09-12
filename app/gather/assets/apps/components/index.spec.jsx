@@ -62,7 +62,6 @@ describe('Common components', () => {
   it('Link components and helpers should be declared', () => {
     expect(components.Link).toBeTruthy()
     expect(components.LinksList).toBeTruthy()
-    expect(components.normalizeLinksList).toBeTruthy()
   })
 
   it('LoadingSpinner should be declared', () => {

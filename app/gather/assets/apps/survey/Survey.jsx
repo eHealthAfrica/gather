@@ -125,7 +125,6 @@ export default class Survey extends Component {
     const { viewMode } = this.state
     const listComponent = (viewMode === SINGLE_VIEW ? EntityItem : EntitiesList)
     const extras = {
-      settings: this.props.settings,
       labels: this.state.labels,
       paths: this.state.selectedPaths
     }
