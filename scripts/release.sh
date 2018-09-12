@@ -46,12 +46,17 @@ then
     VERSION="alpha"
 
 else
+    echo "----------------------------------------------------"
     echo "Skipping a release because this branch is not permitted: ${TRAVIS_BRANCH}"
+    echo "----------------------------------------------------"
     exit 0
 fi
 
-echo "Release version:  ${VERSION}"
-echo "Release revision: ${TRAVIS_COMMIT}"
+echo "----------------------------------------------------"
+echo "Releasing in branch: ${TRAVIS_BRANCH}"
+echo "Release version:     ${VERSION}"
+echo "Release revision:    ${TRAVIS_COMMIT}"
+echo "----------------------------------------------------"
 
 APP="gather"
 
