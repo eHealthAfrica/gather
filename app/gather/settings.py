@@ -29,15 +29,6 @@ DEBUG = bool(os.environ.get('DEBUG'))
 TESTING = bool(os.environ.get('TESTING'))
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-if DEBUG:
-    logger.setLevel(logging.DEBUG)
-if TESTING:
-    logger.setLevel(logging.CRITICAL)
-
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -143,6 +134,88 @@ DATABASES = {
 }
 
 
+# Logging Configuration
+# ------------------------------------------------------------------------------
+
+LOGGING_LEVEL = logging.INFO
+if DEBUG:
+    LOGGING_LEVEL = logging.DEBUG
+    LOGGING_CLASS = 'logging.StreamHandler'
+
+if TESTING:
+    LOGGING_LEVEL = logging.CRITICAL
+    LOGGING_CLASS = 'logging.NullHandler'
+
+logger = logging.getLogger(__name__)
+logger.setLevel(LOGGING_LEVEL)
+
+
+SENTRY_DSN = os.environ.get('SENTRY_DSN')
+if SENTRY_DSN:
+    INSTALLED_APPS += ['raven.contrib.django.raven_compat', ]
+    MIDDLEWARE = [
+        'raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware',
+    ] + MIDDLEWARE
+
+    SENTRY_CLIENT = 'raven.contrib.django.raven_compat.DjangoClient'
+    SENTRY_CELERY_LOGLEVEL = LOGGING_LEVEL
+
+    LOGGING_CLASS = 'raven.contrib.django.raven_compat.handlers.SentryHandler'
+
+else:
+    logger.info('No SENTRY enabled!')
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': LOGGING_LEVEL,
+        'handlers': ['gather_handler'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s  %(asctime)s  %(module)s  %(process)d  %(thread)d  %(message)s'
+        },
+    },
+    'handlers': {
+        'gather_handler': {
+            'level': LOGGING_LEVEL,
+            'class': LOGGING_CLASS,
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.StreamHandler' if not TESTING else 'logging.NullHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'gather': {
+            'level': LOGGING_LEVEL,
+            'handlers': ['console', 'gather_handler'],
+            'propagate': False,
+        },
+        'django': {
+            'level': LOGGING_LEVEL,
+            'handlers': ['console', 'gather_handler'],
+            'propagate': False,
+        },
+        # These ones are available with Sentry enabled
+        'raven': {
+            'level': 'ERROR',
+            'handlers': ['console', 'gather_handler'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'ERROR',
+            'handlers': ['console', 'gather_handler'],
+            'propagate': False,
+        },
+    },
+}
+
+
 # Authentication Configuration
 # ------------------------------------------------------------------------------
 
@@ -187,23 +260,6 @@ else:
 
     LOGIN_TEMPLATE = os.environ.get('LOGIN_TEMPLATE', 'pages/login.html')
     LOGGED_OUT_TEMPLATE = os.environ.get('LOGGED_OUT_TEMPLATE', 'pages/logged_out.html')
-
-
-# Sentry Configuration
-# ------------------------------------------------------------------------------
-
-SENTRY_DSN = os.environ.get('SENTRY_DSN')
-if SENTRY_DSN:
-    INSTALLED_APPS += ['raven.contrib.django.raven_compat', ]
-    MIDDLEWARE = [
-        'raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware',
-    ] + MIDDLEWARE
-
-    SENTRY_CLIENT = 'raven.contrib.django.raven_compat.DjangoClient'
-    SENTRY_CELERY_LOGLEVEL = logging.INFO
-
-else:
-    logger.info('No SENTRY enabled!')
 
 
 # Security Configuration
@@ -302,7 +358,9 @@ if TESTING:
 if kernel['url'].strip() and kernel['token'].strip():
     AETHER_APPS['kernel'] = kernel
 else:
-    raise RuntimeError('Aether Kernel configuration was not properly set!')
+    msg = 'Aether Kernel configuration was not properly set!'
+    logger.critical(msg)
+    raise RuntimeError(msg)
 
 
 # check if ODK is available in this instance
@@ -320,7 +378,9 @@ if 'odk' in AETHER_MODULES:
         AETHER_APPS['odk'] = odk
         AETHER_ODK = True
     else:
-        raise RuntimeError('Aether ODK configuration was not properly set!')
+        msg = 'Aether ODK configuration was not properly set!'
+        logger.critical(msg)
+        raise RuntimeError(msg)
 
 # Asset settings
 CSV_HEADER_RULES = os.environ.get(
@@ -339,4 +399,4 @@ CSV_MAX_ROWS_SIZE = os.environ.get('CSV_MAX_ROWS_SIZE', '0')
 try:
     from local_settings import *  # noqa
 except ImportError:
-    logger.info('No local settings!')
+    logger.debug('No local settings!')
