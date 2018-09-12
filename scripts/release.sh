@@ -30,6 +30,14 @@ docker_push () {
     docker push ${IMAGE}
 }
 
+if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]
+then
+    echo "--------------------------------------------------------------"
+    echo "Skipping a release because this is a pull request: ${TRAVIS_PULL_REQUEST}"
+    echo "--------------------------------------------------------------"
+    exit 0
+fi
+
 # release version depending on TRAVIS_BRANCH / TRAVIS_TAG
 if [[ $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+[\.0-9]*$ ]]
 then
@@ -46,17 +54,17 @@ then
     VERSION="alpha"
 
 else
-    echo "----------------------------------------------------"
+    echo "--------------------------------------------------------------"
     echo "Skipping a release because this branch is not permitted: ${TRAVIS_BRANCH}"
-    echo "----------------------------------------------------"
+    echo "--------------------------------------------------------------"
     exit 0
 fi
 
-echo "----------------------------------------------------"
+echo "--------------------------------------------------------------"
 echo "Releasing in branch: ${TRAVIS_BRANCH}"
 echo "Release version:     ${VERSION}"
 echo "Release revision:    ${TRAVIS_COMMIT}"
-echo "----------------------------------------------------"
+echo "--------------------------------------------------------------"
 
 APP="gather"
 
