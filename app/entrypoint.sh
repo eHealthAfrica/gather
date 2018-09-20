@@ -41,6 +41,8 @@ show_help () {
     start_dev     : start webserver for development
 
     health        : checks the system healthy
+    check_kernel  : checks communication with Aether Kernel
+    check_odk     : checks communication with Aether ODK
 
     test          : run tests
     test_lint     : run flake8 tests
@@ -162,6 +164,19 @@ case "$1" in
 
     health )
         ./manage.py check_url --url=http://0.0.0.0:$WEB_SERVER_PORT/health
+    ;;
+
+    check_kernel )
+        ./manage.py check_url --url=$AETHER_KERNEL_URL --token=$AETHER_KERNEL_TOKEN
+    ;;
+
+    check_odk )
+        if [[ "$AETHER_MODULES" == *odk* ]];
+        then
+            ./manage.py check_url --url=$AETHER_ODK_URL --token=$AETHER_ODK_TOKEN
+        else
+            echo "No ODK module enabled!"
+        fi
     ;;
 
     test )
