@@ -152,7 +152,6 @@ services:
     ports:
       - "8004:8004"
     command: start
-      retries: 30
 
 
   # ---------------------------------
