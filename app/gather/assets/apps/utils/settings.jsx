@@ -21,8 +21,6 @@
 import { getData } from './request'
 
 const DEFAULT_SETTINGS = {
-  AETHER_KERNEL_URL: '/kernel',
-  AETHER_ODK_URL: '/odk',
   ODK_ACTIVE: true,
   EXPORT_FORMAT: 'xlsx',
   EXPORT_MAX_ROWS_SIZE: 0
@@ -32,9 +30,7 @@ export const getSettings = () => new Promise(resolve => {
   getData('/assets-settings')
     .then(response => {
       resolve({
-        AETHER_KERNEL_URL: response.kernel_url,
-        AETHER_ODK_URL: response.odk_url,
-        ODK_ACTIVE: !!response.odk_url,
+        ODK_ACTIVE: !!response.odk_active,
         EXPORT_FORMAT: response.export_format || DEFAULT_SETTINGS.EXPORT_FORMAT,
         EXPORT_MAX_ROWS_SIZE: response.export_max_rows_size || DEFAULT_SETTINGS.EXPORT_MAX_ROWS_SIZE
       })

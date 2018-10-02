@@ -40,16 +40,13 @@ describe('Settings utils', () => {
       nock('http://localhost')
         .get('/assets-settings')
         .reply(200, {
-          kernel_url: 'http://kernel.server.url',
-          odk_url: 'http://odk.server.url',
+          odk_active: true,
           export_format: 'csv',
           export_max_rows_size: 10000
         })
 
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
-          AETHER_KERNEL_URL: 'http://kernel.server.url',
-          AETHER_ODK_URL: 'http://odk.server.url',
           ODK_ACTIVE: true,
           EXPORT_FORMAT: 'csv',
           EXPORT_MAX_ROWS_SIZE: 10000
@@ -61,14 +58,11 @@ describe('Settings utils', () => {
       nock('http://localhost')
         .get('/assets-settings')
         .reply(200, {
-          kernel_url: 'http://kernel.server.url',
           csv_max_rows_size: 10000
         })
 
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
-          AETHER_KERNEL_URL: 'http://kernel.server.url',
-          AETHER_ODK_URL: undefined,
           ODK_ACTIVE: false,
           EXPORT_FORMAT: 'xlsx',
           EXPORT_MAX_ROWS_SIZE: 0
@@ -83,8 +77,6 @@ describe('Settings utils', () => {
 
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
-          AETHER_KERNEL_URL: '/kernel',
-          AETHER_ODK_URL: '/odk',
           ODK_ACTIVE: true,
           EXPORT_FORMAT: 'xlsx',
           EXPORT_MAX_ROWS_SIZE: 0

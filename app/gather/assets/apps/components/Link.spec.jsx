@@ -23,7 +23,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { Link, LinksList, normalizeLinksList } from './Link'
+import { Link, LinksList } from './Link'
 
 describe('Link components', () => {
   describe('Link', () => {
@@ -92,45 +92,6 @@ describe('Link components', () => {
         expect(link.props.href).toEqual(`/link-${i + 1}`)
         expect(link.props.children).toEqual(`click here ${i + 1}`)
       }
-    })
-  })
-
-  describe('normalizeLinksList', () => {
-    it('should return an empty list', () => {
-      expect(normalizeLinksList()).toEqual([])
-      expect(normalizeLinksList([])).toEqual([])
-      expect(normalizeLinksList([], 'app')).toEqual([])
-    })
-
-    it('should prepend the given base url', () => {
-      const baseUrl = 'http://localhost'
-      const list = [
-        { url: '/link-1', name: 'click here 1', useless: 1 },
-        { url: '/link-2', name: 'click here 2', to_be_ignored: 2 },
-        { url: '/link-3', name: 'click here 3', nothing: 'important' }
-      ]
-      const expected = [
-        { url: 'http://localhost/link-1', name: 'click here 1' },
-        { url: 'http://localhost/link-2', name: 'click here 2' },
-        { url: 'http://localhost/link-3', name: 'click here 3' }
-      ]
-
-      expect(normalizeLinksList(list, baseUrl)).toEqual(expected)
-    })
-
-    it('should not prepend anything', () => {
-      const list = [
-        { url: '/link-1', name: 'click here 1', useless: 1 },
-        { url: '/link-2', name: 'click here 2', to_be_ignored: 2 },
-        { url: '/link-3', name: 'click here 3', nothing: 'important' }
-      ]
-      const expected = [
-        { url: '/link-1', name: 'click here 1' },
-        { url: '/link-2', name: 'click here 2' },
-        { url: '/link-3', name: 'click here 3' }
-      ]
-
-      expect(normalizeLinksList(list)).toEqual(expected)
     })
   })
 })

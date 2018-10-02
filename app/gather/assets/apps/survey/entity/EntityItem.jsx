@@ -22,11 +22,11 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { filterByPaths } from '../../utils/types'
-import { JSONViewer, LinksList, normalizeLinksList } from '../../components'
+import { JSONViewer, LinksList } from '../../components'
 
 export default class EntityItem extends Component {
   render () {
-    const { list, settings } = this.props
+    const { list } = this.props
 
     if (list.length !== 1) {
       return <div />
@@ -34,7 +34,6 @@ export default class EntityItem extends Component {
 
     // assumption: there is only one item
     const entity = list[0]
-    const links = normalizeLinksList(entity.attachments, settings.AETHER_KERNEL_URL)
 
     return (
       <div data-qa={`entity-item-${entity.id}`} className='x-2'>
@@ -58,7 +57,7 @@ export default class EntityItem extends Component {
                   defaultMessage='Attachments' />
               </h5>
               <div className='property-value'>
-                <LinksList list={links} />
+                <LinksList list={entity.attachments} />
               </div>
             </div>
           }
@@ -67,7 +66,7 @@ export default class EntityItem extends Component {
             <JSONViewer
               data={filterByPaths(entity.payload, this.props.paths)}
               labels={this.props.labels}
-              links={links}
+              links={entity.attachments}
             />
           </div>
         </div>
