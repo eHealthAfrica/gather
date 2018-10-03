@@ -30,6 +30,7 @@ describe('constants', () => {
 
     assert.deepStrictEqual(constants.KERNEL_APP, 'kernel')
     assert.deepStrictEqual(constants.ODK_APP, 'odk')
+    assert.deepStrictEqual(constants.COUCHDB_SYNC_APP, 'couchdb-sync')
     assert.deepStrictEqual(constants.GATHER_APP, 'gather')
   })
 })

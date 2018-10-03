@@ -34,7 +34,7 @@ def assets_settings(*args, **kwargs):
     '''
 
     return JsonResponse({
-        'odk_active': settings.AETHER_ODK,
+        'aether_apps': list(settings.AETHER_APPS.keys()),
 
         # CSV export
         'csv_header_rules': settings.CSV_HEADER_RULES,

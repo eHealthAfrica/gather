@@ -34,12 +34,15 @@ class ContextProcessorsTests(TestCase):
             'navigation_list': ['surveys', 'surveyors', ],
             'kernel_url': 'http://kernel.aether.local',
             'odk_url': 'http://odk.aether.local',
+            'couchdb_sync_url': 'http://sync.aether.local',
         })
 
-    @mock.patch('gather.context_processors.settings.AETHER_ODK', False)
+    @mock.patch('gather.context_processors.settings.AETHER_APPS',
+                {'kernel': {'assets': 'http://localhost'}})
     def test_gather_context__mocked(self):
         request = RequestFactory().get('/')
         context = gather_context(request)
 
         self.assertNotIn('odk_url', context)
+        self.assertNotIn('couchdb_sync_url', context)
         self.assertEqual(context['navigation_list'], ['surveys', ])

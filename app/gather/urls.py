@@ -85,7 +85,7 @@ urlpatterns = [
             name='surveys'),
 ]
 
-if settings.AETHER_ODK:  # pragma: no cover
+if settings.AETHER_APPS.get('odk'):  # pragma: no cover
     urlpatterns += [
         re_path(r'^surveyors/(?P<action>\w+)/(?P<surveyor_id>[0-9]+)?$',
                 login_required(tokens_required(TemplateView.as_view(template_name='pages/surveyors.html'))),

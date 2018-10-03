@@ -43,6 +43,15 @@ check_odk() {
     fi
 }
 
+check_couchdb_sync() {
+    if [[ "$AETHER_MODULES" == *couchdb-sync* ]];
+    then
+        # check if COUCHDB SYNC env variables were set only if it's included in the modules list.
+        check_variable "$AETHER_COUCHDB_SYNC_URL"   "Aether CouchDB Sync url (AETHER_COUCHDB_SYNC_URL)"
+        check_variable "$AETHER_COUCHDB_SYNC_TOKEN" "Aether CouchDB Sync token (AETHER_COUCHDB_SYNC_TOKEN)"
+    fi
+}
+
 # App requirements
 check_variable "$ADMIN_USERNAME"    "Admin user username (ADMIN_USERNAME)"
 check_variable "$ADMIN_PASSWORD"    "Admin user password (ADMIN_PASSWORD)"
@@ -53,3 +62,4 @@ check_variable "$WEB_SERVER_PORT"   "Web server port (WEB_SERVER_PORT)"
 # Aether requirements
 check_kernel
 check_odk
+check_couchdb_sync

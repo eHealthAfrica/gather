@@ -40,7 +40,7 @@ describe('Settings utils', () => {
       nock('http://localhost')
         .get('/assets-settings')
         .reply(200, {
-          odk_active: true,
+          aether_apps: ['odk'],
           csv_header_rules: 'rules#rules#more-rules',
           csv_header_rules_sep: '#',
           csv_max_rows_size: 10000
@@ -49,6 +49,7 @@ describe('Settings utils', () => {
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: true,
+          COUCHDB_SYNC_ACTIVE: false,
           CSV_HEADER_RULES: 'rules#rules#more-rules',
           CSV_HEADER_RULES_SEP: '#',
           CSV_MAX_ROWS_SIZE: 10000
@@ -66,6 +67,7 @@ describe('Settings utils', () => {
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: false,
+          COUCHDB_SYNC_ACTIVE: false,
           CSV_HEADER_RULES: undefined,
           CSV_HEADER_RULES_SEP: undefined,
           CSV_MAX_ROWS_SIZE: 10000
@@ -81,6 +83,7 @@ describe('Settings utils', () => {
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: true,
+          COUCHDB_SYNC_ACTIVE: true,
           CSV_HEADER_RULES: 'remove-prefix;payload.,remove-prefix;None.,replace;.;:;',
           CSV_HEADER_RULES_SEP: ';',
           CSV_MAX_ROWS_SIZE: 0

@@ -39,6 +39,8 @@ class SettingsTest(TestCase):
         self.assertIn('kernel', settings.AETHER_APPS)
         self.assertEqual(settings.AETHER_APPS['kernel']['url'], 'http://kernel-test:9000')
 
-        self.assertTrue(settings.AETHER_ODK)
         self.assertIn('odk', settings.AETHER_APPS)
         self.assertEqual(settings.AETHER_APPS['odk']['url'], 'http://odk-test:9002')
+
+        self.assertIn('couchdb-sync', settings.AETHER_APPS)
+        self.assertEqual(settings.AETHER_APPS['couchdb-sync']['url'], 'http://couchdb-sync-test:9006')

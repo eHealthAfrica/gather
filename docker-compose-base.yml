@@ -266,8 +266,8 @@ services:
       AETHER_ODK_URL_ASSETS: http://odk.aether.local
 
       AETHER_COUCHDB_SYNC_TOKEN: ${COUCHDB_SYNC_ADMIN_TOKEN}
-      AETHER_COUCHDB_SYNC_URL: http://sync:8006
-      AETHER_COUCHDB_SYNC_URL_TEST: http://sync-test:9006
+      AETHER_COUCHDB_SYNC_URL: http://couchdb-sync:8006
+      AETHER_COUCHDB_SYNC_URL_TEST: http://couchdb-sync-test:9006
       AETHER_COUCHDB_SYNC_URL_ASSETS: http://sync.aether.local
 
       DB_NAME: gather

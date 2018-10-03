@@ -34,6 +34,7 @@ services:
       file: ./docker-compose-base.yml
       service: kernel-base
     environment:
+      DEBUG: null
       TESTING: "true"
       MEDIA_ROOT: /tmp/
       DJANGO_SECRET_KEY: ${TEST_KERNEL_DJANGO_SECRET_KEY}
@@ -66,6 +67,7 @@ services:
       file: ./docker-compose-base.yml
       service: odk-base
     environment:
+      DEBUG: null
       TESTING: "true"
       MEDIA_ROOT: /tmp/
       DJANGO_SECRET_KEY: ${TEST_ODK_DJANGO_SECRET_KEY}
@@ -100,6 +102,7 @@ services:
       file: ./docker-compose-base.yml
       service: couchdb-sync-base
     environment:
+      DEBUG: null
       TESTING: "true"
       MEDIA_ROOT: /tmp/
       DJANGO_SECRET_KEY: ${TEST_COUCHDB_SYNC_DJANGO_SECRET_KEY}
@@ -143,8 +146,8 @@ services:
       file: ./docker-compose-base.yml
       service: gather-base
     environment:
-      TESTING: "true"
       DEBUG: null  # set to null to remove previous value
+      TESTING: "true"
       DJANGO_SECRET_KEY: ${TEST_GATHER_DJANGO_SECRET_KEY}
 
       ADMIN_USERNAME: ${TEST_GATHER_ADMIN_USERNAME}
@@ -157,7 +160,7 @@ services:
       AETHER_ODK_URL: http://odk-test:9002
 
       AETHER_COUCHDB_SYNC_TOKEN: ${TEST_COUCHDB_SYNC_ADMIN_TOKEN}
-      AETHER_COUCHDB_SYNC_URL: http://sync-test:9006
+      AETHER_COUCHDB_SYNC_URL: http://couchdb-sync-test:9006
 
       DB_NAME: gather-test
       PGHOST: db-test

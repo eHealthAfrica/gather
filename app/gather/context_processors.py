@@ -21,7 +21,7 @@ from django.conf import settings
 
 def gather_context(request):
     navigation_list = ['surveys', ]
-    if settings.AETHER_ODK:
+    if settings.AETHER_APPS.get('odk'):
         navigation_list.append('surveyors')
 
     context = {
@@ -29,10 +29,10 @@ def gather_context(request):
         'app_name': settings.APP_NAME,
         'instance_name': settings.INSTANCE_NAME,
         'navigation_list': navigation_list,
-        'kernel_url': settings.AETHER_APPS['kernel']['assets'],
     }
 
-    if settings.AETHER_ODK:
-        context['odk_url'] = settings.AETHER_APPS['odk']['assets']
+    for key, value in settings.AETHER_APPS.items():
+        name = key.replace('-', '_')
+        context[f'{name}_url'] = value['assets']
 
     return context
