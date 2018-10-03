@@ -123,7 +123,7 @@ export const getMasksAPIPath = ({ id, ...params }) => {
 const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => {
   const suffix = (
     (id ? '/' + id : '') +
-    // indicates the ation suffix like "details", "fetch" or "propagates"
+    // indicates the ation suffix like "details", "fetch" or "propagate"
     (action ? '/' + action : ''))
   const url = `${API_PREFIX}/${app}/${type}${suffix}.${format}`
   const queryString = id ? '' : buildQueryString(params)
