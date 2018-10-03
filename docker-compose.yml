@@ -10,7 +10,7 @@ volumes:
 services:
 
   # ---------------------------------
-  # Database
+  # Databases
   # ---------------------------------
 
   db:
@@ -19,6 +19,20 @@ services:
       service: postgres-base
     volumes:
       - gather_database_data:/var/lib/postgresql/data
+    networks:
+      - gather_net
+
+  couchdb:
+    extends:
+      file: ./docker-compose-base.yml
+      service: couchdb-base
+    networks:
+      - gather_net
+
+  redis:
+    extends:
+      file: ./docker-compose-base.yml
+      service: redis-base
     networks:
       - gather_net
 
@@ -55,6 +69,38 @@ services:
       gather_net:
         aliases:
           - odk.aether.local
+
+  # ---------------------------------
+  # Aether CouchDB Sync module
+  # ---------------------------------
+
+  couchdb-sync:
+    extends:
+      file: ./docker-compose-base.yml
+      service: couchdb-sync-base
+    depends_on:
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
+    networks:
+      gather_net:
+        aliases:
+          - sync.aether.local
+
+  couchdb-sync-rq:
+    extends:
+      file: ./docker-compose-base.yml
+      service: couchdb-sync-rq-base
+    depends_on:
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
+      couchdb-sync:
+        condition: service_started
+    networks:
+      - gather_net
 
   # ---------------------------------
   # Aether UI
@@ -117,6 +163,8 @@ services:
       kernel:
         condition: service_started
       odk:
+        condition: service_started
+      couchdb-sync:
         condition: service_started
       ui:
         condition: service_started

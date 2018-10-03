@@ -65,7 +65,7 @@ for local development. Never deploy these to publicly accessible servers.
 127.0.0.1    gather.local
 
 # aether
-127.0.0.1    kernel.aether.local odk.aether.local ui.aether.local
+127.0.0.1    kernel.aether.local odk.aether.local sync.aether.local ui.aether.local
 ```
 
 #### Generate credentials for local development with docker-compose
@@ -121,8 +121,8 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
   - `WEB_SERVER_PORT`: `8005` Web server port.
 
 - Aether specific:
-  - `AETHER_MODULES`: `odk,` Comma separated list with the available modules.
-    To avoid confusion, the values will match the container name, `odk`.
+  - `AETHER_MODULES`: `odk,couchdb-sync` Comma separated list with the available modules.
+    To avoid confusion, the values will match the container name, `odk`, `couchdb-sync`.
 
   - Aether Kernel:
     - `AETHER_KERNEL_TOKEN`: `aether_kernel_admin_user_auth_token`
@@ -142,6 +142,12 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
       This url is being used in the frontend to display the linked media files
       served by NGINX. Defaults to `AETHER_ODK_URL` value.
 
+  - Aether CouchDB Sync:
+    - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_odk_admin_user_auth_token`
+      Token to connect to Aether ODK Server.
+    - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8002` Aether CouchDB Sync Server url.
+    - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9002` Aether CouchDB Sync Testing Server url.
+    - `AETHER_COUCHDB_SYNC_URL_ASSETS`: `http://sync.aether.local` Aether CouchDB Sync url used in NGINX.
 
 ##### AETHER_XXX_URL vs AETHER_XXX_URL_ASSETS
 
@@ -176,6 +182,9 @@ This will start:
 - **aether-odk** on `http://odk.aether.local:8002`
   and create a superuser with the needed TOKEN.
 
+- **aether-couchdb-sync** on `http://sync.aether.local:8006`
+  and create a superuser with the needed TOKEN.
+
 - **aether-ui** on `http://ui.aether.local:8004`
   and create a superuser.
 
@@ -187,6 +196,7 @@ If the `nginx` container is also started the url ports can be removed.
 - `http://kernel.aether.local`
 - `http://odk.aether.local`
 - `http://odk.aether.local:8443` This is required by ODK Collect
+- `http://sync.aether.local`
 - `http://ui.aether.local`
 
 
@@ -215,11 +225,14 @@ The communication with the Aether servers is done via
 
 In `gather` there are tokens per user to connect to other servers.
 This means that every time a logged in user tries to visit any page that requires
-to fetch data from any of the other apps, `aether-kernel` and/or `aether-odk`,
+to fetch data from any of the other apps, `aether-kernel`, `aether-odk`, `aether-couchdb-sync`,
 the system will verify that the user token for that app is valid or will request
-a new one using the global tokens, `AETHER_KERNEL_TOKEN` and/or `AETHER_ODK_TOKEN`;
-that token is going to be used for all requests and will allow the system to better
-track the user actions.
+a new one using the global token, `AETHER_<<APP>>_TOKEN`;
+the user token is going to be used for all requests and will allow the system to
+track better the user actions.
+
+**Warning**: The global `AETHER_<<APP>>_TOKEN` needs to belong to an admin user,
+because only those users can create new users with tokens in the Aether apps.
 
 *[Return to TOC](#table-of-contents)*
 
@@ -261,6 +274,7 @@ The list of the main containers:
 | **gather-assets** | Gather Assets HRM module                                          |
 | **kernel**        | Aether Kernel app                                                 |
 | **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)    |
+| **couchdb-sync**  | Aether CouchDB Sync app (imports data from Aether Mobile App)     |
 | **ui**            | Aether Kernel UI (only needed for advanced mapping functionality) |
 | kernel-test       | Aether Kernel TESTING app (used only in e2e testss)               |
 | odk-test          | Aether ODK TESTING app (used only in e2e testss)                  |

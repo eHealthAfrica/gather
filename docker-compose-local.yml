@@ -16,13 +16,27 @@ networks:
 services:
 
   # ---------------------------------
-  # Database
+  # Databases
   # ---------------------------------
 
   db:
     extends:
       file: ./docker-compose-base.yml
       service: postgres-base
+    networks:
+      - gather_local
+
+  couchdb:
+    extends:
+      file: ./docker-compose-base.yml
+      service: couchdb-base
+    networks:
+      - gather_local
+
+  redis:
+    extends:
+      file: ./docker-compose-base.yml
+      service: redis-base
     networks:
       - gather_local
 
@@ -61,10 +75,47 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      kernel:
+        condition: service_started
     networks:
       gather_local:
         aliases:
           - odk.aether.local
+
+
+  # ---------------------------------
+  # Aether CouchDB Sync module
+  # ---------------------------------
+
+  couchdb-sync:
+    extends:
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
+      service: couchdb-sync-base
+    volumes:
+      - ./.persistent_data/static/sync:/var/www/static
+    depends_on:
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
+    networks:
+      gather_local:
+        aliases:
+          - sync.aether.local
+
+  couchdb-sync-rq:
+    extends:
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
+      service: couchdb-sync-rq-base
+    depends_on:
+      db:
+        condition: service_healthy
+      kernel:
+        condition: service_started
+      couchdb-sync:
+        condition: service_started
+    networks:
+      - gather_local
 
 
   # ---------------------------------
@@ -87,6 +138,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      kernel:
+        condition: service_started
     networks:
       gather_local:
         aliases:
@@ -116,6 +169,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      kernel:
+        condition: service_started
+      odk:
+        condition: service_started
+      couchdb-sync:
+        condition: service_started
     networks:
       gather_local:
         aliases:
@@ -134,6 +193,8 @@ services:
       kernel:
         condition: service_started
       odk:
+        condition: service_started
+      couchdb-sync:
         condition: service_started
       ui:
         condition: service_started

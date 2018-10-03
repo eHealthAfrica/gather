@@ -124,6 +124,40 @@ TEST_ODK_DB_PASSWORD=$(gen_random_string)
 
 
 # ------------------------------------------------------------------
+# Aether CouchDB-Sync Module
+# ==================================================================
+
+COUCHDB_SYNC_ADMIN_USERNAME=admin
+COUCHDB_SYNC_ADMIN_PASSWORD=adminadmin
+COUCHDB_SYNC_ADMIN_TOKEN=$(gen_random_string)
+
+COUCHDB_SYNC_DJANGO_SECRET_KEY=$(gen_random_string)
+COUCHDB_SYNC_DB_PASSWORD=$(gen_random_string)
+
+COUCHDB_SYNC_GOOGLE_CLIENT_ID=${COUCHDB_SYNC_GOOGLE_CLIENT_ID:-¯\_(ツ)_/¯}
+
+COUCHDB_USER=admin
+COUCHDB_PASSWORD=adminadmin
+REDIS_PASSWORD=$(gen_random_string)
+
+# TEST Aether COUCHDB_SYNC Module
+TEST_COUCHDB_SYNC_ADMIN_USERNAME=admin-test
+TEST_COUCHDB_SYNC_ADMIN_PASSWORD=testingtesting
+TEST_COUCHDB_SYNC_ADMIN_TOKEN=$(gen_random_string)
+
+TEST_COUCHDB_SYNC_DJANGO_SECRET_KEY=$(gen_random_string)
+TEST_COUCHDB_SYNC_DB_PASSWORD=$(gen_random_string)
+
+TEST_COUCHDB_SYNC_GOOGLE_CLIENT_ID=$(gen_random_string)
+
+TEST_COUCHDB_USER=admin-test
+TEST_COUCHDB_PASSWORD=testingtesting
+TEST_REDIS_PASSWORD=$(gen_random_string)
+
+# ------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------
 # Aether UI
 # ==================================================================
 
