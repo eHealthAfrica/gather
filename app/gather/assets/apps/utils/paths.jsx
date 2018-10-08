@@ -113,7 +113,7 @@ export const getMasksAPIPath = ({ id, ...params }) => {
 const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => {
   const suffix = (
     (id ? '/' + id : '') +
-    // indicates the action suffix like "details", "csv", "xlsx" or "propagates"
+    // indicates the action suffix like "details", "csv", "xlsx" or "propagate"
     (action ? '/' + action : ''))
   const formatSuffix = (format === '' ? '/' : '.' + format)
   const url = `${API_PREFIX}/${app}/${type}${suffix}${formatSuffix}`

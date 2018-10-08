@@ -537,7 +537,7 @@ class SurveyForm extends Component {
     actions.push({
       message: formatMessage(MESSAGES.propagateODKSurvey, { name: this.state.name }),
       method: patchData,
-      url: getSurveysAPIPath({ app: ODK_APP, id: this.state.id, action: 'propagates' })
+      url: getSurveysAPIPath({ app: ODK_APP, id: this.state.id, action: 'propagate' })
     })
 
     const executeActions = () => {
