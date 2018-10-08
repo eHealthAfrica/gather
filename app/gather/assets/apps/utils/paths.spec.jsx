@@ -26,6 +26,8 @@ import {
   getEntitiesAPIPath,
   getMasksAPIPath,
   getMediaFileAPIPath,
+  getMobileUsersAPIPath,
+  getMobileUsersPath,
   getSchemasAPIPath,
   getSurveyorsAPIPath,
   getSurveyorsPath,
@@ -46,6 +48,13 @@ describe('paths utils', () => {
     it('should return the Media Files API path', () => {
       assert.strictEqual(getMediaFileAPIPath({ }), '/odk/media-files.json')
       assert.strictEqual(getMediaFileAPIPath({ id: 1 }), '/odk/media-files/1.json')
+    })
+  })
+
+  describe('getMobileUsersAPIPath', () => {
+    it('should return the Mobile Users API path', () => {
+      assert.strictEqual(getMobileUsersAPIPath({ }), '/couchdb-sync/mobile-users.json')
+      assert.strictEqual(getMobileUsersAPIPath({ id: 1 }), '/couchdb-sync/mobile-users/1.json')
     })
   })
 
@@ -203,6 +212,20 @@ describe('paths utils', () => {
       assert.strictEqual(getSurveyorsPath({ action: 'add' }), '/surveyors/add/')
       assert.strictEqual(getSurveyorsPath({ action: 'edit' }), '/surveyors/add/', '"edit" without "id" is "add"')
       assert.strictEqual(getSurveyorsPath({ action: 'edit', id: 1 }), '/surveyors/edit/1')
+    })
+  })
+
+  describe('getMobileUsersPath', () => {
+    it('should return the Mobile Users path based on arguments', () => {
+      assert.strictEqual(getMobileUsersPath({ }), '/mobile-users/list/')
+      assert.strictEqual(getMobileUsersPath({ action: 'list' }), '/mobile-users/list/')
+      assert.strictEqual(getMobileUsersPath({ action: 'list', id: 1 }), '/mobile-users/list/')
+      assert.strictEqual(getMobileUsersPath({ action: 'unknown-action', id: 1 }), '/mobile-users/list/')
+      assert.strictEqual(getMobileUsersPath({ action: 'view' }), '/mobile-users/list/', 'no "view" action available')
+      assert.strictEqual(getMobileUsersPath({ action: 'view', id: 1 }), '/mobile-users/list/', 'no "view" action available')
+      assert.strictEqual(getMobileUsersPath({ action: 'add' }), '/mobile-users/add/')
+      assert.strictEqual(getMobileUsersPath({ action: 'edit' }), '/mobile-users/add/', '"edit" without "id" is "add"')
+      assert.strictEqual(getMobileUsersPath({ action: 'edit', id: 1 }), '/mobile-users/edit/1')
     })
   })
 

@@ -92,6 +92,13 @@ if settings.AETHER_APPS.get('odk'):  # pragma: no cover
                 name='surveyors'),
     ]
 
+if settings.AETHER_APPS.get('couchdb-sync'):  # pragma: no cover
+    urlpatterns += [
+        re_path(r'^mobile-users/(?P<action>\w+)/(?P<mobile_user_id>[0-9]+)?$',
+                login_required(tokens_required(TemplateView.as_view(template_name='pages/mobile-users.html'))),
+                name='mobile-users'),
+    ]
+
 if settings.DEBUG:  # pragma: no cover
     if 'debug_toolbar' in settings.INSTALLED_APPS:
         import debug_toolbar

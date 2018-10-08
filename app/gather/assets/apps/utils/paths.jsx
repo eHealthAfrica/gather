@@ -18,10 +18,10 @@
  * under the License.
  */
 
-import { KERNEL_APP, ODK_APP, GATHER_APP } from './constants'
+import { KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP } from './constants'
 
 const API_PREFIX = ''
-const APPS = [ KERNEL_APP, ODK_APP, GATHER_APP ]
+const APPS = [ KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP ]
 
 /**
  * Returns the API url to get the Projects/Surveys data
@@ -48,6 +48,16 @@ export const getSurveysAPIPath = ({ app, id, withStats, ...params }) => {
  */
 export const getSurveyorsAPIPath = ({ id, ...params }) => {
   return buildAPIPath(ODK_APP, 'surveyors', id, params)
+}
+
+/**
+ * Returns the API url to get the Mobile Users data
+ *
+ * @param {number}  id          - mobile user id
+ * @param {object}  params      - query string parameters
+ */
+export const getMobileUsersAPIPath = ({ id, ...params }) => {
+  return buildAPIPath(COUCHDB_SYNC_APP, 'mobile-users', id, params)
 }
 
 /**
@@ -201,5 +211,27 @@ export const getSurveyorsPath = ({ action, id }) => {
 
     default:
       return '/surveyors/list/'
+  }
+}
+
+/**
+ * Returns the path to go to any Mobile Users page
+ *
+ * @param {string} action       - action: `list` (default), `add`, `edit`
+ * @param {number} id           - surveyor id
+ */
+export const getMobileUsersPath = ({ action, id }) => {
+  switch (action) {
+    case 'edit':
+      if (id) {
+        return `/mobile-users/edit/${id}`
+      }
+      return '/mobile-users/add/'
+
+    case 'add':
+      return '/mobile-users/add/'
+
+    default:
+      return '/mobile-users/list/'
   }
 }

@@ -191,7 +191,8 @@ a.btn-primary:not([href]) {
   font-size: $font-size-s;
   font-style: italic;
 
-  .username {
+  .username,
+  .email {
     font-family: $body-font-family;
     font-weight: 500;
   }
