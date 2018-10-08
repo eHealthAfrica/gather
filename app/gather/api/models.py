@@ -85,7 +85,7 @@ class UserTokens(models.Model):
         null=True,
         blank=True,
         verbose_name=_('Aether ODK token'),
-        help_text=_('This token corresponds to an Aether ODK token authorization linked to this user.'),
+        help_text=_('This token corresponds to an Aether ODK authorization token linked to this user.'),
     )
 
     def get_app_url(self, app_name):

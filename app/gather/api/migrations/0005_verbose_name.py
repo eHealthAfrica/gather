@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='usertokens',
             name='odk_token',
-            field=models.CharField(blank=True, help_text='This token corresponds to an Aether ODK token authorization linked to this user.', max_length=40, null=True, verbose_name='Aether ODK token'),
+            field=models.CharField(blank=True, help_text='This token corresponds to an Aether ODK authorization token linked to this user.', max_length=40, null=True, verbose_name='Aether ODK token'),
         ),
         migrations.AlterField(
             model_name='usertokens',
