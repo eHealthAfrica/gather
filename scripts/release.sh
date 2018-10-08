@@ -18,18 +18,55 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-set -e
+set -Eeuo pipefail
 
-APP="gather"
-DOCKER_REPO="ehealthafrica"
+docker_push () {
+    ORG="ehealthafrica"
+    TAG=$1
+    IMAGE=${ORG}/${APP}:${TAG}
 
-if [[ -n $TRAVIS_TAG ]]; then
-    DOCKER_TAG=$TRAVIS_TAG
-else
-    DOCKER_TAG=$TRAVIS_BRANCH
+    echo "Pushing Docker image ${IMAGE}"
+    docker tag ${APP} ${IMAGE}
+    docker push ${IMAGE}
+}
+
+if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]
+then
+    echo "--------------------------------------------------------------"
+    echo "Skipping a release because this is a pull request: ${TRAVIS_PULL_REQUEST}"
+    echo "--------------------------------------------------------------"
+    exit 0
 fi
 
-DOCKER_IMAGE=${DOCKER_REPO}/${APP}:${DOCKER_TAG}
+# release version depending on TRAVIS_BRANCH / TRAVIS_TAG
+if [[ $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+[\.0-9]*$ ]]
+then
+    VERSION=$TRAVIS_TAG
+
+elif [[ $TRAVIS_BRANCH =~ ^release\-[0-9]+\.[0-9]+[\.0-9]*$ ]]
+then
+    VERSION=`cat VERSION`
+    # append "-rc" suffix
+    VERSION=${VERSION}-rc
+
+elif [[ $TRAVIS_BRANCH = "develop" ]]
+then
+    VERSION="alpha"
+
+else
+    echo "--------------------------------------------------------------"
+    echo "Skipping a release because this branch is not permitted: ${TRAVIS_BRANCH}"
+    echo "--------------------------------------------------------------"
+    exit 0
+fi
+
+echo "--------------------------------------------------------------"
+echo "Releasing in branch: ${TRAVIS_BRANCH}"
+echo "Release version:     ${VERSION}"
+echo "Release revision:    ${TRAVIS_COMMIT}"
+echo "--------------------------------------------------------------"
+
+APP="gather"
 
 # Login in docker hub
 docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
@@ -40,9 +77,12 @@ docker-compose run   gather-assets build
 
 # Build and push docker image to docker hub
 docker-compose build \
-    --build-arg GIT_REVISION=$TRAVIS_COMMIT \
-    --build-arg VERSION=$DOCKER_TAG \
-    $APP
+    --build-arg GIT_REVISION=${TRAVIS_COMMIT} \
+    --build-arg VERSION=${VERSION} \
+    ${APP}
 
-docker tag  $APP ${DOCKER_IMAGE}
-docker push      ${DOCKER_IMAGE}
+docker_push $VERSION
+if [[ $VERSION != "alpha" ]]
+then
+    docker_push "latest"
+fi

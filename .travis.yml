@@ -6,23 +6,22 @@ python:
 services:
   - docker
 
+install: true
+
 before_script:
   - ./scripts/generate-credentials.sh > .env
 
-script:
-  - ./scripts/test_gather.sh
+# use matrix to split jobs and only re-execute the failing one
+matrix:
+  fast_finish: true
+  include:
+    - name: "Gather tests"
+      stage: test
+      script: ./scripts/test_gather.sh
 
-
-# deploy:
-#   - provider: script
-#     script: ./scripts/release.sh
-#     skip_cleanup: true
-#     on:
-#       branch: develop
-
-
-after_failure:
-  - ./scripts/kill_all.sh
+    - name: "Gather release"
+      stage: deploy
+      script: ./scripts/release.sh
 
 after_script:
   - ./scripts/kill_all.sh
