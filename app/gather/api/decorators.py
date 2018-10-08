@@ -18,7 +18,7 @@
 
 from django.contrib.auth.decorators import user_passes_test
 
-from ..settings import AETHER_APPS
+from ..settings import AETHER_APPS, logger
 from .models import UserTokens
 
 
@@ -36,9 +36,10 @@ def tokens_required(function=None, redirect_field_name=None, login_url=None):
             for app in AETHER_APPS:
                 # checks if there is a valid token for this app
                 if UserTokens.get_or_create_user_app_token(user, app) is None:
+                    logger.error(f'Could not check the authorization token for "{user}" in "{app}".')
                     return False
             return True
-        except Exception as e:
+        except Exception:
             return False
 
     actual_decorator = user_passes_test(
