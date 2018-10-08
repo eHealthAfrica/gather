@@ -21,12 +21,12 @@ import mock
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from ..models import UserTokens, Survey, Mask
+from ..models import UserTokens, Survey, Mask, AETHER_APPS
 
 
 get_or_create_user_app_token = UserTokens.get_or_create_user_app_token
 
-MODULES = ['kernel', 'odk', ]
+MODULES = list(AETHER_APPS.keys())
 
 
 def mock_return_none(*args):
@@ -213,3 +213,11 @@ class TokenModelsTests(TestCase):
             user_tokens.save_app_token(app, 'ABCDEFGH')
             self.assertEqual(get_or_create_user_app_token(self.user, app).token,
                              'ABCDEFGH')
+
+    def test_get_or_create_user_app_token__integration_test(self):
+        # checks that gather can create tokens in each app server
+        for app in MODULES:
+            uat = get_or_create_user_app_token(self.user, app)
+            self.assertIsNotNone(uat, app)
+            self.assertEqual(uat.base_url, AETHER_APPS[app]['url'])
+            self.assertIsNotNone(uat.token, app)
