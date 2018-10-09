@@ -3,7 +3,7 @@ version: "2.1"
 services:
 
   # ---------------------------------
-  # Database container
+  # Database
   # ---------------------------------
 
   postgres-base:
@@ -17,7 +17,7 @@ services:
       retries: 30
 
   # ---------------------------------
-  # NGINX container
+  # NGINX
   # ---------------------------------
 
   nginx-base:
@@ -38,7 +38,7 @@ services:
 
 
   # ---------------------------------
-  # Aether Kernel container
+  # Aether Kernel
   # ---------------------------------
 
   kernel-base:
@@ -79,7 +79,7 @@ services:
 
 
   # ---------------------------------
-  # Aether ODK container
+  # Aether ODK module
   # ---------------------------------
 
   odk-base:
@@ -123,7 +123,7 @@ services:
 
 
   # ---------------------------------
-  # Aether UI container
+  # Aether UI
   # ---------------------------------
 
   ui-base:
@@ -159,7 +159,7 @@ services:
 
 
   # ---------------------------------
-  # Gather container
+  # Gather
   # ---------------------------------
 
   gather-base:
@@ -215,7 +215,7 @@ services:
     command: start_dev
 
   # ---------------------------------
-  # Gather Assets container
+  # Gather Assets
   # ---------------------------------
 
   gather-assets-base:

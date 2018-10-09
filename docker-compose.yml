@@ -10,7 +10,7 @@ volumes:
 services:
 
   # ---------------------------------
-  # Database container
+  # Database
   # ---------------------------------
 
   db:
@@ -23,7 +23,7 @@ services:
       - gather_net
 
   # ---------------------------------
-  # Aether Kernel container
+  # Aether Kernel
   # ---------------------------------
 
   kernel:
@@ -39,7 +39,7 @@ services:
           - kernel.aether.local
 
   # ---------------------------------
-  # Aether ODK container
+  # Aether ODK module
   # ---------------------------------
 
   odk:
@@ -57,7 +57,7 @@ services:
           - odk.aether.local
 
   # ---------------------------------
-  # Aether UI container
+  # Aether UI
   # ---------------------------------
 
   ui:
@@ -75,7 +75,7 @@ services:
           - ui.aether.local
 
   # ---------------------------------
-  # Gather Assets container
+  # Gather Assets
   # ---------------------------------
 
   gather-assets:
@@ -86,7 +86,7 @@ services:
       - gather_net
 
   # ---------------------------------
-  # Gather container
+  # Gather
   # ---------------------------------
 
   gather:
@@ -106,7 +106,7 @@ services:
           - gather.local
 
   # ---------------------------------
-  # NGINX container
+  # NGINX
   # ---------------------------------
 
   nginx:

@@ -16,7 +16,7 @@ networks:
 services:
 
   # ---------------------------------
-  # Database container
+  # Database
   # ---------------------------------
 
   db:
@@ -28,7 +28,7 @@ services:
 
 
   # ---------------------------------
-  # Aether kernel container
+  # Aether kernel
   # ---------------------------------
 
   kernel:
@@ -48,7 +48,7 @@ services:
 
 
   # ---------------------------------
-  # ODK container
+  # Aether ODK module
   # ---------------------------------
 
   odk:
@@ -68,8 +68,15 @@ services:
 
 
   # ---------------------------------
-  # Aether UI module
+  # Aether UI
   # ---------------------------------
+
+  ui-assets:
+    extends:
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
+      service: ui-assets-base
+    networks:
+      - gather_local
 
   ui:
     extends:
@@ -85,14 +92,9 @@ services:
         aliases:
           - ui.aether.local
 
-  ui-assets:
-    extends:
-      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
-      service: ui-assets-base
-
 
   # ---------------------------------
-  # Gather Assets container
+  # Gather Assets
   # ---------------------------------
 
   gather-assets:
@@ -104,7 +106,7 @@ services:
 
 
   # ---------------------------------
-  # Gather container
+  # Gather
   # ---------------------------------
 
   gather:
@@ -121,7 +123,7 @@ services:
 
 
   # ---------------------------------
-  # NGINX container
+  # NGINX
   # ---------------------------------
 
   nginx:
