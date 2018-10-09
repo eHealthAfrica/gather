@@ -143,7 +143,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
       served by NGINX. Defaults to `AETHER_ODK_URL` value.
 
   - Aether CouchDB Sync:
-    - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_odk_admin_user_auth_token`
+    - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_couchdb_sync_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8002` Aether CouchDB Sync Server url.
     - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9002` Aether CouchDB Sync Testing Server url.
