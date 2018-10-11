@@ -81,7 +81,7 @@ export default class EntitiesDownload extends Component {
             type='button'
             className='tab'
             disabled={this.state.preparing}
-            onClick={() => { download(1, survey.name) }}
+            onClick={() => { download(1, this.props.filename) }}
           >
             { icon }
             <FormattedMessage
@@ -96,7 +96,7 @@ export default class EntitiesDownload extends Component {
     const pages = range(1, Math.ceil(total / pageSize) + 1)
       .map(index => ({
         currentPage: index,
-        filename: `${survey.name}-${index}`
+        filename: `${this.props.filename}-${index}`
       }))
 
     return (

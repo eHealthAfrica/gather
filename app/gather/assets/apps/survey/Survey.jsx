@@ -87,6 +87,7 @@ export default class Survey extends Component {
       labels: this.state.labels,
       paths: this.state.selectedPaths
     }
+    const filename = this.props.skeleton.name || survey.name
 
     return (
       <div className='survey-data'>
@@ -125,6 +126,7 @@ export default class Survey extends Component {
                 paths={this.state.selectedPaths}
                 labels={this.state.labels}
                 settings={this.props.settings}
+                filename={filename}
               />
             </li>
             <li className='toolbar-filter'>
