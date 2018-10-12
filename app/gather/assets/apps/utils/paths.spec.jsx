@@ -45,7 +45,7 @@ describe('paths utils', () => {
 
   describe('getMediaFileAPIPath', () => {
     it('should return the Media Files API path', () => {
-      assert.strictEqual(getMediaFileAPIPath({ }), '/odk/media-files.json')
+      assert.strictEqual(getMediaFileAPIPath({}), '/odk/media-files.json')
       assert.strictEqual(getMediaFileAPIPath({ id: 1 }), '/odk/media-files/1.json')
     })
   })
@@ -55,7 +55,7 @@ describe('paths utils', () => {
       const prefix = '/kernel/'
 
       it('should return the Surveys API path', () => {
-        assert.strictEqual(getSurveysAPIPath({ }), prefix + 'projects.json')
+        assert.strictEqual(getSurveysAPIPath({}), prefix + 'projects.json')
         assert.strictEqual(getSurveysAPIPath({ id: 1 }), prefix + 'projects/1.json')
       })
 
@@ -118,7 +118,7 @@ describe('paths utils', () => {
     const prefix = '/kernel/'
 
     it('should return the Entities API path', () => {
-      assert.strictEqual(getEntitiesAPIPath({ }), prefix + 'entities.json')
+      assert.strictEqual(getEntitiesAPIPath({}), prefix + 'entities.json')
     })
 
     it('should return the Survey Entities API path', () => {
@@ -130,7 +130,7 @@ describe('paths utils', () => {
     const prefix = '/odk/'
 
     it('should return the Surveyors API path', () => {
-      assert.strictEqual(getSurveyorsAPIPath({ }), prefix + 'surveyors.json')
+      assert.strictEqual(getSurveyorsAPIPath({}), prefix + 'surveyors.json')
       assert.strictEqual(getSurveyorsAPIPath({ id: 1 }), prefix + 'surveyors/1.json')
     })
 
@@ -155,7 +155,7 @@ describe('paths utils', () => {
     const prefix = '/odk/'
 
     it('should return the xForms API path', () => {
-      assert.strictEqual(getXFormsAPIPath({ }), prefix + 'xforms.json')
+      assert.strictEqual(getXFormsAPIPath({}), prefix + 'xforms.json')
     })
 
     it('should return the xForms API path filtering by survey', () => {
@@ -169,7 +169,7 @@ describe('paths utils', () => {
 
   describe('getSurveysPath', () => {
     it('should return the Surveys path based on arguments', () => {
-      assert.strictEqual(getSurveysPath({ }), '/surveys/list/')
+      assert.strictEqual(getSurveysPath({}), '/surveys/list/')
       assert.strictEqual(getSurveysPath({ action: 'list' }), '/surveys/list/')
       assert.strictEqual(getSurveysPath({ action: 'list', id: 1 }), '/surveys/list/')
       assert.strictEqual(getSurveysPath({ action: 'unknown-action' }), '/surveys/list/')
@@ -183,7 +183,7 @@ describe('paths utils', () => {
 
   describe('getSurveyorsPath', () => {
     it('should return the Surveyors path based on arguments', () => {
-      assert.strictEqual(getSurveyorsPath({ }), '/surveyors/list/')
+      assert.strictEqual(getSurveyorsPath({}), '/surveyors/list/')
       assert.strictEqual(getSurveyorsPath({ action: 'list' }), '/surveyors/list/')
       assert.strictEqual(getSurveyorsPath({ action: 'list', id: 1 }), '/surveyors/list/')
       assert.strictEqual(getSurveyorsPath({ action: 'unknown-action', id: 1 }), '/surveyors/list/')
@@ -198,7 +198,7 @@ describe('paths utils', () => {
   describe('buildQueryString', () => {
     it('should build query string path based on arguments', () => {
       assert.strictEqual(buildQueryString(), '')
-      assert.strictEqual(buildQueryString({ }), '')
+      assert.strictEqual(buildQueryString({}), '')
       assert.strictEqual(buildQueryString({ param_1: 1 }), 'param_1=1')
       assert.strictEqual(buildQueryString({ param_1: 1, param_2: 2 }), 'param_1=1&param_2=2')
     })

@@ -294,7 +294,7 @@ describe('request utils', () => {
           removeChildCalled = true
         }
 
-        return getData('http://localhost/down', { download: true, fileName: 'my-file.txt' })
+        return getData('http://localhost/down', { download: true, filename: 'my-file.txt' })
           .then(
             (body) => {
               assert(!body, `No expected response ${body}`)

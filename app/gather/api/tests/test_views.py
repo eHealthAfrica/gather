@@ -85,7 +85,6 @@ class ViewsTest(TestCase):
         request = RequestFactory().delete('/go_to_proxy')
         request.user = self.user
         response = self.view(request, path='to-delete')
-        self.assertNotIn('a', response)
 
         self.assertEqual(response.status_code, 200)
         mock_test_conn.assert_called_once()
