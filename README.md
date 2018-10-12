@@ -58,7 +58,7 @@ cd gather
 **IMPORTANT NOTE**: the docker-compose files are intended to be used exclusively
 for local development. Never deploy these to publicly accessible servers.
 
-#### Include this entry in your `/etc/hosts` file
+#### Include this entry in your `/etc/hosts` or `C:\Windows\System32\Drivers\etc\hosts` file
 
 ```text
 # gather
@@ -106,6 +106,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
 - Authentication (Central Authentication Service):
   - `CAS_SERVER_URL`: `https://your.cas.server`.
   - `HOSTNAME`: `gather.local`.
+  See more in [Django CAS client](https://github.com/mingchen/django-cas-ng).
 
 - Authentication (Django templates):
   - `LOGIN_TEMPLATE`: `pages/login.html`.
@@ -218,8 +219,8 @@ This means that every time a logged in user tries to visit any page that require
 to fetch data from any of the other apps, `aether-kernel` and/or `aether-odk`,
 the system will verify that the user token for that app is valid or will request
 a new one using the global tokens, `AETHER_KERNEL_TOKEN` and/or `AETHER_ODK_TOKEN`;
-that token is going to be used for all requests and will allow the system to better
-track the user actions.
+that token is going to be used for all requests and will allow the system to
+track better the user actions.
 
 *[Return to TOC](#table-of-contents)*
 
