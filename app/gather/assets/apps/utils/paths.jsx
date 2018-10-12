@@ -81,16 +81,6 @@ export const getEntitiesAPIPath = ({ id, ...params }) => {
 }
 
 /**
- * Returns the API url to get the Schemas data
- *
- * @param {number}  id          - schema id
- * @param {object}  params      - query string parameters
- */
-export const getSchemasAPIPath = ({ id, ...params }) => {
-  return buildAPIPath(KERNEL_APP, 'schemas', id, params)
-}
-
-/**
  * Returns the API url to get the Masks data
  *
  * @param {number}  id          - mask id *
@@ -105,8 +95,8 @@ export const getMasksAPIPath = ({ id, ...params }) => {
  *
  * Without "action":
  *
- *    With    {id} -> {app}/{type}/{id}.json?{queryString}
- *    Without {id} -> {app}/{type}.json?{queryString}
+ *    With    {id} -> {app}/{type}/{id}.{format}?{queryString}
+ *    Without {id} -> {app}/{type}.{format}?{queryString}
  *
  * With "action":
  *
@@ -123,14 +113,13 @@ export const getMasksAPIPath = ({ id, ...params }) => {
 const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => {
   const suffix = (
     (id ? '/' + id : '') +
-    // indicates the ation suffix like "details", "fetch" or "propagate"
+    // indicates the action suffix like "details", "fetch" or "propagate"
     (action ? '/' + action : ''))
-  const url = `${API_PREFIX}/${app}/${type}${suffix}.${format}`
+  const formatSuffix = (format === '' ? '/' : '.' + format)
+  const url = `${API_PREFIX}/${app}/${type}${suffix}${formatSuffix}`
   const queryString = id ? '' : buildQueryString(params)
-  if (queryString === '') {
-    return url
-  }
-  return `${url}?${queryString}`
+
+  return queryString === '' ? url : `${url}?${queryString}`
 }
 
 /**

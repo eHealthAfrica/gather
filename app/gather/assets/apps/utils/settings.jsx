@@ -20,6 +20,14 @@
 
 import { getData } from './request'
 
+const DEFAULT_SETTINGS = {
+  ODK_ACTIVE: true,
+
+  CSV_HEADER_RULES: 'remove-prefix;payload.,remove-prefix;None.,replace;.;:;',
+  CSV_HEADER_RULES_SEP: ';',
+  CSV_MAX_ROWS_SIZE: 0
+}
+
 export const getSettings = () => new Promise(resolve => {
   getData('/assets-settings')
     .then(response => {
@@ -33,12 +41,6 @@ export const getSettings = () => new Promise(resolve => {
     })
     .catch(() => {
       // use default values
-      resolve({
-        ODK_ACTIVE: true,
-
-        CSV_HEADER_RULES: 'remove-prefix;payload.,remove-prefix;None.,replace;.;:;',
-        CSV_HEADER_RULES_SEP: ';',
-        CSV_MAX_ROWS_SIZE: 0
-      })
+      resolve(DEFAULT_SETTINGS)
     })
 })
