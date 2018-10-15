@@ -19,9 +19,11 @@
  */
 
 import { getData } from './request'
+import { ODK_APP } from './constants'
 
 const DEFAULT_SETTINGS = {
   ODK_ACTIVE: true,
+
   EXPORT_FORMAT: 'xlsx',
   EXPORT_MAX_ROWS_SIZE: 0
 }
@@ -30,7 +32,8 @@ export const getSettings = () => new Promise(resolve => {
   getData('/assets-settings')
     .then(response => {
       resolve({
-        ODK_ACTIVE: !!response.odk_active,
+        ODK_ACTIVE: (response.aether_apps || []).indexOf(ODK_APP) > -1,
+
         EXPORT_FORMAT: response.export_format || DEFAULT_SETTINGS.EXPORT_FORMAT,
         EXPORT_MAX_ROWS_SIZE: response.export_max_rows_size || DEFAULT_SETTINGS.EXPORT_MAX_ROWS_SIZE
       })

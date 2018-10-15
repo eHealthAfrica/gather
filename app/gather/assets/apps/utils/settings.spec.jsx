@@ -40,7 +40,7 @@ describe('Settings utils', () => {
       nock('http://localhost')
         .get('/assets-settings')
         .reply(200, {
-          odk_active: true,
+          aether_apps: ['odk'],
           export_format: 'csv',
           export_max_rows_size: 10000
         })

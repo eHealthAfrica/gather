@@ -42,18 +42,18 @@ else:  # pragma: no cover
     logout_view = views.LogoutView.as_view(template_name=settings.LOGGED_OUT_TEMPLATE)
 
 auth_urls = ([
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
+    path('login/', view=login_view, name='login'),
+    path('logout/', view=logout_view, name='logout'),
 ], 'rest_framework')
 
 
 urlpatterns = [
 
     # `health` endpoint
-    path('health', health, name='health'),
+    path('health', view=health, name='health'),
 
     # assets settings
-    path('assets-settings', assets_settings, name='assets-settings'),
+    path('assets-settings', view=assets_settings, name='assets-settings'),
 
     # `admin` section
     path('admin/', admin.site.urls),
@@ -69,26 +69,26 @@ urlpatterns = [
     # ----------------------
     # Welcome page
     path('',
-         login_required(TemplateView.as_view(template_name='pages/index.html')),
+         view=login_required(TemplateView.as_view(template_name='pages/index.html')),
          name='index-page'),
 
     # ----------------------
     # shows the current user app tokens
     path('~tokens',
-         login_required(TemplateView.as_view(template_name='pages/tokens.html')),
+         view=login_required(TemplateView.as_view(template_name='pages/tokens.html')),
          name='tokens'),
     # to check if the user tokens are valid
-    path('check-tokens', login_required(tokens_required(health)), name='check-tokens'),
+    path('check-tokens', view=login_required(tokens_required(health)), name='check-tokens'),
 
     re_path(r'^surveys/(?P<action>\w+)/(?P<survey_id>[0-9a-f-]+)?$',
-            login_required(tokens_required(TemplateView.as_view(template_name='pages/surveys.html'))),
+            view=login_required(tokens_required(TemplateView.as_view(template_name='pages/surveys.html'))),
             name='surveys'),
 ]
 
-if settings.AETHER_ODK:  # pragma: no cover
+if settings.AETHER_APPS.get('odk'):  # pragma: no cover
     urlpatterns += [
         re_path(r'^surveyors/(?P<action>\w+)/(?P<surveyor_id>[0-9]+)?$',
-                login_required(tokens_required(TemplateView.as_view(template_name='pages/surveyors.html'))),
+                view=login_required(tokens_required(TemplateView.as_view(template_name='pages/surveyors.html'))),
                 name='surveyors'),
     ]
 
