@@ -362,7 +362,6 @@ else:
 
 
 # check if ODK is available in this instance
-AETHER_ODK = False
 if 'odk' in AETHER_MODULES:
     odk = {
         'token': os.environ.get('AETHER_ODK_TOKEN'),
@@ -374,7 +373,6 @@ if 'odk' in AETHER_MODULES:
 
     if odk['url'].strip() and odk['token'].strip():
         AETHER_APPS['odk'] = odk
-        AETHER_ODK = True
     else:
         msg = 'Aether ODK configuration was not properly set!'
         logger.critical(msg)

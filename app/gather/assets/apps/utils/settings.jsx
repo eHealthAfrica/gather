@@ -19,6 +19,7 @@
  */
 
 import { getData } from './request'
+import { ODK_APP } from './constants'
 
 const DEFAULT_SETTINGS = {
   ODK_ACTIVE: true,
@@ -32,7 +33,7 @@ export const getSettings = () => new Promise(resolve => {
   getData('/assets-settings')
     .then(response => {
       resolve({
-        ODK_ACTIVE: !!response.odk_active,
+        ODK_ACTIVE: (response.aether_apps || []).indexOf(ODK_APP) > -1,
 
         CSV_HEADER_RULES: response.csv_header_rules,
         CSV_HEADER_RULES_SEP: response.csv_header_rules_sep,

@@ -36,7 +36,8 @@ class ContextProcessorsTests(TestCase):
             'odk_url': 'http://odk.aether.local',
         })
 
-    @mock.patch('gather.context_processors.settings.AETHER_ODK', False)
+    @mock.patch('gather.context_processors.settings.AETHER_APPS',
+                {'kernel': {'assets': 'http://localhost'}})
     def test_gather_context__mocked(self):
         request = RequestFactory().get('/')
         context = gather_context(request)
