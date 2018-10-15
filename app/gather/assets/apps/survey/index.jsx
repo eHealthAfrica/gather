@@ -21,11 +21,7 @@
 import React, { Component } from 'react'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
-import {
-  getSchemasAPIPath,
-  getSurveyorsAPIPath,
-  getSurveysAPIPath
-} from '../utils/paths'
+import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
 import { ODK_APP } from '../utils/constants'
 
 import Survey from './Survey'
@@ -105,10 +101,8 @@ export default class SurveyDispatcher extends Component {
             url: getSurveysAPIPath({ id: surveyId, withStats: true })
           },
           {
-            // take the last schemas to extract the paths and labels
-            // TODO: let the user choose the schema and fetch only entities of that one
-            name: 'schemas',
-            url: getSchemasAPIPath({ project: surveyId, ordering: '-modified', pageSize: 10 })
+            name: 'skeleton',
+            url: getSurveysAPIPath({ id: surveyId, action: 'schemas-skeleton' })
           }
         ]
 

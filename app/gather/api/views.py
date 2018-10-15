@@ -161,7 +161,11 @@ class TokenProxyView(View):
                                     headers=headers,
                                     *args,
                                     **kwargs)
-        http_response = HttpResponse(response, status=response.status_code)
+        http_response = HttpResponse(
+            content=response,
+            status=response.status_code,
+            content_type=response.headers['Content-Type'],
+        )
         # copy from the original response headers the exposed ones
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
         # https://fetch.spec.whatwg.org/#http-access-control-expose-headers

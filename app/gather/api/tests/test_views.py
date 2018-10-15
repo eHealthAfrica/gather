@@ -26,11 +26,12 @@ from django.urls import reverse
 from ..views import TokenProxyView
 
 
-RESPONSE_MOCK = mock.Mock(status_code=200, headers={})
+RESPONSE_MOCK = mock.Mock(status_code=200, headers={'Content-Type': 'application/json'})
 RESPONSE_MOCK_WITH_HEADERS = mock.Mock(
     status_code=200,
     headers={
         'Access-Control-Expose-Headers': 'a, b, c',
+        'Content-Type': 'application/json',
         'a': 'A',
         'b': 'B',
         'z': 'Z',

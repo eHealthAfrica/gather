@@ -58,7 +58,7 @@ cd gather
 **IMPORTANT NOTE**: the docker-compose files are intended to be used exclusively
 for local development. Never deploy these to publicly accessible servers.
 
-#### Include this entry in your `/etc/hosts` file
+#### Include this entry in your `/etc/hosts` or `C:\Windows\System32\Drivers\etc\hosts` file
 
 ```text
 # gather
@@ -106,6 +106,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
 - Authentication (Central Authentication Service):
   - `CAS_SERVER_URL`: `https://your.cas.server`.
   - `HOSTNAME`: `gather.local`.
+  See more in [Django CAS client](https://github.com/mingchen/django-cas-ng).
 
 - Authentication (Django templates):
   - `LOGIN_TEMPLATE`: `pages/login.html`.

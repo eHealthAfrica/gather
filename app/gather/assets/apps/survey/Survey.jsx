@@ -26,7 +26,7 @@ import { range } from '../utils'
 import { MAX_PAGE_SIZE, GATHER_APP } from '../utils/constants'
 import { getSurveysPath, getSurveysAPIPath, getEntitiesAPIPath } from '../utils/paths'
 import { postData } from '../utils/request'
-import { extractPathDocs } from '../utils/avro-utils'
+import { cleanJsonPaths } from '../utils/types'
 
 import SurveyDetail from './SurveyDetail'
 import SurveyMasks from './mask/SurveyMasks'
@@ -41,53 +41,13 @@ export default class Survey extends Component {
   constructor (props) {
     super(props)
 
+    const paths = cleanJsonPaths(props.skeleton.jsonpaths)
     this.state = {
       viewMode: TABLE_VIEW,
       total: props.survey.entities_count,
-      labels: {},
-      allPaths: [],
-      selectedPaths: []
-    }
-
-    const { results } = props.schemas
-    if (results.length) {
-      const pathsAndLabels = {
-        labels: {},
-        paths: []
-      }
-
-      // use the schemas to extract the possible paths
-      results.forEach(result => {
-        extractPathDocs(result.definition, pathsAndLabels)
-      })
-
-      // not desired paths
-      const forbiddenPath = (jsonPath) => (
-        // attributes "@attr"
-        (jsonPath.charAt(0) === '@') ||
-        // internal xForm properties
-        ([
-          '_id', '_version',
-          'starttime', 'endtime', 'deviceid',
-          'meta'
-        ].indexOf(jsonPath) > -1) ||
-        // "meta" children
-        (jsonPath.indexOf('meta.') === 0) ||
-        // array/ map properties
-        (jsonPath.indexOf('#') > -1 || jsonPath.indexOf('*') > -1)
-      )
-      // ["a", "a.b", "a.c"] => ["a.b", "a.c"]
-      const isLeaf = (jsonPath, _, array) => array.filter(
-        anotherPath => anotherPath.indexOf(jsonPath + '.') === 0
-      ).length === 0
-
-      this.state.labels = pathsAndLabels.labels
-      this.state.allPaths = pathsAndLabels.paths
-        // remove undesired paths
-        .filter(jsonPath => !forbiddenPath(jsonPath))
-        // keep only the leafs
-        .filter(isLeaf)
-      this.state.selectedPaths = this.state.allPaths
+      labels: props.skeleton.docs,
+      allPaths: paths,
+      selectedPaths: paths
     }
   }
 
@@ -211,8 +171,8 @@ export default class Survey extends Component {
         .join(',')
     }
 
-    const download = (options, fileName) => {
-      postData(getEntitiesAPIPath(options), payload, { download: true, fileName })
+    const download = (options, filename) => {
+      postData(getEntitiesAPIPath(options), payload, { download: true, filename })
     }
 
     if (total < pageSize) {
@@ -235,7 +195,7 @@ export default class Survey extends Component {
       .map(index => ({
         key: index,
         options: { ...params, page: index },
-        fileName: `${survey.name}-${index}.csv`
+        filename: `${survey.name}-${index}.csv`
       }))
 
     return (
@@ -263,9 +223,9 @@ export default class Survey extends Component {
                   key={page.key}
                   type='button'
                   className='dropdown-item'
-                  onClick={() => { download(page.options, page.fileName) }}
+                  onClick={() => { download(page.options, page.filename) }}
                 >
-                  { page.fileName }
+                  { page.filename }
                 </button>
               ))
             }

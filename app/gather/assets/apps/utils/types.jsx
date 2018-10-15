@@ -20,6 +20,10 @@
 
 import moment from 'moment'
 
+const PATH_ARRAY = '#'
+const PATH_MAP = '*'
+const PATH_UNION = '?'
+
 const DATE_FORMAT = 'YYYY-MM-DD'
 const DATE_REGEXP = /^(\d{4})-(\d{2})-(\d{2})$/
 
@@ -311,19 +315,30 @@ export const getLabel = (jsonPath, labels = {}, separator = '.') => {
     return labels[jsonPath]
   }
 
-  // if there are "map" properties
+  // if there are "union" properties "a.b.?.c.d"
+  const unionKeys = Object.keys(labels)
+    .filter(key => key.indexOf(`${separator}${PATH_UNION}`) > -1)
+  for (let i = 0; i < unionKeys.length; i++) {
+    const current = unionKeys[i]
+    const cleaned = current.replace(`${separator}${PATH_UNION}`, '')
+    if (cleaned === jsonPath) {
+      return labels[current]
+    }
+  }
+
+  // if there are "map" properties "a.b.*.c.d"
   const mapKeys = Object.keys(labels)
-    .filter(key => key.indexOf(`${separator}*`) > -1)
+    .filter(key => key.indexOf(`${separator}${PATH_MAP}`) > -1)
   for (let i = 0; i < mapKeys.length; i++) {
     const current = mapKeys[i]
     // create the regular expression with the key value
-    // "a.b.*.c.d.*.e" => /^a\.b\.([A-Za-z0-9_]+)\.c\.d\.([A-Za-z0-9_]+)\.e/g
-    const reStr = current
+    // "a.b.*.c.?.d.*.e" => /^a\.b\.([A-Za-z0-9_]+)\.c\.d\.([A-Za-z0-9_]+)\.e$/
+    const re = current
+      .replace(`${separator}${PATH_UNION}`, '') // remove union marks
       .split(separator)
-      .map(piece => piece === '*' ? '([A-Za-z0-9_]+)' : piece)
+      .map(piece => piece === PATH_MAP ? '([A-Za-z0-9_]+)' : piece)
       .join(`\\${separator}`)
-    const regexpKey = new RegExp('^' + reStr, 'g')
-    if (regexpKey.test(jsonPath)) {
+    if (new RegExp('^' + re + '$').test(jsonPath)) {
       return labels[current]
     }
   }
@@ -334,7 +349,7 @@ export const getLabel = (jsonPath, labels = {}, separator = '.') => {
 }
 
 /**
- * Return the jsonpath tree labels "a.b.c.d" => "A – B – C – D"
+ * Return the jsonpath tree labels "a.b.c.d" => "A / B / C / D"
  *
  * @param {string} jsonPath       - The jsonpath
  * @param {Object} labels         - The labels dictionary
@@ -367,3 +382,46 @@ const sentenceCase = (name) => (name
   .replace(/([A-Z]+)/g, ' $1') //    convert `myNameIs` into `my Name Is`
   .replace(/([A-Z][a-z])/g, ' $1')
 )
+
+// not desired paths
+const forbiddenPath = (jsonPath) => (
+  // attributes "@attr"
+  (jsonPath.charAt(0) === '@') ||
+  // internal xForm properties
+  ([
+    '_id', '_version',
+    'starttime', 'endtime', 'deviceid',
+    'meta'
+  ].indexOf(jsonPath) > -1) ||
+  // "meta" children
+  (jsonPath.indexOf('meta.') === 0) ||
+  // AVRO array/ map/ union properties
+  (
+    jsonPath.indexOf(PATH_ARRAY) > -1 ||
+    jsonPath.indexOf(PATH_MAP) > -1 ||
+    jsonPath.indexOf(PATH_UNION) > -1
+  )
+)
+// ["a", "a.b", "a.c"] => ["a.b", "a.c"]
+const isLeaf = (jsonPath, _, array) => array.filter(
+  anotherPath => anotherPath.indexOf(jsonPath + '.') === 0
+).length === 0
+
+/**
+ * Return the cleaned list of jsonpaths.
+ *
+ * Remove paths like:
+ *   - attributes, "@xxx"
+ *   - xForm internal, "_id", "_version", ...
+ *   - paths with AVRO internal flags, "#", "?", "*"
+ *   - intermmediate paths, ["a", "a.b", "a.c"] => ["a.b", "a.c"]
+ *
+ * @param {array} jsonPaths  - The list of jsonpaths
+ *
+ * @return {array}           - The cleaned list
+ */
+export const cleanJsonPaths = (jsonPaths) => jsonPaths
+  // remove undesired paths
+  .filter(jsonPath => !forbiddenPath(jsonPath))
+  // keep only the leafs
+  .filter(isLeaf)

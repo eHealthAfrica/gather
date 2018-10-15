@@ -36,6 +36,10 @@ import {
 const handleUnexpectedBody = (body) => { assert(!!body, `Unexpected response ${body}`) }
 const handleUnexpectedError = (error) => { assert(!!error, `Unexpected error ${error}`) }
 
+const WINDOW_URL = window.URL
+const DOCUMENT_BODY_APPEND = document.body.appendChild
+const DOCUMENT_BODY_REMOVE = document.body.removeChild
+
 describe('request utils', () => {
   describe('request', () => {
     describe('implemented HTTP methods', () => {
@@ -152,6 +156,10 @@ describe('request utils', () => {
       afterEach(() => {
         nock.isDone()
         nock.cleanAll()
+
+        window.URL = WINDOW_URL
+        document.body.appendChild = DOCUMENT_BODY_APPEND
+        document.body.removeChild = DOCUMENT_BODY_REMOVE
       })
 
       it('should do a GET request and download response', () => {
@@ -236,7 +244,57 @@ describe('request utils', () => {
           removeChildCalled = true
         }
 
-        return getData('http://localhost/down', { download: true, fileName: 'my-file.txt' })
+        return getData('http://localhost/down', { download: true, filename: 'my-file.txt' })
+          .then(
+            (body) => {
+              assert(!body, `No expected response ${body}`)
+              assert(createObjectURLCalled, 'createObjectURL was called')
+              assert(revokeObjectURLCalled, 'revokeObjectURL was called')
+              assert(appendChildCalled, 'appendChild was called')
+              assert(removeChildCalled, 'removeChild was called')
+            },
+            handleUnexpectedError
+          )
+          .catch(handleUnexpectedError)
+      })
+
+      it('should do a GET request and download response with the Content-Disposition file name', () => {
+        nock('http://localhost')
+          .get('/down')
+          .reply(200, 'content text', {
+            'Content-Disposition': 'attachment; filename="another-file.txt"'
+          })
+
+        let createObjectURLCalled = false
+        let revokeObjectURLCalled = false
+        let appendChildCalled = false
+        let removeChildCalled = false
+        let addedElement = null
+
+        window.URL = {
+          createObjectURL: (content) => {
+            assert(content)
+            createObjectURLCalled = true
+          },
+          revokeObjectURL: (url) => {
+            assert(url)
+            revokeObjectURLCalled = true
+          }
+        }
+
+        document.body.appendChild = (element) => {
+          addedElement = element
+          assert.strictEqual(element.download, 'another-file.txt')
+          appendChildCalled = true
+        }
+
+        document.body.removeChild = (element) => {
+          assert.strictEqual(element, addedElement)
+          assert.strictEqual(element.download, 'another-file.txt')
+          removeChildCalled = true
+        }
+
+        return getData('http://localhost/down', { download: true, filename: 'my-file.txt' })
           .then(
             (body) => {
               assert(!body, `No expected response ${body}`)

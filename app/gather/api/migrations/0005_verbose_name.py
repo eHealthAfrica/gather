@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='usertokens',
-            options={'verbose_name': 'user authorization tokens', 'verbose_name_plural': 'users authorization tokens'},
+            options={'default_related_name': 'app_tokens', 'verbose_name': 'user authorization tokens', 'verbose_name_plural': 'users authorization tokens'},
         ),
 
 
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='survey',
-            options={'verbose_name': 'survey', 'verbose_name_plural': 'surveys'},
+            options={'default_related_name': 'surveys', 'verbose_name': 'survey', 'verbose_name_plural': 'surveys'},
         ),
 
 
@@ -68,6 +68,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='mask',
-            options={'verbose_name': 'mask', 'verbose_name_plural': 'masks'},
+            options={'default_related_name': 'maks', 'verbose_name': 'mask', 'verbose_name_plural': 'masks'},
         ),
     ]

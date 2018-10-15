@@ -22,6 +22,7 @@
 
 import assert from 'assert'
 import {
+  cleanJsonPaths,
   filterByPaths,
   flatten,
   getLabel,
@@ -231,7 +232,9 @@ describe('types', () => {
     const labels = {
       'a': 'Root',
       'a.d.#.e': 'The indexed E',
-      'a.*.c': 'The Big C'
+      'a.*.c': 'The Big C',
+      'a.*.c.?.u': 'Join',
+      'x.y.?.z': 'Union'
     }
 
     it('should find simple nested properties', () => {
@@ -245,13 +248,68 @@ describe('types', () => {
       assert.strictEqual(getLabel('a.x_x.c', labels), 'The Big C')
       assert.strictEqual(getLabel('a.x__1_x.c', labels), 'The Big C')
       assert.strictEqual(getLabel('a.x__1._x.c', labels), 'c')
+
+      assert.strictEqual(getLabel('a.x.c.z', labels), 'z')
+      assert.strictEqual(getLabel('a.x_x.c.z', labels), 'z')
+      assert.strictEqual(getLabel('a.x__1_x.c.z', labels), 'z')
+    })
+
+    it('should detect union properties', () => {
+      assert.strictEqual(getLabel('a.x.c.u', labels), 'Join')
+      assert.strictEqual(getLabel('a.x_x.c.u', labels), 'Join')
+      assert.strictEqual(getLabel('a.x__1_x.c.u', labels), 'Join')
+      assert.strictEqual(getLabel('a.x__1._x.c.u', labels), 'u')
+
+      assert.strictEqual(getLabel('x.y.z', labels), 'Union')
+      assert.strictEqual(getLabel('x.y.a.z', labels), 'z')
     })
   })
 
   describe('getLabelTree', () => {
+    const labels = {
+      'a': 'Root',
+      'a.d.#.e': 'The indexed E',
+      'a.*.c': 'The Big C',
+      'a.*.c.?.u': 'Join',
+      'x.y.?.z': 'Union'
+    }
+
     it('should concatenate jsonpath pieces labels', () => {
       assert.strictEqual(getLabelTree('a.b.c.d.e'), 'a / b / c / d / e')
+      assert.strictEqual(getLabelTree('a.b.c.d.e', labels), 'Root / b / The Big C / d / e')
+
       assert.strictEqual(getLabelTree('a:b:c:d:e', {}, ':', '$'), 'a$b$c$d$e')
+      assert.strictEqual(getLabelTree('a.b.c.d.e', labels, '.', '$'), 'Root$b$The Big C$d$e')
+    })
+  })
+
+  describe('cleanJsonPaths', () => {
+    it('should remove undesired jsonpaths and keep only leafs', () => {
+      const paths = [
+        'a',
+        'a.b',
+        'a.b.*',
+        'a.b.*.#',
+        'a.b.*.#.x',
+        'a.c',
+        'a.c.#',
+        'a.c.#.y',
+        'a.d',
+        'a.d.?',
+        'a.d.?.e',
+        'a.f',
+        'a.f.g',
+        'z'
+      ]
+      const expected = [
+        'a.b',
+        'a.c',
+        'a.d',
+        'a.f.g',
+        'z'
+      ]
+
+      assert.deepStrictEqual(cleanJsonPaths(paths), expected)
     })
   })
 })
