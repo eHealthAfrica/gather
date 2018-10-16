@@ -32,3 +32,6 @@ export const KERNEL_APP = 'kernel'
 export const ODK_APP = 'odk'
 export const COUCHDB_SYNC_APP = 'couchdb-sync'
 export const GATHER_APP = 'gather'
+
+// quick workaround to filter entities belonging to this app
+export const FAMILY = 'gather'

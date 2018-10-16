@@ -24,7 +24,7 @@ import { FormattedMessage } from 'react-intl'
 import { Portal } from '../../components'
 
 import { range } from '../../utils'
-import { MAX_PAGE_SIZE } from '../../utils/constants'
+import { FAMILY, MAX_PAGE_SIZE } from '../../utils/constants'
 import { getEntitiesAPIPath } from '../../utils/paths'
 import { postData } from '../../utils/request'
 
@@ -45,6 +45,7 @@ export default class EntitiesDownload extends Component {
     const params = {
       project: survey.id,
       format: '',
+      family: FAMILY,
       action: EXPORT_FORMAT,
       pageSize
     }
