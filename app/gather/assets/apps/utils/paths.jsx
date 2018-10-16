@@ -51,13 +51,13 @@ export const getSurveyorsAPIPath = ({ id, ...params }) => {
 }
 
 /**
- * Returns the API url to get the Mobile Users data
+ * Returns the API url to get the Sync Users data
  *
- * @param {number}  id          - mobile user id
+ * @param {number}  id          - sync user id
  * @param {object}  params      - query string parameters
  */
-export const getMobileUsersAPIPath = ({ id, ...params }) => {
-  return buildAPIPath(COUCHDB_SYNC_APP, 'mobile-users', id, params)
+export const getSyncUsersAPIPath = ({ id, ...params }) => {
+  return buildAPIPath(COUCHDB_SYNC_APP, 'sync-users', id, params)
 }
 
 /**
@@ -204,23 +204,23 @@ export const getSurveyorsPath = ({ action, id }) => {
 }
 
 /**
- * Returns the path to go to any Mobile Users page
+ * Returns the path to go to any Sync Users page
  *
  * @param {string} action       - action: `list` (default), `add`, `edit`
  * @param {number} id           - surveyor id
  */
-export const getMobileUsersPath = ({ action, id }) => {
+export const getSyncUsersPath = ({ action, id }) => {
   switch (action) {
     case 'edit':
       if (id) {
-        return `/mobile-users/edit/${id}`
+        return `/sync-users/edit/${id}`
       }
-      return '/mobile-users/add/'
+      return '/sync-users/add/'
 
     case 'add':
-      return '/mobile-users/add/'
+      return '/sync-users/add/'
 
     default:
-      return '/mobile-users/list/'
+      return '/sync-users/list/'
   }
 }

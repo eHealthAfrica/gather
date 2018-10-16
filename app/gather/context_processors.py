@@ -24,7 +24,7 @@ def gather_context(request):
     if settings.AETHER_APPS.get('odk'):
         navigation_list.append('surveyors')
     if settings.AETHER_APPS.get('couchdb-sync'):
-        navigation_list.append('mobile-users')
+        navigation_list.append('sync-users')
 
     context = {
         'dev_mode': settings.DEBUG,

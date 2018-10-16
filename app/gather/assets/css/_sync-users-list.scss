@@ -18,11 +18,11 @@
  * under the License.
  */
 
-.mobile-users-list {
+.sync-users-list {
   @extend .page-content;
 }
 
-.mobile-users {
+.sync-users {
   -webkit-column-count: 3;      /* Chrome, Safari, Opera */
   -moz-column-count: 3;         /* Firefox */
   column-count: 3;
@@ -35,7 +35,7 @@
   -moz-column-width: 25rem;     /* Firefox */
   column-width: 25rem;
 
-  .mobile-user-list-item {
+  .sync-user-list-item {
     border-top: 1px solid $light-grey;
     display: inline-block;
     width: 100%;
@@ -46,12 +46,12 @@
     }
   }
 
-  .mobile-user-header {
+  .sync-user-header {
     padding: .4rem;
   }
 }
 
-.mobile-user-edit {
+.sync-user-edit {
   background: $background-color;
   min-height: calc(100vh - #{$navbar-height});
   padding: 2rem 5vw;
@@ -59,7 +59,7 @@
 
 @media screen and (min-width: 992px) {
 
-  .mobile-user-edit {
+  .sync-user-edit {
     form {
       width: 80%;
     }

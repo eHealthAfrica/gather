@@ -21,36 +21,36 @@
 import React, { Component } from 'react'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
-import { getMobileUsersAPIPath } from '../utils/paths'
+import { getSyncUsersAPIPath } from '../utils/paths'
 
-import MobileUserForm from './MobileUserForm'
-import MobileUsersList from './MobileUsersList'
+import SyncUserForm from './SyncUserForm'
+import SyncUsersList from './SyncUsersList'
 
-export default class MobileUserDispatcher extends Component {
+export default class SyncUserDispatcher extends Component {
   render () {
-    const { action, mobileUserId } = this.props
+    const { action, syncUserId } = this.props
 
     switch (action) {
       case 'add':
-        return <MobileUserForm mobileUser={{}} />
+        return <SyncUserForm syncUser={{}} />
 
       case 'edit':
         const editUrls = [
           {
-            name: 'mobileUser',
-            url: getMobileUsersAPIPath({ id: mobileUserId })
+            name: 'syncUser',
+            url: getSyncUsersAPIPath({ id: syncUserId })
           }
         ]
 
-        return <FetchUrlsContainer urls={editUrls} targetComponent={MobileUserForm} />
+        return <FetchUrlsContainer urls={editUrls} targetComponent={SyncUserForm} />
 
       default:
         return (
           <PaginationContainer
             pageSize={36}
-            url={getMobileUsersAPIPath({})}
+            url={getSyncUsersAPIPath({})}
             position='top'
-            listComponent={MobileUsersList}
+            listComponent={SyncUsersList}
             search
             showPrevious
             showNext

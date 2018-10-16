@@ -41,8 +41,8 @@ const apps = [
     path: '../apps/surveyors'
   },
   {
-    name: 'mobile-users',
-    path: '../apps/mobile-users'
+    name: 'sync-users',
+    path: '../apps/sync-users'
   }
 ]
 

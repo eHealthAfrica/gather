@@ -23,83 +23,83 @@ import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
 import { clone } from '../utils'
 import { deleteData, postData, putData } from '../utils/request'
-import { getMobileUsersPath, getMobileUsersAPIPath } from '../utils/paths'
+import { getSyncUsersPath, getSyncUsersAPIPath } from '../utils/paths'
 
 import { ConfirmButton, ErrorAlert } from '../components'
 
 const MESSAGES = defineMessages({
   deleteButton: {
-    defaultMessage: 'Delete mobile user',
-    id: 'mobile-user.form.action.delete'
+    defaultMessage: 'Delete sync user',
+    id: 'sync-user.form.action.delete'
   },
   deleteConfirm: {
-    defaultMessage: 'Are you sure you want to delete the mobile user?',
-    id: 'mobile-user.form.action.delete.confirm'
+    defaultMessage: 'Are you sure you want to delete the sync user?',
+    id: 'sync-user.form.action.delete.confirm'
   },
   deleteError: {
     defaultMessage: 'An error occurred while deleting “{email}”.',
-    id: 'mobile-user.form.action.delete.error'
+    id: 'sync-user.form.action.delete.error'
   },
   submitError: {
     defaultMessage: 'An error occurred while saving “{email}”.',
-    id: 'mobile-user.form.action.submit.error'
+    id: 'sync-user.form.action.submit.error'
   }
 })
 
-class MobileUserForm extends Component {
+class SyncUserForm extends Component {
   constructor (props) {
     super(props)
-    this.state = { ...clone(props.mobileUser), errors: {} }
+    this.state = { ...clone(props.syncUser), errors: {} }
   }
 
   render () {
     const { formatMessage } = this.props.intl
-    const mobileUser = this.state
-    const isNew = (mobileUser.id === undefined)
+    const syncUser = this.state
+    const isNew = (syncUser.id === undefined)
 
     const title = (isNew
       ? <FormattedMessage
-        id='mobile-user.form.title.add'
-        defaultMessage='New mobile user' />
+        id='sync-user.form.title.add'
+        defaultMessage='New sync user' />
       : (
         <span>
           <FormattedMessage
-            id='mobile-user.form.title.edit'
-            defaultMessage='Edit mobile user' />
+            id='sync-user.form.title.edit'
+            defaultMessage='Edit sync user' />
           <span className='email ml-2'>
             <i className='fas fa-user mr-1' />
-            {this.props.mobileUser.email}
+            {this.props.syncUser.email}
           </span>
         </span>
       )
     )
     const dataQA = (isNew
-      ? 'mobile-user-add'
-      : `mobile-user-edit-${mobileUser.id}`
+      ? 'sync-user-add'
+      : `sync-user-edit-${syncUser.id}`
     )
 
     return (
-      <div data-qa={dataQA} className='mobile-user-edit'>
+      <div data-qa={dataQA} className='sync-user-edit'>
         <h3 className='page-title'>{title}</h3>
 
-        <ErrorAlert errors={mobileUser.errors.generic} />
+        <ErrorAlert errors={syncUser.errors.generic} />
 
         <form onSubmit={this.onSubmit.bind(this)}>
-          <div className={`form-group big-input ${mobileUser.errors.email ? 'error' : ''}`}>
+          <div className={`form-group big-input ${syncUser.errors.email ? 'error' : ''}`}>
             <label className='form-control-label title'>
               <FormattedMessage
-                id='mobile-user.form.email'
-                defaultMessage='Mobile user email' />
+                id='sync-user.form.email'
+                defaultMessage='Sync user email' />
             </label>
             <input
               name='email'
               type='email'
               className='form-control'
               required
-              value={mobileUser.email || ''}
+              value={syncUser.email || ''}
               onChange={this.onInputChange.bind(this)}
             />
-            <ErrorAlert errors={mobileUser.errors.email} />
+            <ErrorAlert errors={syncUser.errors.email} />
           </div>
 
           <div className='actions'>
@@ -112,7 +112,7 @@ class MobileUserForm extends Component {
                   title={
                     <span className='email'>
                       <i className='fas fa-user mr-1' />
-                      {this.props.mobileUser.email}
+                      {this.props.syncUser.email}
                     </span>
                   }
                   message={formatMessage(MESSAGES.deleteConfirm)}
@@ -126,15 +126,15 @@ class MobileUserForm extends Component {
                 className='btn btn-cancel'
                 onClick={this.onCancel.bind(this)}>
                 <FormattedMessage
-                  id='mobile-user.form.action.cancel'
+                  id='sync-user.form.action.cancel'
                   defaultMessage='Cancel' />
               </button>
             </div>
             <div>
               <button type='submit' className='btn btn-primary btn-block'>
                 <FormattedMessage
-                  id='mobile-user.form.action.submit'
-                  defaultMessage='Save mobile user' />
+                  id='sync-user.form.action.submit'
+                  defaultMessage='Save sync user' />
               </button>
             </div>
           </div>
@@ -156,20 +156,20 @@ class MobileUserForm extends Component {
     event.preventDefault()
     this.setState({ errors: {} })
 
-    const mobileUser = {
+    const syncUser = {
       email: this.state.email
     }
 
     const saveMethod = (this.state.id ? putData : postData)
-    const url = getMobileUsersAPIPath({ id: this.props.mobileUser.id })
+    const url = getSyncUsersAPIPath({ id: this.props.syncUser.id })
 
-    return saveMethod(url, mobileUser)
+    return saveMethod(url, syncUser)
       .then(this.goBack)
       .catch(error => { this.handleError(error, 'submitError') })
   }
 
   onDelete () {
-    const url = getMobileUsersAPIPath({ id: this.props.mobileUser.id })
+    const url = getSyncUsersAPIPath({ id: this.props.syncUser.id })
     return deleteData(url)
       .then(this.goBack)
       .catch(error => { this.handleError(error, 'deleteError') })
@@ -180,18 +180,18 @@ class MobileUserForm extends Component {
       this.setState({ errors: error.content })
     } else {
       const { formatMessage } = this.props.intl
-      const mobileUser = this.state
-      const generic = [formatMessage(MESSAGES[action], { ...mobileUser })]
+      const syncUser = this.state
+      const generic = [formatMessage(MESSAGES[action], { ...syncUser })]
 
       this.setState({ errors: { generic } })
     }
   }
 
   goBack () {
-    // navigate to Mobile Users list page
-    window.location.assign(getMobileUsersPath({ action: 'list' }))
+    // navigate to Sync Users list page
+    window.location.assign(getSyncUsersPath({ action: 'list' }))
   }
 }
 
 // Include this to enable `this.props.intl` for this component.
-export default injectIntl(MobileUserForm)
+export default injectIntl(SyncUserForm)

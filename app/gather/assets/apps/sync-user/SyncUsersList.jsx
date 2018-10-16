@@ -21,33 +21,33 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { getMobileUsersPath } from '../utils/paths'
+import { getSyncUsersPath } from '../utils/paths'
 
-export default class MobileUsersList extends Component {
+export default class SyncUsersList extends Component {
   render () {
     const { list } = this.props
 
     if (list.length === 0) {
-      return <div data-qa='mobile-users-list-empty' />
+      return <div data-qa='sync-users-list-empty' />
     }
 
     return (
-      <div data-qa='mobile-users-list' className='mobile-users-list'>
+      <div data-qa='sync-users-list' className='sync-users-list'>
         <h4 className='title'>
           <FormattedMessage
-            id='mobile-user.list.title'
-            defaultMessage='Mobile Users' />
+            id='sync-user.list.title'
+            defaultMessage='Sync Users' />
         </h4>
 
-        <div className='mobile-users'>
+        <div className='sync-users'>
           {
-            list.map((mobileUser) => (
-              <div key={mobileUser.id} className='mobile-user-list-item'>
-                <div className='mobile-user-header'>
+            list.map((syncUser) => (
+              <div key={syncUser.id} className='sync-user-list-item'>
+                <div className='sync-user-header'>
                   <i className='fas fa-user mr-2' />
-                  { mobileUser.email }
+                  { syncUser.email }
                   <a
-                    href={getMobileUsersPath({ action: 'edit', id: mobileUser.id })}
+                    href={getSyncUsersPath({ action: 'edit', id: syncUser.id })}
                     role='button'
                     className='btn btn-sm btn-secondary icon-only float-right'>
                     <i className='fas fa-pencil-alt' />

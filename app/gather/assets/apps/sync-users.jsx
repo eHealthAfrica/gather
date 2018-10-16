@@ -24,24 +24,24 @@ import { hot } from 'react-hot-loader'
 
 import { AppIntl } from './components'
 import { getSettings } from './utils/settings'
-import MobileUserDispatcher from './mobile-user'
+import SyncUserDispatcher from './sync-user'
 
 /*
-This is the mobile users app
+This is the sync users app
 */
 
 getSettings().then(settings => {
   if (settings.COUCHDB_SYNC_ACTIVE) {
-    const appElement = document.getElementById('mobile-users-app')
-    const mobileUserId = appElement.getAttribute('data-mobile-user-id')
+    const appElement = document.getElementById('sync-users-app')
+    const syncUserId = appElement.getAttribute('data-sync-user-id')
     const action = appElement.getAttribute('data-action')
 
     const dispatcher = (
       <AppIntl>
-        <MobileUserDispatcher
+        <SyncUserDispatcher
           settings={settings}
           action={action}
-          mobileUserId={mobileUserId}
+          syncUserId={syncUserId}
         />
       </AppIntl>
     )
