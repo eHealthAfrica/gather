@@ -127,7 +127,7 @@ const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => 
     (action ? '/' + action : ''))
   const formatSuffix = (format === '' ? '/' : '.' + format)
   const url = `${API_PREFIX}/${app}/${type}${suffix}${formatSuffix}`
-  const queryString = id ? '' : buildQueryString(params)
+  const queryString = buildQueryString(params)
 
   return queryString === '' ? url : `${url}?${queryString}`
 }
