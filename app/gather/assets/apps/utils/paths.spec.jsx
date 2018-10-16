@@ -54,8 +54,8 @@ describe('paths utils', () => {
 
   describe('getSyncUsersAPIPath', () => {
     it('should return the Sync Users API path', () => {
-      assert.strictEqual(getSyncUsersAPIPath({ }), '/couchdb-sync/sync-users.json')
-      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/couchdb-sync/sync-users/1.json')
+      assert.strictEqual(getSyncUsersAPIPath({ }), '/couchdb-sync/mobile-users.json')
+      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/couchdb-sync/mobile-users/1.json')
     })
   })
 
