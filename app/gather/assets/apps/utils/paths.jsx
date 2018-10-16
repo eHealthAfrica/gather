@@ -18,10 +18,10 @@
  * under the License.
  */
 
-import { KERNEL_APP, ODK_APP, GATHER_APP } from './constants'
+import { KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP } from './constants'
 
 const API_PREFIX = ''
-const APPS = [ KERNEL_APP, ODK_APP, GATHER_APP ]
+const APPS = [ KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP ]
 
 /**
  * Returns the API url to get the Projects/Surveys data
@@ -48,6 +48,16 @@ export const getSurveysAPIPath = ({ app, id, withStats, ...params }) => {
  */
 export const getSurveyorsAPIPath = ({ id, ...params }) => {
   return buildAPIPath(ODK_APP, 'surveyors', id, params)
+}
+
+/**
+ * Returns the API url to get the Sync Users data
+ *
+ * @param {number}  id          - sync user id
+ * @param {object}  params      - query string parameters
+ */
+export const getSyncUsersAPIPath = ({ id, ...params }) => {
+  return buildAPIPath(COUCHDB_SYNC_APP, 'sync-users', id, params)
 }
 
 /**
@@ -190,5 +200,27 @@ export const getSurveyorsPath = ({ action, id }) => {
 
     default:
       return '/surveyors/list/'
+  }
+}
+
+/**
+ * Returns the path to go to any Sync Users page
+ *
+ * @param {string} action       - action: `list` (default), `add`, `edit`
+ * @param {number} id           - surveyor id
+ */
+export const getSyncUsersPath = ({ action, id }) => {
+  switch (action) {
+    case 'edit':
+      if (id) {
+        return `/sync-users/edit/${id}`
+      }
+      return '/sync-users/add/'
+
+    case 'add':
+      return '/sync-users/add/'
+
+    default:
+      return '/sync-users/list/'
   }
 }

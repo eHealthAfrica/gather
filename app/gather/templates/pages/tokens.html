@@ -75,6 +75,18 @@ under the License.
             </td>
           </tr>
         {% endif %}
+
+        {% if couchdb_sync_url %}
+          <tr>
+            <td>Aether CouchDB Sync</td>
+            <td>{{ request.user|get_token:'couchdb-sync' }}</td>
+            <td>
+              <span class="url-name">
+                <a href="{{ couchdb_sync_url }}" target="_blank">{{ couchdb_sync_url }}</a>
+              </span>
+            </td>
+          </tr>
+        {% endif %}
       </tbody>
     </table>
 

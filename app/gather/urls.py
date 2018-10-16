@@ -25,7 +25,7 @@ from django.views.generic import TemplateView
 # Any entry here needs the decorator `tokens_required` if it's going to execute
 # AJAX request to any of the other apps
 from .api.decorators import tokens_required
-from .views import health, assets_settings
+from .views import health, check_db, assets_settings
 
 
 # `accounts` management
@@ -51,6 +51,7 @@ urlpatterns = [
 
     # `health` endpoint
     path('health', view=health, name='health'),
+    path('check-db', view=check_db, name='check-db'),
 
     # assets settings
     path('assets-settings', view=assets_settings, name='assets-settings'),
@@ -90,6 +91,13 @@ if settings.AETHER_APPS.get('odk'):  # pragma: no cover
         re_path(r'^surveyors/(?P<action>\w+)/(?P<surveyor_id>[0-9]+)?$',
                 view=login_required(tokens_required(TemplateView.as_view(template_name='pages/surveyors.html'))),
                 name='surveyors'),
+    ]
+
+if settings.AETHER_APPS.get('couchdb-sync'):  # pragma: no cover
+    urlpatterns += [
+        re_path(r'^sync-users/(?P<action>\w+)/(?P<sync_user_id>[0-9]+)?$',
+                view=login_required(tokens_required(TemplateView.as_view(template_name='pages/sync-users.html'))),
+                name='sync-users'),
     ]
 
 if settings.DEBUG:  # pragma: no cover

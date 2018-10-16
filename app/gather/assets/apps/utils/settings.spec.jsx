@@ -40,7 +40,8 @@ describe('Settings utils', () => {
       nock('http://localhost')
         .get('/assets-settings')
         .reply(200, {
-          aether_apps: ['odk'],
+          aether_apps: ['kernel', 'odk', 'couchdb-sync'],
+
           export_format: 'csv',
           export_max_rows_size: 10000
         })
@@ -48,6 +49,8 @@ describe('Settings utils', () => {
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: true,
+          COUCHDB_SYNC_ACTIVE: true,
+
           EXPORT_FORMAT: 'csv',
           EXPORT_MAX_ROWS_SIZE: 10000
         })
@@ -64,6 +67,8 @@ describe('Settings utils', () => {
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: false,
+          COUCHDB_SYNC_ACTIVE: false,
+
           EXPORT_FORMAT: 'xlsx',
           EXPORT_MAX_ROWS_SIZE: 0
         })
@@ -78,6 +83,8 @@ describe('Settings utils', () => {
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: true,
+          COUCHDB_SYNC_ACTIVE: false,
+
           EXPORT_FORMAT: 'xlsx',
           EXPORT_MAX_ROWS_SIZE: 0
         })

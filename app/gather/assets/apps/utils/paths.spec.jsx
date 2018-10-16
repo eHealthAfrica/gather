@@ -30,6 +30,8 @@ import {
   getSurveyorsPath,
   getSurveysAPIPath,
   getSurveysPath,
+  getSyncUsersAPIPath,
+  getSyncUsersPath,
   getXFormsAPIPath
 } from './paths'
 
@@ -47,6 +49,13 @@ describe('paths utils', () => {
     it('should return the Media Files API path', () => {
       assert.strictEqual(getMediaFileAPIPath({}), '/odk/media-files.json')
       assert.strictEqual(getMediaFileAPIPath({ id: 1 }), '/odk/media-files/1.json')
+    })
+  })
+
+  describe('getSyncUsersAPIPath', () => {
+    it('should return the Sync Users API path', () => {
+      assert.strictEqual(getSyncUsersAPIPath({ }), '/couchdb-sync/sync-users.json')
+      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/couchdb-sync/sync-users/1.json')
     })
   })
 
@@ -192,6 +201,20 @@ describe('paths utils', () => {
       assert.strictEqual(getSurveyorsPath({ action: 'add' }), '/surveyors/add/')
       assert.strictEqual(getSurveyorsPath({ action: 'edit' }), '/surveyors/add/', '"edit" without "id" is "add"')
       assert.strictEqual(getSurveyorsPath({ action: 'edit', id: 1 }), '/surveyors/edit/1')
+    })
+  })
+
+  describe('getSyncUsersPath', () => {
+    it('should return the Sync Users path based on arguments', () => {
+      assert.strictEqual(getSyncUsersPath({ }), '/sync-users/list/')
+      assert.strictEqual(getSyncUsersPath({ action: 'list' }), '/sync-users/list/')
+      assert.strictEqual(getSyncUsersPath({ action: 'list', id: 1 }), '/sync-users/list/')
+      assert.strictEqual(getSyncUsersPath({ action: 'unknown-action', id: 1 }), '/sync-users/list/')
+      assert.strictEqual(getSyncUsersPath({ action: 'view' }), '/sync-users/list/', 'no "view" action available')
+      assert.strictEqual(getSyncUsersPath({ action: 'view', id: 1 }), '/sync-users/list/', 'no "view" action available')
+      assert.strictEqual(getSyncUsersPath({ action: 'add' }), '/sync-users/add/')
+      assert.strictEqual(getSyncUsersPath({ action: 'edit' }), '/sync-users/add/', '"edit" without "id" is "add"')
+      assert.strictEqual(getSyncUsersPath({ action: 'edit', id: 1 }), '/sync-users/edit/1')
     })
   })
 

@@ -28,6 +28,10 @@ fi
 
 set -Eeuo pipefail
 
+# pull dependencies
+docker-compose pull db couchdb redis
+docker-compose pull kernel odk couchdb-sync ui
+
 # build Gather assets
 docker-compose build gather-assets
 docker-compose run   gather-assets build

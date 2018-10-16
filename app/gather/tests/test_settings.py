@@ -34,10 +34,13 @@ class SettingsTest(TestCase):
         self.assertEqual(settings.ROOT_URLCONF, 'gather.urls')
         self.assertEqual(settings.APP_NAME, 'Gather')
         self.assertEqual(settings.INSTANCE_NAME, 'Gather 3')
-        self.assertEqual(settings.AETHER_MODULES, ['kernel', 'odk'])
+        self.assertEqual(settings.AETHER_MODULES, ['kernel', 'odk', 'couchdb-sync'])
 
         self.assertIn('kernel', settings.AETHER_APPS)
         self.assertEqual(settings.AETHER_APPS['kernel']['url'], 'http://kernel-test:9000')
 
         self.assertIn('odk', settings.AETHER_APPS)
         self.assertEqual(settings.AETHER_APPS['odk']['url'], 'http://odk-test:9002')
+
+        self.assertIn('couchdb-sync', settings.AETHER_APPS)
+        self.assertEqual(settings.AETHER_APPS['couchdb-sync']['url'], 'http://couchdb-sync-test:9006')

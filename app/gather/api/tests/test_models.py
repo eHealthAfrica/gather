@@ -82,12 +82,14 @@ class TokenModelsTests(TestCase):
         user_tokens, _ = UserTokens.objects.get_or_create(user=self.user)
         self.assertEqual(user_tokens.get_app_url('kernel'), 'http://kernel-test:9000')
         self.assertEqual(user_tokens.get_app_url('odk'), 'http://odk-test:9002')
+        self.assertEqual(user_tokens.get_app_url('couchdb-sync'), 'http://couchdb-sync-test:9006')
         self.assertEqual(user_tokens.get_app_url('other'), None)
 
     def test__user_tokens__unknown_app(self):
         user_tokens, _ = UserTokens.objects.get_or_create(user=self.user)
         self.assertEqual(user_tokens.kernel_token, None)
         self.assertEqual(user_tokens.odk_token, None)
+        self.assertEqual(user_tokens.couchdb_sync_token, None)
 
         app_name = 'unknown'
 
@@ -104,6 +106,7 @@ class TokenModelsTests(TestCase):
         user_tokens.save_app_token(app_name, '9876543210')
         self.assertEqual(user_tokens.kernel_token, None)
         self.assertEqual(user_tokens.odk_token, None)
+        self.assertEqual(user_tokens.couchdb_sync_token, None)
 
     def helper__test_user_tokens__default_values(self, user_tokens, app_name, app_property):
         self.assertNotEqual(user_tokens.get_app_url(app_name), None)

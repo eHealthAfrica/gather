@@ -3,13 +3,27 @@ version: "2.1"
 services:
 
   # ---------------------------------
-  # Database
+  # Databases
   # ---------------------------------
 
   db-test:
     extends:
       file: ./docker-compose-base.yml
       service: postgres-base
+
+  couchdb-test:
+    extends:
+      file: ./docker-compose-base.yml
+      service: couchdb-base
+    environment:
+      COUCHDB_USER: ${TEST_COUCHDB_USER}
+      COUCHDB_PASSWORD: ${TEST_COUCHDB_PASSWORD}
+
+  redis-test:
+    extends:
+      file: ./docker-compose-base.yml
+      service: redis-base
+    command: "redis-server --requirepass ${TEST_REDIS_PASSWORD}"
 
   # ---------------------------------
   # Aether Kernel
@@ -20,6 +34,7 @@ services:
       file: ./docker-compose-base.yml
       service: kernel-base
     environment:
+      DEBUG: null
       TESTING: "true"
       MEDIA_ROOT: /tmp/
       DJANGO_SECRET_KEY: ${TEST_KERNEL_DJANGO_SECRET_KEY}
@@ -49,7 +64,7 @@ services:
     command: start
 
   # ---------------------------------
-  # Aether ODK
+  # Aether ODK module
   # ---------------------------------
 
   odk-test:
@@ -57,6 +72,7 @@ services:
       file: ./docker-compose-base.yml
       service: odk-base
     environment:
+      DEBUG: null
       TESTING: "true"
       MEDIA_ROOT: /tmp/
       DJANGO_SECRET_KEY: ${TEST_ODK_DJANGO_SECRET_KEY}
@@ -87,6 +103,50 @@ services:
     command: start
 
   # ---------------------------------
+  # Aether CouchDB Sync module
+  # ---------------------------------
+
+  couchdb-sync-test:
+    extends:
+      file: ./docker-compose-base.yml
+      service: couchdb-sync-base
+    environment:
+      DEBUG: null
+      TESTING: "true"
+      MEDIA_ROOT: /tmp/
+      DJANGO_SECRET_KEY: ${TEST_COUCHDB_SYNC_DJANGO_SECRET_KEY}
+
+      ADMIN_USERNAME: ${TEST_COUCHDB_SYNC_ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${TEST_COUCHDB_SYNC_ADMIN_PASSWORD}
+      ADMIN_TOKEN: ${TEST_COUCHDB_SYNC_ADMIN_TOKEN}
+
+      AETHER_KERNEL_URL: http://kernel-test:9000
+      AETHER_KERNEL_TOKEN: ${TEST_KERNEL_ADMIN_TOKEN}
+
+      GOOGLE_CLIENT_ID: ${TEST_COUCHDB_SYNC_GOOGLE_CLIENT_ID}
+
+      DB_NAME: aether-couchdb-sync-test
+      PGHOST: db-test
+      PGPASSWORD: ${TEST_COUCHDB_SYNC_DB_PASSWORD}
+
+      COUCHDB_URL: http://couchdb-test:5984
+      COUCHDB_USER: ${TEST_COUCHDB_USER}
+      COUCHDB_PASSWORD: ${TEST_COUCHDB_PASSWORD}
+
+      REDIS_HOST: redis-test
+      REDIS_PASSWORD: ${TEST_REDIS_PASSWORD}
+
+      WEB_SERVER_PORT: 9006
+    ports:
+      - "9006:9006"
+    depends_on:
+      db-test:
+        condition: service_healthy
+      kernel-test:
+        condition: service_started
+    command: start
+
+  # ---------------------------------
   # Gather
   # ---------------------------------
 
@@ -95,8 +155,8 @@ services:
       file: ./docker-compose-base.yml
       service: gather-base
     environment:
-      TESTING: "true"
       DEBUG: null  # set to null to remove previous value
+      TESTING: "true"
       DJANGO_SECRET_KEY: ${TEST_GATHER_DJANGO_SECRET_KEY}
 
       ADMIN_USERNAME: ${TEST_GATHER_ADMIN_USERNAME}
@@ -104,8 +164,12 @@ services:
 
       AETHER_KERNEL_TOKEN: ${TEST_KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL: http://kernel-test:9000
+
       AETHER_ODK_TOKEN: ${TEST_ODK_ADMIN_TOKEN}
       AETHER_ODK_URL: http://odk-test:9002
+
+      AETHER_COUCHDB_SYNC_TOKEN: ${TEST_COUCHDB_SYNC_ADMIN_TOKEN}
+      AETHER_COUCHDB_SYNC_URL: http://couchdb-sync-test:9006
 
       DB_NAME: gather-test
       PGHOST: db-test
@@ -123,6 +187,8 @@ services:
       kernel-test:
         condition: service_started
       odk-test:
+        condition: service_started
+      couchdb-sync-test:
         condition: service_started
     command: test
 

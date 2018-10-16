@@ -87,6 +87,13 @@ class UserTokens(models.Model):
         verbose_name=_('Aether ODK token'),
         help_text=_('This token corresponds to an Aether ODK authorization token linked to this user.'),
     )
+    couchdb_sync_token = models.CharField(
+        max_length=40,
+        null=True,
+        blank=True,
+        verbose_name=_('Aether CouchDB-Sync token'),
+        help_text=_('This token corresponds to an Aether CouchDB-Sync authorization token linked to this user.'),
+    )
 
     def get_app_url(self, app_name):
         '''

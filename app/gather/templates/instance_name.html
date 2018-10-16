@@ -35,4 +35,12 @@ under the License.
       <a href="{{ odk_url }}" target="_blank">{{ odk_url }}</a>
     </span>
   {% endif %}
+
+  {% if couchdb_sync_url %}
+    {# Include the link to the Aether CouchDB Sync Server #}
+    <span data-qa="couchdb-sync-server" class="url-name">
+      {% trans 'Aether CouchDB Sync Server' %}
+      <a href="{{ couchdb_sync_url }}" target="_blank">{{ couchdb_sync_url }}</a>
+    </span>
+  {% endif %}
 </h1>

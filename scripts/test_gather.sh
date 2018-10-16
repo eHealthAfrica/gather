@@ -38,15 +38,21 @@ echo "_____________________________________________ Killing ALL containers"
 docker-compose kill
 $DC_TEST kill
 $DC_TEST down
-$DC_TEST pull db-test kernel-test odk-test
+$DC_TEST pull db-test couchdb-test redis-test
+$DC_TEST pull kernel-test odk-test couchdb-sync-test
 
 prepare_and_test_container gather-assets
 $DC_TEST run gather-assets-test build
 
-echo "_____________________________________________ Starting database, kernel and odk"
+echo "_____________________________________________ Starting databases"
 $DC_TEST up -d db-test
+$DC_TEST up -d couchdb-test
+$DC_TEST up -d redis-test
+
+echo "_____________________________________________ Starting kernel, odk and couchdb-sync"
 $DC_TEST up -d kernel-test
 $DC_TEST up -d odk-test
+$DC_TEST up -d couchdb-sync-test
 
 prepare_and_test_container gather
 
