@@ -22,7 +22,7 @@ import React, { Component } from 'react'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
-import { ODK_APP } from '../utils/constants'
+import { FAMILY, ODK_APP } from '../utils/constants'
 
 import Survey from './Survey'
 import SurveyForm from './SurveyForm'
@@ -98,11 +98,11 @@ export default class SurveyDispatcher extends Component {
         const viewUrls = [
           {
             name: 'survey',
-            url: getSurveysAPIPath({ id: surveyId, withStats: true })
+            url: getSurveysAPIPath({ id: surveyId, family: FAMILY, withStats: true })
           },
           {
             name: 'skeleton',
-            url: getSurveysAPIPath({ id: surveyId, action: 'schemas-skeleton' })
+            url: getSurveysAPIPath({ id: surveyId, family: FAMILY, action: 'schemas-skeleton' })
           }
         ]
 
@@ -118,7 +118,7 @@ export default class SurveyDispatcher extends Component {
         return (
           <PaginationContainer
             pageSize={12}
-            url={getSurveysAPIPath({ withStats: true })}
+            url={getSurveysAPIPath({ family: FAMILY, withStats: true })}
             position='top'
             listComponent={SurveysList}
             search

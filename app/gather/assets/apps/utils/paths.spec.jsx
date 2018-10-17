@@ -54,8 +54,8 @@ describe('paths utils', () => {
 
   describe('getSyncUsersAPIPath', () => {
     it('should return the Sync Users API path', () => {
-      assert.strictEqual(getSyncUsersAPIPath({ }), '/couchdb-sync/sync-users.json')
-      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/couchdb-sync/sync-users/1.json')
+      assert.strictEqual(getSyncUsersAPIPath({ }), '/couchdb-sync/mobile-users.json')
+      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/couchdb-sync/mobile-users/1.json')
     })
   })
 
@@ -77,8 +77,10 @@ describe('paths utils', () => {
         assert.strictEqual(getSurveysAPIPath({ search: 'survey' }), prefix + 'projects.json?search=survey')
       })
 
-      it('should return the Surveys API path without search', () => {
-        assert.strictEqual(getSurveysAPIPath({ app: 'kernel', search: 'survey', id: 1 }), prefix + 'projects/1.json')
+      it('should return the Surveys API path with ID and search', () => {
+        assert.strictEqual(
+          getSurveysAPIPath({ app: 'kernel', search: 'survey', id: 1 }),
+          prefix + 'projects/1.json?search=survey')
       })
 
       it('should return the Surveys API path with the POST option', () => {
@@ -105,11 +107,15 @@ describe('paths utils', () => {
       })
 
       it('should return the Surveys API path with search', () => {
-        assert.strictEqual(getSurveysAPIPath({ app: 'odk', search: 'survey' }), prefix + 'projects.json?search=survey')
+        assert.strictEqual(
+          getSurveysAPIPath({ app: 'odk', search: 'survey' }),
+          prefix + 'projects.json?search=survey')
       })
 
-      it('should return the Surveys API path without search', () => {
-        assert.strictEqual(getSurveysAPIPath({ app: 'odk', search: 'survey', id: 1 }), prefix + 'projects/1.json')
+      it('should return the Surveys API path with ID and search', () => {
+        assert.strictEqual(
+          getSurveysAPIPath({ app: 'odk', search: 'survey', id: 1 }),
+          prefix + 'projects/1.json?search=survey')
       })
 
       it('should return the Surveys API path with the POST option', () => {
@@ -147,16 +153,16 @@ describe('paths utils', () => {
       assert.strictEqual(getSurveyorsAPIPath({ project: 1 }), prefix + 'surveyors.json?project=1')
     })
 
-    it('should return the Surveyors API path but not filtering by survey', () => {
-      assert.strictEqual(getSurveyorsAPIPath({ project: 1, id: 1 }), prefix + 'surveyors/1.json')
+    it('should return the Surveyors API path with ID and filtering by survey', () => {
+      assert.strictEqual(getSurveyorsAPIPath({ project: 1, id: 1 }), prefix + 'surveyors/1.json?project=1')
     })
 
     it('should return the Surveyors API path with search', () => {
       assert.strictEqual(getSurveyorsAPIPath({ search: 'surveyor' }), prefix + 'surveyors.json?search=surveyor')
     })
 
-    it('should return the Surveyors API path without search', () => {
-      assert.strictEqual(getSurveyorsAPIPath({ search: 'surveyor', id: 1 }), prefix + 'surveyors/1.json')
+    it('should return the Surveyors API path with ID and search', () => {
+      assert.strictEqual(getSurveyorsAPIPath({ search: 'surveyor', id: 1 }), prefix + 'surveyors/1.json?search=surveyor')
     })
   })
 

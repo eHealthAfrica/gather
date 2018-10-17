@@ -30,7 +30,7 @@ import {
   getXFormsAPIPath
 } from '../utils/paths'
 
-import { ODK_APP, GATHER_APP } from '../utils/constants'
+import { ODK_APP, GATHER_APP, FAMILY } from '../utils/constants'
 
 import { ConfirmButton, ErrorAlert, Portal } from '../components'
 import SurveyODKForm from './SurveyODKForm'
@@ -537,7 +537,8 @@ class SurveyForm extends Component {
     actions.push({
       message: formatMessage(MESSAGES.propagateODKSurvey, { name: this.state.name }),
       method: patchData,
-      url: getSurveysAPIPath({ app: ODK_APP, id: this.state.id, action: 'propagate' })
+      url: getSurveysAPIPath({ app: ODK_APP, id: this.state.id, action: 'propagate' }),
+      data: { family: FAMILY }
     })
 
     const executeActions = () => {

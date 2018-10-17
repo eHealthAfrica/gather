@@ -51,13 +51,13 @@ export const getSurveyorsAPIPath = ({ id, ...params }) => {
 }
 
 /**
- * Returns the API url to get the Sync Users data
+ * Returns the API url to get the Sync/Mobile Users data
  *
  * @param {number}  id          - sync user id
  * @param {object}  params      - query string parameters
  */
 export const getSyncUsersAPIPath = ({ id, ...params }) => {
-  return buildAPIPath(COUCHDB_SYNC_APP, 'sync-users', id, params)
+  return buildAPIPath(COUCHDB_SYNC_APP, 'mobile-users', id, params)
 }
 
 /**
@@ -127,7 +127,7 @@ const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => 
     (action ? '/' + action : ''))
   const formatSuffix = (format === '' ? '/' : '.' + format)
   const url = `${API_PREFIX}/${app}/${type}${suffix}${formatSuffix}`
-  const queryString = id ? '' : buildQueryString(params)
+  const queryString = buildQueryString(params)
 
   return queryString === '' ? url : `${url}?${queryString}`
 }

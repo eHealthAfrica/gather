@@ -22,7 +22,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
-import { GATHER_APP } from '../utils/constants'
+import { FAMILY, GATHER_APP } from '../utils/constants'
 import { getSurveysPath, getSurveysAPIPath, getEntitiesAPIPath } from '../utils/paths'
 import { cleanJsonPaths } from '../utils/types'
 
@@ -137,7 +137,7 @@ export default class Survey extends Component {
         <PaginationContainer
           pageSize={viewMode === SINGLE_VIEW ? 1 : TABLE_SIZES[0]}
           sizes={viewMode === SINGLE_VIEW ? [] : TABLE_SIZES}
-          url={getEntitiesAPIPath({ project: survey.id })}
+          url={getEntitiesAPIPath({ project: survey.id, family: FAMILY })}
           position='top'
           listComponent={listComponent}
           showPrevious
