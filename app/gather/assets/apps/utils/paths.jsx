@@ -35,9 +35,9 @@ const APPS = [ KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP ]
  */
 export const getSurveysAPIPath = ({ app, id, withStats, ...params }) => {
   const source = (APPS.indexOf(app) === -1 ? KERNEL_APP : app)
-  const stats = (source === KERNEL_APP && withStats ? '-stats' : '')
+  const suffix = (source === KERNEL_APP && withStats ? '-stats' : '')
 
-  return buildAPIPath(source, `projects${stats}`, id, { ...params })
+  return buildAPIPath(source, `projects${suffix}`, id, params)
 }
 
 /**
@@ -127,7 +127,13 @@ const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => 
     (action ? '/' + action : ''))
   const formatSuffix = (format === '' ? '/' : '.' + format)
   const url = `${API_PREFIX}/${app}/${type}${suffix}${formatSuffix}`
-  const queryString = id ? '' : buildQueryString(params)
+
+  // any call that goes to kernel must include the `passthrough` filter
+  const queryParams = {
+    ...(app === KERNEL_APP ? { passthrough: 'true' } : {}),
+    ...(id ? {} : params)
+  }
+  const queryString = buildQueryString(queryParams)
 
   return queryString === '' ? url : `${url}?${queryString}`
 }

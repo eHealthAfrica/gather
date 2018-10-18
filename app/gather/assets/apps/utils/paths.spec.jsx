@@ -63,31 +63,42 @@ describe('paths utils', () => {
     describe('without app or `kernel` app', () => {
       const prefix = '/kernel/'
 
+      // NOTE: the `passthrough` parameter is ALWAYS include,
+      // this does not apply to rest of parameters
+
       it('should return the Surveys API path', () => {
-        assert.strictEqual(getSurveysAPIPath({}), prefix + 'projects.json')
-        assert.strictEqual(getSurveysAPIPath({ id: 1 }), prefix + 'projects/1.json')
+        assert.strictEqual(getSurveysAPIPath({}), prefix + 'projects.json?passthrough=true')
+        assert.strictEqual(getSurveysAPIPath({ id: 1 }), prefix + 'projects/1.json?passthrough=true')
       })
 
       it('should return the Surveys Stats API path', () => {
-        assert.strictEqual(getSurveysAPIPath({ app: 'kernel', withStats: true }), prefix + 'projects-stats.json')
-        assert.strictEqual(getSurveysAPIPath({ withStats: true, id: 1 }), prefix + 'projects-stats/1.json')
+        assert.strictEqual(
+          getSurveysAPIPath({ app: 'kernel', withStats: true }),
+          prefix + 'projects-stats.json?passthrough=true')
+        assert.strictEqual(
+          getSurveysAPIPath({ withStats: true, id: 1 }),
+          prefix + 'projects-stats/1.json?passthrough=true')
       })
 
       it('should return the Surveys API path with search', () => {
-        assert.strictEqual(getSurveysAPIPath({ search: 'survey' }), prefix + 'projects.json?search=survey')
+        assert.strictEqual(
+          getSurveysAPIPath({ search: 'survey' }),
+          prefix + 'projects.json?passthrough=true&search=survey')
       })
 
       it('should return the Surveys API path without search', () => {
-        assert.strictEqual(getSurveysAPIPath({ app: 'kernel', search: 'survey', id: 1 }), prefix + 'projects/1.json')
+        assert.strictEqual(
+          getSurveysAPIPath({ search: 'survey', id: 1 }),
+          prefix + 'projects/1.json?passthrough=true')
       })
 
       it('should return the Surveys API path with the POST option', () => {
         assert.strictEqual(
           getSurveysAPIPath({ app: 'kernel', format: 'txt', action: 'fetch' }),
-          prefix + 'projects/fetch.txt')
+          prefix + 'projects/fetch.txt?passthrough=true')
         assert.strictEqual(
           getSurveysAPIPath({ app: 'kernel', format: 'txt', action: 'details', id: 1 }),
-          prefix + 'projects/1/details.txt')
+          prefix + 'projects/1/details.txt?passthrough=true')
       })
     })
 
@@ -126,12 +137,29 @@ describe('paths utils', () => {
   describe('getEntitiesAPIPath', () => {
     const prefix = '/kernel/'
 
+    // NOTE: the `passthrough` parameter is ALWAYS include,
+    // this does not apply to rest of parameters
+
     it('should return the Entities API path', () => {
-      assert.strictEqual(getEntitiesAPIPath({}), prefix + 'entities.json')
+      assert.strictEqual(getEntitiesAPIPath({}), prefix + 'entities.json?passthrough=true')
     })
 
     it('should return the Survey Entities API path', () => {
-      assert.strictEqual(getEntitiesAPIPath({ project: 1 }), prefix + 'entities.json?project=1')
+      assert.strictEqual(
+        getEntitiesAPIPath({ project: 1 }),
+        prefix + 'entities.json?passthrough=true&project=1')
+    })
+
+    it('should return the Surveys Entities API path with search', () => {
+      assert.strictEqual(
+        getEntitiesAPIPath({ search: 'survey' }),
+        prefix + 'entities.json?passthrough=true&search=survey')
+    })
+
+    it('should return the Surveys Entities API path without search', () => {
+      assert.strictEqual(
+        getEntitiesAPIPath({ search: 'survey', id: 1 }),
+        prefix + 'entities/1.json?passthrough=true')
     })
   })
 
