@@ -63,7 +63,7 @@ describe('paths utils', () => {
     describe('without app or `kernel` app', () => {
       const prefix = '/kernel/'
 
-      // NOTE: the `passthrough` parameter is ALWAYS include,
+      // NOTE: the `passthrough` parameter is ALWAYS included,
       // this does not apply to rest of parameters
 
       it('should return the Surveys API path', () => {
@@ -137,7 +137,7 @@ describe('paths utils', () => {
   describe('getEntitiesAPIPath', () => {
     const prefix = '/kernel/'
 
-    // NOTE: the `passthrough` parameter is ALWAYS include,
+    // NOTE: the `passthrough` parameter is ALWAYS included,
     // this does not apply to rest of parameters
 
     it('should return the Entities API path', () => {
