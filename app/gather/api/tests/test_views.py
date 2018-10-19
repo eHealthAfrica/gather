@@ -79,13 +79,13 @@ class ViewsTest(TestCase):
 
     @mock.patch('gather.api.models.UserTokens.get_or_create_user_app_token',
                 return_value=APP_TOKEN_MOCK)
-    @mock.patch('requests.request', return_value=RESPONSE_MOCK)
+    @mock.patch('requests.request', return_value=mock.Mock(status_code=204))
     def test_proxy_view_delete(self, mock_request, mock_test_conn):
         request = RequestFactory().delete('/go_to_proxy')
         request.user = self.user
         response = self.view(request, path='to-delete')
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
         mock_test_conn.assert_called_once()
         mock_request.assert_called_once_with(
             method='DELETE',

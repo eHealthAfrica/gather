@@ -161,10 +161,13 @@ class TokenProxyView(View):
                                     headers=headers,
                                     *args,
                                     **kwargs)
+        if response.status_code == 204:  # NO-CONTENT
+            return HttpResponse(status=response.status_code)
+
         http_response = HttpResponse(
             content=response,
             status=response.status_code,
-            content_type=response.headers['Content-Type'],
+            content_type=response.headers.get('Content-Type'),
         )
         # copy from the original response headers the exposed ones
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
