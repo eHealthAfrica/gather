@@ -97,7 +97,9 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
 
 - Data export:
   - `EXPORT_FORMAT`: `csv` the default export format. Possible values: `xlsx` or `csv`.
-  - `EXPORT_MAX_ROWS_SIZE`: `1048575` indicates the maximum number of rows to include in the export file.
+  - `EXPORT_MAX_ROWS_SIZE`: between `0` and `1048575` indicates the maximum
+    number of rows to include in the export file.
+    The limit is an [Excel 2007 restriction](https://support.office.com/en-us/article/Excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3).
 
 - Authentication (Central Authentication Service):
   - `CAS_SERVER_URL`: `https://your.cas.server`.
@@ -273,8 +275,9 @@ The list of the main containers:
 | **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)    |
 | **couchdb-sync**  | Aether CouchDB Sync app (imports data from Aether Mobile App)     |
 | **ui**            | Aether Kernel UI (only needed for advanced mapping functionality) |
-| kernel-test       | Aether Kernel TESTING app (used only in e2e testss)               |
-| odk-test          | Aether ODK TESTING app (used only in e2e testss)                  |
+| kernel-test       | Aether Kernel TESTING app (used only in e2e tests)                |
+| odk-test          | Aether ODK TESTING app (used only in e2e tests)                   |
+| couchdb-sync-test | Aether CouchDB Sync TESTING app (used only in e2e tests)          |
 
 
 All of the containers definition for development can be found in the
@@ -332,10 +335,10 @@ docker-compose -f docker-compose-test.yml up -d <container-name>-test
 **WARNING**
 
 Never run `gather` tests against any PRODUCTION server.
-The tests clean up could **DELETE ALL PROJECTS!!!**
+The tests would create random users with tokens in the different apps.
 
 Look into [docker-compose-base.yml](docker-compose-base.yml), the variable
-`AETHER_KERNEL_URL_TEST` indicates the Aether Kernel Server used in tests.
+`AETHER_<<APP>>_URL_TEST` indicates the Aether Server used in tests.
 
 *[Return to TOC](#table-of-contents)*
 
