@@ -144,8 +144,8 @@ See also [Django settings](https://docs.djangoproject.com/en/2.0/ref/settings/).
   - Aether CouchDB Sync:
     - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_couchdb_sync_admin_user_auth_token`
       Token to connect to Aether ODK Server.
-    - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8002` Aether CouchDB Sync Server url.
-    - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9002` Aether CouchDB Sync Testing Server url.
+    - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8006` Aether CouchDB Sync Server url.
+    - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9006` Aether CouchDB Sync Testing Server url.
     - `AETHER_COUCHDB_SYNC_URL_ASSETS`: `http://sync.aether.local` Aether CouchDB Sync url used in NGINX.
 
 ##### AETHER_XXX_URL vs AETHER_XXX_URL_ASSETS
@@ -190,7 +190,7 @@ This will start:
 All the created superusers have username `${ADMIN_USERNAME}` and
 password `${ADMIN_PASSWORD}` in each container.
 
-If the `nginx` container is also started the url ports can be removed.
+If the `nginx` container is also started then the url ports can be removed.
 - `http://gather.local`
 - `http://kernel.aether.local`
 - `http://odk.aether.local`
