@@ -16,7 +16,7 @@ RUN /tmp/setup.sh
 WORKDIR /code
 
 COPY ./app/conf/pip /code/conf/pip
-RUN pip install -f /code/conf/pip/dependencies -r /code/conf/pip/requirements.txt
+RUN pip install -q -f /code/conf/pip/dependencies -r /code/conf/pip/requirements.txt
 
 COPY ./app /code
 
