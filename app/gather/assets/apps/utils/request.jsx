@@ -19,7 +19,7 @@
  */
 
 const buildFetchOptions = (method, payload, multipart) => {
-  // See: https://docs.djangoproject.com/en/2.0/ref/csrf/
+  // See: https://docs.djangoproject.com/en/2.1/ref/csrf/
   const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]') || {}
   const options = {
     method,
