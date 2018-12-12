@@ -393,7 +393,6 @@ if 'couchdb-sync' in AETHER_MODULES:
 
 
 # Assets settings
-EXPORT_FORMAT = os.environ.get('EXPORT_FORMAT', 'csv')
 EXPORT_MAX_ROWS_SIZE = os.environ.get('EXPORT_MAX_ROWS_SIZE', '0')
 
 

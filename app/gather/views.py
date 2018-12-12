@@ -54,8 +54,5 @@ def assets_settings(*args, **kwargs):
 
     return JsonResponse({
         'aether_apps': list(settings.AETHER_APPS.keys()),
-
-        # export
-        'export_format': settings.EXPORT_FORMAT,
         'export_max_rows_size': int(settings.EXPORT_MAX_ROWS_SIZE),
     })

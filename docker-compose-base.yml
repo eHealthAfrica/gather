@@ -286,7 +286,6 @@ services:
       PGPORT: 5432
       PGUSER: postgres
 
-      EXPORT_FORMAT: csv
       EXPORT_MAX_ROWS_SIZE: 0
 
       WEB_SERVER_PORT: 8005
