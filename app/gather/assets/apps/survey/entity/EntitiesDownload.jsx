@@ -56,7 +56,7 @@ export default class EntitiesDownload extends Component {
         getEntitiesAPIPath({ ...params, page }),
         {
           paths: this.props.paths,
-          headers: this.props.labels,
+          labels: this.props.labels,
           filename
         },
         { download: true }
