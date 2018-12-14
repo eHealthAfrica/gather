@@ -352,6 +352,24 @@ describe('request utils', () => {
           )
           .catch(handleUnexpectedError)
       })
+
+      it('should catch aborted signals', () => {
+        nock('http://localhost')
+          .get('/to-be-aborted')
+          .reply({ aborted: false })
+
+        const controller = new window.AbortController()
+        const opts = { signal: controller.signal }
+        controller.abort()
+
+        return getData('http://localhost/to-be-aborted', opts)
+          .then(handleUnexpectedBody)
+          .catch(error => {
+            assert(error, 'Expected error')
+            assert.strictEqual(error.name, 'AbortError')
+            assert.strictEqual(error.message, 'The user aborted a request.')
+          })
+      })
     })
   })
 

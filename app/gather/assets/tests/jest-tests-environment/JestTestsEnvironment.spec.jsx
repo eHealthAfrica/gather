@@ -35,6 +35,7 @@ describe('Tests Environment', () => {
     expect(global.jsdom).toBeTruthy()
     expect(global.range).toBeTruthy()
     expect(global.window.fetch).toBeTruthy()
+    expect(global.window.AbortController).toBeTruthy()
   })
 
   it('should set the default URL to http://localhost', () => {

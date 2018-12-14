@@ -18,7 +18,7 @@
  * under the License.
  */
 
-const buildFetchOptions = (method, payload, multipart) => {
+const buildFetchOptions = (method, payload, multipart, extras) => {
   // See: https://docs.djangoproject.com/en/2.1/ref/csrf/
   const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]') || {}
   const options = {
@@ -27,7 +27,8 @@ const buildFetchOptions = (method, payload, multipart) => {
     headers: {
       'X-CSRFToken': csrfToken.value,
       'X-METHOD': method // See comment below
-    }
+    },
+    ...extras
   }
 
   if (payload) {
@@ -149,12 +150,14 @@ const request = (
     payload, //   in case of POST, PUT, PATCH the payload
     multipart, // in case of POST, PUT, PATCH indicates if send as FormData
     download, //  indicates if download the response as a file
-    filename //   in case of "download" the file name
+    filename, //  in case of "download" the file name
+    ...extras
   }
 ) => new Promise((resolve, reject) => {
   window
-    .fetch(url, buildFetchOptions(method, payload, multipart))
+    .fetch(url, buildFetchOptions(method, payload, multipart, extras))
     .then(inspectResponse.bind(null, { download, filename }, resolve, reject))
+    .catch(error => { reject(error) })
 })
 
 /**
@@ -203,10 +206,10 @@ export const patchData = (url, payload, opts = {}) => (
  * @param {string} postUrl     - POST url used to create the object below
  * @param {object} postPayload - the default object
  */
-export const forceGetData = (url, postUrl, postPayload) => (
-  getData(url)
+export const forceGetData = (url, postUrl, postPayload, opts = {}) => (
+  getData(url, opts)
     // in case of error, try to create it and get again
-    .catch(() => postData(postUrl, postPayload).then(() => getData(url)))
+    .catch(() => postData(postUrl, postPayload, opts).then(() => getData(url, opts)))
 )
 
 /*
@@ -219,7 +222,9 @@ export const forceGetData = (url, postUrl, postPayload) => (
  *      force: {
  *        url: 'string',
  *        data: { object }
- *      }
+ *      },
+ *      // optional, fetch options
+ *      opts: { ... }
  *    },
  *    ...
  *  ]
@@ -227,10 +232,10 @@ export const forceGetData = (url, postUrl, postPayload) => (
  * Returns an object where each key is the name defined by
  * each url entry and the value is the response content.
  */
-export const fetchUrls = (urls) => Promise
+export const fetchUrls = (urls, opts = {}) => Promise
   .all(urls.map(config => config.force
-    ? forceGetData(config.url, config.force.url, config.force.data)
-    : getData(config.url)
+    ? forceGetData(config.url, config.force.url, config.force.data, { ...opts, ...(config.opts || {}) })
+    : getData(config.url, { ...opts, ...(config.opts || {}) })
   ))
   .then(responses => responses.reduce((payload, response, index) => {
     return { ...payload, [urls[index].name]: response }
