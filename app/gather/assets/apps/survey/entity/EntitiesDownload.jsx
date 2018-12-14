@@ -65,7 +65,6 @@ export default class EntitiesDownload extends Component {
             className='tab'
             disabled={this.state.preparing}
             onClick={() => {
-              console.log(1, filename)
               this.setState({ page: 1, filename })
             }}
           >
@@ -289,7 +288,7 @@ export default class EntitiesDownload extends Component {
       <Portal>
         <div className='modal show'>
           <div className='modal-dialog modal-dialog-centered modal-lg'>
-            <div className='modal-content'>
+            <div className='modal-content modal-options'>
               <div className='modal-header'>
                 <h5 className='modal-title'>
                   <FormattedMessage
@@ -326,16 +325,12 @@ export default class EntitiesDownload extends Component {
 
                   <div className='ml-5 form-inline'>
                     <div
-                      className='form-group mr-5'
+                      className='form-group mt-2'
                       onClick={() => { this.setState({ headerFull: !this.state.headerFull }) }}>
-                      <input
-                        name='headerFull'
-                        type='checkbox'
-                        className='form-control mr-2'
-                        checked={this.state.headerFull}
-                        readOnly
+                      <i
+                        className={`fa ${this.state.headerFull ? 'fa-toggle-on' : 'fa-toggle-off'}`}
                       />
-                      <label className='form-control-label title'>
+                      <label className='form-control-label title ml-2'>
                         <FormattedMessage
                           id='entities.download.headers.full'
                           defaultMessage='Show full path in headers' />
@@ -343,7 +338,7 @@ export default class EntitiesDownload extends Component {
                     </div>
 
                     { this.state.headerFull &&
-                      <div className='form-group mr-5'>
+                      <div className='form-group ml-5'>
                         <label className='form-control-label title mr-2'>
                           <FormattedMessage
                             id='entities.download.headers.separator'
@@ -410,25 +405,19 @@ export default class EntitiesDownload extends Component {
     return list.map(option => (
       <div
         key={option.id}
-        className={`form-group pl-2 ${className || ''}`}>
+        className={`p-2 ${className || ''} ${this.state[name] === option.id ? 'selected' : ''}`}>
         <div
+          className='d-inline-flex'
           onClick={() => { this.setState({ [name]: option.id }) }}>
-          <input
-            name={name}
-            value={option.id}
-            type='radio'
-            checked={this.state[name] === option.id}
-            readOnly
-            className='mr-2'
-          />
-          <label>
+          <div className='radio' />
+          <label className='ml-1'>
             { option.label }
           </label>
         </div>
 
         { this.state[name] === option.id &&
           option.renderChecked &&
-          <div>
+          <div className='d-inline-flex'>
             { option.renderChecked() }
           </div>
         }
