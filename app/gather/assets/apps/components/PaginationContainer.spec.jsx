@@ -39,6 +39,13 @@ class Foo extends React.Component {
   }
 }
 
+const BLANK_STATE = {
+  isLoading: false,
+  isRefreshing: false,
+  error: null,
+  list: null
+}
+
 describe('PaginationContainer', () => {
   describe('depending on the state', () => {
     const buildStateComponent = (url) => {
@@ -72,12 +79,7 @@ describe('PaginationContainer', () => {
     it('should render the loading spinner', () => {
       const component = buildStateComponent('/paginate-spinner')
 
-      component.setState({
-        isLoading: true,
-        isRefreshing: false,
-        error: null,
-        list: null
-      })
+      component.setState({ ...BLANK_STATE, isLoading: true })
 
       expect(component.find(LoadingSpinner).exists()).toBeTruthy()
       expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -92,10 +94,8 @@ describe('PaginationContainer', () => {
       const component = buildStateComponent('/paginate-warning')
 
       component.setState({
-        isLoading: false,
-        isRefreshing: false,
-        error: { message: 'something went wrong' },
-        list: null
+        ...BLANK_STATE,
+        error: { message: 'something went wrong' }
       })
 
       expect(component.find(LoadingSpinner).exists()).toBeFalsy()
@@ -111,8 +111,7 @@ describe('PaginationContainer', () => {
       const component = buildStateComponent('/paginate-empty')
 
       component.setState({
-        isLoading: false,
-        isRefreshing: false,
+        ...BLANK_STATE,
         list: {
           count: 0,
           results: []
@@ -137,9 +136,7 @@ describe('PaginationContainer', () => {
         .reply(200, { count: 0, results: [] })
 
       component.setState({
-        isLoading: false,
-        isRefreshing: false,
-        error: null,
+        ...BLANK_STATE,
         search: 'something',
         list: {
           count: 0,
@@ -163,9 +160,8 @@ describe('PaginationContainer', () => {
       const component = buildStateComponent('/paginate-spinner-list')
 
       component.setState({
-        isLoading: false,
+        ...BLANK_STATE,
         isRefreshing: true,
-        error: null,
         list: {
           count: 1,
           results: [1]
@@ -186,9 +182,7 @@ describe('PaginationContainer', () => {
       const component = buildStateComponent('/paginate-list')
 
       component.setState({
-        isLoading: false,
-        isRefreshing: false,
-        error: null,
+        ...BLANK_STATE,
         list: {
           count: 1,
           results: [1]
@@ -478,6 +472,40 @@ describe('PaginationContainer', () => {
 
       expect(component.state('page')).toEqual(3)
       expect(component.state('search')).toEqual('bla')
+    })
+  })
+
+  describe('abort', () => {
+    beforeEach(() => {
+      nock.cleanAll()
+    })
+
+    afterEach(() => {
+      nock.isDone()
+      nock.cleanAll()
+    })
+
+    it('should call the abort method if unmounted', async () => {
+      const component = mountWithIntl(
+        <PaginationContainer
+          listComponent={Foo}
+          url={'/unmounted'}
+          sizes={[25]}
+        />
+      )
+
+      let abortCalled = false
+      const mockController = {
+        abort: () => {
+          abortCalled = true
+        }
+      }
+
+      component.setState({ controller: mockController })
+
+      expect(abortCalled).toBeFalsy()
+      component.unmount()
+      expect(abortCalled).toBeTruthy()
     })
   })
 })

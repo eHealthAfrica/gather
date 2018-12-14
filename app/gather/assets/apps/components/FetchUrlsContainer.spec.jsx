@@ -38,6 +38,13 @@ class Foo extends React.Component {
   }
 }
 
+const BLANK_STATE = {
+  isLoading: false,
+  isRefreshing: false,
+  error: null,
+  response: false
+}
+
 describe('FetchUrlsContainer', () => {
   describe('depending on the state', () => {
     describe('without silent property', () => {
@@ -72,7 +79,7 @@ describe('FetchUrlsContainer', () => {
       it('should render the loading spinner', () => {
         const component = buildStateComponent('/spinner')
 
-        component.setState({ isLoading: true, isRefreshing: false, error: null, response: false })
+        component.setState({ ...BLANK_STATE, isLoading: true })
 
         expect(component.find(LoadingSpinner).exists()).toBeTruthy()
         expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -85,7 +92,7 @@ describe('FetchUrlsContainer', () => {
       it('should render the fetch error warning', () => {
         const component = buildStateComponent('/warning')
 
-        component.setState({ isLoading: false, isRefreshing: false, error: {}, response: false })
+        component.setState({ ...BLANK_STATE, error: {} })
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
         expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -98,7 +105,7 @@ describe('FetchUrlsContainer', () => {
       it('should render the empty warning', () => {
         const component = buildStateComponent('/empty')
 
-        component.setState({ isLoading: false, isRefreshing: false, error: null, response: false })
+        component.setState({ ...BLANK_STATE })
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
         expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -111,7 +118,7 @@ describe('FetchUrlsContainer', () => {
       it('should render the refresh spinner and the target component', () => {
         const component = buildStateComponent('/spinner-target')
 
-        component.setState({ isLoading: false, isRefreshing: true, error: null, response: true })
+        component.setState({ ...BLANK_STATE, isRefreshing: true, response: true })
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
         expect(component.find(RefreshSpinner).exists()).toBeTruthy()
@@ -125,7 +132,7 @@ describe('FetchUrlsContainer', () => {
       it('should render the refresh spinner and the target component with "refreshData"', () => {
         const component = buildStateComponent('/spinner-target-refresh')
 
-        component.setState({ isLoading: false, isRefreshing: false, error: null, response: true })
+        component.setState({ ...BLANK_STATE, response: true })
 
         nock('http://localhost').get('/spinner-target-refresh').reply(200, {})
         component.instance().refreshData()
@@ -144,7 +151,7 @@ describe('FetchUrlsContainer', () => {
       it('should render the target component', () => {
         const component = buildStateComponent('/target')
 
-        component.setState({ isLoading: false, isRefreshing: false, error: null, response: true })
+        component.setState({ ...BLANK_STATE, response: true })
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
         expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -189,7 +196,7 @@ describe('FetchUrlsContainer', () => {
       it('should NOT render the loading spinner', () => {
         const component = buildStateSilentComponent('/spinner-silent')
 
-        component.setState({ isLoading: true, isRefreshing: false, error: null, response: false })
+        component.setState({ ...BLANK_STATE, isLoading: true })
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
         expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -203,7 +210,7 @@ describe('FetchUrlsContainer', () => {
       it('should NOT render the fetch error warning', () => {
         const component = buildStateSilentComponent('/warning-silent')
 
-        component.setState({ isLoading: false, isRefreshing: false, error: {}, response: false })
+        component.setState({ ...BLANK_STATE, error: {} })
 
         expect(component.text()).toEqual('')
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
@@ -218,7 +225,7 @@ describe('FetchUrlsContainer', () => {
       it('should NOT render the empty warning', () => {
         const component = buildStateSilentComponent('/empty-silent')
 
-        component.setState({ isLoading: false, isRefreshing: false, error: null, response: false })
+        component.setState({ ...BLANK_STATE })
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
         expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -232,7 +239,7 @@ describe('FetchUrlsContainer', () => {
       it('should NOT render the refresh spinner BUT the target component', () => {
         const component = buildStateSilentComponent('/spinner-target-silent')
 
-        component.setState({ isLoading: false, isRefreshing: true, error: null, response: true })
+        component.setState({ ...BLANK_STATE, isRefreshing: true, response: true })
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
         expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -246,7 +253,7 @@ describe('FetchUrlsContainer', () => {
       it('should NOT render the refresh spinner BUT the target component with "refreshData"', () => {
         const component = buildStateSilentComponent('/spinner-target-refresh-silent')
 
-        component.setState({ isLoading: false, isRefreshing: false, error: null, response: true })
+        component.setState({ ...BLANK_STATE, response: true })
 
         nock('http://localhost').get('/spinner-target-refresh-silent').reply(200, {})
         component.instance().refreshData()
@@ -266,7 +273,7 @@ describe('FetchUrlsContainer', () => {
       it('should render the target component', () => {
         const component = buildStateSilentComponent('/target-silent')
 
-        component.setState({ isLoading: false, isRefreshing: false, error: null, response: true })
+        component.setState({ ...BLANK_STATE, response: true })
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
         expect(component.find(RefreshSpinner).exists()).toBeFalsy()
@@ -451,6 +458,61 @@ describe('FetchUrlsContainer', () => {
         expect(component.find(Foo).exists()).toBeTruthy()
         expect(component.text()).toEqual('foo')
       })
+    })
+  })
+
+  describe('abort', () => {
+    beforeEach(() => {
+      nock.cleanAll()
+    })
+
+    afterEach(() => {
+      nock.isDone()
+      nock.cleanAll()
+    })
+
+    it('should call the abort method if unmounted', async () => {
+      const component = mountWithIntl(
+        <FetchUrlsContainer
+          targetComponent={Foo}
+          urls={[]}
+        />
+      )
+
+      let abortCalled = false
+      const mockController = {
+        abort: () => {
+          abortCalled = true
+        }
+      }
+
+      component.setState({ controller: mockController })
+
+      expect(abortCalled).toBeFalsy()
+      component.unmount()
+      expect(abortCalled).toBeTruthy()
+    })
+
+    it('should call the abort method if "refreshData" is called', async () => {
+      const component = mountWithIntl(
+        <FetchUrlsContainer
+          targetComponent={Foo}
+          urls={[]}
+        />
+      )
+
+      let abortCalled = false
+      const mockController = {
+        abort: () => {
+          abortCalled = true
+        }
+      }
+
+      component.setState({ controller: mockController })
+
+      expect(abortCalled).toBeFalsy()
+      component.instance().refreshData()
+      expect(abortCalled).toBeTruthy()
     })
   })
 })

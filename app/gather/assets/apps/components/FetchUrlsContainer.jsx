@@ -62,6 +62,7 @@ export default class FetchUrlsContainer extends Component {
 
     this.state = {
       // default status variables
+      controller: new window.AbortController(),
       isLoading: true
     }
   }
@@ -70,13 +71,23 @@ export default class FetchUrlsContainer extends Component {
     this.loadData()
   }
 
+  componentWillUnmount () {
+    this.abortFetch()
+  }
+
+  abortFetch () {
+    this.state.controller && this.state.controller.abort()
+    this.setState({ controller: new window.AbortController() })
+  }
+
   refreshData () {
+    this.abortFetch()
     this.setState({ isRefreshing: true })
     this.loadData()
   }
 
   loadData () {
-    return fetchUrls(this.props.urls)
+    return fetchUrls(this.props.urls, { signal: this.state.controller.signal })
       .then(response => {
         const { handleResponse } = this.props
         isMounted(this) && this.setState({

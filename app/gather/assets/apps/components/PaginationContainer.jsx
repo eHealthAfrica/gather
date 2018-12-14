@@ -60,6 +60,7 @@ export default class PaginationContainer extends Component {
 
     this.state = {
       // default status variables
+      controller: new window.AbortController(),
       isLoading: true,
       pageSize: props.pageSize || 25,
       page: 1,
@@ -89,8 +90,18 @@ export default class PaginationContainer extends Component {
     if (prevState.page !== this.state.page ||
         prevState.pageSize !== this.state.pageSize ||
         prevState.search !== this.state.search) {
+      this.abortFetch()
       this.loadData()
     }
+  }
+
+  componentWillUnmount () {
+    this.abortFetch()
+  }
+
+  abortFetch () {
+    this.state.controller && this.state.controller.abort()
+    this.setState({ controller: new window.AbortController() })
   }
 
   loadData () {
