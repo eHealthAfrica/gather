@@ -60,7 +60,6 @@ export default class PaginationContainer extends Component {
 
     this.state = {
       // default status variables
-      controller: new window.AbortController(),
       isLoading: true,
       pageSize: props.pageSize || 25,
       page: 1,
@@ -90,7 +89,6 @@ export default class PaginationContainer extends Component {
     if (prevState.page !== this.state.page ||
         prevState.pageSize !== this.state.pageSize ||
         prevState.search !== this.state.search) {
-      this.abortFetch()
       this.loadData()
     }
   }
@@ -101,7 +99,6 @@ export default class PaginationContainer extends Component {
 
   abortFetch () {
     this.state.controller && this.state.controller.abort()
-    this.setState({ controller: new window.AbortController() })
   }
 
   loadData () {
@@ -109,7 +106,11 @@ export default class PaginationContainer extends Component {
     const sep = this.props.url.indexOf('?') > -1 ? '&' : '?'
     const url = `${this.props.url}${sep}${buildQueryString({ page, pageSize, search })}`
 
-    return getData(url)
+    this.abortFetch()
+    const controller = new window.AbortController()
+    this.setState({ controller })
+
+    return getData(url, { signal: controller.signal })
       .then(response => {
         isMounted(this) && this.setState({
           list: response,
