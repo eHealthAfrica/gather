@@ -174,6 +174,14 @@ export default class EntitiesDownload extends Component {
       this.setState({ [event.target.name]: event.target.value })
     }
 
+    const onKeyPress = (event) => {
+      // change to TAB if the input value is "t" or "T" and key pressed is Ctrl+Enter
+      if (['t', 'T'].indexOf(this.state[event.target.name]) > -1 && event.ctrlKey && event.charCode === 13) {
+        event.preventDefault()
+        this.setState({ [event.target.name]: 'TAB' })
+      }
+    }
+
     const DATA_FORMATS = [
       {
         id: 'split',
@@ -242,9 +250,10 @@ export default class EntitiesDownload extends Component {
                 type='text'
                 className='form-control'
                 size={3}
-                maxLength={3}
+                maxLength={1}
                 value={this.state.csvSeparator || ''}
                 onChange={onInputChange}
+                onKeyPress={onKeyPress}
               />
             </div>
             <div className='form-group mr-5'>
