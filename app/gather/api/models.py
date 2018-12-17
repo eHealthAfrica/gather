@@ -33,6 +33,16 @@ from ..settings import AETHER_APPS
 Data model schema:
 
 
+    +--------------------+
+    | UserTokens         |
+    +====================+
+    | user (User)        |
+    | kernel_token       |
+    | odk_token          |
+    | couchdb_sync_token |
+    +--------------------+
+
+
     +------------------+       +------------------+
     | Survey / Project |       | Mask             |
     +==================+       +==================+
@@ -42,15 +52,6 @@ Data model schema:
                            |   +::::::::::::::::::+
                            +--<| survey           |
                                +------------------+
-
-
-    +------------------+
-    | UserTokens       |
-    +==================+
-    | user (User)      |
-    | kernel_token     |
-    | odk_token        |
-    +------------------+
 
 '''
 
