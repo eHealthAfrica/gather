@@ -19,7 +19,12 @@
  */
 
 import React, { Component } from 'react'
-import { FormattedMessage, FormattedNumber } from 'react-intl'
+import {
+  defineMessages,
+  injectIntl,
+  FormattedMessage,
+  FormattedNumber
+} from 'react-intl'
 
 import { Portal } from '../../components'
 
@@ -28,7 +33,14 @@ import { MAX_PAGE_SIZE, EXPORT_CSV_FORMAT, EXPORT_EXCEL_FORMAT } from '../../uti
 import { getEntitiesAPIPath } from '../../utils/paths'
 import { postData } from '../../utils/request'
 
-export default class EntitiesDownload extends Component {
+const MESSAGES = defineMessages({
+  delimiterHint: {
+    defaultMessage: 'Write «T» and press «Ctrl+Enter» to use «TAB» as delimiter',
+    id: 'export.csv.delimiter.hint.first'
+  }
+})
+
+class EntitiesDownload extends Component {
   constructor (props) {
     super(props)
 
@@ -52,12 +64,21 @@ export default class EntitiesDownload extends Component {
   }
 
   render () {
+    return (
+      <React.Fragment>
+        { this.renderDownloadButton() }
+        { this.renderOptions() }
+        { this.renderError() }
+      </React.Fragment>
+    )
+  }
+
+  renderDownloadButton () {
     const { total, filename } = this.props
     const { pageSize, controller } = this.state
 
-    let downloadButton
     if (controller) { // download in progress
-      downloadButton = (
+      return (
         <button
           type='button'
           className='tab'
@@ -69,72 +90,65 @@ export default class EntitiesDownload extends Component {
             defaultMessage='Cancel download' />
         </button>
       )
-    } else {
-      if (total < pageSize) { // only one call
-        downloadButton = (
-          <button
-            type='button'
-            className='tab'
-            onClick={() => { this.setState({ page: 1, filename }) }}
-          >
-            <i className='fas fa-download mr-2' />
-            <FormattedMessage
-              id='entities.download.title'
-              defaultMessage='Download' />
-          </button>
-        )
-      } else { // too much data
-        const dropdown = 'downloadLinkChoices'
-        const pages = range(1, Math.ceil(total / pageSize) + 1)
-          .map(index => ({
-            page: index,
-            filename: `${filename}-${index}`
-          }))
-
-        downloadButton = (
-          <div className='dropdown'>
-            <button
-              type='button'
-              className='tab'
-              id={dropdown}
-              data-toggle='dropdown'
-            >
-              <i className='fas fa-download mr-2' />
-              <FormattedMessage
-                id='entities.download.title'
-                defaultMessage='Download' />
-            </button>
-
-            <div
-              className='dropdown-menu'
-              aria-labelledby={dropdown}
-            >
-              <div className='dropdown-list'>
-                {
-                  pages.map(pageOptions => (
-                    <button
-                      key={pageOptions.page}
-                      type='button'
-                      className='dropdown-item'
-                      onClick={() => { this.setState({ ...pageOptions }) }}
-                    >
-                      { this.renderInterval(pageOptions.page) }
-                    </button>
-                  ))
-                }
-              </div>
-            </div>
-          </div>
-        )
-      }
     }
 
+    if (total < pageSize) { // only one call
+      return (
+        <button
+          type='button'
+          className='tab'
+          onClick={() => { this.setState({ page: 1, filename }) }}
+        >
+          <i className='fas fa-download mr-2' />
+          <FormattedMessage
+            id='entities.download.title'
+            defaultMessage='Download' />
+        </button>
+      )
+    }
+
+    // too many records for only one call
+    const dropdown = 'downloadLinkChoices'
+    const pages = range(1, Math.ceil(total / pageSize) + 1)
+      .map(index => ({
+        page: index,
+        filename: `${filename}-${index}`
+      }))
+
     return (
-      <React.Fragment>
-        { this.renderError() }
-        { this.renderOptions() }
-        { downloadButton }
-      </React.Fragment>
+      <div className='dropdown'>
+        <button
+          type='button'
+          className='tab'
+          id={dropdown}
+          data-toggle='dropdown'
+        >
+          <i className='fas fa-download mr-2' />
+          <FormattedMessage
+            id='entities.download.title'
+            defaultMessage='Download' />
+        </button>
+
+        <div
+          className='dropdown-menu'
+          aria-labelledby={dropdown}
+        >
+          <div className='dropdown-list'>
+            {
+              pages.map(pageOptions => (
+                <button
+                  key={pageOptions.page}
+                  type='button'
+                  className='dropdown-item'
+                  onClick={() => { this.setState({ ...pageOptions }) }}
+                >
+                  { this.renderInterval(pageOptions.page) }
+                </button>
+              ))
+            }
+          </div>
+        </div>
+      </div>
     )
   }
 
@@ -162,6 +176,7 @@ export default class EntitiesDownload extends Component {
   }
 
   renderOptions () {
+    const { formatMessage } = this.props.intl
     const { page, pageSize, filename } = this.state
 
     if (!page) {
@@ -279,10 +294,13 @@ export default class EntitiesDownload extends Component {
         renderChecked: () => (
           <div className='ml-5 form-inline'>
             <div className='form-group mr-5'>
-              <label className='form-control-label title mr-2'>
+              <label
+                className='form-control-label title mr-2'
+                title={formatMessage(MESSAGES.delimiterHint)}>
                 <FormattedMessage
                   id='entities.download.csv.separator'
                   defaultMessage='Delimiter' />
+                <sup className='ml-1'><b>(*)</b></sup>
               </label>
               <input
                 name='csvSeparator'
@@ -437,7 +455,7 @@ export default class EntitiesDownload extends Component {
                       onClick={() => { download() }}>
                       <FormattedMessage
                         id='entities.download.prepare'
-                        defaultMessage='Prepare' />
+                        defaultMessage='Prepare file' />
                     </button>
                   </div>
                 </div>
@@ -523,3 +541,6 @@ export default class EntitiesDownload extends Component {
     )
   }
 }
+
+// Include this to enable `this.props.intl` for this component.
+export default injectIntl(EntitiesDownload)
