@@ -39,3 +39,19 @@
   background-image: linear-gradient(to right, transparent, $hover-color);
   color: $white;
 }
+
+@mixin radio {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px $action-color;
+  margin: 0 12px;
+  transition: all .1s;
+}
+
+@mixin radio-selected {
+  width: 4px;
+  height: 4px;
+  box-shadow: 0 0 0 6px $grey;
+  margin: 4px 16px;
+}

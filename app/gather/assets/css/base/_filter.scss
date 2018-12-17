@@ -247,12 +247,7 @@
     position: relative;
 
     .marker {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      box-shadow: 0 0 0 2px $action-color;
-      margin: 0 12px;
-      transition: all .1s;
+      @include radio;
     }
 
     span::before {
@@ -265,10 +260,7 @@
       color: $grey;
 
       .marker {
-        width: 4px;
-        height: 4px;
-        box-shadow: 0 0 0 6px $grey;
-        margin: 0 16px;
+        @include radio-selected;
       }
     }
   }

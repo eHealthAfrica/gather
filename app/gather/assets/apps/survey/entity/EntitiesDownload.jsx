@@ -295,7 +295,7 @@ class EntitiesDownload extends Component {
           <div className='ml-5 form-inline'>
             <div className='form-group mr-5'>
               <label
-                className='form-control-label title mr-2'
+                className='form-control-label label mr-2'
                 title={formatMessage(MESSAGES.delimiterHint)}>
                 <FormattedMessage
                   id='entities.download.csv.separator'
@@ -314,7 +314,7 @@ class EntitiesDownload extends Component {
               />
             </div>
             <div className='form-group mr-5'>
-              <label className='form-control-label title mr-2'>
+              <label className='form-control-label label mr-2'>
                 <FormattedMessage
                   id='entities.download.csv.quote'
                   defaultMessage='Quote' />
@@ -330,7 +330,7 @@ class EntitiesDownload extends Component {
               />
             </div>
             <div className='form-group mr-5'>
-              <label className='form-control-label title mr-2'>
+              <label className='form-control-label label mr-2'>
                 <FormattedMessage
                   id='entities.download.csv.escape'
                   defaultMessage='Escape' />
@@ -356,11 +356,11 @@ class EntitiesDownload extends Component {
           <div className='modal-dialog modal-dialog-centered modal-lg'>
             <div className='modal-content modal-options'>
               <div className='modal-header'>
-                <h5 className='modal-title'>
+                <h3 className='modal-title'>
                   <FormattedMessage
                     id='entities.download.options.title'
                     defaultMessage='Download data' />: { this.renderInterval(page) }
-                </h5>
+                </h3>
                 <button
                   data-qa='confirm-button-close'
                   type='button'
@@ -372,31 +372,31 @@ class EntitiesDownload extends Component {
 
               <div className='modal-body'>
                 <div className='m-3'>
-                  <h6 className='border-bottom p-2 mb-3'>
+                  <h5 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.data.format.title'
                       defaultMessage='Data format' />
-                  </h6>
+                  </h5>
                   { this.renderChoices(DATA_FORMATS, 'dataFormat') }
                 </div>
 
                 <div className='m-3'>
-                  <h6 className='border-bottom p-2 mb-3'>
+                  <h5 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.headers.title'
                       defaultMessage='Headers' />
-                  </h6>
+                  </h5>
 
                   { this.renderChoices(HEADERS, 'headerContent', 'd-inline mr-5') }
 
-                  <div className='ml-5 form-inline'>
+                  <div className='form-inline p-2'>
                     <div
-                      className='form-group mt-2'
+                      className='form-group mt-2 ml-2'
                       onClick={() => { this.setState({ headerFull: !this.state.headerFull }) }}>
                       <i
                         className={`fa ${this.state.headerFull ? 'fa-toggle-on' : 'fa-toggle-off'}`}
                       />
-                      <label className='form-control-label title ml-2'>
+                      <label className='form-control-label ml-2'>
                         <FormattedMessage
                           id='entities.download.headers.full'
                           defaultMessage='Show full path in headers' />
@@ -405,7 +405,7 @@ class EntitiesDownload extends Component {
 
                     { this.state.headerFull &&
                       <div className='form-group ml-5'>
-                        <label className='form-control-label title mr-2'>
+                        <label className='form-control-label label mr-2'>
                           <FormattedMessage
                             id='entities.download.headers.separator'
                             defaultMessage='Delimiter' />
@@ -425,11 +425,11 @@ class EntitiesDownload extends Component {
                 </div>
 
                 <div className='m-3'>
-                  <h6 className='border-bottom p-2 mb-3'>
+                  <h5 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.file.format.title'
                       defaultMessage='File format' />
-                  </h6>
+                  </h5>
 
                   { this.renderChoices(FILE_FORMATS, 'fileFormat') }
                 </div>
