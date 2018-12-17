@@ -20,7 +20,7 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { hot } from 'react-hot-loader'
+import { hot } from 'react-hot-loader/root'
 
 import { AppIntl } from './components'
 import { getSettings } from './utils/settings'
@@ -49,6 +49,6 @@ getSettings().then(settings => {
     ReactDOM.render(dispatcher, appElement)
 
     // Include this to enable HMR for this module
-    hot(module)(dispatcher)
+    hot(dispatcher)
   }
 })
