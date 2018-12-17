@@ -19,7 +19,7 @@
  */
 
 import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, FormattedNumber } from 'react-intl'
 
 import { Portal } from '../../components'
 
@@ -32,8 +32,13 @@ export default class EntitiesDownload extends Component {
   constructor (props) {
     super(props)
 
+    const { EXPORT_MAX_ROWS_SIZE } = props.settings
+    const pageSize = Math.min(EXPORT_MAX_ROWS_SIZE || MAX_PAGE_SIZE, MAX_PAGE_SIZE)
+
     this.state = {
-      preparing: false,
+      pageSize,
+      controller: false,
+
       // default export options
       dataFormat: 'split',
       fileFormat: EXPORT_CSV_FORMAT,
@@ -48,93 +53,122 @@ export default class EntitiesDownload extends Component {
 
   render () {
     const { total, filename } = this.props
-    const { EXPORT_MAX_ROWS_SIZE } = this.props.settings
-    const pageSize = Math.min(EXPORT_MAX_ROWS_SIZE || MAX_PAGE_SIZE, MAX_PAGE_SIZE)
+    const { pageSize, controller } = this.state
 
-    const icon = this.state.preparing
-      ? <i className='fa fa-spinner fa-pulse mr-2' />
-      : <i className='fas fa-download mr-2' />
-
-    if (total < pageSize) {
-      return (
-        <React.Fragment>
-          { this.renderError() }
-          { this.renderOptions() }
+    let downloadButton
+    if (controller) { // download in progress
+      downloadButton = (
+        <button
+          type='button'
+          className='tab'
+          onClick={() => { controller.abort() }}
+        >
+          <i className='fa fa-spinner fa-pulse mr-2' />
+          <FormattedMessage
+            id='entities.download.cancel'
+            defaultMessage='Cancel download' />
+        </button>
+      )
+    } else {
+      if (total < pageSize) { // only one call
+        downloadButton = (
           <button
             type='button'
             className='tab'
-            disabled={this.state.preparing}
-            onClick={() => {
-              this.setState({ page: 1, filename })
-            }}
+            onClick={() => { this.setState({ page: 1, filename }) }}
           >
-            { icon }
+            <i className='fas fa-download mr-2' />
             <FormattedMessage
               id='entities.download.title'
               defaultMessage='Download' />
           </button>
-        </React.Fragment>
-      )
+        )
+      } else { // too much data
+        const dropdown = 'downloadLinkChoices'
+        const pages = range(1, Math.ceil(total / pageSize) + 1)
+          .map(index => ({
+            page: index,
+            filename: `${filename}-${index}`
+          }))
+
+        downloadButton = (
+          <div className='dropdown'>
+            <button
+              type='button'
+              className='tab'
+              id={dropdown}
+              data-toggle='dropdown'
+            >
+              <i className='fas fa-download mr-2' />
+              <FormattedMessage
+                id='entities.download.title'
+                defaultMessage='Download' />
+            </button>
+
+            <div
+              className='dropdown-menu'
+              aria-labelledby={dropdown}
+            >
+              <div className='dropdown-list'>
+                {
+                  pages.map(pageOptions => (
+                    <button
+                      key={pageOptions.page}
+                      type='button'
+                      className='dropdown-item'
+                      onClick={() => { this.setState({ ...pageOptions }) }}
+                    >
+                      { this.renderInterval(pageOptions.page) }
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        )
+      }
     }
 
-    const dropdown = 'downloadLinkChoices'
-    const pages = range(1, Math.ceil(total / pageSize) + 1)
-      .map(index => ({
-        page: index,
-        filename: `${filename}-${index}`
-      }))
-
     return (
-      <div className='dropdown'>
+      <React.Fragment>
         { this.renderError() }
         { this.renderOptions() }
-        <button
-          type='button'
-          className='tab'
-          disabled={this.state.preparing}
-          id={dropdown}
-          data-toggle='dropdown'
-        >
-          { icon }
-          <FormattedMessage
-            id='entities.download.title'
-            defaultMessage='Download' />
-        </button>
+        { downloadButton }
+      </React.Fragment>
+    )
+  }
 
-        <div
-          className='dropdown-menu'
-          aria-labelledby={dropdown}
-        >
-          <div className='dropdown-list'>
-            {
-              pages.map(pageOptions => (
-                <button
-                  key={pageOptions.page}
-                  type='button'
-                  className='dropdown-item'
-                  onClick={() => { this.setState({ ...pageOptions }) }}
-                >
-                  { pageOptions.filename }
-                </button>
-              ))
-            }
-          </div>
-        </div>
-      </div>
+  renderInterval (page) {
+    const { total } = this.props
+    const { pageSize } = this.state
+
+    return (
+      <React.Fragment>
+        <FormattedMessage
+          id='entities.download.page.from'
+          defaultMessage='from record' />
+        <b className='mr-2 ml-2'>
+          <FormattedNumber value={(page - 1) * pageSize + 1} />
+        </b>
+
+        <FormattedMessage
+          id='entities.download.page.to'
+          defaultMessage='to record' />
+        <b className='ml-2'>
+          <FormattedNumber value={Math.min((page) * pageSize, total)} />
+        </b>
+      </React.Fragment>
     )
   }
 
   renderOptions () {
-    const { page, filename } = this.state
+    const { page, pageSize, filename } = this.state
 
     if (!page) {
       return ''
     }
 
     const { survey } = this.props
-    const { EXPORT_MAX_ROWS_SIZE } = this.props.settings
-
-    const pageSize = Math.min(EXPORT_MAX_ROWS_SIZE || MAX_PAGE_SIZE, MAX_PAGE_SIZE)
     const params = {
       project: survey.id,
       format: '',
@@ -143,7 +177,8 @@ export default class EntitiesDownload extends Component {
     }
 
     const download = () => {
-      this.setState({ preparing: true, page: 0, error: null })
+      const controller = new window.AbortController()
+      this.setState({ controller, page: 0, error: null })
 
       return postData(
         getEntitiesAPIPath({ ...params, page }),
@@ -159,13 +194,17 @@ export default class EntitiesDownload extends Component {
           csv_quote: this.state.csvQuote,
           filename
         },
-        { download: true }
+        { download: true, signal: controller.signal }
       )
         .then(() => {
-          this.setState({ preparing: false, error: null })
+          this.setState({ controller: null, error: null })
         })
         .catch(error => {
-          this.setState({ preparing: false, error })
+          if (error.name === 'AbortError') {
+            this.setState({ controller: null, error: null })
+          } else {
+            this.setState({ controller: null, error })
+          }
         })
     }
 
@@ -302,7 +341,7 @@ export default class EntitiesDownload extends Component {
                 <h5 className='modal-title'>
                   <FormattedMessage
                     id='entities.download.options.title'
-                    defaultMessage='Download data' />
+                    defaultMessage='Download data' />: { this.renderInterval(page) }
                 </h5>
                 <button
                   data-qa='confirm-button-close'
