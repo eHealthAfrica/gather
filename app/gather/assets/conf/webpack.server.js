@@ -36,27 +36,29 @@ const hmrEntry = [
   // ...
 ]
 
-const config = buildConfig({
-  production: false,
-  stylesAsCss: false,
+const config = Object.assign(
+  {},
+  buildConfig({
+    production: false,
+    stylesAsCss: false,
 
-  entryOptions: hmrEntry,
+    entryOptions: hmrEntry,
 
-  output: {
-    // Tell django to use this URL to load packages
-    // and not use STATIC_URL + bundle_name
-    publicPath: WEBPACK_URL + '/static/'
-  },
+    output: {
+      // Tell django to use this URL to load packages
+      // and not use STATIC_URL + bundle_name
+      publicPath: WEBPACK_URL + '/static/'
+    },
 
-  plugins: [
-    // enable HMR globally
-    new webpack.HotModuleReplacementPlugin(),
-    // prints more readable module names in the browser console on HMR updates
-    new webpack.NamedModulesPlugin(),
-    // don't reload if there is an error
-    new webpack.NoEmitOnErrorsPlugin()
-  ]
-})
+    plugins: [
+      // enable HMR globally
+      new webpack.HotModuleReplacementPlugin()
+    ]
+  }),
+  {
+    devtool: 'inline-source-map'
+  }
+)
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
@@ -75,6 +77,7 @@ new WebpackDevServer(webpack(config), {
   noInfo: false,
   stats: {
     // Config for minimal console.log mess.
+    builtAt: true,
     assets: false,
     colors: true,
     version: false,

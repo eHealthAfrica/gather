@@ -32,15 +32,24 @@ module.exports = (custom) => ({
 
   entry: buildEntries(custom.entryOptions),
 
-  output: Object.assign({
-    filename: '[name]-[hash].js',
-    library: ['gather', '[name]'],
-    libraryTarget: 'var',
-    path: BUNDLES_DIR
-  }, custom.output),
+  output: Object.assign(
+    {},
+    {
+      filename: '[name]-[hash].js',
+      library: ['gather', '[name]'],
+      libraryTarget: 'var',
+      path: BUNDLES_DIR
+    },
+    custom.output || {}
+  ),
 
   optimization: {
-    minimize: custom.production
+    minimize: custom.production,
+
+    concatenateModules: true,
+    namedChunks: true,
+    namedModules: true,
+    noEmitOnErrors: true
   },
 
   module: {
@@ -80,8 +89,10 @@ module.exports = (custom) => ({
 
     // needed by `django-webpack-loader`
     new BundleTracker({
-      path: BUNDLES_DIR,
-      filename: 'webpack-stats.json'
+      filename: 'webpack-stats.json',
+      indent: 2,
+      logTime: true,
+      path: BUNDLES_DIR
     }),
 
     // Environment variables

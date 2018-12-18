@@ -303,12 +303,8 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
 # Javascript/CSS Files:
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'CACHE': not DEBUG,
         'BUNDLE_DIR_NAME': '/',
         'STATS_FILE': os.path.join(STATIC_ROOT, 'webpack-stats.json'),
-        'POLL_INTERVAL': 0.1,  # in miliseconds
-        'TIMEOUT': None,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
 }
 
