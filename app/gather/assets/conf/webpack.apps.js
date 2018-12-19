@@ -55,8 +55,7 @@ const buildEntries = (hmr) => {
       'bootstrap',
       'whatwg-fetch',
       'abortcontroller-polyfill/dist/polyfill-patch-fetch'
-    ],
-    'html5shiv': 'html5shiv'
+    ]
   }
 
   apps.forEach(app => {
