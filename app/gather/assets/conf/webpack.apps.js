@@ -59,7 +59,7 @@ const buildEntries = (hmr) => {
   }
 
   apps.forEach(app => {
-    list[app.name] = (hmr ? [ app.path, hmr + app.name ] : app.path)
+    list[app.name] = (hmr ? [ app.path, hmr ] : app.path)
   })
 
   return list

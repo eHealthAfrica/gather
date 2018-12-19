@@ -31,8 +31,7 @@ const WEBPACK_HMR_PATH = '/__webpack_hmr'
 const HMR_URL = 'webpack-hot-middleware/client?' +
   '&path=' + WEBPACK_URL + WEBPACK_HMR_PATH +
   '&timeout=20000' +
-  '&reload=true' +
-  '&name=' // here comes the module name
+  '&reload=true'
 
 const webpackOptions = Object.assign(
   {},
@@ -62,9 +61,8 @@ const serverOptions = {
   publicPath: webpackOptions.output.publicPath,
   contentBase: path.resolve(__dirname, '../'),
 
-  // hot: true,
-  // inline: true,
-  // historyApiFallback: true,
+  inline: true,
+  historyApiFallback: true,
 
   // Fixes:
   //    Access to XXX at 'http://localhost:{port}/static/ZZZ' from origin
@@ -110,6 +108,10 @@ app.use(require('webpack-hot-middleware')(compiler, {
   path: WEBPACK_HMR_PATH,
   heartbeat: 10 * 1000
 }))
+
+app.get('/', function (req, res) {
+  res.send(webpackOptions)
+})
 
 // Step 4: Start the server
 var server = http.createServer(app)
