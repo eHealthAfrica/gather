@@ -48,6 +48,8 @@ under the License.
     id="sync-users-app"
     data-action="{{ action }}"
     data-sync-user-id="{{ sync_user_id }}"></div>
-
-  {% render_bundle 'sync-users' %}
 {% endblock content %}
+
+{% block extra_js %}
+  {% render_bundle 'sync-users' %}
+{% endblock extra_js %}

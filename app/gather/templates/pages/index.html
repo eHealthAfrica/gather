@@ -29,6 +29,8 @@ under the License.
 
 {% block content %}
   <div id="home-app"></div>
-
-  {% render_bundle 'home' %}
 {% endblock content %}
+
+{% block extra_js %}
+  {% render_bundle 'home' %}
+{% endblock extra_js %}
