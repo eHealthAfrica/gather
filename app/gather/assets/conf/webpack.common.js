@@ -28,9 +28,9 @@ const BUNDLES_DIR = path.resolve(__dirname, '../bundles/')
 
 module.exports = (custom) => ({
   mode: (custom.production ? 'production' : 'development'),
-  context: __dirname,
+  context: path.resolve(__dirname, '../'),
 
-  entry: buildEntries(custom.entryOptions),
+  entry: buildEntries(custom.hmr),
 
   output: Object.assign(
     {},
@@ -97,9 +97,15 @@ module.exports = (custom) => ({
 
     // Environment variables
     new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(custom.production ? 'production' : 'development')
-      }
+      // Note from  https://webpack.js.org/plugins/define-plugin/
+      // When defining values for process prefer
+      //    'process.env.NODE_ENV': JSON.stringify('production')
+      //  over
+      //    process: { env: { NODE_ENV: JSON.stringify('production') } }
+      // Using the latter will overwrite the process object which can break
+      // compatibility with some modules that expect other values
+      // on the process object to be defined.
+      'process.env.NODE_ENV': JSON.stringify(custom.production ? 'production' : 'development')
     }),
 
     // extract styles as a CSS file not JS file

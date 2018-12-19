@@ -22,27 +22,27 @@
 const apps = [
   {
     name: 'styles',
-    path: '../css/index.scss'
+    path: './css/index.scss'
   },
   {
     name: 'styles-login',
-    path: '../css/login.scss'
+    path: './css/login.scss'
   },
   {
     name: 'home',
-    path: '../apps/home'
+    path: './apps/home'
   },
   {
     name: 'surveys',
-    path: '../apps/surveys'
+    path: './apps/surveys'
   },
   {
     name: 'surveyors',
-    path: '../apps/surveyors'
+    path: './apps/surveyors'
   },
   {
     name: 'sync-users',
-    path: '../apps/sync-users'
+    path: './apps/sync-users'
   }
 ]
 
@@ -59,7 +59,7 @@ const buildEntries = (hmr) => {
   }
 
   apps.forEach(app => {
-    list[app.name] = (hmr ? [ ...hmr, app.path ] : app.path)
+    list[app.name] = (hmr ? [ app.path, hmr + app.name ] : app.path)
   })
 
   return list
