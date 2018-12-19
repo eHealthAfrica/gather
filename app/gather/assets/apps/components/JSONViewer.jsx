@@ -25,9 +25,10 @@ import {
   FormattedNumber,
   FormattedTime
 } from 'react-intl'
+import { hot } from 'react-hot-loader/root'
 
 import { getLabel, getType } from '../utils/types'
-import { Link } from './Link'
+import Link from './Link'
 
 /**
  * JSONViewer component.
@@ -43,7 +44,7 @@ import { Link } from './Link'
  *   - `labelRoot`:   The prefix needed to look for the associated label.
  */
 
-export default class JSONViewer extends Component {
+class JSONViewer extends Component {
   render () {
     const { data } = this.props
 
@@ -330,3 +331,6 @@ class JSONArrayViewer extends Component {
     this.setState({ collapsed: !this.state.collapsed })
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(JSONViewer)

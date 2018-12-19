@@ -19,6 +19,7 @@
  */
 
 import React, { Component } from 'react'
+import { hot } from 'react-hot-loader/root'
 
 import { fetchUrls } from '../utils/request'
 import { isMounted } from '../utils/dom'
@@ -56,7 +57,7 @@ import RefreshSpinner from './RefreshSpinner'
  *
  */
 
-export default class FetchUrlsContainer extends Component {
+class FetchUrlsContainer extends Component {
   constructor (props) {
     super(props)
 
@@ -132,3 +133,6 @@ export default class FetchUrlsContainer extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(FetchUrlsContainer)

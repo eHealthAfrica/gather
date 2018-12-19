@@ -19,13 +19,14 @@
  */
 
 import React, { Component } from 'react'
+import { hot } from 'react-hot-loader/root'
 
 /**
  * Link component.
  *
  * Renders a link.
  */
-export class Link extends Component {
+class Link extends Component {
   render () {
     return (
       <a href={this.props.link.url} target='_blank'>
@@ -35,50 +36,5 @@ export class Link extends Component {
   }
 }
 
-/**
- * LinksList component.
- *
- * Renders a collapsable list of links.
- */
-export class LinksList extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      collapsed: (props.list && props.list.length > 1)
-    }
-  }
-
-  render () {
-    const { list } = this.props
-
-    if (!list || list.length === 0) {
-      return ''
-    }
-
-    return (
-      <div>
-        { list.length > 1 &&
-          <button
-            type='button'
-            data-qa='link-list-collapse-button'
-            className='btn icon-only btn-collapse'
-            onClick={() => this.setState({ collapsed: !this.state.collapsed })}>
-            <i className={`fas fa-${this.state.collapsed ? 'plus' : 'minus'}`} />
-          </button>
-        }
-
-        { !this.state.collapsed &&
-          <ol className='property-list'>
-            {
-              list.map((link, index) => (
-                <li key={index} className='property-item'>
-                  <Link link={link} />
-                </li>
-              ))
-            }
-          </ol>
-        }
-      </div>
-    )
-  }
-}
+// Include this to enable HMR for this module
+export default hot(Link)

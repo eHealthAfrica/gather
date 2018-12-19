@@ -20,6 +20,7 @@
 
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { hot } from 'react-hot-loader/root'
 
 /**
  * EmptyAlert component.
@@ -28,7 +29,7 @@ import { FormattedMessage } from 'react-intl'
  * while requesting it from server.
  */
 
-export default class EmptyAlert extends Component {
+class EmptyAlert extends Component {
   render () {
     return (
       <div data-qa='data-empty' className='container-fluid'>
@@ -42,3 +43,6 @@ export default class EmptyAlert extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(EmptyAlert)

@@ -20,6 +20,7 @@
 
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { hot } from 'react-hot-loader/root'
 
 import Portal from './Portal'
 
@@ -30,7 +31,7 @@ import Portal from './Portal'
  * to continue executing the expected action.
  */
 
-export default class ConfirmButton extends Component {
+class ConfirmButton extends Component {
   constructor (props) {
     super(props)
     this.state = { open: false }
@@ -130,3 +131,6 @@ export default class ConfirmButton extends Component {
     this.setState({ open: false }, this.props.onConfirm)
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(ConfirmButton)

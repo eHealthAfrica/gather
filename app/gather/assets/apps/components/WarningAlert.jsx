@@ -19,6 +19,7 @@
  */
 
 import React, { Component } from 'react'
+import { hot } from 'react-hot-loader/root'
 
 /**
  * WarningAlert component.
@@ -27,7 +28,7 @@ import React, { Component } from 'react'
  * while executing any action.
  */
 
-export default class WarningAlert extends Component {
+class WarningAlert extends Component {
   render () {
     const { warnings } = this.props
     if (!warnings || !warnings.length) {
@@ -47,3 +48,6 @@ export default class WarningAlert extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(WarningAlert)

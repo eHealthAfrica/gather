@@ -24,6 +24,7 @@ import {
   FormattedRelative,
   FormattedTime
 } from 'react-intl'
+import { hot } from 'react-hot-loader/root'
 
 /**
  * FullDateTime component.
@@ -32,7 +33,7 @@ import {
  * Like: October 17, 2017 18:30:20 GMT+2 (1 hour ago)
  */
 
-export default class FullDateTime extends Component {
+class FullDateTime extends Component {
   render () {
     const { date } = this.props
     if (!date) {
@@ -64,3 +65,6 @@ export default class FullDateTime extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(FullDateTime)

@@ -19,6 +19,7 @@
  */
 
 import React, { Component } from 'react'
+import { hot } from 'react-hot-loader/root'
 
 import { generateRandomId } from '../utils'
 
@@ -28,7 +29,7 @@ import { generateRandomId } from '../utils'
  * Renders a question button that shows/hides a help message.
  */
 
-export default class HelpMessage extends Component {
+class HelpMessage extends Component {
   render () {
     const randomId = `help-content-${generateRandomId()}`
 
@@ -50,3 +51,6 @@ export default class HelpMessage extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(HelpMessage)
