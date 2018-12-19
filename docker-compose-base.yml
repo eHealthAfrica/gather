@@ -285,11 +285,10 @@ services:
 
       WEB_SERVER_PORT: 8005
 
-      # Use this value with `start_dev` command and "webpack" otherwise comment it out
-      STATIC_ROOT: /code/gather/assets/bundles
+      # Use this value with "HMR" otherwise you can comment it out
+      WEBPACK_STATS_FILE: /code/gather/assets/bundles/webpack-stats.json
     volumes:
       - ./app:/code
-      # Use this volume with `start` command and comment out `STATIC_ROOT`
       - ./.persistent_data/static/gather:/var/www/static
     ports:
       - "8005:8005"

@@ -60,6 +60,7 @@ const webpackOptions = Object.assign(
 const serverOptions = {
   publicPath: webpackOptions.output.publicPath,
   contentBase: path.resolve(__dirname, '../'),
+  host: '0.0.0.0',
 
   inline: true,
   historyApiFallback: true,

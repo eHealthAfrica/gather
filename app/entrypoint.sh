@@ -165,6 +165,7 @@ case "$1" in
 
     start_dev )
         setup
+
         python ./manage.py runserver 0.0.0.0:$WEB_SERVER_PORT
     ;;
 
