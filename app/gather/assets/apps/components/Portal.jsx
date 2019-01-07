@@ -20,10 +20,11 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { hot } from 'react-hot-loader/root'
 
 // https://reactjs.org/docs/portals.html
 
-export default class Portal extends React.Component {
+class Portal extends React.Component {
   constructor (props) {
     super(props)
     this.element = document.createElement('div')
@@ -52,3 +53,6 @@ export default class Portal extends React.Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(Portal)

@@ -20,6 +20,7 @@
 
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { hot } from 'react-hot-loader/root'
 
 import { sortNumericArray } from '../utils'
 import { getData } from '../utils/request'
@@ -54,7 +55,7 @@ import RefreshSpinner from './RefreshSpinner'
  *
  */
 
-export default class PaginationContainer extends Component {
+class PaginationContainer extends Component {
   constructor (props) {
     super(props)
 
@@ -202,3 +203,6 @@ export default class PaginationContainer extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(PaginationContainer)

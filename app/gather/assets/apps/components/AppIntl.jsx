@@ -20,6 +20,7 @@
 
 import React, { Component } from 'react'
 import { IntlProvider } from 'react-intl'
+import { hot } from 'react-hot-loader/root'
 
 /**
  * AppIntl component.
@@ -27,7 +28,7 @@ import { IntlProvider } from 'react-intl'
  * Wraps the children with the IntlProvider component to enable i18n and L11n.
  */
 
-export default class AppIntl extends Component {
+class AppIntl extends Component {
   render () {
     return (
       <IntlProvider defaultLocale='en' locale={navigator.locale || 'en'}>
@@ -36,3 +37,6 @@ export default class AppIntl extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(AppIntl)

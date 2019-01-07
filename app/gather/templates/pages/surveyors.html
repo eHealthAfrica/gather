@@ -48,6 +48,8 @@ under the License.
     id="surveyors-app"
     data-action="{{ action }}"
     data-surveyor-id="{{ surveyor_id }}"></div>
-
-  {% render_bundle 'surveyors' %}
 {% endblock content %}
+
+{% block extra_js %}
+  {% render_bundle 'surveyors' %}
+{% endblock extra_js %}

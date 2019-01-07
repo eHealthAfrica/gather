@@ -20,6 +20,7 @@
 
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { hot } from 'react-hot-loader/root'
 
 /**
  * LoadingSpinner component.
@@ -27,7 +28,7 @@ import { FormattedMessage } from 'react-intl'
  * Renders a spinner indicating that data is being loaded from server.
  */
 
-export default class LoadingSpinner extends Component {
+class LoadingSpinner extends Component {
   render () {
     return (
       <div data-qa='data-loading' className='container-fluid'>
@@ -41,3 +42,6 @@ export default class LoadingSpinner extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(LoadingSpinner)

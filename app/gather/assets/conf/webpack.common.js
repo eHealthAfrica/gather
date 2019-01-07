@@ -28,19 +28,28 @@ const BUNDLES_DIR = path.resolve(__dirname, '../bundles/')
 
 module.exports = (custom) => ({
   mode: (custom.production ? 'production' : 'development'),
-  context: __dirname,
+  context: path.resolve(__dirname, '../'),
 
-  entry: buildEntries(custom.entryOptions),
+  entry: buildEntries(custom.hmr),
 
-  output: Object.assign({
-    filename: '[name]-[hash].js',
-    library: ['gather', '[name]'],
-    libraryTarget: 'var',
-    path: BUNDLES_DIR
-  }, custom.output),
+  output: Object.assign(
+    {},
+    {
+      filename: '[name]-[hash].js',
+      library: ['gather', '[name]'],
+      libraryTarget: 'var',
+      path: BUNDLES_DIR
+    },
+    custom.output || {}
+  ),
 
   optimization: {
-    minimize: custom.production
+    minimize: custom.production,
+
+    concatenateModules: true,
+    namedChunks: true,
+    namedModules: true,
+    noEmitOnErrors: true
   },
 
   module: {
@@ -80,15 +89,23 @@ module.exports = (custom) => ({
 
     // needed by `django-webpack-loader`
     new BundleTracker({
-      path: BUNDLES_DIR,
-      filename: 'webpack-stats.json'
+      filename: 'webpack-stats.json',
+      indent: 2,
+      logTime: true,
+      path: BUNDLES_DIR
     }),
 
     // Environment variables
     new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(custom.production ? 'production' : 'development')
-      }
+      // Note from  https://webpack.js.org/plugins/define-plugin/
+      // When defining values for process prefer
+      //    'process.env.NODE_ENV': JSON.stringify('production')
+      //  over
+      //    process: { env: { NODE_ENV: JSON.stringify('production') } }
+      // Using the latter will overwrite the process object which can break
+      // compatibility with some modules that expect other values
+      // on the process object to be defined.
+      'process.env.NODE_ENV': JSON.stringify(custom.production ? 'production' : 'development')
     }),
 
     // extract styles as a CSS file not JS file

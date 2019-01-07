@@ -23,75 +23,17 @@
 import React from 'react'
 import { mount } from 'enzyme'
 
-import { Link, LinksList } from './Link'
+import Link from './Link'
 
-describe('Link components', () => {
-  describe('Link', () => {
-    it('should render a link', () => {
-      const component = mount(
-        <Link link={{ url: '/link', name: 'click here' }} />
-      )
+describe('Link component', () => {
+  it('should render a link', () => {
+    const component = mount(
+      <Link link={{ url: '/link', name: 'click here' }} />
+    )
 
-      const link = component.find('a')
-      expect(link.exists()).toBeTruthy()
-      expect(link.props().href).toEqual('/link')
-      expect(link.text()).toEqual('click here')
-    })
-  })
-
-  describe('LinksList', () => {
-    it('should render nothing with an empty list', () => {
-      const component = mount(<LinksList />)
-      expect(component.state('collapsed')).toBeFalsy()
-      expect(component.text()).toEqual('')
-    })
-
-    it('should render a link', () => {
-      const component = mount(
-        <LinksList list={
-          [
-            { url: '/link', name: 'click here' }
-          ]
-        }
-        />
-      )
-      expect(component.state('collapsed')).toBeFalsy()
-      const button = component.find('[data-qa="link-list-collapse-button"]')
-      expect(button.exists()).toBeFalsy()
-
-      const link = component.find('a')
-      expect(link.exists()).toBeTruthy()
-      expect(link.props().href).toEqual('/link')
-      expect(link.text()).toEqual('click here')
-    })
-
-    it('should render a list of links', () => {
-      const component = mount(
-        <LinksList list={
-          [
-            { url: '/link-1', name: 'click here 1' },
-            { url: '/link-2', name: 'click here 2' },
-            { url: '/link-3', name: 'click here 3' }
-          ]
-        }
-        />
-      )
-      expect(component.state('collapsed')).toBeTruthy()
-      const button = component.find('[data-qa="link-list-collapse-button"]')
-      expect(button.exists()).toBeTruthy()
-
-      button.simulate('click')
-
-      const links = component.find('a')
-      expect(links.exists()).toBeTruthy()
-      expect(links.length).toEqual(3)
-
-      for (let i = 0; i < 3; i++) {
-        const link = links.get(i)
-
-        expect(link.props.href).toEqual(`/link-${i + 1}`)
-        expect(link.props.children).toEqual(`click here ${i + 1}`)
-      }
-    })
+    const link = component.find('a')
+    expect(link.exists()).toBeTruthy()
+    expect(link.props().href).toEqual('/link')
+    expect(link.text()).toEqual('click here')
   })
 })

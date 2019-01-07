@@ -19,6 +19,7 @@
  */
 
 import React, { Component } from 'react'
+import { hot } from 'react-hot-loader/root'
 
 import { getType } from '../utils/types'
 
@@ -29,7 +30,7 @@ import { getType } from '../utils/types'
  * while executing any action.
  */
 
-export default class ErrorAlert extends Component {
+class ErrorAlert extends Component {
   render () {
     const { errors } = this.props
 
@@ -52,3 +53,6 @@ export default class ErrorAlert extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(ErrorAlert)

@@ -20,6 +20,7 @@
 
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { hot } from 'react-hot-loader/root'
 
 /**
  * FetchErrorAlert component.
@@ -28,7 +29,7 @@ import { FormattedMessage } from 'react-intl'
  * while requesting data from server.
  */
 
-export default class FetchErrorAlert extends Component {
+class FetchErrorAlert extends Component {
   render () {
     return (
       <div data-qa='data-erred' className='container-fluid'>
@@ -51,3 +52,6 @@ export default class FetchErrorAlert extends Component {
     )
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(FetchErrorAlert)

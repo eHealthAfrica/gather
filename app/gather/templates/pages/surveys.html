@@ -48,6 +48,8 @@ under the License.
     id="surveys-app"
     data-action="{{ action }}"
     data-survey-id="{{ survey_id }}"></div>
-
-  {% render_bundle 'surveys' %}
 {% endblock content %}
+
+{% block extra_js %}
+  {% render_bundle 'surveys' %}
+{% endblock extra_js %}

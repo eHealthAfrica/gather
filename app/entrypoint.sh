@@ -27,27 +27,29 @@ show_help () {
     Commands
     ----------------------------------------------------------------------------
 
-    bash          : run bash
-    eval          : eval shell command
-    manage        : invoke django manage.py commands
+    bash               : run bash
+    eval               : eval shell command
+    manage             : invoke django manage.py commands
 
-    pip_freeze    : freeze pip dependencies and write to 'requirements.txt'
+    pip_freeze         : freeze pip dependencies and write to 'requirements.txt'
 
-    setup         : check required environment variables,
-                    create/migrate database and,
-                    create/update superuser using 'ADMIN_USERNAME' and 'ADMIN_PASSWORD'
+    setup              : check required environment variables,
+                         create/migrate database and,
+                         create/update superuser using
+                            'ADMIN_USERNAME' and 'ADMIN_PASSWORD'
 
-    start         : start webserver behind nginx
-    start_dev     : start webserver for development
+    start              : start webserver behind nginx
+    start_dev          : start webserver for development
 
-    health        : checks the system healthy
-    check_kernel  : checks communication with Aether Kernel
-    check_odk     : checks communication with Aether ODK
+    health             : checks the system healthy
+    check_kernel       : checks communication with Aether Kernel
+    check_odk          : checks communication with Aether ODK
+    check_couchdb_sync : checks communication with Aether CouchDB Sync
 
-    test          : run tests
-    test_lint     : run flake8 tests
-    test_coverage : run python tests with coverage output
-    test_py       : alias of test_coverage
+    test               : run tests
+    test_lint          : run flake8 tests
+    test_coverage      : run python tests with coverage output
+    test_py            : alias of test_coverage
 
     """
 }
@@ -57,7 +59,10 @@ pip_freeze () {
     rm -rf /tmp/env
 
     virtualenv -p python3 /tmp/env/
-    /tmp/env/bin/pip install -q -f ./conf/pip/dependencies -r ./conf/pip/primary-requirements.txt --upgrade
+    /tmp/env/bin/pip install -q \
+        -f ./conf/pip/dependencies \
+        -r ./conf/pip/primary-requirements.txt \
+        --upgrade
 
     cat conf/pip/requirements_header.txt | tee conf/pip/requirements.txt
     /tmp/env/bin/pip freeze --local | grep -v appdir | tee -a conf/pip/requirements.txt
@@ -78,7 +83,7 @@ setup () {
     fi
 
     # migrate data model if needed
-    ./manage.py migrate --noinput
+    python ./manage.py migrate --noinput
 
     # create admin user
     # arguments:
@@ -86,7 +91,7 @@ setup () {
     #    -p=secretsecret
     #    -e=admin@gather2.org
     #    -t=01234656789abcdefghij
-    ./manage.py setup_admin -u=$ADMIN_USERNAME -p=$ADMIN_PASSWORD
+    python ./manage.py setup_admin -u=$ADMIN_USERNAME -p=$ADMIN_PASSWORD
 
     # copy assets bundles folder into static folder
     rm -r -f ./gather/static/*.*
@@ -96,13 +101,14 @@ setup () {
     STATIC_ROOT=/var/www/static
 
     # create static assets
-    ./manage.py collectstatic --noinput --clear --verbosity 0
-    chmod -R 755 $STATIC_ROOT
+    python ./manage.py collectstatic --noinput --clear --verbosity 0
 
     # expose version number (if exists)
     cp ./VERSION $STATIC_ROOT/VERSION   2>/dev/null || :
     # add git revision (if exists)
     cp ./REVISION $STATIC_ROOT/REVISION 2>/dev/null || :
+
+    chmod -R 755 $STATIC_ROOT
 }
 
 test_lint () {
@@ -136,7 +142,7 @@ case "$1" in
     ;;
 
     manage )
-        ./manage.py "${@:2}"
+        python ./manage.py "${@:2}"
     ;;
 
     pip_freeze )
@@ -159,23 +165,40 @@ case "$1" in
 
     start_dev )
         setup
-        ./manage.py runserver 0.0.0.0:$WEB_SERVER_PORT
+
+        python ./manage.py runserver 0.0.0.0:$WEB_SERVER_PORT
     ;;
 
     health )
-        ./manage.py check_url --url=http://0.0.0.0:$WEB_SERVER_PORT/health
+        python ./manage.py check_url \
+            --url=http://0.0.0.0:$WEB_SERVER_PORT/health
     ;;
 
     check_kernel )
-        ./manage.py check_url --url=$AETHER_KERNEL_URL --token=$AETHER_KERNEL_TOKEN
+        python ./manage.py check_url \
+            --url=$AETHER_KERNEL_URL \
+            --token=$AETHER_KERNEL_TOKEN
     ;;
 
     check_odk )
         if [[ "$AETHER_MODULES" == *odk* ]];
         then
-            ./manage.py check_url --url=$AETHER_ODK_URL --token=$AETHER_ODK_TOKEN
+            python ./manage.py check_url \
+                --url=$AETHER_ODK_URL \
+                --token=$AETHER_ODK_TOKEN
         else
             echo "No ODK module enabled!"
+        fi
+    ;;
+
+    check_couchdb_sync )
+        if [[ "$AETHER_MODULES" == *couchdb-sync* ]];
+        then
+            python ./manage.py check_url \
+                --url=$AETHER_COUCHDB_SYNC_URL \
+                --token=$AETHER_COUCHDB_SYNC_TOKEN
+        else
+            echo "No CouchDB-Sync module enabled!"
         fi
     ;;
 

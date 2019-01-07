@@ -19,6 +19,7 @@
  */
 
 import React, { Component } from 'react'
+import { hot } from 'react-hot-loader/root'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { getSyncUsersAPIPath } from '../utils/paths'
@@ -26,7 +27,7 @@ import { getSyncUsersAPIPath } from '../utils/paths'
 import SyncUserForm from './SyncUserForm'
 import SyncUsersList from './SyncUsersList'
 
-export default class SyncUserDispatcher extends Component {
+class SyncUserDispatcher extends Component {
   render () {
     const { action, syncUserId } = this.props
 
@@ -59,3 +60,6 @@ export default class SyncUserDispatcher extends Component {
     }
   }
 }
+
+// Include this to enable HMR for this module
+export default hot(SyncUserDispatcher)

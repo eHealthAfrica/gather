@@ -300,13 +300,20 @@ INSTANCE_NAME = os.environ.get('INSTANCE_NAME', 'Gather 3')
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
 
+WEBPACK_STATS_FILE = os.environ.get(
+    'WEBPACK_STATS_FILE',
+    os.path.join(STATIC_ROOT, 'webpack-stats.json')
+)
+logger.debug(f'Assets served by file:  {WEBPACK_STATS_FILE}')
+
 # Javascript/CSS Files:
+# https://github.com/owais/django-webpack-loader#default-configuration
 WEBPACK_LOADER = {
     'DEFAULT': {
         'CACHE': not DEBUG,
         'BUNDLE_DIR_NAME': '/',
-        'STATS_FILE': os.path.join(STATIC_ROOT, 'webpack-stats.json'),
-        'POLL_INTERVAL': 0.1,  # in miliseconds
+        'STATS_FILE': WEBPACK_STATS_FILE,
+        'POLL_INTERVAL': 0.1,
         'TIMEOUT': None,
         'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     },
