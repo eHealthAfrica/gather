@@ -178,6 +178,8 @@ services:
       PGHOST: db-test
       PGPASSWORD: ${TEST_GATHER_DB_PASSWORD}
 
+      EXPORT_MAX_ROWS_SIZE: 1000
+
       WEB_SERVER_PORT: 9005
     volumes:
       # volumes in tests
