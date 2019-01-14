@@ -22,12 +22,12 @@
 
   "dependencies": {
     "abortcontroller-polyfill": "~1.2.0",
-    "bootstrap": "~4.1.0",
+    "bootstrap": "~4.2.1",
     "jquery": "~3.3.0",
     "moment": "~2.23.0",
     "popper.js": "~1.14.0",
-    "react": "~16.6.0",
-    "react-dom": "~16.6.0",
+    "react": "~16.7.0",
+    "react-dom": "~16.7.0",
     "react-filtered-multiselect": "~0.5.0",
     "react-intl": "~2.7.0",
     "whatwg-fetch": "~3.0.0"
@@ -35,12 +35,12 @@
 
   "devDependencies": {
     "@babel/core": "~7.2.0",
-    "@babel/preset-env": "7.2.0",
+    "@babel/preset-env": "~7.2.0",
     "@babel/preset-react": "~7.0.0",
     "abort-controller": "~2.0.0",
     "babel-core": "~7.0.0-bridge.0",
     "babel-loader": "~8.0.0",
-    "css-loader": "~2.0.0",
+    "css-loader": "~2.1.0",
     "enzyme": "~3.8.0",
     "enzyme-adapter-react-16": "~1.7.0",
     "enzyme-react-intl": "~2.0.0",
@@ -57,8 +57,8 @@
     "style-loader": "~0.23.0",
     "webpack": "~4.28.0",
     "webpack-bundle-tracker": "~0.4.2-beta",
-    "webpack-cli": "~3.1.0",
-    "webpack-dev-middleware": "~3.4.0",
+    "webpack-cli": "~3.2.0",
+    "webpack-dev-middleware": "~3.5.0",
     "webpack-hot-middleware": "~2.24.0"
   },
 
