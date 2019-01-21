@@ -50,6 +50,7 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: kernel-base
     volumes:
+      - ./.persistent_data/backups/kernel:/backups
       - ./.persistent_data/media/kernel:/media
       - ./.persistent_data/static/kernel:/var/www/static
     depends_on:
@@ -70,6 +71,7 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: odk-base
     volumes:
+      - ./.persistent_data/backups/odk:/backups
       - ./.persistent_data/media/odk:/media
       - ./.persistent_data/static/odk:/var/www/static
     depends_on:
@@ -92,6 +94,7 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: couchdb-sync-base
     volumes:
+      - ./.persistent_data/backups/sync:/backups
       - ./.persistent_data/static/sync:/var/www/static
     depends_on:
       db:
@@ -134,6 +137,7 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: ui-base
     volumes:
+      - ./.persistent_data/backups/ui:/backups
       - ./.persistent_data/static/ui:/var/www/static
     depends_on:
       db:
