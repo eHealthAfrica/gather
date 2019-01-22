@@ -32,8 +32,9 @@ django-debug-toolbar
 
 
 # Server side
-raven    # Sentry
-uwsgi    # Server behind NGINX
+python-json-logger
+sentry-sdk          # Sentry
+uwsgi               # Server behind NGINX
 
 
 # Test libraries
