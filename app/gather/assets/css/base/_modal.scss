@@ -75,9 +75,9 @@
       width: 2rem;
 
       &::before {
+        @include radio;
         content: '';
         display: inline-block;
-        @include radio;
         box-shadow: 0 0 0 2px $grey;
       }
     }
@@ -107,7 +107,8 @@
     }
   }
 
-  .d-inline-flex, .d-inline {
+  .d-inline-flex,
+  .d-inline {
     label {
       margin-bottom: 0;
     }
