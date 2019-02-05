@@ -25,9 +25,6 @@ set -Eeuox pipefail
 # install packages
 ################################################################################
 
-# upgrade pip
-pip install --upgrade pip
-
 # install missing packages of slim distribution and Gather required ones
 PACKAGE_LIST=/tmp/apt-packages.txt
 if [ -f "$PACKAGE_LIST" ]; then
