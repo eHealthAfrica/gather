@@ -20,7 +20,7 @@
 #
 set -Eeuo pipefail
 
-docker_push () {
+function docker_push {
     ORG="ehealthafrica"
     TAG=$1
     IMAGE=${ORG}/${APP}:${TAG}

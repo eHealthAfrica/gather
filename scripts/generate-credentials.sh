@@ -25,11 +25,11 @@
 # Example:
 # ./scripts/generate-credentials.sh > .env
 
-check_openssl () {
+function check_openssl {
     which openssl > /dev/null
 }
 
-gen_random_string () {
+function gen_random_string {
     openssl rand -hex 16 | tr -d "\n"
 }
 
@@ -65,10 +65,23 @@ cat << EOF
 # Aether
 # ==================================================================
 
-AETHER_VERSION=1.2.0
+AETHER_VERSION=1.3.0-rc
 
 # used in docker-compose-local.yml
 AETHER_PATH=../aether
+
+# ------------------------------------------------------------------
+
+
+# ------------------------------------------------------------------
+# Minio storage
+# ==================================================================
+
+MINIO_STORAGE_ACCESS_KEY=$(gen_random_string)
+MINIO_STORAGE_SECRET_KEY=$(gen_random_string)
+
+TEST_MINIO_STORAGE_ACCESS_KEY=$(gen_random_string)
+TEST_MINIO_STORAGE_SECRET_KEY=$(gen_random_string)
 
 # ------------------------------------------------------------------
 
@@ -188,5 +201,4 @@ TEST_GATHER_DJANGO_SECRET_KEY=$(gen_random_string)
 TEST_GATHER_DB_PASSWORD=$(gen_random_string)
 
 # ------------------------------------------------------------------
-
 EOF

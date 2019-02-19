@@ -28,6 +28,10 @@ fi
 
 set -Eeuo pipefail
 
+# create volumes
+docker volume create gather_database_data 2>/dev/null || true
+docker volume create gather_minio_data    2>/dev/null || true
+
 # pull dependencies
 docker-compose pull db couchdb redis
 docker-compose pull kernel odk couchdb-sync ui
@@ -36,7 +40,7 @@ docker-compose pull kernel odk couchdb-sync ui
 docker-compose build gather-assets
 docker-compose run   gather-assets build
 
-VERSION=`git rev-parse --abbrev-ref HEAD`
+VERSION=`cat ./VERSION`
 GIT_REVISION=`git rev-parse HEAD`
 
 # build Gather

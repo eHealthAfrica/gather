@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
 #
@@ -18,8 +18,10 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-set -Eeuox pipefail
+set -Eeuo pipefail
 
+POSTGRES_PACKAGE=postgresql-client-9.6
+APT_INSTALL="apt-get -qq --yes --allow-downgrades --allow-remove-essential --allow-change-held-packages install"
 
 ################################################################################
 # install packages
@@ -29,14 +31,14 @@ set -Eeuox pipefail
 PACKAGE_LIST=/tmp/apt-packages.txt
 if [ -f "$PACKAGE_LIST" ]; then
     apt-get update -qq
-    apt-get -qq --yes --force-yes install `cat $PACKAGE_LIST`
+    $APT_INSTALL `cat $PACKAGE_LIST`
 fi
 
 # add postgres apt repo to get more recent postgres versions
 echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > /etc/apt/sources.list.d/pgdg.list
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 apt-get update -qq
-apt-get -qq --yes --force-yes install postgresql-client-9.6
+$APT_INSTALL $POSTGRES_PACKAGE
 
 
 ################################################################################

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
 #
@@ -22,7 +22,7 @@ set -e
 
 
 # Define help message
-show_help() {
+function show_help {
   echo """
   Commands
   ----------------------------------------------------------------------------
@@ -40,11 +40,11 @@ show_help() {
   """
 }
 
-test_lint() {
+function test_lint {
   npm run test-lint
 }
 
-test_js() {
+function test_js {
   npm run test-js "${@:1}"
 }
 

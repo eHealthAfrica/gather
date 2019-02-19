@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
 #
@@ -20,7 +20,7 @@
 #
 set -Eeo pipefail
 
-check_variable() {
+function check_variable {
     if [ -z "$1" ];
     then
         echo "Missing $2 in Gather!"
@@ -28,13 +28,13 @@ check_variable() {
     fi
 }
 
-check_kernel() {
+function check_kernel {
     # check if KERNEL env variables were set
     check_variable "$AETHER_KERNEL_URL"   "Aether KERNEL url (AETHER_KERNEL_URL)"
     check_variable "$AETHER_KERNEL_TOKEN" "Aether KERNEL token (AETHER_KERNEL_TOKEN)"
 }
 
-check_odk() {
+function check_odk {
     if [[ "$AETHER_MODULES" == *odk* ]];
     then
         # check if ODK env variables were set only if it's included in the modules list.
@@ -43,7 +43,7 @@ check_odk() {
     fi
 }
 
-check_couchdb_sync() {
+function check_couchdb_sync {
     if [[ "$AETHER_MODULES" == *couchdb-sync* ]];
     then
         # check if COUCHDB SYNC env variables were set only if it's included in the modules list.

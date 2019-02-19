@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
 #
@@ -29,7 +29,7 @@ BACKUPS_FOLDER=/backups
 
 
 # Define help message
-show_help () {
+function show_help {
     echo """
     Commands
     ----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ show_help () {
     """
 }
 
-pip_freeze () {
+function pip_freeze {
     pip install virtualenv
     rm -rf /tmp/env
 
@@ -76,7 +76,7 @@ pip_freeze () {
     /tmp/env/bin/pip freeze --local | grep -v appdir | tee -a conf/pip/requirements.txt
 }
 
-setup () {
+function setup {
     # check if required environment variables exist
     ./conf/check_vars.sh
 
@@ -112,14 +112,14 @@ setup () {
     python ./manage.py collectstatic --noinput --clear --verbosity 0
 
     # expose version number (if exists)
-    cp ./VERSION $STATIC_ROOT/VERSION   2>/dev/null || :
+    cp /var/tmp/VERSION $STATIC_ROOT/VERSION   2>/dev/null || :
     # add git revision (if exists)
-    cp ./REVISION $STATIC_ROOT/REVISION 2>/dev/null || :
+    cp /var/tmp/REVISION $STATIC_ROOT/REVISION 2>/dev/null || :
 
     chmod -R 755 $STATIC_ROOT
 }
 
-backup_db() {
+function backup_db {
     pg_isready
 
     if psql -c "" $DB_NAME; then
@@ -130,7 +130,7 @@ backup_db() {
     fi
 }
 
-restore_db() {
+function restore_db {
     pg_isready
 
     # backup current data
@@ -153,11 +153,11 @@ restore_db() {
     ./manage.py migrate --noinput
 }
 
-test_lint () {
+function test_lint {
     flake8 . --config=./conf/extras/flake8.cfg
 }
 
-test_coverage () {
+function test_coverage {
     export RCFILE=./conf/extras/coverage.rc
     export TESTING=true
 

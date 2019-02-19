@@ -27,9 +27,11 @@ COPY ./app /code
 ################################################################################
 
 ARG VERSION
-RUN echo $VERSION > VERSION
 ARG GIT_REVISION
-RUN echo $GIT_REVISION > REVISION
+
+RUN mkdir -p /var/tmp && \
+    echo $VERSION > /var/tmp/VERSION && \
+    echo $GIT_REVISION > /var/tmp/REVISION
 
 
 ################################################################################

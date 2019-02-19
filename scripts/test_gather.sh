@@ -20,7 +20,7 @@
 #
 set -Eeuo pipefail
 
-function prepare_and_test_container() {
+function prepare_and_test_container {
     container="$1"-test
 
     echo "_____________________________________________ Building $1"
