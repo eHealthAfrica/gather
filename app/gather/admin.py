@@ -48,8 +48,8 @@ admin.site.register(models.Survey, SurveyAdmin)
 admin.site.register(models.Mask, MaskAdmin)
 
 admin.site.site_url = '/'
-admin.site.site_header = settings.APP_NAME
-admin.site.site_title = settings.APP_NAME
+admin.site.site_header = settings.INSTANCE_NAME
+admin.site.site_title = settings.INSTANCE_NAME
 
 admin.site.login_template = settings.LOGIN_TEMPLATE
 admin.site.logout_template = settings.LOGGED_OUT_TEMPLATE
