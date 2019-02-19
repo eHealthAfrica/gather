@@ -125,7 +125,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - `ADMIN_PASSWORD`: `secresecret` the setup script will create the superuser
     with this password. There is no default value.
   - `DB_NAME`: `gather` Postgres database name.
-  - `WEB_SERVER_PORT`: `8005` Web server port.
+  - `WEB_SERVER_PORT`: `8105` Web server port.
 
 - Aether specific:
   - `AETHER_MODULES`: `odk,couchdb-sync` Comma separated list with the available modules.
@@ -134,7 +134,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - Aether Kernel:
     - `AETHER_KERNEL_TOKEN`: `aether_kernel_admin_user_auth_token`
       Token to connect to Aether Kernel Server.
-    - `AETHER_KERNEL_URL`: `http://kernel:8000` Aether Kernel Server url.
+    - `AETHER_KERNEL_URL`: `http://kernel:8100` Aether Kernel Server url.
     - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9000` Aether Kernel Testing Server url.
     - `AETHER_KERNEL_URL_ASSETS`: `http://kernel.aether.local` Aether Kernel url used in NGINX.
       This url is being used in the frontend to display the linked attachment files
@@ -143,7 +143,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - Aether ODK:
     - `AETHER_ODK_TOKEN`: `aether_odk_admin_user_auth_token`
       Token to connect to Aether ODK Server.
-    - `AETHER_ODK_URL`: `http://odk:8002` Aether ODK Server url.
+    - `AETHER_ODK_URL`: `http://odk:8102` Aether ODK Server url.
     - `AETHER_ODK_URL_TEST`: `http://odk-test:9002` Aether ODK Testing Server url.
     - `AETHER_ODK_URL_ASSETS`: `http://odk.aether.local` Aether ODK url used in NGINX.
       This url is being used in the frontend to display the linked media files
@@ -152,7 +152,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - Aether CouchDB Sync:
     - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_couchdb_sync_admin_user_auth_token`
       Token to connect to Aether ODK Server.
-    - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8006` Aether CouchDB Sync Server url.
+    - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8106` Aether CouchDB Sync Server url.
     - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9006` Aether CouchDB Sync Testing Server url.
     - `AETHER_COUCHDB_SYNC_URL_ASSETS`: `http://sync.aether.local` Aether CouchDB Sync url used in NGINX.
 
@@ -163,7 +163,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
 
 The difference between these two variables is quite obscure.
 If we are using docker-compose and running the containers together,
-the first one is the container name with the port, `http://kernel:8000`, and the
+the first one is the container name with the port, `http://kernel:8100`, and the
 second one is the one provided by NGINX, using the network name, and serves the
 protected media, `http://kernel.aether.local`.
 For an unexpected reason `gather` container cannot communicate with
@@ -182,22 +182,22 @@ docker-compose up
 
 This will start:
 
-- **gather** on `http://gather.local:8005`
+- **gather** on `http://gather.local:8105`
   and create a superuser.
 
 - **gather-assets** on `http://localhost:3005`
   only needed for HMR during assets development (`/app/gather/assets/`).
 
-- **aether-kernel** on `http://kernel.aether.local:8000`
+- **aether-kernel** on `http://kernel.aether.local:8100`
   and create a superuser with the needed TOKEN.
 
-- **aether-odk** on `http://odk.aether.local:8002`
+- **aether-odk** on `http://odk.aether.local:8102`
   and create a superuser with the needed TOKEN.
 
-- **aether-couchdb-sync** on `http://sync.aether.local:8006`
+- **aether-couchdb-sync** on `http://sync.aether.local:8106`
   and create a superuser with the needed TOKEN.
 
-- **aether-ui** on `http://ui.aether.local:8004`
+- **aether-ui** on `http://ui.aether.local:8104`
   and create a superuser.
 
 All the created superusers have username `${ADMIN_USERNAME}` and
