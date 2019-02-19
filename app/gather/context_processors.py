@@ -39,6 +39,6 @@ def gather_context(request):
 
     for key, value in settings.AETHER_APPS.items():
         name = key.replace('-', '_')
-        context[f'{name}_url'] = value['assets']
+        context[f'{name}_url'] = value['url']
 
     return context

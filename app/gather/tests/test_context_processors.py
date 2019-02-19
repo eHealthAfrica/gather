@@ -33,15 +33,15 @@ class ContextProcessorsTests(TestCase):
         self.assertEqual(context['app_name'], 'Gather')
         self.assertNotEqual(context['app_version'], '#.#.#')
         self.assertNotEqual(context['app_revision'], '---')
-
         self.assertEqual(context['instance_name'], 'Gather 3')
+
         self.assertEqual(context['navigation_list'], ['surveys', 'surveyors', 'sync-users'])
-        self.assertEqual(context['kernel_url'], 'http://kernel.aether.local')
-        self.assertEqual(context['odk_url'], 'http://odk.aether.local')
-        self.assertEqual(context['couchdb_sync_url'], 'http://sync.aether.local')
+        self.assertEqual(context['kernel_url'], 'http://kernel-test:9100')
+        self.assertEqual(context['odk_url'], 'http://odk-test:9102')
+        self.assertEqual(context['couchdb_sync_url'], 'http://couchdb-sync-test:9106')
 
     @mock.patch('gather.context_processors.settings.AETHER_APPS',
-                {'kernel': {'assets': 'http://localhost'}})
+                {'kernel': {'url': 'http://localhost'}})
     def test_gather_context__mocked(self):
         request = RequestFactory().get('/')
         context = gather_context(request)

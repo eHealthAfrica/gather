@@ -356,7 +356,6 @@ AETHER_MODULES = [
 kernel = {
     'token': os.environ.get('AETHER_KERNEL_TOKEN'),
     'url': os.environ.get('AETHER_KERNEL_URL'),
-    'assets': os.environ.get('AETHER_KERNEL_URL_ASSETS', os.environ.get('AETHER_KERNEL_URL')),
 }
 if TESTING:
     kernel['url'] = os.environ.get('AETHER_KERNEL_URL_TEST')
@@ -374,7 +373,6 @@ if 'odk' in AETHER_MODULES:
     odk = {
         'token': os.environ.get('AETHER_ODK_TOKEN'),
         'url': os.environ.get('AETHER_ODK_URL'),
-        'assets': os.environ.get('AETHER_ODK_URL_ASSETS', os.environ.get('AETHER_ODK_URL')),
     }
     if TESTING:
         odk['url'] = os.environ.get('AETHER_ODK_URL_TEST')
@@ -392,7 +390,6 @@ if 'couchdb-sync' in AETHER_MODULES:
     sync = {
         'token': os.environ.get('AETHER_COUCHDB_SYNC_TOKEN'),
         'url': os.environ.get('AETHER_COUCHDB_SYNC_URL'),
-        'assets': os.environ.get('AETHER_COUCHDB_SYNC_URL_ASSETS', os.environ.get('AETHER_COUCHDB_SYNC_URL')),
     }
     if TESTING:
         sync['url'] = os.environ.get('AETHER_COUCHDB_SYNC_URL_TEST')
