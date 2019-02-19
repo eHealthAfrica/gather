@@ -18,15 +18,16 @@
 
 import mock
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from ..models import UserTokens, Survey, Mask, AETHER_APPS
+from ..models import UserTokens, Survey, Mask
 
 
 get_or_create_user_app_token = UserTokens.get_or_create_user_app_token
 
-MODULES = list(AETHER_APPS.keys())
+MODULES = list(settings.AETHER_APPS.keys())
 
 
 def mock_return_none(*args):
@@ -150,7 +151,7 @@ class TokenModelsTests(TestCase):
             self.assertTrue(user_tokens.validates_app_token(app_name))
 
         # what happens if the base_url or the token for the APP was not set
-        with mock.patch('gather.api.models.AETHER_APPS', new={}):
+        with mock.patch('gather.api.models.settings.AETHER_APPS', new={}):
             self.assertFalse(user_tokens.validates_app_token(app_name))
 
         # None tokens are always not valid
@@ -169,7 +170,7 @@ class TokenModelsTests(TestCase):
             mock_post.assert_called_once()
 
         # what happens if the base_url or the token for the APP was not set
-        with mock.patch('gather.api.models.AETHER_APPS', new={}):
+        with mock.patch('gather.api.models.settings.AETHER_APPS', new={}):
             self.assertEqual(user_tokens.obtain_app_token(app_name), None)
 
         # with an error on the other side
@@ -192,7 +193,7 @@ class TokenModelsTests(TestCase):
     def test_get_or_create_user_app_token__unknown_app(self):
         self.assertEqual(get_or_create_user_app_token(self.user, 'other'), None)
 
-    @mock.patch('gather.api.models.AETHER_APPS', new={})
+    @mock.patch('gather.api.models.settings.AETHER_APPS', new={})
     def test_get_or_create_user_app_token__not_base_url(self):
         for app in MODULES:
             self.assertEqual(get_or_create_user_app_token(self.user, app), None)
@@ -222,5 +223,5 @@ class TokenModelsTests(TestCase):
         for app in MODULES:
             uat = get_or_create_user_app_token(self.user, app)
             self.assertIsNotNone(uat, app)
-            self.assertEqual(uat.base_url, AETHER_APPS[app]['url'])
+            self.assertEqual(uat.base_url, settings.AETHER_APPS[app]['url'])
             self.assertIsNotNone(uat.token, app)

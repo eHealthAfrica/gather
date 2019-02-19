@@ -21,12 +21,11 @@ import requests
 
 from collections import namedtuple
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext as _
-
-from ..settings import AETHER_APPS
 
 '''
 
@@ -101,8 +100,8 @@ class UserTokens(models.Model):
         Gets the `url` of the app.
         '''
 
-        if app_name in AETHER_APPS:
-            return AETHER_APPS[app_name]['url']
+        if app_name in settings.AETHER_APPS:
+            return settings.AETHER_APPS[app_name]['url']
 
         return None
 
@@ -111,7 +110,7 @@ class UserTokens(models.Model):
         Saves the auth `token` of the app.
         '''
 
-        if app_name not in AETHER_APPS:
+        if app_name not in settings.AETHER_APPS:
             return
 
         app_property = '{}_token'.format(self.__clean_app_name__(app_name))
@@ -123,7 +122,7 @@ class UserTokens(models.Model):
         Gets the auth `token` of the app.
         '''
 
-        if app_name not in AETHER_APPS:
+        if app_name not in settings.AETHER_APPS:
             return None
 
         app_property = '{}_token'.format(self.__clean_app_name__(app_name))
@@ -134,7 +133,7 @@ class UserTokens(models.Model):
         Creates a new auth `token` of the app.
         '''
 
-        if app_name not in AETHER_APPS:
+        if app_name not in settings.AETHER_APPS:
             return None
 
         # obtain it from app server
@@ -147,7 +146,7 @@ class UserTokens(models.Model):
         Gets the auth `token` of the app. If it does not exist yet, it's created.
         '''
 
-        if app_name not in AETHER_APPS:
+        if app_name not in settings.AETHER_APPS:
             return None
 
         token = self.get_app_token(app_name)
@@ -160,10 +159,10 @@ class UserTokens(models.Model):
         Gets the auth `token` of the app from the app itself.
         '''
 
-        if app_name not in AETHER_APPS:
+        if app_name not in settings.AETHER_APPS:
             return None
         base_url = self.get_app_url(app_name)
-        auxiliary_token = AETHER_APPS[app_name]['token']
+        auxiliary_token = settings.AETHER_APPS[app_name]['token']
 
         response = requests.post(
             '{}/accounts/token'.format(base_url),
@@ -181,7 +180,7 @@ class UserTokens(models.Model):
         Checks if with the current auth `token` it's possible to connect to the app server.
         '''
 
-        if app_name not in AETHER_APPS:
+        if app_name not in settings.AETHER_APPS:
             return False
         base_url = self.get_app_url(app_name)
         token = self.get_app_token(app_name)
@@ -203,7 +202,7 @@ class UserTokens(models.Model):
         Gets the user auth token to connect to the app, checking first if it's valid.
         '''
 
-        if app_name not in AETHER_APPS:
+        if app_name not in settings.AETHER_APPS:
             return None
 
         user_tokens, _ = cls.objects.get_or_create(user=user)

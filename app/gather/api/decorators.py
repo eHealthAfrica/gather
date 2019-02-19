@@ -16,10 +16,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import logging
+
+from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 
-from ..settings import AETHER_APPS, logger
 from .models import UserTokens
+
+logger = logging.getLogger(__name__)
+logger.setLevel(settings.LOGGING_LEVEL)
 
 
 def tokens_required(function=None, redirect_field_name=None, login_url=None):
@@ -33,7 +38,7 @@ def tokens_required(function=None, redirect_field_name=None, login_url=None):
         Checks for each external app that the user can currently connect to it.
         '''
         try:
-            for app in AETHER_APPS:
+            for app in settings.AETHER_APPS:
                 # checks if there is a valid token for this app
                 if UserTokens.get_or_create_user_app_token(user, app) is None:
                     logger.error(f'Could not check the authorization token for "{user}" in "{app}".')

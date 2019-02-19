@@ -16,18 +16,22 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import logging
 import requests
 
 from datetime import datetime
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from django.views import View
 
 from rest_framework import viewsets
 
-from ..settings import AETHER_APPS, TESTING
 from . import models, serializers
+
+logger = logging.getLogger(__name__)
+logger.setLevel(settings.LOGGING_LEVEL)
 
 
 class TokenProxyView(View):
@@ -45,7 +49,7 @@ class TokenProxyView(View):
         Dispatches the request including/modifying the needed properties
         '''
 
-        if self.app_name not in AETHER_APPS:
+        if self.app_name not in settings.AETHER_APPS:
             err = _('"{}" app is not recognized.').format(self.app_name)
             log(err)
             raise RuntimeError(err)
@@ -201,6 +205,5 @@ class MaskViewSet(viewsets.ModelViewSet):
     ordering = ('survey', 'name',)
 
 
-def log(message):  # pragma: no cover
-    if not TESTING:
-        print(f'**** [{datetime.now().isoformat()}] -  {message} ****')
+def log(message):
+    logger.info(f'**** [{datetime.now().isoformat()}] -  {message} ****')
