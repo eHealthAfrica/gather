@@ -236,6 +236,14 @@ If you want to develop with your local Aether images use the file
 [docker-compose-local.yml](docker-compose-local.yml) and change the container
 paths to your current paths.
 
+Build local aether and gather containers
+
+```bash
+./scripts/prepare-containers-local.sh
+```
+
+Start local aether and gather containers
+
 ```bash
 docker-compose -f docker-compose-local.yml up
 ```

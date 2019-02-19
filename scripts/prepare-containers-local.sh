@@ -28,18 +28,7 @@ fi
 
 set -Eeuo pipefail
 
-# create volumes
-docker volume create gather_database_data 2>/dev/null || true
-docker volume create gather_minio_data    2>/dev/null || true
-
-# pull dependencies
-docker-compose pull db couchdb redis
-docker-compose pull kernel odk couchdb-sync ui
-
-# build Gather assets
-docker-compose build gather-assets
-docker-compose run   gather-assets build
-
+DC="docker-compose -f docker-compose-local.yml"
 VERSION=`cat ./VERSION`
 GIT_REVISION=`git rev-parse HEAD`
 
@@ -48,8 +37,24 @@ echo "Version:     ${VERSION}"
 echo "Revision:    ${GIT_REVISION}"
 echo "_____________________________________________"
 
-# build Gather
-docker-compose build \
-    --build-arg GIT_REVISION=${GIT_REVISION} \
-    --build-arg VERSION=${VERSION} \
-    gather
+
+# build assets containers
+containers=( ui gather )
+for container in "${containers[@]}"
+do
+    echo "_____________________________________________ Building container ${container}-assets"
+    $DC build ${container}-assets
+    $DC run   ${container}-assets build
+done
+
+
+# build containers
+containers=( kernel ui odk couchdb-sync gather )
+for container in "${containers[@]}"
+do
+    echo "_____________________________________________ Building container ${container}"
+    $DC build \
+        --build-arg GIT_REVISION=${GIT_REVISION} \
+        --build-arg VERSION=${VERSION} \
+        ${container}
+done
