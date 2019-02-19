@@ -6,6 +6,7 @@ networks:
 
 volumes:
   gather_database_data: {}
+  gather_minio_data: {}
 
 services:
 
@@ -33,6 +34,15 @@ services:
     extends:
       file: ./docker-compose-base.yml
       service: redis-base
+    networks:
+      - gather_net
+
+  minio:
+    extends:
+      file: ./docker-compose-base.yml
+      service: minio-base
+    volumes:
+      - gather_minio_data:/data
     networks:
       - gather_net
 

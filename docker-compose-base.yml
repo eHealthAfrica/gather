@@ -17,7 +17,7 @@ services:
       retries: 30
 
   couchdb-base:
-    image: couchdb:1.7.2
+    image: couchdb:2.3
     environment:
       COUCHDB_USER: ${COUCHDB_USER}
       COUCHDB_PASSWORD: ${COUCHDB_PASSWORD}
@@ -28,7 +28,16 @@ services:
 
   redis-base:
     image: redis:alpine
-    command: "redis-server --requirepass ${REDIS_PASSWORD}"
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+
+  minio-base:
+    image: minio/minio
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
+    command: minio server --quiet --address minio:9000 /data
+    ports:
+      - "9000:9000"
 
 
   # ---------------------------------
@@ -44,9 +53,6 @@ services:
 
       # static folders per container
       - ./.persistent_data/static:/static
-
-      # media folders per container
-      - ./.persistent_data/media:/media
     ports:
       - "80:80"
       - "8443:8443"
@@ -61,11 +67,21 @@ services:
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
       DJANGO_SECRET_KEY: ${KERNEL_DJANGO_SECRET_KEY}
-      DJANGO_STORAGE_BACKEND: filesystem
-      HOSTNAME: kernel.aether.local
 
       # Uncomment this line to enable single sign on if you use CAS
       # CAS_SERVER_URL: https://your.cas.server
+      # HOSTNAME: kernel.aether.local
+
+      BUCKET_NAME: kernel
+      DJANGO_STORAGE_BACKEND: minio
+      MINIO_STORAGE_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
+      MINIO_STORAGE_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
+      MINIO_STORAGE_ENDPOINT: minio:9000
+      # Use these settings to make it accessible via browser
+      MINIO_STORAGE_MEDIA_USE_PRESIGNED: null
+      MINIO_STORAGE_MEDIA_URL: http://localhost:9000/kernel
+      MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET: "true"
+      MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY: "true"
 
       APP_NAME: Aether Kernel
 
@@ -94,9 +110,7 @@ services:
       WEB_SERVER_PORT: 8100
     volumes:
       - ./.persistent_data/backups/kernel:/backups
-      - ./.persistent_data/media/kernel:/media
       - ./.persistent_data/static/kernel:/var/www/static
-      - ./.persistent_data/tmp/kernel:/tmp
     ports:
       - "8100:8100"
     command: start
@@ -111,11 +125,21 @@ services:
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
       DJANGO_SECRET_KEY: ${ODK_DJANGO_SECRET_KEY}
-      DJANGO_STORAGE_BACKEND: filesystem
-      HOSTNAME: odk.aether.local
 
       # Uncomment this line to enable single sign on if you use CAS
       # CAS_SERVER_URL: https://your.cas.server
+      # HOSTNAME: odk.aether.local
+
+      BUCKET_NAME: odk
+      DJANGO_STORAGE_BACKEND: minio
+      MINIO_STORAGE_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
+      MINIO_STORAGE_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
+      MINIO_STORAGE_ENDPOINT: minio:9000
+      # Use these settings to make it accessible via browser
+      MINIO_STORAGE_MEDIA_USE_PRESIGNED: null
+      MINIO_STORAGE_MEDIA_URL: http://localhost:9000/odk
+      MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET: "true"
+      MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY: "true"
 
       APP_NAME: Aether ODK
 
@@ -139,7 +163,6 @@ services:
       # WEB_SERVER_PORT: 8443
     volumes:
       - ./.persistent_data/backups/odk:/backups
-      - ./.persistent_data/media/odk:/media
       - ./.persistent_data/static/odk:/var/www/static
     ports:
       # behind ngnix
@@ -158,11 +181,10 @@ services:
     environment: &sync-environment
       CSRF_COOKIE_DOMAIN: .aether.local
       DJANGO_SECRET_KEY: ${COUCHDB_SYNC_DJANGO_SECRET_KEY}
-      DJANGO_STORAGE_BACKEND: filesystem
-      HOSTNAME: sync.aether.local
 
       # Uncomment this line to enable single sign on if you use CAS
       # CAS_SERVER_URL: https://your.cas.server
+      # HOSTNAME: sync.aether.local
 
       APP_NAME: Aether CouchDB-Sync
 
@@ -214,11 +236,10 @@ services:
     environment:
       CSRF_COOKIE_DOMAIN: .aether.local
       DJANGO_SECRET_KEY: ${UI_DJANGO_SECRET_KEY}
-      DJANGO_STORAGE_BACKEND: filesystem
-      HOSTNAME: ui.aether.local
 
       # Uncomment this line to enable single sign on if you use CAS
       # CAS_SERVER_URL: https://your.cas.server
+      # HOSTNAME: ui.aether.local
 
       APP_NAME: Aether
 
