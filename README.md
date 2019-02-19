@@ -135,7 +135,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
     - `AETHER_KERNEL_TOKEN`: `aether_kernel_admin_user_auth_token`
       Token to connect to Aether Kernel Server.
     - `AETHER_KERNEL_URL`: `http://kernel:8100` Aether Kernel Server url.
-    - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9000` Aether Kernel Testing Server url.
+    - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9100` Aether Kernel Testing Server url.
     - `AETHER_KERNEL_URL_ASSETS`: `http://kernel.aether.local` Aether Kernel url used in NGINX.
       This url is being used in the frontend to display the linked attachment files
       served by NGINX. Defaults to `AETHER_KERNEL_URL` value.
@@ -144,7 +144,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
     - `AETHER_ODK_TOKEN`: `aether_odk_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_ODK_URL`: `http://odk:8102` Aether ODK Server url.
-    - `AETHER_ODK_URL_TEST`: `http://odk-test:9002` Aether ODK Testing Server url.
+    - `AETHER_ODK_URL_TEST`: `http://odk-test:9102` Aether ODK Testing Server url.
     - `AETHER_ODK_URL_ASSETS`: `http://odk.aether.local` Aether ODK url used in NGINX.
       This url is being used in the frontend to display the linked media files
       served by NGINX. Defaults to `AETHER_ODK_URL` value.
@@ -153,7 +153,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
     - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_couchdb_sync_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8106` Aether CouchDB Sync Server url.
-    - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9006` Aether CouchDB Sync Testing Server url.
+    - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9106` Aether CouchDB Sync Testing Server url.
     - `AETHER_COUCHDB_SYNC_URL_ASSETS`: `http://sync.aether.local` Aether CouchDB Sync url used in NGINX.
 
 *[Return to TOC](#table-of-contents)*

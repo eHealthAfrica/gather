@@ -50,14 +50,14 @@ services:
       PGHOST: db-test
       PGPASSWORD: ${TEST_KERNEL_DB_PASSWORD}
 
-      WEB_SERVER_PORT: 9000
+      WEB_SERVER_PORT: 9100
     volumes:
       # volumes in tests
       - ./tmp/test/kernel/media:/media
       - ./tmp/test/kernel/static:/var/www/static
       - ./tmp/test/kernel/tmp:/tmp
     ports:
-      - "9000:9000"
+      - "9100:9100"
     depends_on:
       db-test:
         condition: service_healthy
@@ -81,20 +81,20 @@ services:
       ADMIN_PASSWORD: ${TEST_ODK_ADMIN_PASSWORD}
       ADMIN_TOKEN: ${TEST_ODK_ADMIN_TOKEN}
 
-      AETHER_KERNEL_URL: http://kernel-test:9000
+      AETHER_KERNEL_URL: http://kernel-test:9100
       AETHER_KERNEL_TOKEN: ${TEST_KERNEL_ADMIN_TOKEN}
 
       DB_NAME: aether-odk-test
       PGHOST: db-test
       PGPASSWORD: ${TEST_ODK_DB_PASSWORD}
 
-      WEB_SERVER_PORT: 9002
+      WEB_SERVER_PORT: 9102
     volumes:
       # volumes in tests
       - ./tmp/test/odk/media:/media
       - ./tmp/test/odk/static:/var/www/static
     ports:
-      - "9002:9002"
+      - "9102:9102"
     depends_on:
       db-test:
         condition: service_healthy
@@ -120,7 +120,7 @@ services:
       ADMIN_PASSWORD: ${TEST_COUCHDB_SYNC_ADMIN_PASSWORD}
       ADMIN_TOKEN: ${TEST_COUCHDB_SYNC_ADMIN_TOKEN}
 
-      AETHER_KERNEL_URL: http://kernel-test:9000
+      AETHER_KERNEL_URL: http://kernel-test:9100
       AETHER_KERNEL_TOKEN: ${TEST_KERNEL_ADMIN_TOKEN}
 
       GOOGLE_CLIENT_ID: ${TEST_COUCHDB_SYNC_GOOGLE_CLIENT_ID}
@@ -136,12 +136,12 @@ services:
       REDIS_HOST: redis-test
       REDIS_PASSWORD: ${TEST_REDIS_PASSWORD}
 
-      WEB_SERVER_PORT: 9006
+      WEB_SERVER_PORT: 9106
     volumes:
       # volumes in tests
       - ./tmp/test/sync/static:/var/www/static
     ports:
-      - "9006:9006"
+      - "9106:9106"
     depends_on:
       db-test:
         condition: service_healthy
@@ -166,13 +166,13 @@ services:
       ADMIN_PASSWORD: ${TEST_GATHER_ADMIN_PASSWORD}
 
       AETHER_KERNEL_TOKEN: ${TEST_KERNEL_ADMIN_TOKEN}
-      AETHER_KERNEL_URL: http://kernel-test:9000
+      AETHER_KERNEL_URL: http://kernel-test:9100
 
       AETHER_ODK_TOKEN: ${TEST_ODK_ADMIN_TOKEN}
-      AETHER_ODK_URL: http://odk-test:9002
+      AETHER_ODK_URL: http://odk-test:9102
 
       AETHER_COUCHDB_SYNC_TOKEN: ${TEST_COUCHDB_SYNC_ADMIN_TOKEN}
-      AETHER_COUCHDB_SYNC_URL: http://couchdb-sync-test:9006
+      AETHER_COUCHDB_SYNC_URL: http://couchdb-sync-test:9106
 
       DB_NAME: gather-test
       PGHOST: db-test
@@ -180,12 +180,12 @@ services:
 
       EXPORT_MAX_ROWS_SIZE: 1000
 
-      WEB_SERVER_PORT: 9005
+      WEB_SERVER_PORT: 9105
     volumes:
       # volumes in tests
       - ./tmp/test/gather/static:/var/www/static
     ports:
-      - "9005:9005"
+      - "9105:9105"
     depends_on:
       db-test:
         condition: service_healthy

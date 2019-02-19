@@ -37,10 +37,10 @@ class SettingsTest(TestCase):
         self.assertEqual(settings.AETHER_MODULES, ['kernel', 'odk', 'couchdb-sync'])
 
         self.assertIn('kernel', settings.AETHER_APPS)
-        self.assertEqual(settings.AETHER_APPS['kernel']['url'], 'http://kernel-test:9000')
+        self.assertEqual(settings.AETHER_APPS['kernel']['url'], 'http://kernel-test:9100')
 
         self.assertIn('odk', settings.AETHER_APPS)
-        self.assertEqual(settings.AETHER_APPS['odk']['url'], 'http://odk-test:9002')
+        self.assertEqual(settings.AETHER_APPS['odk']['url'], 'http://odk-test:9102')
 
         self.assertIn('couchdb-sync', settings.AETHER_APPS)
-        self.assertEqual(settings.AETHER_APPS['couchdb-sync']['url'], 'http://couchdb-sync-test:9006')
+        self.assertEqual(settings.AETHER_APPS['couchdb-sync']['url'], 'http://couchdb-sync-test:9106')
