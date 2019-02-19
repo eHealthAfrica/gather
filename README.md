@@ -21,7 +21,7 @@
   - [Python container](#python-container)
   - [Node container](#node-container)
   - [Run tests](#run-tests)
-  - [Upgrade python dependencies](#upgrade-python-dependencies)
+  - [Upgrade dependencies](#upgrade-dependencies)
     - [Check outdated dependencies](#check-outdated-dependencies)
     - [Update requirements file](#update-requirements-file)
 
@@ -104,7 +104,6 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - `INSTANCE_NAME`: `Gather 3` identifies the current instance among others.
 
 - Data export:
-  - `EXPORT_FORMAT`: `csv` the default export format. Possible values: `xlsx` or `csv`.
   - `EXPORT_MAX_ROWS_SIZE`: between `0` and `1048575` indicates the maximum
     number of rows to include in the export file.
     The limit is an [Excel 2007 restriction](https://support.office.com/en-us/article/Excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3).
@@ -136,40 +135,18 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
       Token to connect to Aether Kernel Server.
     - `AETHER_KERNEL_URL`: `http://kernel:8100` Aether Kernel Server url.
     - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9100` Aether Kernel Testing Server url.
-    - `AETHER_KERNEL_URL_ASSETS`: `http://kernel.aether.local` Aether Kernel url used in NGINX.
-      This url is being used in the frontend to display the linked attachment files
-      served by NGINX. Defaults to `AETHER_KERNEL_URL` value.
 
   - Aether ODK:
     - `AETHER_ODK_TOKEN`: `aether_odk_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_ODK_URL`: `http://odk:8102` Aether ODK Server url.
     - `AETHER_ODK_URL_TEST`: `http://odk-test:9102` Aether ODK Testing Server url.
-    - `AETHER_ODK_URL_ASSETS`: `http://odk.aether.local` Aether ODK url used in NGINX.
-      This url is being used in the frontend to display the linked media files
-      served by NGINX. Defaults to `AETHER_ODK_URL` value.
 
   - Aether CouchDB Sync:
     - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_couchdb_sync_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8106` Aether CouchDB Sync Server url.
     - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9106` Aether CouchDB Sync Testing Server url.
-    - `AETHER_COUCHDB_SYNC_URL_ASSETS`: `http://sync.aether.local` Aether CouchDB Sync url used in NGINX.
-
-*[Return to TOC](#table-of-contents)*
-
-
-##### AETHER_XXX_URL vs AETHER_XXX_URL_ASSETS
-
-The difference between these two variables is quite obscure.
-If we are using docker-compose and running the containers together,
-the first one is the container name with the port, `http://kernel:8100`, and the
-second one is the one provided by NGINX, using the network name, and serves the
-protected media, `http://kernel.aether.local`.
-For an unexpected reason `gather` container cannot communicate with
-`kernel` container using the network name.
-If we are running the containers separately (with kubernetes, in AWS...)
-both urls are external to the gather container and should be the same.
 
 *[Return to TOC](#table-of-contents)*
 
@@ -353,16 +330,17 @@ The full list of commands can be seen in the script file.
 
 The following are some examples:
 
-| Action                                     | Command                                           |
-| ------------------------------------------ | ------------------------------------------------- |
-| List predefined commands                   | `docker-compose run gather-assets help`           |
-| Run tests                                  | `docker-compose run gather-assets test`           |
-| Run code style tests                       | `docker-compose run gather-assets test_lint`      |
-| Run JS tests                               | `docker-compose run gather-assets test_js`        |
-| Create a shell inside the container        | `docker-compose run gather-assets bash`           |
-| Execute shell command inside the container | `docker-compose run gather-assets eval <command>` |
-| Build assets used in the Django app        | `docker-compose run gather-assets build`          |
-| Start webpack server with HRM              | `docker-compose run gather-assets start_dev`      |
+| Action                                     | Command                                              |
+| ------------------------------------------ | ---------------------------------------------------- |
+| List predefined commands                   | `docker-compose run gather-assets help`              |
+| Run tests                                  | `docker-compose run gather-assets test`              |
+| Run code style tests                       | `docker-compose run gather-assets test_lint`         |
+| Run JS tests                               | `docker-compose run gather-assets test_js`           |
+| Create a shell inside the container        | `docker-compose run gather-assets bash`              |
+| Execute shell command inside the container | `docker-compose run gather-assets eval <command>`    |
+| Check outdated node libraries              | `docker-compose run gather-assets eval npm outdated` |
+| Build assets used in the Django app        | `docker-compose run gather-assets build`             |
+| Start webpack server with HRM              | `docker-compose run gather-assets start_dev`         |
 
 *[Return to TOC](#table-of-contents)*
 
@@ -412,12 +390,13 @@ Look into [docker-compose-base.yml](docker-compose-base.yml), the variable
 *[Return to TOC](#table-of-contents)*
 
 
-### Upgrade python dependencies
+### Upgrade dependencies
 
 #### Check outdated dependencies
 
 ```bash
 docker-compose run --no-deps gather eval pip list --outdated
+docker-compose run --no-deps gather-assets eval npm outdated
 ```
 
 #### Update requirements file
