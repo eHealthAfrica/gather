@@ -39,6 +39,22 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.environ.get('STATIC_ROOT', '/var/www/static/')
 
 
+# Version and revision
+# ------------------------------------------------------------------------------
+
+try:
+    with open('/var/tmp/VERSION') as fp:
+        VERSION = fp.read().strip()
+except Exception:
+    VERSION = '#.#.#'
+
+try:
+    with open('/var/tmp/REVISION') as fp:
+        REVISION = fp.read().strip()
+except Exception:
+    REVISION = '---'
+
+
 # Django Basic Configuration
 # ------------------------------------------------------------------------------
 
@@ -79,7 +95,6 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.media',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
