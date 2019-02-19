@@ -21,22 +21,29 @@ services:
 
   db:
     extends:
-      file: ./docker-compose-base.yml
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: postgres-base
     networks:
       - gather_local
 
   couchdb:
     extends:
-      file: ./docker-compose-base.yml
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: couchdb-base
     networks:
       - gather_local
 
   redis:
     extends:
-      file: ./docker-compose-base.yml
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: redis-base
+    networks:
+      - gather_local
+
+  minio:
+    extends:
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
+      service: minio-base
     networks:
       - gather_local
 
@@ -51,7 +58,6 @@ services:
       service: kernel-base
     volumes:
       - ./.persistent_data/backups/kernel:/backups
-      - ./.persistent_data/media/kernel:/media
       - ./.persistent_data/static/kernel:/var/www/static
     depends_on:
       db:
@@ -72,7 +78,6 @@ services:
       service: odk-base
     volumes:
       - ./.persistent_data/backups/odk:/backups
-      - ./.persistent_data/media/odk:/media
       - ./.persistent_data/static/odk:/var/www/static
     depends_on:
       db:
