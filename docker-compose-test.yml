@@ -25,7 +25,7 @@ services:
       service: redis-base
     command: redis-server --requirepass ${TEST_REDIS_PASSWORD}
 
-  minio:
+  minio-test:
     extends:
       file: ./docker-compose-base.yml
       service: minio-base
