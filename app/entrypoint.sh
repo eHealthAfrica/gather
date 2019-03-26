@@ -258,12 +258,7 @@ case "$1" in
         test_lint
     ;;
 
-    test_coverage )
-        export TESTING=true
-        test_coverage "${@:2}"
-    ;;
-
-    test_py )
+    test_coverage | test_py )
         export TESTING=true
         test_coverage "${@:2}"
     ;;

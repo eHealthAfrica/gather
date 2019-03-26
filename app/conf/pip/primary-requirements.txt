@@ -16,6 +16,8 @@
 # Main libraries
 django
 django-cors-headers
+django-prometheus
+django-uwsgi
 django-webpack-loader
 djangorestframework
 psycopg2-binary
@@ -42,3 +44,4 @@ coverage
 flake8
 flake8-quotes
 mock
+tblib
