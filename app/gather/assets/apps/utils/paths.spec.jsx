@@ -38,30 +38,30 @@ import {
 describe('paths utils', () => {
   describe('getMasksAPIPath', () => {
     it('should return the Mask API path', () => {
-      assert.strictEqual(getMasksAPIPath({}), '/gather/masks.json')
-      assert.strictEqual(getMasksAPIPath({ format: '' }), '/gather/masks/')
-      assert.strictEqual(getMasksAPIPath({ id: 1 }), '/gather/masks/1.json')
-      assert.strictEqual(getMasksAPIPath({ id: 1, format: '' }), '/gather/masks/1/')
+      assert.strictEqual(getMasksAPIPath({}), '/api/gather/masks.json')
+      assert.strictEqual(getMasksAPIPath({ format: '' }), '/api/gather/masks/')
+      assert.strictEqual(getMasksAPIPath({ id: 1 }), '/api/gather/masks/1.json')
+      assert.strictEqual(getMasksAPIPath({ id: 1, format: '' }), '/api/gather/masks/1/')
     })
   })
 
   describe('getMediaFileAPIPath', () => {
     it('should return the Media Files API path', () => {
-      assert.strictEqual(getMediaFileAPIPath({}), '/odk/media-files.json')
-      assert.strictEqual(getMediaFileAPIPath({ id: 1 }), '/odk/media-files/1.json')
+      assert.strictEqual(getMediaFileAPIPath({}), '/api/odk/media-files.json')
+      assert.strictEqual(getMediaFileAPIPath({ id: 1 }), '/api/odk/media-files/1.json')
     })
   })
 
   describe('getSyncUsersAPIPath', () => {
     it('should return the Sync Users API path', () => {
-      assert.strictEqual(getSyncUsersAPIPath({ }), '/couchdb-sync/sync-users.json')
-      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/couchdb-sync/sync-users/1.json')
+      assert.strictEqual(getSyncUsersAPIPath({ }), '/api/couchdb-sync/sync-users.json')
+      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/api/couchdb-sync/sync-users/1.json')
     })
   })
 
   describe('getSurveysAPIPath', () => {
     describe('without app or `kernel` app', () => {
-      const prefix = '/kernel/'
+      const prefix = '/api/kernel/'
 
       // NOTE: the `passthrough` parameter is ALWAYS included,
       // this does not apply to rest of parameters
@@ -103,7 +103,7 @@ describe('paths utils', () => {
     })
 
     describe('with `odk` app', () => {
-      const prefix = '/odk/'
+      const prefix = '/api/odk/'
 
       it('should return the Surveys API path', () => {
         assert.strictEqual(getSurveysAPIPath({ app: 'odk' }), prefix + 'projects.json')
@@ -135,7 +135,7 @@ describe('paths utils', () => {
   })
 
   describe('getEntitiesAPIPath', () => {
-    const prefix = '/kernel/'
+    const prefix = '/api/kernel/'
 
     // NOTE: the `passthrough` parameter is ALWAYS included,
     // this does not apply to rest of parameters
@@ -164,7 +164,7 @@ describe('paths utils', () => {
   })
 
   describe('getSurveyorsAPIPath', () => {
-    const prefix = '/odk/'
+    const prefix = '/api/odk/'
 
     it('should return the Surveyors API path', () => {
       assert.strictEqual(getSurveyorsAPIPath({}), prefix + 'surveyors.json')
@@ -189,7 +189,7 @@ describe('paths utils', () => {
   })
 
   describe('getXFormsAPIPath', () => {
-    const prefix = '/odk/'
+    const prefix = '/api/odk/'
 
     it('should return the xForms API path', () => {
       assert.strictEqual(getXFormsAPIPath({}), prefix + 'xforms.json')
