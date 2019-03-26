@@ -20,15 +20,6 @@
 #
 set -Eeuo pipefail
 
-# set DEBUG if missing
-set +u
-DEBUG="$DEBUG"
-set -u
-
-BACKUPS_FOLDER=/backups
-
-
-# Define help message
 function show_help {
     echo """
     Commands
@@ -168,6 +159,7 @@ function test_coverage {
     cat ./conf/extras/good_job.txt
 }
 
+BACKUPS_FOLDER=/backups
 
 case "$1" in
     bash )
@@ -200,12 +192,20 @@ case "$1" in
 
     start )
         setup
+        [ -z "${DEBUG:-}" ] && UWSGI_LOGGING="--disable-logging" || UWSGI_LOGGING=""
 
-        [ -z "$DEBUG" ] && LOGGING="--disable-logging" || LOGGING=""
+        UWSGI_STATIC="--static-map ${APP_URL:-/}static=/var/www/static"
+        UWSGI_FAVICO="--static-map ${APP_URL:-/}favicon.ico=/var/www/static/gather/images/gather.ico"
+        [ -z "${UWSGI_SERVE_STATIC:-}" ] && UWSGI_STATIC="" && UWSGI_FAVICO=""
+
         /usr/local/bin/uwsgi \
             --ini /code/conf/uwsgi.ini \
-            --http 0.0.0.0:$WEB_SERVER_PORT \
-            $LOGGING
+            --http 0.0.0.0:${WEB_SERVER_PORT} \
+            --processes ${UWSGI_PROCESSES:-4} \
+            --threads ${UWSGI_THREADS:-2} \
+            ${UWSGI_STATIC} \
+            ${UWSGI_FAVICO} \
+            ${UWSGI_LOGGING}
     ;;
 
     start_dev )
