@@ -57,7 +57,8 @@ urlpatterns = [
     path('assets-settings', view=assets_settings, name='assets-settings'),
 
     # `admin` section
-    path('admin/', admin.site.urls),
+    path(route='admin/uwsgi/', view=include('django_uwsgi.urls')),
+    path(route='admin/', view=admin.site.urls),
 
     # `accounts` management
     path('accounts/', include(auth_urls, namespace='rest_framework')),

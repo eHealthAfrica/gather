@@ -35,7 +35,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-STATIC_URL = '/static/'
+APP_URL = os.environ.get('APP_URL', '/')  # URL Friendly
+
+STATIC_URL = f'{APP_URL}static/'
 STATIC_ROOT = os.environ.get('STATIC_ROOT', '/var/www/static/')
 
 
@@ -68,12 +70,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.staticfiles',
 
+    # CORS checking
+    'corsheaders',
+
+    # Monitoring
+    'django_prometheus',
+    'django_uwsgi',
+
     # REST framework with auth token
     'rest_framework',
     'rest_framework.authtoken',
-
-    # CORS checking
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -108,28 +114,28 @@ TEMPLATES = [
 # ------------------------------------------------------------------------------
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
+    'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework.renderers.AdminRenderer',
-    ),
-    'DEFAULT_PARSER_CLASSES': (
+    ],
+    'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_FILTER_BACKENDS': (
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
-    ),
+    ],
 }
 
 
@@ -152,7 +158,7 @@ DATABASES = {
 # Logging Configuration
 # ------------------------------------------------------------------------------
 
-# https://docs.python.org/3.6/library/logging.html#levels
+# https://docs.python.org/3.7/library/logging.html#levels
 LOGGING_LEVEL = os.environ.get('LOGGING_LEVEL', logging.INFO)
 LOGGING_CLASS = 'logging.StreamHandler' if not TESTING else 'logging.NullHandler'
 LOGGING_FORMAT = '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
@@ -215,6 +221,13 @@ else:
     logger.info('No SENTRY enabled!')
 
 
+# Site Configuration
+# ------------------------------------------------------------------------------
+
+LOGIN_TEMPLATE = os.environ.get('LOGIN_TEMPLATE', 'pages/login.html')
+LOGGED_OUT_TEMPLATE = os.environ.get('LOGGED_OUT_TEMPLATE', 'pages/logged_out.html')
+
+
 # Authentication Configuration
 # ------------------------------------------------------------------------------
 
@@ -257,9 +270,6 @@ if CAS_SERVER_URL:
 else:
     logger.info('No CAS enabled!')
 
-LOGIN_TEMPLATE = os.environ.get('LOGIN_TEMPLATE', 'pages/login.html')
-LOGGED_OUT_TEMPLATE = os.environ.get('LOGGED_OUT_TEMPLATE', 'pages/logged_out.html')
-
 
 # Security Configuration
 # ------------------------------------------------------------------------------
@@ -293,6 +303,36 @@ if not TESTING and DEBUG:
         'SHOW_TOOLBAR_CALLBACK': lambda _: True,
         'SHOW_TEMPLATE_CONTEXT': True,
     }
+
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.logging.LoggingPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+        'django_uwsgi.panels.UwsgiPanel',
+    ]
+
+
+# Prometheus Configuration
+# ------------------------------------------------------------------------------
+
+MIDDLEWARE = [
+    # Make sure this stays as the first middleware
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
+
+    *MIDDLEWARE,
+
+    # Make sure this stays as the last middleware
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
+]
 
 
 # ------------------------------------------------------------------------------
