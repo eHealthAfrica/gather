@@ -33,16 +33,16 @@ router.register('surveys', views.SurveyViewSet, base_name='surveys')
 router.register('masks', views.MaskViewSet, base_name='masks')
 
 urlpatterns = [
-    path('gather/', include(router.urls)),
+    path(route='gather/', view=include(router.urls)),
 ]
 
 for app in settings.AETHER_APPS:
     urlpatterns += [
-        path(f'{app}/',
-             login_required(tokens_required(views.TokenProxyView.as_view(app_name=app))),
+        path(route=f'{app}/',
+             view=login_required(tokens_required(views.TokenProxyView.as_view(app_name=app))),
              name=f'{app}-proxy-root'),
-        path(f'{app}/<path:path>',
-             login_required(tokens_required(views.TokenProxyView.as_view(app_name=app))),
+        path(route=f'{app}/<path:path>',
+             view=login_required(tokens_required(views.TokenProxyView.as_view(app_name=app))),
              name=f'{app}-proxy-path'),
     ]
 
