@@ -50,6 +50,13 @@ describe('utils', () => {
       assert(!deepEqual(a, b), 'Primitives are not equal')
     })
 
+    it('should compare different types', () => {
+      assert(!deepEqual(1, {}), 'Primitive and Objects are not equal')
+      assert(!deepEqual('1', []), 'Primitive and Arrays are not equal')
+      assert(!deepEqual({}, []), 'Blank Objects and Empty Arrays are not equal')
+      assert(!deepEqual({ '0': 1 }, [1]), 'Objects and Arrays are not equal')
+    })
+
     it('should compare objects', () => {
       let a = { foo: 11, bar: 22, baz: { y: 4 } }
       let b = { bar: 22, foo: 11, baz: { y: 4 } }
