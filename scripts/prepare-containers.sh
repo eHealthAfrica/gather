@@ -36,9 +36,11 @@ docker volume create gather_minio_data    2>/dev/null || true
 docker-compose pull db couchdb redis
 docker-compose pull kernel odk couchdb-sync ui
 
+BUILD_OPTIONS="--no-cache --force-rm --pull"
+
 # build Gather assets
-docker-compose build gather-assets
-docker-compose run   gather-assets build
+docker-compose build ${BUILD_OPTIONS} gather-assets
+docker-compose run gather-assets build
 
 VERSION=`cat ./VERSION`
 GIT_REVISION=`git rev-parse HEAD`
@@ -50,6 +52,7 @@ echo "_____________________________________________"
 
 # build Gather
 docker-compose build \
+    ${BUILD_OPTIONS} \
     --build-arg GIT_REVISION=${GIT_REVISION} \
     --build-arg VERSION=${VERSION} \
     gather

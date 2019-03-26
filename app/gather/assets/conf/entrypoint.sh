@@ -18,10 +18,8 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-set -e
+set -Eeuo pipefail
 
-
-# Define help message
 function show_help {
   echo """
   Commands

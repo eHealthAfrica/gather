@@ -39,17 +39,17 @@ then
 fi
 
 # release version depending on TRAVIS_BRANCH / TRAVIS_TAG
-if [[ $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+[\.0-9]*$ ]]
+if [[ ${TRAVIS_TAG} =~ ^[0-9]+\.[0-9]+[\.0-9]*$ ]]
 then
-    VERSION=$TRAVIS_TAG
+    VERSION=${TRAVIS_TAG}
 
-elif [[ $TRAVIS_BRANCH =~ ^release\-[0-9]+\.[0-9]+[\.0-9]*$ ]]
+elif [[ ${TRAVIS_BRANCH} =~ ^release\-[0-9]+\.[0-9]+[\.0-9]*$ ]]
 then
     VERSION=`cat VERSION`
     # append "-rc" suffix
     VERSION=${VERSION}-rc
 
-elif [[ $TRAVIS_BRANCH = "develop" ]]
+elif [[ ${TRAVIS_BRANCH} = "develop" ]]
 then
     VERSION="alpha"
 
@@ -69,20 +69,23 @@ echo "--------------------------------------------------------------"
 APP="gather"
 
 # Login in docker hub
-docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+
+BUILD_OPTIONS="--no-cache --force-rm --pull"
 
 # Build and distribute the JS assets
-docker-compose build gather-assets
-docker-compose run   gather-assets build
+docker-compose build ${BUILD_OPTIONS} gather-assets
+docker-compose run gather-assets build
 
 # Build and push docker image to docker hub
 docker-compose build \
+    ${BUILD_OPTIONS} \
     --build-arg GIT_REVISION=${TRAVIS_COMMIT} \
     --build-arg VERSION=${VERSION} \
     ${APP}
 
-docker_push $VERSION
-if [[ $VERSION != "alpha" ]]
+docker_push ${VERSION}
+if [[ ${VERSION} != "alpha" ]]
 then
     docker_push "latest"
 fi

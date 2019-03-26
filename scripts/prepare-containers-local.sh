@@ -37,14 +37,15 @@ echo "Version:     ${VERSION}"
 echo "Revision:    ${GIT_REVISION}"
 echo "_____________________________________________"
 
+BUILD_OPTIONS="--no-cache --force-rm --pull"
 
 # build assets containers
 containers=( ui gather )
 for container in "${containers[@]}"
 do
     echo "_____________________________________________ Building container ${container}-assets"
-    $DC build ${container}-assets
-    $DC run   ${container}-assets build
+    $DC build ${BUILD_OPTIONS} ${container}-assets
+    $DC run ${container}-assets build
 done
 
 
@@ -54,6 +55,7 @@ for container in "${containers[@]}"
 do
     echo "_____________________________________________ Building container ${container}"
     $DC build \
+        ${BUILD_OPTIONS} \
         --build-arg GIT_REVISION=${GIT_REVISION} \
         --build-arg VERSION=${VERSION} \
         ${container}

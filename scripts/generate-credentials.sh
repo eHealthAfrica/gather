@@ -74,14 +74,21 @@ AETHER_PATH=../aether
 
 
 # ------------------------------------------------------------------
-# Minio storage
+# Gather
 # ==================================================================
 
-MINIO_STORAGE_ACCESS_KEY=$(gen_random_string)
-MINIO_STORAGE_SECRET_KEY=$(gen_random_string)
+GATHER_ADMIN_USERNAME=admin
+GATHER_ADMIN_PASSWORD=adminadmin
 
-TEST_MINIO_STORAGE_ACCESS_KEY=$(gen_random_string)
-TEST_MINIO_STORAGE_SECRET_KEY=$(gen_random_string)
+GATHER_DJANGO_SECRET_KEY=$(gen_random_string)
+GATHER_DB_PASSWORD=$(gen_random_string)
+
+# TEST Gather
+TEST_GATHER_ADMIN_USERNAME=admin-test
+TEST_GATHER_ADMIN_PASSWORD=testingtesting
+
+TEST_GATHER_DJANGO_SECRET_KEY=$(gen_random_string)
+TEST_GATHER_DB_PASSWORD=$(gen_random_string)
 
 # ------------------------------------------------------------------
 
@@ -184,21 +191,21 @@ UI_DB_PASSWORD=$(gen_random_string)
 
 
 # ------------------------------------------------------------------
-# Gather
+# Minio storage
 # ==================================================================
 
-GATHER_ADMIN_USERNAME=admin
-GATHER_ADMIN_PASSWORD=adminadmin
+MINIO_STORAGE_ACCESS_KEY=$(gen_random_string)
+MINIO_STORAGE_SECRET_KEY=$(gen_random_string)
 
-GATHER_DJANGO_SECRET_KEY=$(gen_random_string)
-GATHER_DB_PASSWORD=$(gen_random_string)
+TEST_MINIO_STORAGE_ACCESS_KEY=$(gen_random_string)
+TEST_MINIO_STORAGE_SECRET_KEY=$(gen_random_string)
 
-# TEST Gather
-TEST_GATHER_ADMIN_USERNAME=admin-test
-TEST_GATHER_ADMIN_PASSWORD=testingtesting
+# ------------------------------------------------------------------
 
-TEST_GATHER_DJANGO_SECRET_KEY=$(gen_random_string)
-TEST_GATHER_DB_PASSWORD=$(gen_random_string)
 
+# ------------------------------------------------------------------
+# Other
+# ==================================================================
+TEST_PARALLEL=8
 # ------------------------------------------------------------------
 EOF
