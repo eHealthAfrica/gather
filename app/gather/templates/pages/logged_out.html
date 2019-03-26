@@ -20,19 +20,11 @@ specific language governing permissions and limitations
 under the License.
 {% endcomment %}
 
-{% load render_bundle from webpack_loader %}
 {% load i18n %}
 
-{% block extra_css %}
-  {% if dev_mode %}
-    {# this is for CSS Hot reloading in development (render as another JS file) #}
-    {% render_bundle 'styles-login' 'js' %}
-
-  {% else %}
-    {# render as CSS file #}
-    {% render_bundle 'styles-login' 'css' %}
-  {% endif %}
-{% endblock extra_css %}
+{% block css %}
+  {% include 'styles.html' with common='yes' login='yes' %}
+{% endblock css %}
 
 {% block navbar %}{% endblock %}
 

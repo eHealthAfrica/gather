@@ -41,22 +41,12 @@ under the License.
     {# This is the block for the page TITLE, redefine it in the child template #}
     <title>{% block title %}{{ app_name }}{% endblock title %}</title>
 
-    {# Common JS libraries #}
-    {% render_bundle 'common' %}
-
     {% block css %}
-      {% if dev_mode %}
-        {# this is for CSS Hot reloading in development (render as another JS file) #}
-        {% render_bundle 'styles' 'js' %}
-
-      {% else %}
-        {# render as CSS file #}
-        {% render_bundle 'styles' 'css' %}
-      {% endif %}
+      {% include 'styles.html' with common='yes' login='no' %}
     {% endblock css %}
 
-    {% block extra_css %}
-    {% endblock extra_css %}
+    {# Common JS libraries #}
+    {% render_bundle 'common' %}
   </head>
 
   <body>

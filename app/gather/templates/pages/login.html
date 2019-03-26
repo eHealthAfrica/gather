@@ -21,7 +21,6 @@ under the License.
 {% endcomment %}
 
 {% load i18n %}
-{% load render_bundle from webpack_loader %}
 {% load static %}
 
 {% block title %}{{ app_name }}{% endblock %}
@@ -43,14 +42,5 @@ under the License.
 {% endblock %}
 
 {% block style %}
-  {% if dev_mode %}
-    {# this is for CSS Hot reloading in development (render as another JS file) #}
-    {% render_bundle 'styles'       'js' %}
-    {% render_bundle 'styles-login' 'js' %}
-
-  {% else %}
-    {# render as CSS file #}
-    {% render_bundle 'styles'       'css' %}
-    {% render_bundle 'styles-login' 'css' %}
-  {% endif %}
+  {% include 'styles.html' with common='yes' login='yes' %}
 {% endblock %}

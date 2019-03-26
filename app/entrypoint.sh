@@ -198,7 +198,7 @@ case "$1" in
         [ -z "${DEBUG:-}" ] && UWSGI_LOGGING="--disable-logging" || UWSGI_LOGGING=""
 
         UWSGI_STATIC="--static-map ${APP_URL:-/}static=/var/www/static"
-        UWSGI_FAVICO="--static-map ${APP_URL:-/}favicon.ico=/var/www/static/gather/images/gather.ico"
+        UWSGI_FAVICO="--static-map ${APP_URL:-/}favicon.ico=/var/www/static/images/gather.ico"
         [ -z "${UWSGI_SERVE_STATIC:-}" ] && UWSGI_STATIC="" && UWSGI_FAVICO=""
 
         /usr/local/bin/uwsgi \
