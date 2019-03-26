@@ -149,14 +149,17 @@ function test_lint {
 }
 
 function test_coverage {
-    export RCFILE=./conf/extras/coverage.rc
-    export TESTING=true
+    RCFILE=/code/conf/extras/coverage.rc
+    PARALLEL_COV="--concurrency=multiprocessing --parallel-mode"
+    PARALLEL_PY="--parallel=${TEST_PARALLEL:-4}"
 
-    coverage run    --rcfile="$RCFILE" manage.py test "${@:1}"
-    coverage report --rcfile="$RCFILE"
+    rm -R /code/.coverage* 2>/dev/null || :
+    coverage run     --rcfile="$RCFILE" $PARALLEL_COV manage.py test --noinput "${@:1}" $PARALLEL_PY
+    coverage combine --rcfile="$RCFILE" --append
+    coverage report  --rcfile="$RCFILE"
     coverage erase
 
-    cat ./conf/extras/good_job.txt
+    cat /code/conf/extras/good_job.txt
 }
 
 BACKUPS_FOLDER=/backups
@@ -244,21 +247,24 @@ case "$1" in
     ;;
 
     test )
-        echo "DEBUG=$DEBUG"
+        export TESTING=true
         setup
         test_lint
         test_coverage
     ;;
 
     test_lint )
+        export TESTING=true
         test_lint
     ;;
 
     test_coverage )
+        export TESTING=true
         test_coverage "${@:2}"
     ;;
 
     test_py )
+        export TESTING=true
         test_coverage "${@:2}"
     ;;
 

@@ -170,6 +170,8 @@ services:
     environment:
       DEBUG: null  # set to null to remove previous value
       TESTING: "true"
+      TEST_PARALLEL: ${TEST_PARALLEL}
+
       DJANGO_SECRET_KEY: ${TEST_GATHER_DJANGO_SECRET_KEY}
 
       ADMIN_USERNAME: ${TEST_GATHER_ADMIN_USERNAME}
