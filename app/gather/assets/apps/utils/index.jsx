@@ -33,11 +33,14 @@ export const clone = (x) => JSON.parse(JSON.stringify(x))
  * @param {bool}   ignoreNull -- ignore null values
  */
 export const deepEqual = (a, b, ignoreNull = false) => {
+  // Note:
+  //   "typeof [1, 2, 3] == 'object'"
+  //   [x, y, z,...]  equals to  {'0': x, '1': y, '2': z, ...}
   if (typeof a !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
     return false
   }
 
-  if (!Array.isArray(a) && typeof a !== 'object') {
+  if (typeof a !== 'object') {
     return a === b
   }
 
