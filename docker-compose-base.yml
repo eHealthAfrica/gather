@@ -328,6 +328,7 @@ services:
   # ---------------------------------
 
   gather-assets-base:
+    image: gather-assets
     build: ./app/gather/assets
     stdin_open: true
     tty: true
