@@ -35,10 +35,14 @@ class JestTestsEnvironment extends JSDOMEnvironment {
   async setup () {
     await super.setup()
 
-    // include global variables
-    this.global.window.$ = $(this.global.window)
-    this.global.window.jQuery = this.global.window.$
-    this.global.window.Popper = popper
+    // used to create random data
+    // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/from
+    this.global.range = (start, end) => Array.from({ length: end - start }, (v, i) => i + start)
+
+    // Issue that solves in tests: change window.location
+    // https://github.com/jsdom/jsdom#reconfiguring-the-jsdom-with-reconfiguresettings
+    this.global.jsdom = this.dom
+    this.global.jsdom.reconfigure({ url: testURL })
 
     Object.defineProperty(
       this.global.window.navigator,
@@ -46,14 +50,10 @@ class JestTestsEnvironment extends JSDOMEnvironment {
       { value: 'en', configurable: true }
     )
 
-    // Issue that solves in tests: change window.location
-    // https://github.com/jsdom/jsdom#reconfiguring-the-jsdom-with-reconfiguresettings
-    this.global.jsdom = this.dom
-    this.global.jsdom.reconfigure({ url: testURL })
-
-    // used to create random data
-    // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/from
-    this.global.range = (start, end) => Array.from({length: end - start}, (v, i) => i + start)
+    // include global variables
+    this.global.window.$ = $(this.global.window)
+    this.global.window.jQuery = this.global.window.$
+    this.global.window.Popper = popper
 
     // uses "node-fetch" in tests, "whatwg-fetch" only works in browsers
     // check that the url is not a relative url, otherwise prepend testURL
