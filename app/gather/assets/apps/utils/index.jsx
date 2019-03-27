@@ -34,13 +34,14 @@ export const clone = (x) => JSON.parse(JSON.stringify(x))
  */
 export const deepEqual = (a, b, ignoreNull = false) => {
   // Note:
-  //   "typeof [1, 2, 3] == 'object'"
   //   [x, y, z,...]  equals to  {'0': x, '1': y, '2': z, ...}
-  if (typeof a !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
+  const getType = (value) => Object.prototype.toString.call(value)
+
+  if (getType(a) !== getType(b)) {
     return false
   }
 
-  if (typeof a !== 'object') {
+  if (['[object Object]', '[object Array]'].indexOf(getType(a)) === -1) {
     return a === b
   }
 
