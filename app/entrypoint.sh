@@ -201,6 +201,7 @@ case "$1" in
         UWSGI_FAVICO="--static-map ${APP_URL:-/}favicon.ico=/var/www/static/images/gather.ico"
         [ -z "${UWSGI_SERVE_STATIC:-}" ] && UWSGI_STATIC="" && UWSGI_FAVICO=""
 
+        export DEBUG=''
         /usr/local/bin/uwsgi \
             --ini /code/conf/uwsgi.ini \
             --http 0.0.0.0:${WEB_SERVER_PORT} \
