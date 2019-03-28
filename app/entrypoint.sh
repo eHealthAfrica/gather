@@ -195,21 +195,12 @@ case "$1" in
 
     start )
         setup
-        [ -z "${DEBUG:-}" ] && UWSGI_LOGGING="--disable-logging" || UWSGI_LOGGING=""
 
-        UWSGI_STATIC="--static-map ${APP_URL:-/}static=/var/www/static"
-        UWSGI_FAVICO="--static-map ${APP_URL:-/}favicon.ico=/var/www/static/images/gather.ico"
-        [ -z "${UWSGI_SERVE_STATIC:-}" ] && UWSGI_STATIC="" && UWSGI_FAVICO=""
+        # Export woraround: in seconds: 20min
+        export UWSGI_HARAKIRI=${UWSGI_HARAKIRI:-1200}
 
-        export DEBUG=''
-        /usr/local/bin/uwsgi \
-            --ini /code/conf/uwsgi.ini \
-            --http 0.0.0.0:${WEB_SERVER_PORT} \
-            --processes ${UWSGI_PROCESSES:-4} \
-            --threads ${UWSGI_THREADS:-2} \
-            ${UWSGI_STATIC} \
-            ${UWSGI_FAVICO} \
-            ${UWSGI_LOGGING}
+        export DJANGO_SETTINGS_MODULE="gather.settings"
+        ./conf/uwsgi/start.sh
     ;;
 
     start_dev )

@@ -117,6 +117,17 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - `LOGIN_TEMPLATE`: `pages/login.html`.
   - `LOGGED_OUT_TEMPLATE`: `pages/logged_out.html`.
 
+- uWSGI specific:
+  - `CUSTOM_UWSGI_ENV_FILE` Path to a file of environment variables to use with uWSGI.
+  - `CUSTOM_UWSGI_SERVE_STATIC` Indicates if uWSGI also serves the static content.
+    Is `false` if unset or set to empty string, anything else is considered `true`.
+  - Any `UWSGI_A_B_C` Translates into the `a-b-c` uswgi option.
+    > [
+      *When passed as environment variables, options are capitalized and prefixed
+      with UWSGI_, and dashes are substituted with underscores.*
+    ](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html#environment-variables)
+
+  See more in https://uwsgi-docs.readthedocs.io/
 
 - Django specific:
   - `ADMIN_USERNAME`: `admin` the setup script will create a superuser
