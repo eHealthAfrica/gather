@@ -38,12 +38,12 @@ then
     exit 0
 fi
 
-# release version depending on TRAVIS_BRANCH / TRAVIS_TAG
-if [[ ${TRAVIS_TAG} =~ ^[0-9]+\.[0-9]+[\.0-9]*$ ]]
+# release version depending on TRAVIS_BRANCH (develop | release-#.#) / TRAVIS_TAG (#.#.#)
+if [[ ${TRAVIS_TAG} =~ ^[0-9]+(\.[0-9]+){2}$ ]]
 then
     VERSION=${TRAVIS_TAG}
 
-elif [[ ${TRAVIS_BRANCH} =~ ^release\-[0-9]+\.[0-9]+[\.0-9]*$ ]]
+elif [[ ${TRAVIS_BRANCH} =~ ^release\-[0-9]+\.[0-9]+$ ]]
 then
     VERSION=`cat VERSION`
     # append "-rc" suffix
