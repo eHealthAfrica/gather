@@ -42,12 +42,12 @@ under the License.
 
         <ul class="nav navbar-nav">
 
-          {% for nav_item in navigation_list %}
+          {% for nav_item, nav_label in navigation_list %}
             <li class="nav-item">
               <a
                 class="nav-link {% if request.resolver_match.view_name == nav_item %}active{% endif %}"
                 href="{% url nav_item action='list' %}">
-                {% trans nav_item %}
+                {{ nav_label }}
               </a>
             </li>
           {% endfor %}
