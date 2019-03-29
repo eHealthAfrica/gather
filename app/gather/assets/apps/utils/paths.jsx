@@ -212,21 +212,14 @@ export const getSurveyorsPath = ({ action, id }) => {
 /**
  * Returns the path to go to any Sync Users page
  *
- * @param {string} action       - action: `list` (default), `add`, `edit`
- * @param {number} id           - surveyor id
+ * @param {string} action       - action: `list` (default), `add`
  */
-export const getSyncUsersPath = ({ action, id }) => {
+export const getSyncUsersPath = ({ action }) => {
   switch (action) {
-    case 'edit':
-      if (id) {
-        return `/sync-users/edit/${id}`
-      }
-      return '/sync-users/add/'
-
     case 'add':
-      return '/sync-users/add/'
+      return '/mobile-users/add'
 
     default:
-      return '/sync-users/list/'
+      return '/mobile-users/list'
   }
 }

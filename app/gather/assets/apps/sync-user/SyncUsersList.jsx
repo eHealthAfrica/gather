@@ -19,16 +19,58 @@
  */
 
 import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
-import { getSyncUsersPath } from '../utils/paths'
+import { getSyncUsersPath, getSyncUsersAPIPath } from '../utils/paths'
+import { deleteData } from '../utils/request'
 
-export default class SyncUsersList extends Component {
+import { ConfirmButton, ErrorAlert } from '../components'
+
+const MESSAGES = defineMessages({
+  deleteButton: {
+    defaultMessage: 'Delete sync user',
+    id: 'sync-user.form.action.delete'
+  },
+  deleteConfirm: {
+    defaultMessage: 'Are you sure you want to delete the sync user?',
+    id: 'sync-user.form.action.delete.confirm'
+  },
+  deleteError: {
+    defaultMessage: 'An error occurred while deleting “{email}”.',
+    id: 'sync-user.form.action.delete.error'
+  }
+})
+
+class SyncUsersList extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { errors: {} }
+  }
+
   render () {
+    const { formatMessage } = this.props.intl
     const { list } = this.props
 
     if (list.length === 0) {
       return <div data-qa='sync-users-list-empty' />
+    }
+
+    const onDelete = (syncUser) => {
+      const url = getSyncUsersAPIPath({ id: syncUser.id })
+      return deleteData(url)
+        .then(() => {
+          window.location.assign(getSyncUsersPath({ action: 'list' }))
+        })
+        .catch(error => {
+          if (error.content) {
+            this.setState({ errors: error.content })
+          } else {
+            const { formatMessage } = this.props.intl
+            const syncUser = this.state
+            const errors = [formatMessage(MESSAGES.deleteError, { ...syncUser })]
+            this.setState({ errors })
+          }
+        })
     }
 
     return (
@@ -39,6 +81,8 @@ export default class SyncUsersList extends Component {
             defaultMessage='Sync Users' />
         </h4>
 
+        <ErrorAlert errors={this.state.errors} />
+
         <div className='sync-users'>
           {
             list.map((syncUser) => (
@@ -46,12 +90,20 @@ export default class SyncUsersList extends Component {
                 <div className='sync-user-header'>
                   <i className='fas fa-user mr-2' />
                   { syncUser.email }
-                  <a
-                    href={getSyncUsersPath({ action: 'edit', id: syncUser.id })}
-                    role='button'
-                    className='btn btn-sm btn-secondary icon-only float-right'>
-                    <i className='fas fa-pencil-alt' />
-                  </a>
+
+                  <ConfirmButton
+                    className='btn btn-danger icon-only float-right'
+                    cancelable
+                    onConfirm={() => { onDelete(syncUser) }}
+                    title={
+                      <span className='email'>
+                        <i className='fas fa-user mr-1' />
+                        { syncUser.email }
+                      </span>
+                    }
+                    message={formatMessage(MESSAGES.deleteConfirm)}
+                    buttonLabel={<i className='fas fa-times' />}
+                  />
                 </div>
               </div>
             ))
@@ -61,3 +113,6 @@ export default class SyncUsersList extends Component {
     )
   }
 }
+
+// Include this to enable `this.props.intl` for this component.
+export default injectIntl(SyncUsersList)

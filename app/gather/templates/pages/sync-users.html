@@ -35,7 +35,7 @@ under the License.
 
       {# include the ADD NEW button within the LIST view #}
       <a
-        href="{% url 'sync-users' action='add' %}"
+        href="{% url 'couchdb-sync-mobile-users' action='add' %}"
         role="button"
         class="btn btn-primary btn-icon">
         <i class="fas fa-plus-circle mr-3"></i>
@@ -46,8 +46,7 @@ under the License.
 
   <div
     id="sync-users-app"
-    data-action="{{ action }}"
-    data-sync-user-id="{{ sync_user_id }}"></div>
+    data-action="{{ action }}"></div>
 {% endblock content %}
 
 {% block extra_js %}

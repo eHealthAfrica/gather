@@ -54,7 +54,7 @@ describe('paths utils', () => {
 
   describe('getSyncUsersAPIPath', () => {
     it('should return the Sync Users API path', () => {
-      assert.strictEqual(getSyncUsersAPIPath({ }), '/api/couchdb-sync/sync-users.json')
+      assert.strictEqual(getSyncUsersAPIPath({}), '/api/couchdb-sync/sync-users.json')
       assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/api/couchdb-sync/sync-users/1.json')
     })
   })
@@ -234,15 +234,13 @@ describe('paths utils', () => {
 
   describe('getSyncUsersPath', () => {
     it('should return the Sync Users path based on arguments', () => {
-      assert.strictEqual(getSyncUsersPath({ }), '/sync-users/list/')
-      assert.strictEqual(getSyncUsersPath({ action: 'list' }), '/sync-users/list/')
-      assert.strictEqual(getSyncUsersPath({ action: 'list', id: 1 }), '/sync-users/list/')
-      assert.strictEqual(getSyncUsersPath({ action: 'unknown-action', id: 1 }), '/sync-users/list/')
-      assert.strictEqual(getSyncUsersPath({ action: 'view' }), '/sync-users/list/', 'no "view" action available')
-      assert.strictEqual(getSyncUsersPath({ action: 'view', id: 1 }), '/sync-users/list/', 'no "view" action available')
-      assert.strictEqual(getSyncUsersPath({ action: 'add' }), '/sync-users/add/')
-      assert.strictEqual(getSyncUsersPath({ action: 'edit' }), '/sync-users/add/', '"edit" without "id" is "add"')
-      assert.strictEqual(getSyncUsersPath({ action: 'edit', id: 1 }), '/sync-users/edit/1')
+      assert.strictEqual(getSyncUsersPath({}), '/mobile-users/list')
+      assert.strictEqual(getSyncUsersPath({ action: 'list' }), '/mobile-users/list')
+      assert.strictEqual(getSyncUsersPath({ action: 'list', id: 1 }), '/mobile-users/list')
+      assert.strictEqual(getSyncUsersPath({ action: 'unknown-action', id: 1 }), '/mobile-users/list')
+      assert.strictEqual(getSyncUsersPath({ action: 'view' }), '/mobile-users/list', 'no "view" action available')
+      assert.strictEqual(getSyncUsersPath({ action: 'edit', id: 1 }), '/mobile-users/list', 'no "edit" action available')
+      assert.strictEqual(getSyncUsersPath({ action: 'add' }), '/mobile-users/add')
     })
   })
 

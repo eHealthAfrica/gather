@@ -93,14 +93,14 @@ if settings.AETHER_APPS.get('odk'):
     urlpatterns += [
         re_path(route=r'^surveyors/(?P<action>\w+)/(?P<surveyor_id>[0-9]+)?$',
                 view=login_required(tokens_required(TemplateView.as_view(template_name='pages/surveyors.html'))),
-                name='surveyors'),
+                name='odk-surveyors'),
     ]
 
 if settings.AETHER_APPS.get('couchdb-sync'):
     urlpatterns += [
-        re_path(route=r'^sync-users/(?P<action>\w+)/(?P<sync_user_id>[0-9]+)?$',
+        re_path(route=r'^mobile-users/(?P<action>\w+)$',
                 view=login_required(tokens_required(TemplateView.as_view(template_name='pages/sync-users.html'))),
-                name='sync-users'),
+                name='couchdb-sync-mobile-users'),
     ]
 
 if settings.DEBUG:  # pragma: no cover

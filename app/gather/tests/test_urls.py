@@ -57,8 +57,8 @@ class UrlsTest(UrlsTestCase):
 
     def test__urls__aether(self):
         self.assertEqual(reverse('surveys', kwargs={'action': 'a'}), '/surveys/a/')
-        self.assertEqual(reverse('surveyors', kwargs={'action': 'b'}), '/surveyors/b/')
-        self.assertEqual(reverse('sync-users', kwargs={'action': 'c'}), '/sync-users/c/')
+        self.assertEqual(reverse('odk-surveyors', kwargs={'action': 'b'}), '/surveyors/b/')
+        self.assertEqual(reverse('couchdb-sync-mobile-users', kwargs={'action': 'c'}), '/mobile-users/c')
 
         self.assertEqual(reverse('api:kernel-proxy-root'), '/api/kernel/')
         self.assertEqual(reverse('api:odk-proxy-root'), '/api/odk/')
@@ -80,8 +80,8 @@ class UrlsAppUrlTest(UrlsTestCase):
 
     def test__urls__aether(self):
         self.assertEqual(reverse('surveys', kwargs={'action': 'a'}), '/gather/surveys/a/')
-        self.assertEqual(reverse('surveyors', kwargs={'action': 'b'}), '/gather/surveyors/b/')
-        self.assertEqual(reverse('sync-users', kwargs={'action': 'c'}), '/gather/sync-users/c/')
+        self.assertEqual(reverse('odk-surveyors', kwargs={'action': 'b'}), '/gather/surveyors/b/')
+        self.assertEqual(reverse('couchdb-sync-mobile-users', kwargs={'action': 'c'}), '/gather/mobile-users/c')
 
         self.assertEqual(reverse('api:kernel-proxy-root'), '/gather/api/kernel/')
         self.assertEqual(reverse('api:odk-proxy-root'), '/gather/api/odk/')
@@ -109,5 +109,5 @@ class UrlsAetherAppsTest(UrlsTestCase):
 
     def test__urls__aether(self):
         self.assertEqual(reverse('surveys', kwargs={'action': 'a'}), '/surveys/a/')
-        self.assertRaises(exceptions.NoReverseMatch, reverse, 'surveyors')
-        self.assertRaises(exceptions.NoReverseMatch, reverse, 'sync-users')
+        self.assertRaises(exceptions.NoReverseMatch, reverse, 'odk-surveyors')
+        self.assertRaises(exceptions.NoReverseMatch, reverse, 'couchdb-sync-mobile-users')
