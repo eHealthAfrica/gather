@@ -27,6 +27,7 @@
   text-align: left;
   color: $text-color;
   white-space: normal;
+  overflow-y:auto;
 
   &.show {
     display: block;
@@ -34,10 +35,6 @@
 
   .modal-header {
     align-items: flex-start;
-  }
-
-  .modal-dialog {
-    margin: 80px auto;
   }
 
   .modal-content {
