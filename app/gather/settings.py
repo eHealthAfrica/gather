@@ -37,7 +37,7 @@ USE_TZ = True
 
 APP_URL = os.environ.get('APP_URL', '/')  # URL Friendly
 
-STATIC_URL = f'{APP_URL}static/'
+STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 STATIC_ROOT = os.environ.get('STATIC_ROOT', '/var/www/static/')
 
 
