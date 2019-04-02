@@ -67,6 +67,7 @@ button {
   &:focus,
   &:hover {
     background-color: $hover-color;
+    color: $white;
   }
 }
 
@@ -216,8 +217,9 @@ small {
 .badge {
   background: $grey;
   border-radius: 1rem;
-  padding: .3rem .6rem;
+  padding: .1rem .5rem;
   font-size: $font-size-s;
+  line-height: 1.2em;
 
   .icon-only {
     margin-right: -.3rem;
