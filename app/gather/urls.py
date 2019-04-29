@@ -30,7 +30,11 @@ from .api.decorators import tokens_required
 from .views import assets_settings
 
 
-urlpatterns = [
+def login_tokens(view):
+    return login_required(tokens_required(view))
+
+
+app_urls = [
     # assets settings
     path(route='assets-settings', view=assets_settings, name='assets-settings'),
 
@@ -51,28 +55,28 @@ urlpatterns = [
          name='tokens'),
 
     # to check if the user tokens are valid
-    path('check-tokens', view=login_required(tokens_required(health)), name='check-tokens'),
+    path('check-tokens', view=login_tokens(health), name='check-tokens'),
 
     # ----------------------
     # surveys app
     re_path(route=r'^surveys/(?P<action>\w+)/(?P<survey_id>[0-9a-f-]+)?$',
-            view=login_required(tokens_required(TemplateView.as_view(template_name='gather/pages/surveys.html'))),
+            view=login_tokens(TemplateView.as_view(template_name='gather/pages/surveys.html')),
             name='surveys'),
 ]
 
 if settings.AETHER_APPS.get('odk'):
-    urlpatterns += [
+    app_urls += [
         re_path(route=r'^surveyors/(?P<action>\w+)/(?P<surveyor_id>[0-9]+)?$',
-                view=login_required(tokens_required(TemplateView.as_view(template_name='gather/pages/surveyors.html'))),
+                view=login_tokens(TemplateView.as_view(template_name='gather/pages/surveyors.html')),
                 name='odk-surveyors'),
     ]
 
 if settings.AETHER_APPS.get('couchdb-sync'):
-    urlpatterns += [
+    app_urls += [
         re_path(route=r'^mobile-users/(?P<action>\w+)$',
-                view=login_required(tokens_required(TemplateView.as_view(template_name='gather/pages/sync-users.html'))),
+                view=login_tokens(TemplateView.as_view(template_name='gather/pages/sync-users.html')),
                 name='couchdb-sync-mobile-users'),
     ]
 
 
-urlpatterns = generate_urlpatterns(app=urlpatterns)
+urlpatterns = generate_urlpatterns(app=app_urls)
