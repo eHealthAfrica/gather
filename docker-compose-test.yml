@@ -25,15 +25,6 @@ services:
       service: redis-base
     command: redis-server --requirepass ${TEST_REDIS_PASSWORD}
 
-  minio-test:
-    extends:
-      file: ./docker-compose-base.yml
-      service: minio-base
-    environment:
-      MINIO_ACCESS_KEY: ${TEST_MINIO_STORAGE_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${TEST_MINIO_STORAGE_SECRET_KEY}
-    command: minio server --quiet --address minio-test:9000 /data
-
 
   # ---------------------------------
   # Aether Kernel
@@ -44,12 +35,8 @@ services:
       file: ./docker-compose-base.yml
       service: kernel-base
     environment:
-      DEBUG: null
       TESTING: "true"
       DJANGO_SECRET_KEY: ${TEST_KERNEL_DJANGO_SECRET_KEY}
-
-      BUCKET_NAME: test-kernel
-      MINIO_STORAGE_ENDPOINT: minio-test:9000
 
       ADMIN_USERNAME: ${TEST_KERNEL_ADMIN_USERNAME}
       ADMIN_PASSWORD: ${TEST_KERNEL_ADMIN_PASSWORD}
@@ -67,7 +54,7 @@ services:
       # volumes in tests
       - ./tmp/test/kernel/static:/var/www/static
     ports:
-      - "9100:9100"
+      - 9100:9100
     depends_on:
       db-test:
         condition: service_healthy
@@ -82,12 +69,8 @@ services:
       file: ./docker-compose-base.yml
       service: odk-base
     environment:
-      DEBUG: null
       TESTING: "true"
       DJANGO_SECRET_KEY: ${TEST_ODK_DJANGO_SECRET_KEY}
-
-      BUCKET_NAME: test-odk
-      MINIO_STORAGE_ENDPOINT: minio-test:9000
 
       ADMIN_USERNAME: ${TEST_ODK_ADMIN_USERNAME}
       ADMIN_PASSWORD: ${TEST_ODK_ADMIN_PASSWORD}
@@ -105,7 +88,7 @@ services:
       # volumes in tests
       - ./tmp/test/odk/static:/var/www/static
     ports:
-      - "9102:9102"
+      - 9102:9102
     depends_on:
       db-test:
         condition: service_healthy
@@ -122,7 +105,6 @@ services:
       file: ./docker-compose-base.yml
       service: couchdb-sync-base
     environment:
-      DEBUG: null
       TESTING: "true"
       DJANGO_SECRET_KEY: ${TEST_COUCHDB_SYNC_DJANGO_SECRET_KEY}
 
@@ -151,7 +133,7 @@ services:
       # volumes in tests
       - ./tmp/test/sync/static:/var/www/static
     ports:
-      - "9106:9106"
+      - 9106:9106
     depends_on:
       db-test:
         condition: service_healthy
@@ -168,7 +150,6 @@ services:
       file: ./docker-compose-base.yml
       service: gather-base
     environment:
-      DEBUG: null  # set to null to remove previous value
       TESTING: "true"
       TEST_PARALLEL: ${TEST_PARALLEL}
 
@@ -197,7 +178,7 @@ services:
       # volumes in tests
       - ./tmp/test/gather/static:/var/www/static
     ports:
-      - "9105:9105"
+      - 9105:9105
     depends_on:
       db-test:
         condition: service_healthy

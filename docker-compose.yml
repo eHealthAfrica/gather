@@ -3,6 +3,12 @@ version: "2.1"
 networks:
   gather_net:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.3.0/24
+          gateway: 192.168.3.1
+          attachable: true
 
 volumes:
   gather_database_data: {}
@@ -47,6 +53,21 @@ services:
       - gather_net
 
   # ---------------------------------
+  # NGINX
+  # ---------------------------------
+
+  nginx:
+    extends:
+      file: ./docker-compose-base.yml
+      service: nginx-base
+    networks:
+      gather_net:
+        ipv4_address: 192.168.3.10
+    extra_hosts:
+      - aether.local:127.0.0.1
+      - gather.local:127.0.0.1
+
+  # ---------------------------------
   # Aether Kernel
   # ---------------------------------
 
@@ -57,10 +78,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      nginx:
+        condition: service_healthy
     networks:
-      gather_net:
-        aliases:
-          - kernel.aether.local
+      - gather_net
+    extra_hosts:
+      - aether.local:192.168.3.10
+      - gather.local:192.168.3.10
 
   # ---------------------------------
   # Aether ODK module
@@ -73,12 +97,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      nginx:
+        condition: service_healthy
       kernel:
         condition: service_started
     networks:
-      gather_net:
-        aliases:
-          - odk.aether.local
+      - gather_net
+    extra_hosts:
+      - aether.local:192.168.3.10
+      - gather.local:192.168.3.10
 
   # ---------------------------------
   # Aether CouchDB Sync module
@@ -91,12 +118,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      nginx:
+        condition: service_healthy
       kernel:
         condition: service_started
     networks:
-      gather_net:
-        aliases:
-          - sync.aether.local
+      - gather_net
+    extra_hosts:
+      - aether.local:192.168.3.10
+      - gather.local:192.168.3.10
 
   couchdb-sync-rq:
     extends:
@@ -105,12 +135,17 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      nginx:
+        condition: service_healthy
       kernel:
         condition: service_started
       couchdb-sync:
         condition: service_started
     networks:
       - gather_net
+    extra_hosts:
+      - aether.local:192.168.3.10
+      - gather.local:192.168.3.10
 
   # ---------------------------------
   # Aether UI
@@ -123,12 +158,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      nginx:
+        condition: service_healthy
       kernel:
         condition: service_started
     networks:
-      gather_net:
-        aliases:
-          - ui.aether.local
+      - gather_net
+    extra_hosts:
+      - aether.local:192.168.3.10
+      - gather.local:192.168.3.10
 
   # ---------------------------------
   # Gather Assets
@@ -152,33 +190,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      nginx:
+        condition: service_healthy
       kernel:
         condition: service_started
       odk:
-        condition: service_started
-    networks:
-      gather_net:
-        aliases:
-          - gather.local
-
-  # ---------------------------------
-  # NGINX
-  # ---------------------------------
-
-  nginx:
-    extends:
-      file: ./docker-compose-base.yml
-      service: nginx-base
-    depends_on:
-      kernel:
-        condition: service_started
-      odk:
-        condition: service_started
-      couchdb-sync:
-        condition: service_started
-      ui:
-        condition: service_started
-      gather:
         condition: service_started
     networks:
       - gather_net
+    extra_hosts:
+      - aether.local:192.168.3.10
+      - gather.local:192.168.3.10

@@ -90,7 +90,7 @@ function setup {
     #    -p=secretsecret
     #    -e=admin@gather2.org
     #    -t=01234656789abcdefghij
-    python ./manage.py setup_admin -u=$ADMIN_USERNAME -p=$ADMIN_PASSWORD
+    python ./manage.py setup_admin -u=$ADMIN_USERNAME -p=$ADMIN_PASSWORD -t=${ADMIN_TOKEN:-}
 
     # copy assets bundles folder into static folder
     rm -r -f ./gather/static/*.*
@@ -253,7 +253,7 @@ case "$1" in
 
     test )
         export TESTING=true
-        # export MULTITENANCY=true
+        export MULTITENANCY=true
         setup
 
         test_lint
@@ -262,14 +262,14 @@ case "$1" in
 
     test_lint )
         export TESTING=true
-        # export MULTITENANCY=true
+        export MULTITENANCY=true
 
         test_lint
     ;;
 
     test_coverage | test_py )
         export TESTING=true
-        # export MULTITENANCY=true
+        export MULTITENANCY=true
 
         test_coverage "${@:2}"
     ;;

@@ -66,7 +66,7 @@ TEMPLATES[0]['OPTIONS']['context_processors'] += [
     'gather.context_processors.gather_context',
 ]
 
-MULTITENANCY_MODEL = 'gather.Project'
+MULTITENANCY_MODEL = 'gather.Survey'
 MIGRATION_MODULES['gather'] = 'gather.api.migrations'
 
 

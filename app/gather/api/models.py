@@ -27,6 +27,9 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext as _
 
+from django_prometheus.models import ExportModelOperationsMixin
+from django_eha_sdk.multitenancy.models import MtModelAbstract, MtModelChildAbstract
+
 '''
 
 Data model schema:
@@ -61,7 +64,7 @@ Named tuple to pass together the app base url and the user auth token
 UserAppToken = namedtuple('UserAppToken', ['base_url', 'token'])
 
 
-class UserTokens(models.Model):
+class UserTokens(ExportModelOperationsMixin('gather_usertokens'), models.Model):
     '''
     User auth tokens to connect to the different apps.
     '''
@@ -226,7 +229,7 @@ class UserTokens(models.Model):
         verbose_name_plural = _('users authorization tokens')
 
 
-class Survey(models.Model):
+class Survey(ExportModelOperationsMixin('gather_survey'), MtModelAbstract):
     '''
     Database link of a Aether Kernel Project
     '''
@@ -255,7 +258,7 @@ class Survey(models.Model):
         verbose_name_plural = _('surveys')
 
 
-class Mask(models.Model):
+class Mask(ExportModelOperationsMixin('gather_mask'), MtModelChildAbstract):
     '''
     Survey entities mask.
 
@@ -273,6 +276,9 @@ class Mask(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(str(self.survey), self.name)
+
+    def get_mt_instance(self):
+        return self.survey
 
     class Meta:
         app_label = 'gather'

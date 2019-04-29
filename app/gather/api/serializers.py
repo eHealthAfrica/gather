@@ -16,19 +16,29 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+
+from django_eha_sdk.multitenancy.serializers import (
+    MtPrimaryKeyRelatedField,
+    MtModelSerializer,
+)
 
 from .models import Survey, Mask
 
 
-class MaskSerializer(serializers.ModelSerializer):
+class MaskSerializer(ModelSerializer):
+
+    survey = MtPrimaryKeyRelatedField(
+        required=True,
+        queryset=Survey.objects.all(),
+    )
 
     class Meta:
         model = Mask
         fields = '__all__'
 
 
-class SurveySerializer(serializers.ModelSerializer):
+class SurveySerializer(MtModelSerializer):
 
     masks = MaskSerializer(many=True, read_only=True)
 

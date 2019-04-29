@@ -38,7 +38,7 @@ echo "_____________________________________________ Killing ALL containers"
 docker-compose kill
 $DC_TEST kill
 $DC_TEST down
-$DC_TEST pull db-test couchdb-test redis-test minio-test
+$DC_TEST pull db-test couchdb-test redis-test
 $DC_TEST pull kernel-test odk-test couchdb-sync-test
 
 prepare_and_test_container gather-assets
