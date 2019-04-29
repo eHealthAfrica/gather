@@ -32,20 +32,6 @@ services:
     networks:
       - local
 
-  couchdb:
-    extends:
-      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
-      service: couchdb-base
-    networks:
-      - local
-
-  redis:
-    extends:
-      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
-      service: redis-base
-    networks:
-      - local
-
   minio:
     extends:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
@@ -104,6 +90,7 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: odk-base
     environment:
+      AETHER_KERNEL_URL: http://aether.local/kernel
       KEYCLOAK_SERVER_URL: null
     volumes:
       - ./.persistent_data/backups/odk:/backups
@@ -123,49 +110,6 @@ services:
 
 
   # ---------------------------------
-  # Aether CouchDB Sync module
-  # ---------------------------------
-
-  couchdb-sync:
-    extends:
-      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
-      service: couchdb-sync-base
-    environment:
-      KEYCLOAK_SERVER_URL: null
-    volumes:
-      - ./.persistent_data/backups/sync:/backups
-      - ./.persistent_data/static/sync:/var/www/static
-    depends_on:
-      db:
-        condition: service_healthy
-      nginx:
-        condition: service_healthy
-      kernel:
-        condition: service_started
-    networks:
-      - local
-    extra_hosts:
-      - aether.local:192.168.33.10
-      - gather.local:192.168.33.10
-
-  couchdb-sync-rq:
-    extends:
-      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
-      service: couchdb-sync-rq-base
-    depends_on:
-      db:
-        condition: service_healthy
-      nginx:
-        condition: service_healthy
-      kernel:
-        condition: service_started
-      couchdb-sync:
-        condition: service_started
-    networks:
-      - local
-
-
-  # ---------------------------------
   # Aether UI
   # ---------------------------------
 
@@ -181,6 +125,7 @@ services:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: ui-base
     environment:
+      AETHER_KERNEL_URL: http://aether.local/kernel
       KEYCLOAK_SERVER_URL: null
     volumes:
       - ./.persistent_data/backups/ui:/backups
@@ -227,8 +172,6 @@ services:
       kernel:
         condition: service_started
       odk:
-        condition: service_started
-      couchdb-sync:
         condition: service_started
     networks:
       - local

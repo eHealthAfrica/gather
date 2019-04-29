@@ -33,8 +33,8 @@ docker volume create gather_database_data 2>/dev/null || true
 docker volume create gather_minio_data    2>/dev/null || true
 
 # pull dependencies
-docker-compose pull db couchdb redis
-docker-compose pull kernel odk couchdb-sync ui
+docker-compose pull db
+docker-compose pull kernel odk ui
 
 BUILD_OPTIONS="--no-cache --force-rm --pull"
 

@@ -103,9 +103,9 @@ function setup {
     python ./manage.py collectstatic --noinput --clear --verbosity 0
 
     # expose version number (if exists)
-    cp /var/tmp/VERSION $STATIC_ROOT/VERSION   2>/dev/null || :
+    cp /var/tmp/VERSION $STATIC_ROOT/VERSION   2>/dev/null || true
     # add git revision (if exists)
-    cp /var/tmp/REVISION $STATIC_ROOT/REVISION 2>/dev/null || :
+    cp /var/tmp/REVISION $STATIC_ROOT/REVISION 2>/dev/null || true
 
     chmod -R 755 $STATIC_ROOT
 }
@@ -253,23 +253,20 @@ case "$1" in
 
     test )
         export TESTING=true
-        export MULTITENANCY=true
-        setup
 
+        setup
         test_lint
         test_coverage "${@:2}"
     ;;
 
     test_lint )
         export TESTING=true
-        export MULTITENANCY=true
 
         test_lint
     ;;
 
     test_coverage | test_py )
         export TESTING=true
-        export MULTITENANCY=true
 
         test_coverage "${@:2}"
     ;;

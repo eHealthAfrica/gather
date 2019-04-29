@@ -16,20 +16,6 @@ services:
       timeout: 3s
       retries: 30
 
-  couchdb-base:
-    image: couchdb:2.3
-    environment:
-      COUCHDB_USER: ${COUCHDB_USER}
-      COUCHDB_PASSWORD: ${COUCHDB_PASSWORD}
-    volumes:
-      - ./local-setup/couchdb/config.ini:/usr/local/etc/couchdb/local.ini
-    ports:
-      - 5984:5984
-
-  redis-base:
-    image: redis:alpine
-    command: redis-server --requirepass ${REDIS_PASSWORD}
-
   minio-base:
     image: minio/minio
     environment:
@@ -161,8 +147,6 @@ services:
 
       AETHER_KERNEL_TOKEN: ${KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL: http://aether.local/kernel
-      AETHER_KERNEL_TOKEN_TEST: ${TEST_KERNEL_ADMIN_TOKEN}
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9100
 
       DB_NAME: aether-odk
       PGHOST: db # This matches the DB service name
@@ -178,64 +162,6 @@ services:
       # behind ngnix
       - 8102:8102
     command: start
-
-
-  # ---------------------------------
-  # Aether CouchDB Sync module
-  # ---------------------------------
-
-  couchdb-sync-base:
-    image: ehealthafrica/aether-couchdb-sync:${AETHER_VERSION:-latest}
-    environment: &sync-environment
-      CSRF_COOKIE_DOMAIN: aether.local
-      DJANGO_SECRET_KEY: ${COUCHDB_SYNC_DJANGO_SECRET_KEY}
-
-      APP_NAME: Aether CouchDB-Sync
-      APP_URL: /sync
-      STATIC_URL: /static/sync/
-
-      MULTITENANCY: ${MULTITENANCY}
-      DEFAULT_REALM: ${DEFAULT_REALM}
-      REALM_COOKIE: ${REALM_COOKIE}
-
-      ADMIN_USERNAME: ${COUCHDB_SYNC_ADMIN_USERNAME}
-      ADMIN_PASSWORD: ${COUCHDB_SYNC_ADMIN_PASSWORD}
-      ADMIN_TOKEN: ${COUCHDB_SYNC_ADMIN_TOKEN}
-
-      AETHER_KERNEL_TOKEN: ${KERNEL_ADMIN_TOKEN}
-      AETHER_KERNEL_URL: http://aether.local/kernel
-      AETHER_KERNEL_TOKEN_TEST: ${TEST_KERNEL_ADMIN_TOKEN}
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9100
-
-      GOOGLE_CLIENT_ID: ${COUCHDB_SYNC_GOOGLE_CLIENT_ID}
-
-      COUCHDB_URL: http://couchdb:5984
-      COUCHDB_USER: ${COUCHDB_USER}
-      COUCHDB_PASSWORD: ${COUCHDB_PASSWORD}
-
-      DB_NAME: aether-couchdb-sync
-      PGHOST: db # This matches the DB service name
-      PGPASSWORD: ${COUCHDB_SYNC_DB_PASSWORD}
-      PGPORT: 5432
-      PGUSER: postgres
-
-      REDIS_DB: 0
-      REDIS_HOST: redis
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      REDIS_PORT: 6379
-
-      WEB_SERVER_PORT: 8106
-    volumes:
-      - ./.persistent_data/backups/sync:/backups
-      - ./.persistent_data/static/sync:/var/www/static
-    ports:
-      - 8106:8106
-    command: start
-
-  couchdb-sync-rq-base:
-    image: ehealthafrica/aether-couchdb-sync:${AETHER_VERSION:-latest}
-    environment: *sync-environment
-    command: start_rq
 
 
   # ---------------------------------
@@ -260,8 +186,6 @@ services:
 
       AETHER_KERNEL_TOKEN: ${KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL: http://aether.local/kernel
-      AETHER_KERNEL_TOKEN_TEST: ${TEST_KERNEL_ADMIN_TOKEN}
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9100
 
       DB_NAME: aether-ui
       PGHOST: db # This matches the DB service name
@@ -303,25 +227,13 @@ services:
       ADMIN_USERNAME: ${GATHER_ADMIN_USERNAME}
       ADMIN_PASSWORD: ${GATHER_ADMIN_PASSWORD}
 
-      EXTERNAL_APPS: "aether-kernel,aether-odk,aether-couchdb-sync"
+      EXTERNAL_APPS: aether-kernel,aether-odk
 
       AETHER_KERNEL_TOKEN: ${KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL: http://aether.local/kernel
 
-      AETHER_KERNEL_TOKEN_TEST: ${TEST_KERNEL_ADMIN_TOKEN}
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9100
-
       AETHER_ODK_TOKEN: ${ODK_ADMIN_TOKEN}
       AETHER_ODK_URL: http://aether.local:8443/odk
-
-      AETHER_ODK_TOKEN_TEST: ${TEST_ODK_ADMIN_TOKEN}
-      AETHER_ODK_URL_TEST: http://odk-test:9102
-
-      AETHER_COUCHDB_SYNC_TOKEN: ${COUCHDB_SYNC_ADMIN_TOKEN}
-      AETHER_COUCHDB_SYNC_URL: http://aether.local/sync
-
-      AETHER_COUCHDB_SYNC_TOKEN_TEST: ${TEST_COUCHDB_SYNC_ADMIN_TOKEN}
-      AETHER_COUCHDB_SYNC_URL_TEST: http://couchdb-sync-test:9106
 
       DB_NAME: gather
       PGHOST: db # This matches the DB service name

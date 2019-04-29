@@ -64,14 +64,14 @@ for local development. Never deploy these to publicly accessible servers.
 
 *[Return to TOC](#table-of-contents)*
 
-#### Include this entry in your `/etc/hosts` or `C:\Windows\System32\Drivers\etc\hosts` file
+#### Include these entries in your `/etc/hosts` or `C:\Windows\System32\Drivers\etc\hosts` file
 
 ```text
 # gather
 127.0.0.1    gather.local
 
 # aether
-127.0.0.1    kernel.aether.local odk.aether.local sync.aether.local ui.aether.local
+127.0.0.1    aether.local
 ```
 
 *[Return to TOC](#table-of-contents)*
@@ -113,10 +113,6 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - `HOSTNAME`: `gather.local`.
   See more in [Django CAS client](https://github.com/mingchen/django-cas-ng).
 
-- Authentication (Django templates):
-  - `LOGIN_TEMPLATE`: `pages/login.html`.
-  - `LOGGED_OUT_TEMPLATE`: `pages/logged_out.html`.
-
 - uWSGI specific:
   - `CUSTOM_UWSGI_ENV_FILE` Path to a file of environment variables to use with uWSGI.
   - `CUSTOM_UWSGI_SERVE_STATIC` Indicates if uWSGI also serves the static content.
@@ -138,7 +134,7 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - `WEB_SERVER_PORT`: `8105` Web server port.
 
 - Aether specific:
-  - `EXTERNAL_APPS`: `aether-kernel,aether-odk,aether-couchdb-sync`
+  - `EXTERNAL_APPS`: `aether-kernel,aether-odk`
     Comma separated list with the available modules.
     To avoid confusion, the values will match the container name prepending `aether-`,
     `kernel`, `odk`, `couchdb-sync`.
@@ -147,19 +143,16 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
     - `AETHER_KERNEL_TOKEN`: `aether_kernel_admin_user_auth_token`
       Token to connect to Aether Kernel Server.
     - `AETHER_KERNEL_URL`: `http://kernel:8100` Aether Kernel Server url.
-    - `AETHER_KERNEL_URL_TEST`: `http://kernel-test:9100` Aether Kernel Testing Server url.
 
   - Aether ODK:
     - `AETHER_ODK_TOKEN`: `aether_odk_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_ODK_URL`: `http://odk:8102` Aether ODK Server url.
-    - `AETHER_ODK_URL_TEST`: `http://odk-test:9102` Aether ODK Testing Server url.
 
-  - Aether CouchDB Sync:
+  - Aether CouchDB Sync (*disabled*):
     - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_couchdb_sync_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8106` Aether CouchDB Sync Server url.
-    - `AETHER_COUCHDB_SYNC_URL_TEST`: `http://sync-test:9106` Aether CouchDB Sync Testing Server url.
 
 *[Return to TOC](#table-of-contents)*
 
@@ -172,54 +165,18 @@ docker-compose up
 
 This will start:
 
-- **gather** on `http://gather.local:8105`
-  and create a superuser.
-
-- **gather-assets** on `http://localhost:3005`
-  only needed for HMR during assets development (`/app/gather/assets/`).
-
-- **aether-kernel** on `http://kernel.aether.local:8100`
-  and create a superuser with the needed TOKEN.
-
-- **aether-odk** on `http://odk.aether.local:8102`
-  and create a superuser with the needed TOKEN.
-
-- **aether-couchdb-sync** on `http://sync.aether.local:8106`
-  and create a superuser with the needed TOKEN.
-
-- **aether-ui** on `http://ui.aether.local:8104`
-  and create a superuser.
+- **gather** on `http://gather.local`.
+- **aether-kernel** on `http://aether.local/kernel`.
+- **aether-odk** on `http://aether.local/odk` or `http://aether.local:8443/odk`.
+- **aether-ui** on `http://aether.local/`.
 
 All the created superusers have username `${ADMIN_USERNAME}` and
 password `${ADMIN_PASSWORD}` in each container.
-
-If the `nginx` container is also started then the url ports can be removed.
-- `http://gather.local`
-- `http://kernel.aether.local`
-- `http://odk.aether.local`
-- `http://odk.aether.local:8443` This is required by ODK Collect
-- `http://sync.aether.local`
-- `http://ui.aether.local`
 
 *[Return to TOC](#table-of-contents)*
 
 
 ### Users & Authentication
-
-Set the `HOSTNAME` and `CAS_SERVER_URL` environment variables if you want to
-activate the CAS integration in the app.
-See more in [Django CAS client](https://github.com/mingchen/django-cas-ng).
-
-The other option is the standard django authentication.
-
-You can indicate your own login and logged out pages with these environment
-variables:
-
-- `LOGIN_TEMPLATE`: `pages/login.html`.
-- `LOGGED_OUT_TEMPLATE`: `pages/logged_out.html`.
-
-*[Return to TOC](#table-of-contents)*
-
 
 #### Token Authentication
 
@@ -285,11 +242,7 @@ The list of the main containers:
 | **gather-assets** | Gather Assets HRM module                                          |
 | **kernel**        | Aether Kernel app                                                 |
 | **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)    |
-| **couchdb-sync**  | Aether CouchDB Sync app (imports data from Aether Mobile App)     |
 | **ui**            | Aether Kernel UI (only needed for advanced mapping functionality) |
-| kernel-test       | Aether Kernel TESTING app (used only in e2e tests)                |
-| odk-test          | Aether ODK TESTING app (used only in e2e tests)                   |
-| couchdb-sync-test | Aether CouchDB Sync TESTING app (used only in e2e tests)          |
 
 
 All the containers definition for development can be found in the
@@ -399,14 +352,6 @@ Before running `gather` tests you should start the dependencies test containers.
 ```bash
 docker-compose -f docker-compose-test.yml up -d <container-name>-test
 ```
-
-**WARNING**
-
-Never run `gather` tests against any PRODUCTION server.
-The tests would create random users with tokens in the different apps.
-
-Look into [docker-compose-base.yml](docker-compose-base.yml), the variable
-`AETHER_<<APP>>_URL_TEST` indicates the Aether Server used in tests.
 
 *[Return to TOC](#table-of-contents)*
 

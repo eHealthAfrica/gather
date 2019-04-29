@@ -275,7 +275,7 @@ class Mask(ExportModelOperationsMixin('gather_mask'), MtModelChildAbstract):
     )
 
     def __str__(self):
-        return '{} - {}'.format(str(self.survey), self.name)
+        return self.name
 
     def get_mt_instance(self):
         return self.survey

@@ -50,7 +50,7 @@ done
 
 
 # build containers
-containers=( kernel ui odk couchdb-sync gather )
+containers=( kernel ui odk gather )
 for container in "${containers[@]}"
 do
     echo "_____________________________________________ Building container ${container}"

@@ -29,20 +29,6 @@ services:
     networks:
       - gather_net
 
-  couchdb:
-    extends:
-      file: ./docker-compose-base.yml
-      service: couchdb-base
-    networks:
-      - gather_net
-
-  redis:
-    extends:
-      file: ./docker-compose-base.yml
-      service: redis-base
-    networks:
-      - gather_net
-
   minio:
     extends:
       file: ./docker-compose-base.yml
@@ -100,46 +86,6 @@ services:
       nginx:
         condition: service_healthy
       kernel:
-        condition: service_started
-    networks:
-      - gather_net
-    extra_hosts:
-      - aether.local:192.168.3.10
-      - gather.local:192.168.3.10
-
-  # ---------------------------------
-  # Aether CouchDB Sync module
-  # ---------------------------------
-
-  couchdb-sync:
-    extends:
-      file: ./docker-compose-base.yml
-      service: couchdb-sync-base
-    depends_on:
-      db:
-        condition: service_healthy
-      nginx:
-        condition: service_healthy
-      kernel:
-        condition: service_started
-    networks:
-      - gather_net
-    extra_hosts:
-      - aether.local:192.168.3.10
-      - gather.local:192.168.3.10
-
-  couchdb-sync-rq:
-    extends:
-      file: ./docker-compose-base.yml
-      service: couchdb-sync-rq-base
-    depends_on:
-      db:
-        condition: service_healthy
-      nginx:
-        condition: service_healthy
-      kernel:
-        condition: service_started
-      couchdb-sync:
         condition: service_started
     networks:
       - gather_net

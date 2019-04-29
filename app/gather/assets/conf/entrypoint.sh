@@ -58,7 +58,7 @@ case "$1" in
 
   test)
     test_lint
-    test_js
+    test_js "${@:2}"
     npm run build
   ;;
 

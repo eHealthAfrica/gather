@@ -243,7 +243,7 @@ class ViewsTest(TestCase):
                         return_value=APP_TOKEN_MOCK) as mock_get_app_token:
             response = self.client.get(url)
             self.assertEqual(response.status_code, 200)
-            # it checks every app in `gather.models.APPS`: `kernel`, `odk`, `couchdb-sync`
+            # it checks every app in `settings.AETHER_APPS`: `kernel`, `odk`, `couchdb-sync`
             self.assertEqual(mock_get_app_token.call_count, 3)
             self.assertEqual(mock_get_app_token.call_args_list,
                              [

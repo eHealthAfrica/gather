@@ -68,7 +68,8 @@ class ModelsTests(TestCase):
             name='Masking',
             columns=['a', 'b', 'c'],
         )
-        self.assertEquals(str(mask), 'Something - Masking')
+        self.assertEquals(str(mask), 'Masking')
+        self.assertEqual(mask.get_mt_instance(), mask.survey)
 
 
 class TokenModelsTests(TestCase):
@@ -81,9 +82,9 @@ class TokenModelsTests(TestCase):
 
     def test__user_tokens__get_app_url(self):
         user_tokens, _ = UserTokens.objects.get_or_create(user=self.user)
-        self.assertEqual(user_tokens.get_app_url('kernel'), 'http://kernel-test:9100')
-        self.assertEqual(user_tokens.get_app_url('odk'), 'http://odk-test:9102')
-        self.assertEqual(user_tokens.get_app_url('couchdb-sync'), 'http://couchdb-sync-test:9106')
+        self.assertEqual(user_tokens.get_app_url('kernel'), 'http://kernel-test')
+        self.assertEqual(user_tokens.get_app_url('odk'), 'http://odk-test')
+        self.assertEqual(user_tokens.get_app_url('couchdb-sync'), 'http://couchdb-sync-test')
         self.assertEqual(user_tokens.get_app_url('other'), None)
 
     def test__user_tokens__unknown_app(self):
@@ -150,7 +151,7 @@ class TokenModelsTests(TestCase):
         with mock.patch('requests.get', return_value=mock.Mock(status_code=200)):
             self.assertTrue(user_tokens.validates_app_token(app_name))
 
-        # what happens if the base_url or the token for the APP was not set
+        # what happens if the base_url or the token for the app was not set
         with mock.patch('gather.api.models.settings.AETHER_APPS', new={}):
             self.assertFalse(user_tokens.validates_app_token(app_name))
 
@@ -169,7 +170,7 @@ class TokenModelsTests(TestCase):
             self.assertEqual(getattr(user_tokens, app_property), '0123456789')
             mock_post.assert_called_once()
 
-        # what happens if the base_url or the token for the APP was not set
+        # what happens if the base_url or the token for the app was not set
         with mock.patch('gather.api.models.settings.AETHER_APPS', new={}):
             self.assertEqual(user_tokens.obtain_app_token(app_name), None)
 
@@ -217,11 +218,3 @@ class TokenModelsTests(TestCase):
             user_tokens.save_app_token(app, 'ABCDEFGH')
             self.assertEqual(get_or_create_user_app_token(self.user, app).token,
                              'ABCDEFGH')
-
-    def test_get_or_create_user_app_token__integration_test(self):
-        # checks that gather can create tokens in each app server
-        for app in MODULES:
-            uat = get_or_create_user_app_token(self.user, app)
-            self.assertIsNotNone(uat, app)
-            self.assertEqual(uat.base_url, settings.AETHER_APPS[app]['url'])
-            self.assertIsNotNone(uat.token, app)
