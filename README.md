@@ -138,8 +138,10 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - `WEB_SERVER_PORT`: `8105` Web server port.
 
 - Aether specific:
-  - `AETHER_MODULES`: `odk,couchdb-sync` Comma separated list with the available modules.
-    To avoid confusion, the values will match the container name, `odk`, `couchdb-sync`.
+  - `EXTERNAL_APPS`: `aether-kernel,aether-odk,aether-couchdb-sync`
+    Comma separated list with the available modules.
+    To avoid confusion, the values will match the container name prepending `aether-`,
+    `kernel`, `odk`, `couchdb-sync`.
 
   - Aether Kernel:
     - `AETHER_KERNEL_TOKEN`: `aether_kernel_admin_user_auth_token`

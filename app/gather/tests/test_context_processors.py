@@ -16,7 +16,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import mock
+from unittest import mock
+
 from django.test import RequestFactory, TestCase
 
 from ..context_processors import gather_context
@@ -27,13 +28,6 @@ class ContextProcessorsTests(TestCase):
     def test_gather_context(self):
         request = RequestFactory().get('/')
         context = gather_context(request)
-
-        self.assertFalse(context['dev_mode'])
-
-        self.assertEqual(context['app_name'], 'Gather')
-        self.assertNotEqual(context['app_version'], '#.#.#')
-        self.assertNotEqual(context['app_revision'], '---')
-        self.assertEqual(context['instance_name'], 'Gather 3')
 
         self.assertEqual(len(context['navigation_list']), 3)
         self.assertEqual(context['navigation_list'][0][0], 'surveys')

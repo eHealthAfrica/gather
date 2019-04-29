@@ -58,5 +58,6 @@ prepare_and_test_container gather
 
 echo "_____________________________________________ Killing TEST containers"
 $DC_TEST kill
+$DC_TEST down
 
 echo "_____________________________________________ END"

@@ -149,6 +149,7 @@ services:
 
       AETHER_KERNEL_TOKEN: ${KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL: http://kernel:8100
+      AETHER_KERNEL_TOKEN_TEST: ${TEST_KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL_TEST: http://kernel-test:9100
 
       DB_NAME: aether-odk
@@ -194,6 +195,7 @@ services:
 
       AETHER_KERNEL_TOKEN: ${KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL: http://kernel:8100
+      AETHER_KERNEL_TOKEN_TEST: ${TEST_KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL_TEST: http://kernel-test:9100
 
       GOOGLE_CLIENT_ID: ${COUCHDB_SYNC_GOOGLE_CLIENT_ID}
@@ -248,6 +250,7 @@ services:
 
       AETHER_KERNEL_TOKEN: ${KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL: http://kernel:8100
+      AETHER_KERNEL_TOKEN_TEST: ${TEST_KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL_TEST: http://kernel-test:9100
 
       DB_NAME: aether-ui
@@ -288,18 +291,24 @@ services:
       ADMIN_USERNAME: ${GATHER_ADMIN_USERNAME}
       ADMIN_PASSWORD: ${GATHER_ADMIN_PASSWORD}
 
+      EXTERNAL_APPS: "aether-kernel,aether-odk,aether-couchdb-sync"
+
       AETHER_KERNEL_TOKEN: ${KERNEL_ADMIN_TOKEN}
       AETHER_KERNEL_URL: http://kernel:8100
-      AETHER_KERNEL_URL_TEST: http://kernel-test:9100
 
-      AETHER_MODULES: "kernel,odk,couchdb-sync"
+      AETHER_KERNEL_TOKEN_TEST: ${TEST_KERNEL_ADMIN_TOKEN}
+      AETHER_KERNEL_URL_TEST: http://kernel-test:9100
 
       AETHER_ODK_TOKEN: ${ODK_ADMIN_TOKEN}
       AETHER_ODK_URL: http://odk:8102
+
+      AETHER_ODK_TOKEN_TEST: ${TEST_ODK_ADMIN_TOKEN}
       AETHER_ODK_URL_TEST: http://odk-test:9102
 
       AETHER_COUCHDB_SYNC_TOKEN: ${COUCHDB_SYNC_ADMIN_TOKEN}
       AETHER_COUCHDB_SYNC_URL: http://couchdb-sync:8106
+
+      AETHER_COUCHDB_SYNC_TOKEN_TEST: ${TEST_COUCHDB_SYNC_ADMIN_TOKEN}
       AETHER_COUCHDB_SYNC_URL_TEST: http://couchdb-sync-test:9106
 
       DB_NAME: gather

@@ -17,51 +17,22 @@
 # under the License.
 
 from django.conf import settings
-from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
+from django_eha_sdk.conf.urls import generate_urlpatterns
+from django_eha_sdk.health.views import health
+
 # Any entry here needs the decorator `tokens_required` if it's going to execute
 # AJAX request to any of the other apps
 from .api.decorators import tokens_required
-from .views import health, check_db, assets_settings
-
-
-# `accounts` management
-if settings.CAS_SERVER_URL:
-    from django_cas_ng import views
-
-    login_view = views.login
-    logout_view = views.logout
-
-else:
-    from django.contrib.auth import views
-
-    login_view = views.LoginView.as_view(template_name=settings.LOGIN_TEMPLATE)
-    logout_view = views.LogoutView.as_view(template_name=settings.LOGGED_OUT_TEMPLATE)
-
-auth_urls = ([
-    path(route='login/', view=login_view, name='login'),
-    path(route='logout/', view=logout_view, name='logout'),
-], 'rest_framework')
+from .views import assets_settings
 
 
 urlpatterns = [
-
-    # `health` endpoint
-    path(route='health', view=health, name='health'),
-    path(route='check-db', view=check_db, name='check-db'),
-
     # assets settings
     path(route='assets-settings', view=assets_settings, name='assets-settings'),
-
-    # `admin` section
-    path(route='admin/uwsgi/', view=include('django_uwsgi.urls')),
-    path(route='admin/', view=admin.site.urls),
-
-    # `accounts` management
-    path(route='accounts/', view=include(auth_urls, namespace='rest_framework')),
 
     # ----------------------
     # API
@@ -103,20 +74,5 @@ if settings.AETHER_APPS.get('couchdb-sync'):
                 name='couchdb-sync-mobile-users'),
     ]
 
-if settings.DEBUG:  # pragma: no cover
-    if 'debug_toolbar' in settings.INSTALLED_APPS:
-        import debug_toolbar
 
-        urlpatterns += [
-            path(route='__debug__/', view=include(debug_toolbar.urls)),
-        ]
-
-app_url = settings.APP_URL[1:]  # remove leading slash
-if app_url:
-    # Prepend url endpoints with "{APP_URL}/"
-    # if APP_URL = "/gather-app" then
-    # all the url endpoints will be  `<my-server>/gather-app/<endpoint-url>`
-    # before they were  `<my-server>/<endpoint-url>`
-    urlpatterns = [
-        path(route=f'{app_url}/', view=include(urlpatterns))
-    ]
+urlpatterns = generate_urlpatterns(app=urlpatterns)

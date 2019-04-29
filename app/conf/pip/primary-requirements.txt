@@ -13,35 +13,5 @@
 ################################################################################
 
 
-# Main libraries
-django
-django-cors-headers
-django-prometheus
-django-uwsgi
-django-webpack-loader
-djangorestframework
-psycopg2-binary
-requests
-
-
-# CAS client
-django-cas-ng<3.6.0  # breaking changes
-django-ums-client
-
-
-# Development
-django-debug-toolbar
-
-
-# Server side
-python-json-logger
-sentry-sdk          # Sentry
-uwsgi               # Server behind NGINX
-
-
-# Test libraries
-coverage
-flake8
-flake8-quotes
-mock
-tblib
+# Django-eHa-SDK library with extras
+django_eha_sdk[cas,server,webpack,test]

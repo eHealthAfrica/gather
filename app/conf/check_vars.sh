@@ -35,7 +35,7 @@ function check_kernel {
 }
 
 function check_odk {
-    if [[ "$AETHER_MODULES" == *odk* ]];
+    if [[ "$EXTERNAL_APPS" == *odk* ]];
     then
         # check if ODK env variables were set only if it's included in the modules list.
         check_variable "$AETHER_ODK_URL"   "Aether ODK url (AETHER_ODK_URL)"
@@ -44,7 +44,7 @@ function check_odk {
 }
 
 function check_couchdb_sync {
-    if [[ "$AETHER_MODULES" == *couchdb-sync* ]];
+    if [[ "$EXTERNAL_APPS" == *couchdb-sync* ]];
     then
         # check if COUCHDB SYNC env variables were set only if it's included in the modules list.
         check_variable "$AETHER_COUCHDB_SYNC_URL"   "Aether CouchDB Sync url (AETHER_COUCHDB_SYNC_URL)"

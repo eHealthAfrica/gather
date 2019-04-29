@@ -17,25 +17,9 @@
 # under the License.
 
 from django import template
-from django.utils.html import escape
 
 
 register = template.Library()
-
-
-@register.filter(name='get_fullname')
-def get_fullname(user):
-    '''
-    Returns a readable name of the user.
-    - ``first_name`` + ``last_name`` or
-    - ``username``
-    '''
-
-    name = user.username
-    if user.first_name and user.last_name:
-        name = '{} {}'. format(user.first_name, user.last_name)
-
-    return escape(name)
 
 
 @register.filter(name='get_token')

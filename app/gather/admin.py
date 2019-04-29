@@ -16,7 +16,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from django.conf import settings
 from django.contrib import admin
 
 from .api import models
@@ -46,10 +45,3 @@ class MaskAdmin(admin.ModelAdmin):
 admin.site.register(models.UserTokens, UserTokensAdmin)
 admin.site.register(models.Survey, SurveyAdmin)
 admin.site.register(models.Mask, MaskAdmin)
-
-admin.site.site_url = '/'
-admin.site.site_header = settings.INSTANCE_NAME
-admin.site.site_title = settings.INSTANCE_NAME
-
-admin.site.login_template = settings.LOGIN_TEMPLATE
-admin.site.logout_template = settings.LOGGED_OUT_TEMPLATE

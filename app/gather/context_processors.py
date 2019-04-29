@@ -28,12 +28,6 @@ def gather_context(request):
         navigation_list.append(('couchdb-sync-mobile-users', _('Mobile users')))
 
     context = {
-        'dev_mode': settings.DEBUG,
-
-        'app_name': settings.APP_NAME,
-        'app_version': settings.VERSION,
-        'app_revision': settings.REVISION,
-
         'instance_name': settings.INSTANCE_NAME,
         'navigation_list': navigation_list,
     }

@@ -104,7 +104,7 @@ spec:
               key: odk-token
         - name: AETHER_ODK_URL
           value: "{{ .Values.odk_url }}"
-        - name: AETHER_MODULES
+        - name: EXTERNAL_APPS
           value: {{ .Values.aether_modules }}
         - name: DJANGO_SECRET_KEY
           valueFrom:
