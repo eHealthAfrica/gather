@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'gather/base.html' %}
 
 {% comment 'LICENSE' %}
 Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
@@ -24,32 +24,32 @@ under the License.
 {% load render_bundle from webpack_loader %}
 
 
-{% block title %}{{ app_name }} - {% trans 'Surveys' %}{% endblock title %}
+{% block title %}{{ app_name }} - {% trans 'Surveyors' %}{% endblock title %}
 
 
-{% block content %}
+{% block gathered %}
   {% if action == 'list' %}
     <div class="page-header">
       {# include the INSTANCE NAME within the LIST view #}
-      {% include "instance_name.html" %}
+      {% include 'gather/instance_name.html' %}
 
       {# include the ADD NEW button within the LIST view #}
       <a
-        href="{% url 'surveys' action='add' %}"
+        href="{% url 'odk-surveyors' action='add' %}"
         role="button"
         class="btn btn-primary btn-icon">
         <i class="fas fa-plus-circle mr-3"></i>
-        {% trans 'New survey' %}
+        {% trans 'New surveyor' %}
       </a>
     </div>
   {% endif %}
 
   <div
-    id="surveys-app"
+    id="surveyors-app"
     data-action="{{ action }}"
-    data-survey-id="{{ survey_id }}"></div>
-{% endblock content %}
+    data-surveyor-id="{{ surveyor_id }}"></div>
+{% endblock gathered %}
 
 {% block extra_js %}
-  {% render_bundle 'surveys' %}
+  {% render_bundle 'surveyors' %}
 {% endblock extra_js %}

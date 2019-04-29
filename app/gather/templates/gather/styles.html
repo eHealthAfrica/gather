@@ -1,5 +1,3 @@
-{% extends 'base.html' %}
-
 {% comment 'LICENSE' %}
 Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
 
@@ -20,17 +18,11 @@ specific language governing permissions and limitations
 under the License.
 {% endcomment %}
 
-{% load i18n %}
 {% load render_bundle from webpack_loader %}
+{% load static %}
 
-
-{% block title %}{{ app_name }} - {% trans 'Welcome!' %}{% endblock title %}
-
-
-{% block content %}
-  <div id="home-app"></div>
-{% endblock content %}
-
-{% block extra_js %}
-  {% render_bundle 'home' %}
-{% endblock extra_js %}
+{% if dev_mode %}
+  {% render_bundle 'styles' 'js' %}
+{% else %}
+  {% render_bundle 'styles' 'css' %}
+{% endif %}

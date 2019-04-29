@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'gather/base.html' %}
 
 {% comment 'LICENSE' %}
 Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
@@ -21,18 +21,16 @@ under the License.
 {% endcomment %}
 
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
-{% block css %}
-  {% include 'styles.html' with common='yes' login='yes' %}
-{% endblock css %}
 
-{% block navbar %}{% endblock %}
+{% block title %}{{ app_name }} - {% trans 'Welcome!' %}{% endblock title %}
 
-{% block content %}
-  <div class="logout-info">
-    {% include 'branding.html' with classname='top-nav-logo' %}
 
-    <p>{% blocktrans %}Thank you for using {{ app_name }}.{% endblocktrans %}</p>
-    <p><a href="{% url 'rest_framework:login' %}?next=/">{% trans 'Log in again' %}</a></p>
-  </div>
-{% endblock %}
+{% block gathered %}
+  <div id="home-app"></div>
+{% endblock gathered %}
+
+{% block extra_js %}
+  {% render_bundle 'home' %}
+{% endblock extra_js %}

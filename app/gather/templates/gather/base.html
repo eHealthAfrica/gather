@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'eha/base.html' %}
 
 {% comment 'LICENSE' %}
 Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
@@ -20,35 +20,30 @@ specific language governing permissions and limitations
 under the License.
 {% endcomment %}
 
-{% load i18n %}
 {% load render_bundle from webpack_loader %}
 
 
-{% block title %}{{ app_name }} - {% trans 'Mobile Users' %}{% endblock title %}
+{% block style %}
+  {% include 'gather/styles.html' %}
+{% endblock style %}
+
+
+{% block scripts %}
+  {# Common JS libraries #}
+  {% render_bundle 'common' %}
+{% endblock scripts %}
 
 
 {% block content %}
-  {% if action == 'list' %}
-    <div class="page-header">
-      {# include the INSTANCE NAME within the LIST view #}
-      {% include "instance_name.html" %}
+  {% block navbar %}
+    {% include 'gather/navbar.html' %}
+  {% endblock navbar %}
 
-      {# include the ADD NEW button within the LIST view #}
-      <a
-        href="{% url 'couchdb-sync-mobile-users' action='add' %}"
-        role="button"
-        class="btn btn-primary btn-icon">
-        <i class="fas fa-plus-circle mr-3"></i>
-        {% trans 'New mobile user' %}
-      </a>
-    </div>
-  {% endif %}
+  <div class="container-fluid">
+    {% block gathered %}
+      {# This is the block GATHERED, redefine it in the child template #}
+    {% endblock gathered %}
+  </div>
 
-  <div
-    id="sync-users-app"
-    data-action="{{ action }}"></div>
+  {% block extra_js %}{% endblock extra_js %}
 {% endblock content %}
-
-{% block extra_js %}
-  {% render_bundle 'sync-users' %}
-{% endblock extra_js %}

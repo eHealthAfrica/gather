@@ -41,13 +41,13 @@ urlpatterns = [
     # ----------------------
     # Welcome page
     path(route='',
-         view=login_required(TemplateView.as_view(template_name='pages/index.html')),
+         view=login_required(TemplateView.as_view(template_name='gather/pages/index.html')),
          name='index-page'),
 
     # ----------------------
     # shows the current user app tokens
     path(route='~tokens',
-         view=login_required(TemplateView.as_view(template_name='pages/tokens.html')),
+         view=login_required(TemplateView.as_view(template_name='gather/pages/tokens.html')),
          name='tokens'),
 
     # to check if the user tokens are valid
@@ -56,21 +56,21 @@ urlpatterns = [
     # ----------------------
     # surveys app
     re_path(route=r'^surveys/(?P<action>\w+)/(?P<survey_id>[0-9a-f-]+)?$',
-            view=login_required(tokens_required(TemplateView.as_view(template_name='pages/surveys.html'))),
+            view=login_required(tokens_required(TemplateView.as_view(template_name='gather/pages/surveys.html'))),
             name='surveys'),
 ]
 
 if settings.AETHER_APPS.get('odk'):
     urlpatterns += [
         re_path(route=r'^surveyors/(?P<action>\w+)/(?P<surveyor_id>[0-9]+)?$',
-                view=login_required(tokens_required(TemplateView.as_view(template_name='pages/surveyors.html'))),
+                view=login_required(tokens_required(TemplateView.as_view(template_name='gather/pages/surveyors.html'))),
                 name='odk-surveyors'),
     ]
 
 if settings.AETHER_APPS.get('couchdb-sync'):
     urlpatterns += [
         re_path(route=r'^mobile-users/(?P<action>\w+)$',
-                view=login_required(tokens_required(TemplateView.as_view(template_name='pages/sync-users.html'))),
+                view=login_required(tokens_required(TemplateView.as_view(template_name='gather/pages/sync-users.html'))),
                 name='couchdb-sync-mobile-users'),
     ]
 

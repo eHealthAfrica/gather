@@ -18,10 +18,6 @@
 
 import os
 
-# ------------------------------------------------------------------------------
-# Common settings
-# ------------------------------------------------------------------------------
-
 from django_eha_sdk.conf.settings import *  # noqa
 from django_eha_sdk.conf.settings import (
     TESTING,
@@ -31,13 +27,16 @@ from django_eha_sdk.conf.settings import (
 )
 
 
-# Common Configuration
+# ------------------------------------------------------------------------------
+# Gather Configuration
 # ------------------------------------------------------------------------------
 
+INSTANCE_NAME = os.environ.get('INSTANCE_NAME', 'Gather 3')
+
 APP_NAME = os.environ.get('APP_NAME', 'Gather')
+APP_NAME_HTML = APP_NAME
 APP_LINK = os.environ.get('APP_LINK', 'http://gather.ehealthafrica.org')
 
-APP_NAME_HTML = APP_NAME
 APP_FAVICON = 'gather/images/gather.ico'
 APP_LOGO = 'gather/images/gather-icon.svg'
 
@@ -45,20 +44,7 @@ APP_EXTRA_STYLE = 'gather/css/styles.css'
 APP_EXTRA_META = 'Effortless data collection and curation'
 
 
-# Site Configuration
-# ------------------------------------------------------------------------------
-
-LOGIN_TEMPLATE = os.environ.get('LOGIN_TEMPLATE', 'pages/login.html')
-LOGGED_OUT_TEMPLATE = os.environ.get('LOGGED_OUT_TEMPLATE', 'pages/logged_out.html')
-
-
-# ------------------------------------------------------------------------------
-# Gather Configuration
-# ------------------------------------------------------------------------------
-
 ROOT_URLCONF = 'gather.urls'
-
-INSTANCE_NAME = os.environ.get('INSTANCE_NAME', 'Gather 3')
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
 
@@ -78,7 +64,7 @@ EXPORT_MAX_ROWS_SIZE = os.environ.get('EXPORT_MAX_ROWS_SIZE', '0')
 # Aether external modules
 # ------------------------------------------------------------------------------
 
-# extract AETHER_APPS from EXTERNAL_APPS dict
+# build AETHER_APPS from EXTERNAL_APPS dict
 _prefix = 'aether-' if not TESTING else 'test-aether-'
 AETHER_APPS = {
     key.replace(_prefix, ''): value

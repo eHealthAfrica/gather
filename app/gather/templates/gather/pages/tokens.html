@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'gather/base.html' %}
 
 {% comment 'LICENSE' %}
 Copyright (C) 2018 by eHealth Africa : http://www.eHealthAfrica.org
@@ -21,13 +21,14 @@ under the License.
 {% endcomment %}
 
 {% load i18n %}
+{% load eha_tags %}
 {% load ui_tags %}
 
 
 {% block title %}{{ app_name }} - {% trans 'User tokens' %}{% endblock title %}
 
 
-{% block content %}
+{% block gathered %}
 
   <div class="page-header">
     <h1 data-qa='instance-name'>
@@ -92,4 +93,4 @@ under the License.
     </table>
 
   </div>
-{% endblock content %}
+{% endblock gathered %}
