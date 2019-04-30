@@ -20,7 +20,7 @@ import json
 from unittest import mock
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, RequestFactory, override_settings
 from django.urls import reverse
 
 from ..views import TokenProxyView
@@ -40,6 +40,7 @@ RESPONSE_MOCK_WITH_HEADERS = mock.Mock(
 APP_TOKEN_MOCK = mock.Mock(base_url='http://test', token='ABCDEFGH')
 
 
+@override_settings(MULTITENANCY=False)
 class ViewsTest(TestCase):
 
     def setUp(self):
