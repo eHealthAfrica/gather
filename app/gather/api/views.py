@@ -29,6 +29,7 @@ from django.views import View
 from rest_framework import viewsets
 
 from django_eha_sdk.multitenancy.views import MtViewSetMixin
+from django_eha_sdk.multitenancy.utils import add_current_realm_in_headers
 
 from . import models, serializers
 
@@ -115,7 +116,7 @@ class TokenProxyView(View):
         method = request.method
 
         # builds request headers
-        headers = {}
+        headers = add_current_realm_in_headers(request, {})
         for header, value in request.META.items():
             # Fixes:
             # django.http.request.RawPostDataException:
