@@ -17,12 +17,11 @@
 # under the License.
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 
 from rest_framework import routers
 
-from .decorators import tokens_required
+from .decorators import login_tokens_required
 from . import views
 
 router = routers.DefaultRouter()
@@ -39,10 +38,10 @@ urlpatterns = [
 for app in settings.AETHER_APPS:
     urlpatterns += [
         path(route=f'{app}/',
-             view=login_required(tokens_required(views.TokenProxyView.as_view(app_name=app))),
+             view=login_tokens_required(views.TokenProxyView.as_view(app_name=app)),
              name=f'{app}-proxy-root'),
         path(route=f'{app}/<path:path>',
-             view=login_required(tokens_required(views.TokenProxyView.as_view(app_name=app))),
+             view=login_tokens_required(views.TokenProxyView.as_view(app_name=app)),
              name=f'{app}-proxy-path'),
     ]
 
