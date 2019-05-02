@@ -165,9 +165,9 @@ docker-compose up
 
 This will start:
 
-- **gather** on `http://gather.local`.
-- **aether-kernel** on `http://aether.local/kernel`.
-- **aether-odk** on `http://aether.local/odk` or `http://aether.local:8443/odk`.
+- **gather** on `http://gather.local/`.
+- **aether-kernel** on `http://aether.local/kernel/`.
+- **aether-odk** on `http://aether.local/odk/` or `http://aether.local:8443/odk/`.
 - **aether-ui** on `http://aether.local/`.
 
 All the created superusers have username `${ADMIN_USERNAME}` and
