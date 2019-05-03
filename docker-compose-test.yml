@@ -44,7 +44,7 @@ services:
 
       DB_NAME: gather-test
       PGHOST: db-test
-      PGPASSWORD: ${TEST_GATHER_DB_PASSWORD}
+      PGPASSWORD: this-is-really-really-secret.trust-me!
 
       EXPORT_MAX_ROWS_SIZE: 1000
 

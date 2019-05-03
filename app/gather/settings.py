@@ -20,7 +20,6 @@ import os
 
 from django_eha_sdk.conf.settings import *  # noqa
 from django_eha_sdk.conf.settings import (
-    TESTING,
     TEMPLATES,
     MIGRATION_MODULES,
     EXTERNAL_APPS
@@ -65,9 +64,9 @@ EXPORT_MAX_ROWS_SIZE = os.environ.get('EXPORT_MAX_ROWS_SIZE', '0')
 # ------------------------------------------------------------------------------
 
 # build AETHER_APPS from EXTERNAL_APPS dict
-_prefix = 'aether-' if not TESTING else 'test-aether-'
-AETHER_APPS = {
-    key.replace(_prefix, ''): value
-    for key, value in EXTERNAL_APPS.items()
-    if key.startswith(_prefix)
-}
+AETHER_PREFIX = 'aether-'
+AETHER_APPS = [
+    key.replace(AETHER_PREFIX, '')
+    for key in EXTERNAL_APPS.keys()
+    if key.startswith(AETHER_PREFIX)
+]

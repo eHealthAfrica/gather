@@ -18,14 +18,7 @@
 
 from django.contrib import admin
 
-from .api import models
-
-
-class UserTokensAdmin(admin.ModelAdmin):
-
-    list_display = ('user', 'kernel_token', 'odk_token', 'couchdb_sync_token',)
-    search_fields = ('user',)
-    ordering = list_display
+from .api.models import Survey, Mask
 
 
 class SurveyAdmin(admin.ModelAdmin):
@@ -42,6 +35,5 @@ class MaskAdmin(admin.ModelAdmin):
     ordering = list_display
 
 
-admin.site.register(models.UserTokens, UserTokensAdmin)
-admin.site.register(models.Survey, SurveyAdmin)
-admin.site.register(models.Mask, MaskAdmin)
+admin.site.register(Survey, SurveyAdmin)
+admin.site.register(Mask, MaskAdmin)

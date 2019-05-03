@@ -42,10 +42,5 @@ class SettingsTest(TestCase):
         self.assertEqual(settings.INSTANCE_NAME, 'Gather 3')
 
         self.assertIn('kernel', settings.AETHER_APPS)
-        self.assertEqual(settings.AETHER_APPS['kernel']['url'], 'http://kernel-test')
-
         self.assertIn('odk', settings.AETHER_APPS)
-        self.assertEqual(settings.AETHER_APPS['odk']['url'], 'http://odk-test')
-
         self.assertIn('couchdb-sync', settings.AETHER_APPS)
-        self.assertEqual(settings.AETHER_APPS['couchdb-sync']['url'], 'http://couchdb-sync-test')

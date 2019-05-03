@@ -38,8 +38,9 @@ class ContextProcessorsTests(TestCase):
         self.assertIn('odk_url', context)
         self.assertIn('couchdb_sync_url', context)
 
-    @mock.patch('gather.context_processors.settings.AETHER_APPS',
-                {'kernel': {'url': 'http://localhost'}})
+    @mock.patch('gather.context_processors.settings.AETHER_APPS', ['kernel'])
+    @mock.patch('gather.context_processors.settings.EXTERNAL_APPS',
+                {'aether-kernel': {'test': {'url': 'http://localhost'}}})
     def test_gather_context__mocked(self):
         request = RequestFactory().get('/')
         context = gather_context(request)

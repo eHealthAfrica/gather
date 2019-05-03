@@ -17,14 +17,16 @@
 # under the License.
 
 from django.conf import settings
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext_lazy as _
+
+from django_eha_sdk.health.utils import get_external_app_url
 
 
 def gather_context(request):
     navigation_list = [('surveys', _('Surveys')), ]
-    if settings.AETHER_APPS.get('odk'):
+    if 'odk' in settings.AETHER_APPS:
         navigation_list.append(('odk-surveyors', _('Surveyors')))
-    if settings.AETHER_APPS.get('couchdb-sync'):
+    if 'couchdb-sync' in settings.AETHER_APPS:
         navigation_list.append(('couchdb-sync-mobile-users', _('Mobile users')))
 
     context = {
@@ -32,8 +34,9 @@ def gather_context(request):
         'navigation_list': navigation_list,
     }
 
-    for key, value in settings.AETHER_APPS.items():
-        name = key.replace('-', '_')
-        context[f'{name}_url'] = value['url']
+    for app in settings.AETHER_APPS:
+        name = app.replace('-', '_')
+        external_app = f'{settings.AETHER_PREFIX}{app}'
+        context[f'{name}_url'] = get_external_app_url(external_app)
 
     return context

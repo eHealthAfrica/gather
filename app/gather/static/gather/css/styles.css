@@ -37,3 +37,9 @@
   font-size: 16px;
   line-height: 1.3rem;
 }
+
+/* overrride tokens page */
+
+.tokens-info table td {
+  font-family: Asap, Helvetica, Arial, sans-serif;
+}

@@ -34,7 +34,7 @@ class UrlsTest(UrlsTestCase):
         self.assertEqual(reverse('api:couchdb-sync-proxy-root'), '/api/couchdb-sync/')
 
 
-@override_settings(AETHER_APPS={})
+@override_settings(AETHER_APPS=['aether-kernel'])
 class UrlsAetherAppsTest(UrlsTestCase):
 
     def test__urls__aether(self):
