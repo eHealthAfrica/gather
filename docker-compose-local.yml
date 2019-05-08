@@ -17,7 +17,6 @@ networks:
       config:
         - subnet: 192.168.33.0/24
           gateway: 192.168.33.1
-          attachable: true
 
 services:
 
