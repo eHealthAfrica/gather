@@ -20,7 +20,7 @@
 #
 set -Eeuo pipefail
 
-POSTGRES_PACKAGE=postgresql-client-9.6
+POSTGRES_PACKAGE=postgresql-client-10
 APT_INSTALL="apt-get -qq --yes --allow-downgrades --allow-remove-essential --allow-change-held-packages install"
 
 ################################################################################
