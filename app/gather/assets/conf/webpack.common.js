@@ -119,6 +119,7 @@ module.exports = (custom) => ({
 
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    alias: { 'react-dom': '@hot-loader/react-dom' }
   }
 })
