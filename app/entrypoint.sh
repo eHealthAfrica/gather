@@ -59,7 +59,6 @@ function pip_freeze {
 
     virtualenv -p python3 /tmp/env/
     /tmp/env/bin/pip install -q \
-        -f ./conf/pip/dependencies \
         -r ./conf/pip/primary-requirements.txt \
         --upgrade
 
