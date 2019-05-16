@@ -18,14 +18,15 @@
  * under the License.
  */
 
+const CSRF_TOKEN = 'csrfmiddlewaretoken'
+
 const buildFetchOptions = (method, payload, multipart, extras) => {
-  // See: https://docs.djangoproject.com/en/2.1/ref/csrf/
-  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]') || {}
+  const csrfToken = (document.querySelector(`[name=${CSRF_TOKEN}]`) || {}).value
   const options = {
     method,
     credentials: 'same-origin',
     headers: {
-      'X-CSRFToken': csrfToken.value,
+      'X-CSRFToken': csrfToken,
       'X-METHOD': method // See comment below
     },
     ...extras
@@ -35,7 +36,6 @@ const buildFetchOptions = (method, payload, multipart, extras) => {
     if (multipart) {
       /* global FormData */
       const formData = new FormData()
-      formData.append('csrfmiddlewaretoken', csrfToken)
       Object.keys(payload).forEach(key => {
         const value = payload[key]
         if (value !== null && value !== undefined) {
@@ -56,9 +56,9 @@ const buildFetchOptions = (method, payload, multipart, extras) => {
 
         Django does not read twice the `request.body` on POST calls;
         but it is read while checking the CSRF token.
-        This raises an exception in our ProxyTokenView.
+        This raises an exception in our TokenProxyView.
         We are trying to skip it by changing the method from `POST` to `PUT`
-        and the ProxyTokenView handler will change it back again.
+        and the TokenProxyView handler will change it back again.
       */
       if (method === 'POST') {
         options.method = 'PUT'

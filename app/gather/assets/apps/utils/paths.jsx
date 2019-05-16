@@ -22,6 +22,12 @@ import { KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP } from './constants'
 
 const API_PREFIX = '/api'
 const APPS = [ KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP ]
+const getAppPath = () => (document.getElementById('__app_url__') || {}).value || ''
+
+/**
+ * Returns the API url to get the app settings
+ */
+export const getSettingsPath = () => `${getAppPath()}/assets-settings`
 
 /**
  * Returns the API url to get the Projects/Surveys data
@@ -126,7 +132,7 @@ const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => 
     // indicates the action suffix like "query", "csv", "xlsx" or "propagate"
     (action ? '/' + action : ''))
   const formatSuffix = (format === '' ? '/' : '.' + format)
-  const url = `${API_PREFIX}/${app}/${type}${suffix}${formatSuffix}`
+  const url = `${getAppPath()}${API_PREFIX}/${app}/${type}${suffix}${formatSuffix}`
 
   // any call that goes to kernel must include the `passthrough` filter
   const queryParams = {
@@ -166,24 +172,26 @@ export const buildQueryString = (params = {}) => (
  * @param {number} id           - project/survey id
  */
 export const getSurveysPath = ({ action, id }) => {
+  const prefix = `${getAppPath()}/surveys`
+
   switch (action) {
     case 'edit':
       if (id) {
-        return `/surveys/edit/${id}`
+        return `${prefix}/edit/${id}`
       }
-      return '/surveys/add/'
+      return `${prefix}/add/`
 
     case 'add':
-      return '/surveys/add/'
+      return `${prefix}/add/`
 
     case 'view':
       if (id) {
-        return `/surveys/view/${id}`
+        return `${prefix}/view/${id}`
       }
-      return '/surveys/list/'
+      return `${prefix}/list/`
 
     default:
-      return '/surveys/list/'
+      return `${prefix}/list/`
   }
 }
 
@@ -194,18 +202,20 @@ export const getSurveysPath = ({ action, id }) => {
  * @param {number} id           - surveyor id
  */
 export const getSurveyorsPath = ({ action, id }) => {
+  const prefix = `${getAppPath()}/surveyors`
+
   switch (action) {
     case 'edit':
       if (id) {
-        return `/surveyors/edit/${id}`
+        return `${prefix}/edit/${id}`
       }
-      return '/surveyors/add/'
+      return `${prefix}/add/`
 
     case 'add':
-      return '/surveyors/add/'
+      return `${prefix}/add/`
 
     default:
-      return '/surveyors/list/'
+      return `${prefix}/list/`
   }
 }
 
@@ -215,11 +225,13 @@ export const getSurveyorsPath = ({ action, id }) => {
  * @param {string} action       - action: `list` (default), `add`
  */
 export const getSyncUsersPath = ({ action }) => {
+  const prefix = `${getAppPath()}/mobile-users`
+
   switch (action) {
     case 'add':
-      return '/mobile-users/add'
+      return `${prefix}/add`
 
     default:
-      return '/mobile-users/list'
+      return `${prefix}/list`
   }
 }

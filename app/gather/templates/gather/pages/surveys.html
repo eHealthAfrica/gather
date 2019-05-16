@@ -35,7 +35,7 @@ under the License.
 
       {# include the ADD NEW button within the LIST view #}
       <a
-        href="{% url 'surveys' action='add' %}"
+        href="{{ app_url }}{% url 'surveys' action='add' %}"
         role="button"
         class="btn btn-primary btn-icon">
         <i class="fas fa-plus-circle mr-3"></i>

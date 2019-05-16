@@ -37,6 +37,6 @@ def gather_context(request):
     for app in settings.AETHER_APPS:
         name = app.replace('-', '_')
         external_app = f'{settings.AETHER_PREFIX}{app}'
-        context[f'{name}_url'] = get_external_app_url(external_app)
+        context[f'{name}_url'] = get_external_app_url(external_app, request)
 
     return context

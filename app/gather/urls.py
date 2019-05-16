@@ -36,7 +36,7 @@ app_urls = [
 
     # ----------------------
     # API
-    path(route='api/', view=include('gather.api.urls', namespace='api')),
+    path(route='api/', view=include('gather.api.urls')),
 
     # ----------------------
     # Welcome page

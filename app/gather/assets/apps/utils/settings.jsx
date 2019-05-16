@@ -18,6 +18,7 @@
  * under the License.
  */
 
+import { getSettingsPath } from './paths'
 import { getData } from './request'
 import { ODK_APP, COUCHDB_SYNC_APP } from './constants'
 
@@ -28,7 +29,7 @@ const DEFAULT_SETTINGS = {
 }
 
 export const getSettings = () => new Promise(resolve => {
-  getData('/assets-settings')
+  getData(getSettingsPath())
     .then(response => {
       resolve({
         ODK_ACTIVE: (response.aether_apps || []).indexOf(ODK_APP) > -1,

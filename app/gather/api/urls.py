@@ -48,5 +48,3 @@ for app in settings.AETHER_APPS:
              view=app_token_required(TokenProxyView.as_view(app_name=external_app)),
              name=f'{app}-proxy-path'),
     ]
-
-app_name = 'api'
