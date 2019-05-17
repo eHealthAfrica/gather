@@ -141,7 +141,6 @@ const buildAPIPath = (app, type, id, { format = 'json', action, ...params }) => 
     ...(id ? {} : params)
   }
   const queryString = buildQueryString(queryParams)
-  console.log(url)
 
   return queryString === '' ? url : `${url}?${queryString}`
 }
