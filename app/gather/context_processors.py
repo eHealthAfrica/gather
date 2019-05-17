@@ -18,11 +18,22 @@
 
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
+from django_eha_sdk.multitenancy.utils import get_path_realm
 from django_eha_sdk.health.utils import get_external_app_url
 
 
 def gather_context(request):
+    def get_url(view_name, kwargs=None):
+        # get the url using the gateway path if needed.
+        realm = get_path_realm(request)
+        kwargs = kwargs or {}
+        kwargs = {**kwargs, 'realm': realm} if realm else kwargs
+        return reverse(view_name, kwargs=kwargs)
+
+    gather_url = get_url('index-page')[:-1]
+
     navigation_list = [('surveys', _('Surveys')), ]
     if 'odk' in settings.AETHER_APPS:
         navigation_list.append(('odk-surveyors', _('Surveyors')))
@@ -32,6 +43,7 @@ def gather_context(request):
     context = {
         'instance_name': settings.INSTANCE_NAME,
         'navigation_list': navigation_list,
+        'gather_url': gather_url,
     }
 
     for app in settings.AETHER_APPS:

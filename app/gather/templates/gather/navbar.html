@@ -46,7 +46,7 @@ under the License.
             <li class="nav-item">
               <a
                 class="nav-link {% if request.resolver_match.view_name == nav_item %}active{% endif %}"
-                href="{{ app_url }}{% url nav_item action='list' %}">
+                href="{{ gather_url }}{% url nav_item action='list' %}">
                 {{ nav_label }}
               </a>
             </li>
@@ -62,7 +62,7 @@ under the License.
               data-user-id="{{ request.user.id }}">
               {{ request.user|get_fullname }}
             </span>
-            <a class="logout" href="{{ app_url }}{% url 'logout' %}">
+            <a class="logout" href="{{ gather_url }}{% url 'logout' %}">
               <i class="fas fa-sign-out-alt" title="{% trans 'Sign Out' %}" aria-hidden="true"></i>
             </a>
           </li>

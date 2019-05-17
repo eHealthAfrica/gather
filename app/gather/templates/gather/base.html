@@ -40,6 +40,7 @@ under the License.
   {% endblock navbar %}
 
   <div class="container-fluid">
+    <input type="hidden" id="__gather_url__" name="gather_url" value="{{ gather_url }}">
     {% block gathered %}
       {# This is the block GATHERED, redefine it in the child template #}
     {% endblock gathered %}
