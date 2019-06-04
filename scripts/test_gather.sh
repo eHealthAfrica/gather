@@ -26,7 +26,7 @@ function prepare_and_test_container {
     echo "_____________________________________________ Building $1"
     $DC_TEST build $container
     echo "_____________________________________________ Testing $1"
-    $DC_TEST run "$1"-test test
+    $DC_TEST run --rm "$1"-test test
     echo "_____________________________________________ $1 Done"
 }
 
@@ -41,7 +41,7 @@ $DC_TEST down
 $DC_TEST pull db-test
 
 prepare_and_test_container gather-assets
-$DC_TEST run gather-assets-test build
+$DC_TEST run --rm gather-assets-test build
 
 echo "_____________________________________________ Starting database"
 $DC_TEST up -d db-test

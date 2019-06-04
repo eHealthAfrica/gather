@@ -18,7 +18,7 @@
 
 from rest_framework.serializers import ModelSerializer
 
-from django_eha_sdk.multitenancy.serializers import (
+from aether.sdk.multitenancy.serializers import (
     MtPrimaryKeyRelatedField,
     MtModelSerializer,
 )

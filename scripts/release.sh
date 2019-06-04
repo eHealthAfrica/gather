@@ -75,7 +75,7 @@ BUILD_OPTIONS="--no-cache --force-rm --pull"
 
 # Build and distribute the JS assets
 docker-compose build ${BUILD_OPTIONS} gather-assets
-docker-compose run gather-assets build
+docker-compose run --rm gather-assets build
 
 # Build and push docker image to docker hub
 docker-compose build \

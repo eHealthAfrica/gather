@@ -5,13 +5,13 @@
 #                                 CHANGE ME !!!                                #
 #                                                                              #
 # To check the outdated dependencies run                                       #
-#     docker-compose run --no-deps gather eval pip list --outdated             #
+#     docker-compose run --rm --no-deps gather eval pip list --outdated        #
 #                                                                              #
 # To update this first update "primary-requirements.txt" then run              #
-#     docker-compose run --no-deps gather pip_freeze                           #
+#     docker-compose run --rm --no-deps gather pip_freeze                      #
 #                                                                              #
 ################################################################################
 
 
-# Django-eHa-SDK library with extras
-django_eha_sdk[cas,server,webpack,test]
+# Aether Django SDK library with extras
+aether.sdk[cas,server,webpack,test]

@@ -40,7 +40,7 @@ BUILD_OPTIONS="--no-cache --force-rm --pull"
 
 # build Gather assets
 docker-compose build ${BUILD_OPTIONS} gather-assets
-docker-compose run gather-assets build
+docker-compose run --rm gather-assets build
 
 VERSION=`cat ./VERSION`
 GIT_REVISION=`git rev-parse HEAD`

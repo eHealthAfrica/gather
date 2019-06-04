@@ -21,11 +21,11 @@ from django.contrib.auth.decorators import login_required
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
-from django_eha_sdk.conf.urls import generate_urlpatterns
+from aether.sdk.conf.urls import generate_urlpatterns
 
 # Any entry here needs the decorator `app_token_required` if it's going to execute
 # AJAX request to any of the external apps
-from django_eha_sdk.auth.apptoken.decorators import app_token_required
+from aether.sdk.auth.apptoken.decorators import app_token_required
 
 from .views import assets_settings
 

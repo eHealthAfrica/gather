@@ -20,8 +20,8 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
-from django_eha_sdk.multitenancy.utils import get_path_realm
-from django_eha_sdk.health.utils import get_external_app_url
+from aether.sdk.multitenancy.utils import get_path_realm
+from aether.sdk.health.utils import get_external_app_url
 
 
 def gather_context(request):

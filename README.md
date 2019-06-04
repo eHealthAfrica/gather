@@ -15,6 +15,8 @@
   - [Users & Authentication](#users--authentication)
     - [Token Authentication](#token-authentication)
 - [Development](#development)
+  - [Code style](#code-style)
+  - [Naming conventions](#naming-conventions)
   - [Frontend assets](#frontend-assets)
 - [Containers and services](#containers-and-services)
 - [Run commands in the containers](#run-commands-in-the-containers)
@@ -41,6 +43,7 @@ on the [Gather microsite](https://gather.ehealthafrica.org).
 
 - git
 - [docker-compose](https://docs.docker.com/compose/)
+- [openssl](https://www.openssl.org/)
 
 *[Return to TOC](#table-of-contents)*
 
@@ -78,7 +81,7 @@ for local development. Never deploy these to publicly accessible servers.
 
 #### Generate credentials for local development with docker-compose
 
-**Note:** Make sure you have `openssl` installed in your system.
+**Note:** Make sure you have [openssl](https://www.openssl.org/) installed in your system.
 
 ```bash
 ./scripts/generate-credentials.sh > .env
@@ -96,7 +99,9 @@ of the most common ones with non default values. For more info take a look at th
 [docker-compose-base.yml](docker-compose-base.yml) and
 [/scripts/generate-credentials.sh](/scripts/generate-credentials.sh).
 
-See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
+See also [Django settings](https://docs.djangoproject.com/en/2.2/ref/settings/).
+
+See also [Aether Django SDK environment variables](https://github.com/eHealthAfrica/aether-django-sdk-library#environment-variables).
 
 #### Gather instance
 
@@ -107,11 +112,6 @@ See also [Django settings](https://docs.djangoproject.com/en/2.1/ref/settings/).
   - `EXPORT_MAX_ROWS_SIZE`: between `0` and `1048575` indicates the maximum
     number of rows to include in the export file.
     The limit is an [Excel 2007 restriction](https://support.office.com/en-us/article/Excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3).
-
-- Authentication (Central Authentication Service):
-  - `CAS_SERVER_URL`: `https://your.cas.server`.
-  - `HOSTNAME`: `gather.local`.
-  See more in [Django CAS client](https://github.com/mingchen/django-cas-ng).
 
 - uWSGI specific:
   - `CUSTOM_UWSGI_ENV_FILE` Path to a file of environment variables to use with uWSGI.
@@ -220,12 +220,98 @@ docker-compose -f docker-compose-local.yml up
 
 *[Return to TOC](#table-of-contents)*
 
+### Code style
+
+The code style is tested:
+
+- In **python** with [flake8](http://flake8.pycqa.org/en/latest/).
+  Defined in the file `app/setup.cfg`.
+- In **javascript** with [standard](https://github.com/feross/standard/).
+- In **styles** with [sass-lint](https://github.com/sasstools/sass-lint/).
+  Defined in the file `app/gather/assets/conf/sass-lint.yml`.
+
+```bash
+# Python files
+docker-compose run --rm --no-deps gather test_lint
+# Javascript files
+docker-compose run --rm --no-deps gather-assets eval npm run test-lint-js
+# CSS files
+docker-compose run --rm --no-deps gather-assets eval npm run test-lint-sass
+```
+
+*[Return to TOC](#table-of-contents)*
+
+### Naming conventions
+
+There are a couple of naming/coding conventions followed by the
+Python modules and the React Components:
+
+- Names are self-explanatory like `export_project`, `RefreshingSpinner`,
+  `ProjectList`, `constants` and so on.
+
+- Case conventions:
+
+  - Javascript specific:
+    - component names use title case (`TitleCase`)
+    - utility file names use kebab case (`kebab-case`)
+    - method and variable names use camel case (`camelCase`)
+  - Python specific:
+    - class names use title case (`TitleCase`)
+    - file, method and variable names use snake case (`snake_case`)
+
+- Javascript specific:
+
+  - Meaningful suffixes:
+    - `Container` indicates that the component will fetch data from the server.
+    - `List` indicates that the data is a list and is displayed as a table or list.
+    - `Form` indicates that a form will be displayed.
+  - The file name will match the default Component name defined inside,
+    it might be the case that auxiliary components are also defined within
+    the same file.
+  - App "agnostic" components are kept in folder `app/gather/assets/apps/components`
+  - App "agnostic" methods are kept in folder `app/gather/assets/apps/utils`
+
+- - -
+**Comments are warmly welcome!!!**
+- - -
+
+*[Return to TOC](#table-of-contents)*
 
 ### Frontend assets
 
 Frontend assets include JS, CSS, and fonts. They are all handled by webpack.
 
-See more in [Assets README](app/gather/assets/README.md)
+Frontend assets are mounted on the pages via the
+[django-webpack-loader](https://github.com/owais/django-webpack-loader).
+
+* There is a file with all the apps list: `app/gather/assets/conf/webpack.apps.js`.
+
+* There are three webpack configuration files:
+
+  - `app/gather/assets/conf/webpack.common.js`  -- contains the common features to build the webpack files.
+  - `app/gather/assets/conf/webpack.server.js`  -- starts the server in port `3005` with Hot Module Replacement (HMR).
+  - `app/gather/assets/conf/webpack.prod.js`    -- compiles the files to be used in the Django app.
+
+* The `start_dev` entry point starts a webpack development server (port `3005`),
+  that watches assets, rebuilds and does hot reloading of JS Components.
+
+  ```bash
+  docker-compose up gather-assets
+  ```
+
+* The `build` entry point compiles the files to be used in the Django app.
+  The resultant files are kept in the `app/gather/assets/bundles` folder.
+
+  ```bash
+  docker-compose run --rm gather-assets build
+  ```
+
+* The CSS build is separate, and can contain both `.sass` and `.css` files.
+  They spit out a webpack build called `styles.css`.
+
+* Each page has their own JS entry point (needs to be defined in `webpack.apps.js`).
+  On top of that, they load a common chunk, containing `jquery`, `bootstrap` and other
+  stuff that the `webpack common chunk` plugin finds is shared between the apps.
 
 *[Return to TOC](#table-of-contents)*
 
@@ -239,7 +325,7 @@ The list of the main containers:
 | ----------------- | ----------------------------------------------------------------- |
 | db                | [PostgreSQL](https://www.postgresql.org/) database                |
 | **gather**        | Gather app                                                        |
-| **gather-assets** | Gather Assets HRM module                                          |
+| **gather-assets** | Gather assets module                                              |
 | **kernel**        | Aether Kernel app                                                 |
 | **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)    |
 | **ui**            | Aether Kernel UI (only needed for advanced mapping functionality) |
@@ -256,7 +342,7 @@ All the containers definition for development can be found in the
 The pattern to run a command is always
 
 ```bash
-docker-compose run [--no-deps] <container-name> <entrypoint-command> <...args>
+docker-compose run --rm [--no-deps] <container-name> <entrypoint-command> <...args>
 ```
 
 If there is no interaction with any other container then include the option `--no-deps`.
@@ -274,24 +360,24 @@ The full list of commands can be seen in the script file.
 
 The following are some examples:
 
-| Action                                     | Command                                              |
-| ------------------------------------------ | ---------------------------------------------------- |
-| List predefined commands                   | `docker-compose run gather help`                     |
-| Run tests                                  | `docker-compose run gather test`                     |
-| Run code style tests                       | `docker-compose run gather test_lint`                |
-| Run python tests                           | `docker-compose run gather test_coverage`            |
-| Create a shell inside the container        | `docker-compose run gather bash`                     |
-| Execute shell command inside the container | `docker-compose run gather eval <command>`           |
-| Run django manage.py                       | `docker-compose run gather manage help`              |
-| Create a python shell                      | `docker-compose run gather manage shell`             |
-| Create a postgresql shell                  | `docker-compose run gather manage dbshell`           |
-| Show ORM migrations                        | `docker-compose run gather manage showmigrations`    |
-| Create pending ORM migration files         | `docker-compose run gather manage makemigrations`    |
-| Apply pending ORM migrations               | `docker-compose run gather manage migrate`           |
-| Check outdated python libraries            | `docker-compose run gather eval pip list --outdated` |
-| Update outdated python libraries           | `docker-compose run gather pip_freeze`               |
-| Start django development server            | `docker-compose run gather start_dev`                |
-| Start uwsgi server                         | `docker-compose run gather start`                    |
+| Action                                     | Command                                                   |
+| ------------------------------------------ | --------------------------------------------------------- |
+| List predefined commands                   | `docker-compose run --rm gather help`                     |
+| Run tests                                  | `docker-compose run --rm gather test`                     |
+| Run code style tests                       | `docker-compose run --rm gather test_lint`                |
+| Run python tests                           | `docker-compose run --rm gather test_coverage`            |
+| Create a shell inside the container        | `docker-compose run --rm gather bash`                     |
+| Execute shell command inside the container | `docker-compose run --rm gather eval <command>`           |
+| Run django manage.py                       | `docker-compose run --rm gather manage help`              |
+| Create a python shell                      | `docker-compose run --rm gather manage shell`             |
+| Create a postgresql shell                  | `docker-compose run --rm gather manage dbshell`           |
+| Show ORM migrations                        | `docker-compose run --rm gather manage showmigrations`    |
+| Create pending ORM migration files         | `docker-compose run --rm gather manage makemigrations`    |
+| Apply pending ORM migrations               | `docker-compose run --rm gather manage migrate`           |
+| Check outdated python libraries            | `docker-compose run --rm gather eval pip list --outdated` |
+| Update outdated python libraries           | `docker-compose run --rm gather pip_freeze`               |
+| Start django development server            | `docker-compose run --rm gather start_dev`                |
+| Start uwsgi server                         | `docker-compose run --rm gather start`                    |
 
 *[Return to TOC](#table-of-contents)*
 
@@ -304,22 +390,40 @@ The full list of commands can be seen in the script file.
 
 The following are some examples:
 
-| Action                                     | Command                                              |
-| ------------------------------------------ | ---------------------------------------------------- |
-| List predefined commands                   | `docker-compose run gather-assets help`              |
-| Run tests                                  | `docker-compose run gather-assets test`              |
-| Run code style tests                       | `docker-compose run gather-assets test_lint`         |
-| Run JS tests                               | `docker-compose run gather-assets test_js`           |
-| Create a shell inside the container        | `docker-compose run gather-assets bash`              |
-| Execute shell command inside the container | `docker-compose run gather-assets eval <command>`    |
-| Check outdated node libraries              | `docker-compose run gather-assets eval npm outdated` |
-| Build assets used in the Django app        | `docker-compose run gather-assets build`             |
-| Start webpack server with HRM              | `docker-compose run gather-assets start_dev`         |
+| Action                                     | Command                                                   |
+| ------------------------------------------ | --------------------------------------------------------- |
+| List predefined commands                   | `docker-compose run --rm gather-assets help`              |
+| Run tests                                  | `docker-compose run --rm gather-assets test`              |
+| Run code style tests                       | `docker-compose run --rm gather-assets test_lint`         |
+| Run JS tests                               | `docker-compose run --rm gather-assets test_js`           |
+| Create a shell inside the container        | `docker-compose run --rm gather-assets bash`              |
+| Execute shell command inside the container | `docker-compose run --rm gather-assets eval <command>`    |
+| Check outdated node libraries              | `docker-compose run --rm gather-assets eval npm outdated` |
+| Build assets used in the Django app        | `docker-compose run --rm gather-assets build`             |
+| Start webpack server with HMR              | `docker-compose run --rm gather-assets start_dev`         |
 
 *[Return to TOC](#table-of-contents)*
 
 
 ### Run tests
+
+The Python code is tested using
+[coverage](https://bitbucket.org/ned/coveragepy).
+
+The CSS style is analyzed by
+[Sass Lint](https://github.com/sasstools/sass-lint).
+
+The Javascript style is analyzed by
+[Standard JS](https://github.com/feross/standard/).
+
+The Javascript code is tested using
+[Jest](https://facebook.github.io/jest/docs/en/getting-started.html)
+and [Enzyme](http://airbnb.io/enzyme/).
+
+- Python test files are kept in the folder `tests` of each module
+  and the name is `test_my_module.py`.
+- Javascript test files are kept in the same folder and the name
+  is `MyComponent.spec.jsx` or `my-utility.spec.jsx`.
 
 This will stop ALL running containers and execute `gather` tests.
 
@@ -330,27 +434,25 @@ This will stop ALL running containers and execute `gather` tests.
 or
 
 ```bash
-docker-compose run gather test
-docker-compose run gather-assets test
+docker-compose run --rm gather test
+docker-compose run --rm gather-assets test
 ```
 
 or
 
 ```bash
-docker-compose run gather test_lint
-docker-compose run gather test_coverage
+docker-compose run --rm gather test_lint
+docker-compose run --rm gather test_coverage
 
-docker-compose run gather-assets test_lint
-docker-compose run gather-assets test_js
-```
+docker-compose run --rm gather-assets test_lint
+docker-compose run --rm gather-assets test_js
 
-The e2e tests are run against different containers, the config file used
-for them is [docker-compose-test.yml](docker-compose-test.yml).
+# more detailed
+docker-compose run --rm gather-assets eval npm run test-lint-sass
+docker-compose run --rm gather-assets eval npm run test-lint-js
 
-Before running `gather` tests you should start the dependencies test containers.
-
-```bash
-docker-compose -f docker-compose-test.yml up -d <container-name>-test
+# in case you need to check `console.log` messages
+docker-compose run --rm gather-assets eval npm run test-js-verbose
 ```
 
 *[Return to TOC](#table-of-contents)*
@@ -361,14 +463,14 @@ docker-compose -f docker-compose-test.yml up -d <container-name>-test
 #### Check outdated dependencies
 
 ```bash
-docker-compose run --no-deps gather eval pip list --outdated
-docker-compose run --no-deps gather-assets eval npm outdated
+docker-compose run --rm --no-deps gather eval pip list --outdated
+docker-compose run --rm --no-deps gather-assets eval npm outdated
 ```
 
 #### Update requirements file
 
 ```bash
-docker-compose run --no-deps gather pip_freeze
+docker-compose run --rm --no-deps gather pip_freeze
 ```
 
 *[Return to TOC](#table-of-contents)*

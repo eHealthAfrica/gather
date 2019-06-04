@@ -18,8 +18,8 @@
 
 import os
 
-from django_eha_sdk.conf.settings import *  # noqa
-from django_eha_sdk.conf.settings import (
+from aether.sdk.conf.settings import *  # noqa
+from aether.sdk.conf.settings import (
     TEMPLATES,
     MIGRATION_MODULES,
     EXTERNAL_APPS

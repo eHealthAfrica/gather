@@ -19,7 +19,7 @@
 from django.test import override_settings
 from django.urls import reverse, exceptions
 
-from django_eha_sdk.unittest import UrlsTestCase
+from aether.sdk.unittest import UrlsTestCase
 
 
 class UrlsTest(UrlsTestCase):

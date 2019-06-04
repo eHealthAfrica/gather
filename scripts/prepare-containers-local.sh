@@ -45,7 +45,7 @@ for container in "${containers[@]}"
 do
     echo "_____________________________________________ Building container ${container}-assets"
     $DC build ${BUILD_OPTIONS} ${container}-assets
-    $DC run ${container}-assets build
+    $DC run --rm ${container}-assets build
 done
 
 

@@ -19,7 +19,7 @@
 from unittest import mock
 
 from django.test import RequestFactory, override_settings
-from django_eha_sdk.unittest import UrlsTestCase
+from aether.sdk.unittest import UrlsTestCase
 
 from ..context_processors import gather_context
 

@@ -23,7 +23,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from django_prometheus.models import ExportModelOperationsMixin
-from django_eha_sdk.multitenancy.models import MtModelAbstract, MtModelChildAbstract
+from aether.sdk.multitenancy.models import MtModelAbstract, MtModelChildAbstract
 
 '''
 

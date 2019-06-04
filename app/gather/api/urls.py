@@ -21,8 +21,8 @@ from django.urls import path, include
 
 from rest_framework import routers
 
-from django_eha_sdk.auth.apptoken.decorators import app_token_required
-from django_eha_sdk.auth.apptoken.views import TokenProxyView
+from aether.sdk.auth.apptoken.decorators import app_token_required
+from aether.sdk.auth.apptoken.views import TokenProxyView
 
 from . import views
 
