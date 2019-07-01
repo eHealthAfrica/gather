@@ -1,4 +1,4 @@
-FROM node:dubnium-slim
+FROM node:lts-slim
 
 WORKDIR /code/
 
