@@ -62,14 +62,17 @@ services:
       CSRF_COOKIE_DOMAIN: aether.local
       DJANGO_SECRET_KEY: ${KERNEL_DJANGO_SECRET_KEY}
 
+      LOGGING_FORMATTER: verbose
+      HTML_SELECT_CUTOFF: 10
+      PROFILING_ENABLED: "true"
+
       BUCKET_NAME: kernel
       DJANGO_STORAGE_BACKEND: minio
       MINIO_STORAGE_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
       MINIO_STORAGE_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
       MINIO_STORAGE_ENDPOINT: minio:9000
-      # Use these settings to make it accessible via browser
       MINIO_STORAGE_MEDIA_USE_PRESIGNED: null
-      MINIO_STORAGE_MEDIA_URL: http://localhost:9000/kernel
+      MINIO_STORAGE_MEDIA_URL: http://minio:9000/kernel
       MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET: "true"
       MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY: "true"
 
@@ -122,14 +125,17 @@ services:
       CSRF_COOKIE_DOMAIN: aether.local
       DJANGO_SECRET_KEY: ${ODK_DJANGO_SECRET_KEY}
 
+      LOGGING_FORMATTER: verbose
+      HTML_SELECT_CUTOFF: 10
+      PROFILING_ENABLED: "true"
+
       BUCKET_NAME: odk
       DJANGO_STORAGE_BACKEND: minio
       MINIO_STORAGE_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
       MINIO_STORAGE_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
       MINIO_STORAGE_ENDPOINT: minio:9000
-      # Use these settings to make it accessible via browser
       MINIO_STORAGE_MEDIA_USE_PRESIGNED: null
-      MINIO_STORAGE_MEDIA_URL: http://localhost:9000/odk
+      MINIO_STORAGE_MEDIA_URL: http://minio:9000/odk
       MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET: "true"
       MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY: "true"
 
@@ -174,6 +180,10 @@ services:
       CSRF_COOKIE_DOMAIN: aether.local
       DJANGO_SECRET_KEY: ${UI_DJANGO_SECRET_KEY}
 
+      LOGGING_FORMATTER: verbose
+      HTML_SELECT_CUTOFF: 10
+      PROFILING_ENABLED: "true"
+
       APP_NAME: Aether
       STATIC_URL: /static/ui/
 
@@ -216,6 +226,10 @@ services:
     environment:
       CSRF_COOKIE_DOMAIN: gather.local
       DJANGO_SECRET_KEY: ${GATHER_DJANGO_SECRET_KEY}
+
+      LOGGING_FORMATTER: verbose
+      HTML_SELECT_CUTOFF: 10
+      PROFILING_ENABLED: "true"
 
       APP_NAME: Gather
 

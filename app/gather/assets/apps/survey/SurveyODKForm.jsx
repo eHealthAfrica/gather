@@ -34,6 +34,8 @@ import {
   MultiSelect
 } from '../components'
 
+import { getMediaFileContentPath } from '../utils/paths'
+
 const MESSAGES = defineMessages({
   newForm: {
     defaultMessage: 'new',
@@ -493,16 +495,9 @@ class MediaFile extends Component {
 
     return (
       <span key={mediaFile.id || mediaFile.key} className='ml-2 mb-1 badge badge-info'>
-        {
-          /*
-            This does not work locally with the container name
-            but should do in the server. It's possible that the link
-            requires authentication... or not.
-          */
-        }
         <a
           className='btn-link text-white'
-          href={mediaFile.media_file || '#'}
+          href={mediaFile.id ? getMediaFileContentPath(mediaFile) : '#'}
           target='_blank'>
           { mediaFile.name }
         </a>

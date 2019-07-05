@@ -16,9 +16,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from rest_framework.serializers import ModelSerializer
-
 from aether.sdk.multitenancy.serializers import (
+    DynamicFieldsModelSerializer,
     MtPrimaryKeyRelatedField,
     MtModelSerializer,
 )
@@ -26,7 +25,7 @@ from aether.sdk.multitenancy.serializers import (
 from .models import Survey, Mask
 
 
-class MaskSerializer(ModelSerializer):
+class MaskSerializer(DynamicFieldsModelSerializer):
 
     survey = MtPrimaryKeyRelatedField(
         required=True,
@@ -40,7 +39,7 @@ class MaskSerializer(ModelSerializer):
 
 class SurveySerializer(MtModelSerializer):
 
-    masks = MaskSerializer(many=True, read_only=True)
+    masks = MaskSerializer(omit=('survey', ), many=True, read_only=True)
 
     class Meta:
         model = Survey

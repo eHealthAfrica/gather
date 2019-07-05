@@ -21,6 +21,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
+import { attachmentsToLinks } from './utils'
 import { filterByPaths } from '../../utils/types'
 import { JSONViewer, LinksList } from '../../components'
 
@@ -34,6 +35,7 @@ export default class EntityItem extends Component {
 
     // assumption: there is only one item
     const entity = list[0]
+    const attachments = attachmentsToLinks(entity.attachments)
 
     return (
       <div data-qa={`entity-item-${entity.id}`} className='x-2'>
@@ -45,11 +47,11 @@ export default class EntityItem extends Component {
                 defaultMessage='Status' />
             </h5>
             <div className='property-value'>
-              {entity.status}
+              { entity.status }
             </div>
           </div>
 
-          { entity.attachments.length > 0 &&
+          { attachments.length > 0 &&
             <div className='property'>
               <h5 className='property-title'>
                 <FormattedMessage
@@ -57,7 +59,7 @@ export default class EntityItem extends Component {
                   defaultMessage='Attachments' />
               </h5>
               <div className='property-value'>
-                <LinksList list={entity.attachments} />
+                <LinksList list={attachments} />
               </div>
             </div>
           }
@@ -66,7 +68,7 @@ export default class EntityItem extends Component {
             <JSONViewer
               data={filterByPaths(entity.payload, this.props.paths)}
               labels={this.props.labels}
-              links={entity.attachments}
+              links={attachments}
             />
           </div>
         </div>

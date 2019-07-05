@@ -21,6 +21,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
+import { attachmentsToLinks } from './utils'
 import { flatten, inflate, getLabel } from '../../utils/types'
 import { JSONViewer, LinksList } from '../../components'
 
@@ -150,15 +151,16 @@ export default class EntitiesList extends Component {
   renderEntity (entity, index) {
     const { paths, labels } = this.props
     const flattenPayload = flatten({ ...entity.payload })
+    const attachments = attachmentsToLinks(entity.attachments)
 
     return (
       <tr data-qa={`entity-row-${entity.id}`} key={entity.id}>
         <td scope='row'>{this.props.start + index}</td>
         <td>
-          {entity.status}
+          { entity.status }
         </td>
         <td>
-          <LinksList list={entity.attachments} />
+          <LinksList list={attachments} />
         </td>
 
         {
@@ -168,7 +170,7 @@ export default class EntitiesList extends Component {
                 data={flattenPayload[key]}
                 labels={labels}
                 labelRoot={key + '.'}
-                links={entity.attachments}
+                links={attachments}
               />
             </td>
           ))

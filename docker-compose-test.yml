@@ -22,6 +22,8 @@ services:
       service: gather-base
     environment:
       TESTING: "true"
+      # disable profiling
+      PROFILING_ENABLED: null
 
       # set to 1 to disable parallel execution
       TEST_PARALLEL: null

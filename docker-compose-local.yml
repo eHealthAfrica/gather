@@ -1,6 +1,7 @@
 # ------------------------------------------------------------------------------
 # Use this file only to develop with your local Aether images
-# (not the docker hub ones), change the ${AETHER_PATH} to your current one.
+# (not the docker hub ones), change the ${AETHER_PATH} and ${AETHER_SDK_PATH}
+# values to your current ones.
 #
 # docker-compose -f docker-compose-local.yml build
 # docker-compose -f docker-compose-local.yml up
@@ -66,6 +67,7 @@ services:
     environment:
       KEYCLOAK_SERVER_URL: null
     volumes:
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
       - ./.persistent_data/backups/kernel:/backups
       - ./.persistent_data/static/kernel:/var/www/static
     depends_on:
@@ -92,6 +94,7 @@ services:
       AETHER_KERNEL_URL: http://aether.local/kernel
       KEYCLOAK_SERVER_URL: null
     volumes:
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
       - ./.persistent_data/backups/odk:/backups
       - ./.persistent_data/static/odk:/var/www/static
     depends_on:
@@ -127,6 +130,7 @@ services:
       AETHER_KERNEL_URL: http://aether.local/kernel
       KEYCLOAK_SERVER_URL: null
     volumes:
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
       - ./.persistent_data/backups/ui:/backups
       - ./.persistent_data/static/ui:/var/www/static
     depends_on:
@@ -163,6 +167,8 @@ services:
     extends:
       file: ./docker-compose-base.yml
       service: gather-base
+    # volumes:
+    #   - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
     depends_on:
       db:
         condition: service_healthy

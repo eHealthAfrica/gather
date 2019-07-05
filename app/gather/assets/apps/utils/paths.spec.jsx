@@ -24,6 +24,8 @@ import assert from 'assert'
 import {
   buildQueryString,
   getEntitiesAPIPath,
+  getAttachmentContentPath,
+  getMediaFileContentPath,
   getMasksAPIPath,
   getMediaFileAPIPath,
   getSurveyorsAPIPath,
@@ -49,6 +51,20 @@ describe('paths utils', () => {
     it('should return the Media Files API path', () => {
       assert.strictEqual(getMediaFileAPIPath({}), '/api/odk/media-files.json')
       assert.strictEqual(getMediaFileAPIPath({ id: 1 }), '/api/odk/media-files/1.json')
+    })
+  })
+
+  describe('getAttachmentContentPath', () => {
+    it('should return the Attachment content path', () => {
+      assert.strictEqual(
+        getAttachmentContentPath({ id: 1 }),
+        '/api/kernel/attachments/1/content/?passthrough=true')
+    })
+  })
+
+  describe('getMediaFileContentPath', () => {
+    it('should return the Media Files content path', () => {
+      assert.strictEqual(getMediaFileContentPath({ id: 1 }), '/api/odk/media-files/1/content/')
     })
   })
 
