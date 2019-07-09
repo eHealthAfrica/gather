@@ -21,9 +21,7 @@ services:
     environment:
       MINIO_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
-    command: minio server --quiet --address minio:9000 /data
-    ports:
-      - 9000:9000
+    command: minio server --quiet --address minio:9090 /data
 
 
   # ---------------------------------
@@ -70,9 +68,9 @@ services:
       DJANGO_STORAGE_BACKEND: minio
       MINIO_STORAGE_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
       MINIO_STORAGE_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
-      MINIO_STORAGE_ENDPOINT: minio:9000
+      MINIO_STORAGE_ENDPOINT: minio:9090
       MINIO_STORAGE_MEDIA_USE_PRESIGNED: null
-      MINIO_STORAGE_MEDIA_URL: http://minio:9000/kernel
+      MINIO_STORAGE_MEDIA_URL: http://minio:9090/kernel
       MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET: "true"
       MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY: "true"
 
@@ -110,8 +108,6 @@ services:
     volumes:
       - ./.persistent_data/backups/kernel:/backups
       - ./.persistent_data/static/kernel:/var/www/static
-    ports:
-      - 8100:8100
     command: start
 
 
@@ -133,9 +129,9 @@ services:
       DJANGO_STORAGE_BACKEND: minio
       MINIO_STORAGE_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
       MINIO_STORAGE_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
-      MINIO_STORAGE_ENDPOINT: minio:9000
+      MINIO_STORAGE_ENDPOINT: minio:9090
       MINIO_STORAGE_MEDIA_USE_PRESIGNED: null
-      MINIO_STORAGE_MEDIA_URL: http://minio:9000/odk
+      MINIO_STORAGE_MEDIA_URL: http://minio:9090/odk
       MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET: "true"
       MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY: "true"
 
@@ -164,9 +160,6 @@ services:
     volumes:
       - ./.persistent_data/backups/odk:/backups
       - ./.persistent_data/static/odk:/var/www/static
-    ports:
-      # behind ngnix
-      - 8102:8102
     command: start
 
 
@@ -207,8 +200,6 @@ services:
     volumes:
       - ./.persistent_data/backups/ui:/backups
       - ./.persistent_data/static/ui:/var/www/static
-    ports:
-      - 8104:8104
     command: start
 
 
@@ -265,8 +256,6 @@ services:
 
       - ./.persistent_data/backups/gather:/backups
       - ./.persistent_data/static/gather:/var/www/static
-    ports:
-      - 8105:8105
     command: start_dev
 
   # ---------------------------------
@@ -292,6 +281,4 @@ services:
       - ./app/gather/assets/css:/code/css
       - ./app/gather/assets/tests:/code/tests
       - ./app/gather/assets/package.json:/code/package.json
-    ports:
-      - 3005:3005
     command: start_dev

@@ -54,8 +54,6 @@ services:
     volumes:
       # volumes in tests
       - ./tmp/test/gather/static:/var/www/static
-    ports:
-      - 9105:9105
     depends_on:
       db-test:
         condition: service_healthy
