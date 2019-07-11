@@ -42,6 +42,19 @@ $APT_INSTALL $POSTGRES_PACKAGE
 
 
 ################################################################################
+# Create user and folders
+################################################################################
+
+useradd -ms /bin/false gather
+
+mkdir -p /var/run/gather/log/
+touch /var/run/gather/uwsgi.pid
+
+chown gather: /var/run/gather/* -Rf
+chmod -R 755 /var/run/gather/* -R
+
+
+################################################################################
 # cleaning
 ################################################################################
 

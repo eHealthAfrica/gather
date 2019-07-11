@@ -38,8 +38,6 @@ RUN mkdir -p /var/tmp && \
 ## last setup steps
 ################################################################################
 
-# create user to run container (avoid root user)
-RUN useradd -ms /bin/false gather
 RUN chown -R gather: /code
 
 ENTRYPOINT ["/code/entrypoint.sh"]
