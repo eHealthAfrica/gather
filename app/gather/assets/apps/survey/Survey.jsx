@@ -34,7 +34,7 @@ import EntitiesDownload from './entity/EntitiesDownload'
 
 const TABLE_VIEW = 'table'
 const SINGLE_VIEW = 'single'
-const TABLE_SIZES = [ 10, 25, 50, 100 ]
+const TABLE_SIZES = [10, 25, 50, 100]
 
 export default class Survey extends Component {
   constructor (props) {

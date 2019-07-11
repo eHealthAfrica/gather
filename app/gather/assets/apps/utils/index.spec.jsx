@@ -47,20 +47,17 @@ describe('utils', () => {
       assert(!deepEqual(1, {}), 'Primitives and objects are not equal')
       assert(!deepEqual('1', []), 'Primitives and arrays are not equal')
       assert(!deepEqual({}, []), 'Blank objects and empty arrays are not equal')
-      assert(!deepEqual({ '0': 1 }, [1]), 'Objects and arrays are not equal')
+      assert(!deepEqual({ 0: 1 }, [1]), 'Objects and arrays are not equal')
     })
 
     it('should compare primitives', () => {
-      let a = 1
-      let b = 1
-      assert(deepEqual(a, b), 'Primitives are equal')
-      b = 2
-      assert(!deepEqual(a, b), 'Primitives are not equal')
+      assert(deepEqual(1, 1), 'Primitives are equal')
+      assert(!deepEqual(1, 2), 'Primitives are not equal')
     })
 
     it('should compare objects', () => {
-      let a = { foo: 11, bar: 22, baz: { y: 4 } }
-      let b = { bar: 22, foo: 11, baz: { y: 4 } }
+      const a = { foo: 11, bar: 22, baz: { y: 4 } }
+      const b = { bar: 22, foo: 11, baz: { y: 4 } }
       assert(deepEqual(a, b), 'Objects are equal')
       b.baz.y = 5
       assert(!deepEqual(a, b), 'Objects are not equal')
@@ -71,16 +68,14 @@ describe('utils', () => {
     })
 
     it('should compare arrays', () => {
-      let a = [1, 2, 3]
-      let b = [1, 2, 3]
-      assert(deepEqual(a, b), 'Arrays are equal')
-      b = [1, 2, 2]
-      assert(!deepEqual(a, b), 'Arrays are not equal')
+      assert(deepEqual([1, 2, 3], [1, 2, 3]), 'Arrays are equal')
+      assert(!deepEqual([1, 2, 3], [1, 2, 2]), 'Arrays are not equal')
+      assert(!deepEqual([1, 2, 3], [1, 2]), 'Arrays are not equal')
     })
 
     it('should ignore null and undefined values', () => {
-      let a = { x: 1, y: null, z: undefined }
-      let b = { x: 1 }
+      const a = { x: 1, y: null, z: undefined }
+      const b = { x: 1 }
       assert(deepEqual(a, b, true), 'Should be equal without null values')
       assert(!deepEqual(a, b), 'Should not be equal with null values')
     })
@@ -108,8 +103,8 @@ describe('utils', () => {
     it('should order an array of objects by the given property value', () => {
       assert.deepStrictEqual(sortBy([]), [])
       assert.deepStrictEqual(
-        sortBy([ 1, 10, 11, 100, 12, 1 ]),
-        [ 1, 1, 10, 100, 11, 12 ]
+        sortBy([1, 10, 11, 100, 12, 1]),
+        [1, 1, 10, 100, 11, 12]
       )
 
       assert.deepStrictEqual(

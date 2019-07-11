@@ -45,7 +45,7 @@ const apps = [
 const buildEntries = (hmr) => {
   const list = {
     // the apps that DO NOT need Hot Module Replacement in development mode
-    'common': [
+    common: [
       'jquery',
       'popper.js',
       'bootstrap',
@@ -55,7 +55,7 @@ const buildEntries = (hmr) => {
   }
 
   apps.forEach(app => {
-    list[app.name] = (hmr ? [ app.path, hmr ] : app.path)
+    list[app.name] = (hmr ? [app.path, hmr] : app.path)
   })
 
   return list

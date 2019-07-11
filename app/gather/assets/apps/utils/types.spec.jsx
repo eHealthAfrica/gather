@@ -50,8 +50,8 @@ describe('types', () => {
     })
 
     it('should indicate if the value is an array', () => {
-      assert.strictEqual(getType([ null ]), 'array')
-      assert.strictEqual(getType([ undefined ]), 'array')
+      assert.strictEqual(getType([null]), 'array')
+      assert.strictEqual(getType([undefined]), 'array')
       assert.strictEqual(getType([1, 2, 3]), 'array')
     })
 
@@ -182,8 +182,8 @@ describe('types', () => {
 
       const expectedValue = [
         {
-          'a': { key: 'a', path: 'a', siblings: 4, hasChildren: true, isLeaf: false },
-          'h': { key: 'h', path: 'h', siblings: 1, hasChildren: false, isLeaf: true }
+          a: { key: 'a', path: 'a', siblings: 4, hasChildren: true, isLeaf: false },
+          h: { key: 'h', path: 'h', siblings: 1, hasChildren: false, isLeaf: true }
         },
         {
           'a|b': { key: 'a|b', path: 'a.b', siblings: 2, hasChildren: true, isLeaf: false },
@@ -230,7 +230,7 @@ describe('types', () => {
 
   describe('getLabel', () => {
     const labels = {
-      'a': 'Root',
+      a: 'Root',
       'a.d.#.e': 'The indexed E',
       'a.*.c': 'The Big C',
       'a.*.c.?.u': 'Join',
@@ -267,7 +267,7 @@ describe('types', () => {
 
   describe('getLabelTree', () => {
     const labels = {
-      'a': 'Root',
+      a: 'Root',
       'a.d.#.e': 'The indexed E',
       'a.*.c': 'The Big C',
       'a.*.c.?.u': 'Join',

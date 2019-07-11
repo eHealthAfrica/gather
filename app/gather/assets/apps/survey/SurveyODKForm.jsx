@@ -59,7 +59,7 @@ class SurveyODKForm extends Component {
   constructor (props) {
     super(props)
 
-    let xforms = [...(props.survey.xforms || [])].map(xform => ({ ...xform, key: xform.id }))
+    const xforms = [...(props.survey.xforms || [])].map(xform => ({ ...xform, key: xform.id }))
     xforms.sort((a, b) => (
       (a.title > b.title) ||
       (a.title === b.title && a.created_at > b.created_at)
@@ -258,7 +258,7 @@ class SurveyODKForm extends Component {
       })
     }
 
-    this.setState({ xforms: [ ...this.state.xforms, ...xforms ] })
+    this.setState({ xforms: [...this.state.xforms, ...xforms] })
   }
 }
 
@@ -530,7 +530,7 @@ class MediaFile extends Component {
       })
     }
 
-    this.setState({ mediaFiles: [ ...this.state.mediaFiles, ...mediaFiles ] })
+    this.setState({ mediaFiles: [...this.state.mediaFiles, ...mediaFiles] })
   }
 }
 

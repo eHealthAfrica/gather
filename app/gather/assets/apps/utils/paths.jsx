@@ -21,7 +21,7 @@
 import { KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP } from './constants'
 
 const API_PREFIX = '/api'
-const APPS = [ KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP ]
+const APPS = [KERNEL_APP, ODK_APP, COUCHDB_SYNC_APP, GATHER_APP]
 
 const getAppPath = () => (document.getElementById('__gather_url__') || {}).value || ''
 
