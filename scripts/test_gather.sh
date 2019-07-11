@@ -37,7 +37,7 @@ echo "_____________________________________________ TESTING"
 echo "_____________________________________________ Killing ALL containers"
 docker-compose kill
 $DC_TEST kill
-$DC_TEST down
+$DC_TEST down -v
 $DC_TEST pull db-test
 
 prepare_and_test_container gather-assets
@@ -50,6 +50,6 @@ prepare_and_test_container gather
 
 echo "_____________________________________________ Killing TEST containers"
 $DC_TEST kill
-$DC_TEST down
+$DC_TEST down -v
 
 echo "_____________________________________________ END"
