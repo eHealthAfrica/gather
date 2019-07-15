@@ -52,6 +52,7 @@ import RefreshSpinner from './RefreshSpinner'
  *   `showXxx`:           Indicates if the button `Xxx` (`First` , `Previous`, `Next`, `Last`)
  *                        is shown in the pagination bar.
  *   `extras`:            An object that passes directly to the listComponent.
+ *   `mapResponse`:       Function that maps the list of results.
  *
  */
 
@@ -137,9 +138,11 @@ class PaginationContainer extends Component {
       return <FetchErrorAlert error={this.state.error} />
     }
 
+    const { mapResponse } = this.props
     const position = this.props.position || 'bottom'
     const { count, results } = this.state.list
     const ListComponent = this.props.listComponent
+    const list = mapResponse ? mapResponse(results) : results
 
     return (
       <div data-qa='data-loaded'>
@@ -152,7 +155,7 @@ class PaginationContainer extends Component {
         { count > 0 &&
           <ListComponent
             {...this.props.extras}
-            list={results}
+            list={list}
             total={count}
             start={this.state.pageSize * (this.state.page - 1) + 1}
           />

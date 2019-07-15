@@ -35,7 +35,7 @@ import {
 
 class Foo extends React.Component {
   render () {
-    return 'foo'
+    return `foo: [${this.props.list}]`
   }
 }
 
@@ -175,7 +175,7 @@ describe('PaginationContainer', () => {
       expect(component.find(PaginationBar).exists()).toBeTruthy()
       expect(component.find(EmptyAlert).exists()).toBeFalsy()
       expect(component.find(Foo).exists()).toBeTruthy()
-      expect(component.text()).toEqual('foo')
+      expect(component.text()).toEqual('foo: [1]')
     })
 
     it('should render the list component', () => {
@@ -184,8 +184,8 @@ describe('PaginationContainer', () => {
       component.setState({
         ...BLANK_STATE,
         list: {
-          count: 1,
-          results: [1]
+          count: 2,
+          results: [1, 2]
         }
       })
 
@@ -196,7 +196,7 @@ describe('PaginationContainer', () => {
       expect(component.find(PaginationBar).exists()).toBeTruthy()
       expect(component.find(EmptyAlert).exists()).toBeFalsy()
       expect(component.find(Foo).exists()).toBeTruthy()
-      expect(component.text()).toEqual('foo')
+      expect(component.text()).toEqual('foo: [1,2]')
     })
 
     it('should change current page to 1 if pageSize is changed', () => {
@@ -252,6 +252,7 @@ describe('PaginationContainer', () => {
           listComponent={Foo}
           url={url + '?'}
           position='top'
+          mapResponse={(list) => list.map(a => a + 1)}
         />
       )
 
@@ -344,7 +345,7 @@ describe('PaginationContainer', () => {
       expect(component.find(PaginationBar).exists()).toBeTruthy()
       expect(component.find(EmptyAlert).exists()).toBeFalsy()
       expect(component.find(Foo).exists()).toBeTruthy()
-      expect(component.text()).toEqual('foo')
+      expect(component.text()).toEqual('foo: [2]')
     })
   })
 
