@@ -33,7 +33,6 @@ export default class EntityItem extends Component {
       return <div />
     }
 
-    // assumption: there is only one item
     const entity = list[0]
     const attachments = attachmentsToLinks(entity.attachments)
 
