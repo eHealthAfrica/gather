@@ -149,7 +149,7 @@ describe('types', () => {
       assert.deepStrictEqual(unflatten(entry), expected)
     })
 
-    it('should not unflatten array properties', () => {
+    it('should not unflatten array properties (in values)', () => {
       const entry = { 'a:b:c:d': 1, 'a:b:a': [1, 2, {}, { d: 1 }] }
       const expected = {
         a: {
@@ -163,6 +163,46 @@ describe('types', () => {
       }
 
       assert.deepStrictEqual(unflatten(entry, ':'), expected)
+    })
+
+    it('should not unflatten array properties (in keys)', () => {
+      const entry = { 'a;b;0;d': 1, 'a;b;1': 1 }
+      const expected = {
+        a: {
+          b: {
+            0: {
+              d: 1
+            },
+            1: 1
+          }
+        }
+      }
+
+      assert.deepStrictEqual(unflatten(entry, ';'), expected)
+    })
+  })
+
+  describe('flatten & unflatten', () => {
+    it('should be idempotent (flatten+unflatten)', () => {
+      const entry = {
+        'a:b:c:d': 1,
+        'a:b:a': [1, 2, {}, { d: 1 }]
+      }
+      assert.deepStrictEqual(flatten(unflatten(entry, ':'), ':'), entry)
+    })
+
+    it('should be idempotent (unflatten+flatten)', () => {
+      const entry = {
+        a: {
+          b: {
+            c: {
+              d: 1
+            },
+            a: [1, 2, {}, { d: 1 }]
+          }
+        }
+      }
+      assert.deepStrictEqual(unflatten(flatten(entry)), entry)
     })
   })
 

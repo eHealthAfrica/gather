@@ -119,7 +119,8 @@ export const getType = (value) => {
 }
 
 /**
- * Flatten a deep object into a one level object with it’s path as key
+ * Flatten a deep object into a one level object with its path as key.
+ * It doesn’t flat array properties.
  *
  * @param {object} object     - The object to be flattened
  * @param {string} separator  - The properties separator
