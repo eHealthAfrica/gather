@@ -49,7 +49,7 @@ import RefreshSpinner from './RefreshSpinner'
  *                         (loading, error) are hidden.
  *                         The whole fetch process is in silent mode.
  *
- *   `handleResponse`:     Function that transform the response.
+ *   `handleResponse`:     Function that transforms the response.
  *
  *   `targetComponent`:    The rendered component after a sucessful request.
  *                         It's going to received as properties the trasformed
