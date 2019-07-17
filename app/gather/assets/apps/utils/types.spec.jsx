@@ -29,7 +29,8 @@ import {
   getLabelTree,
   getType,
   inflate,
-  unflatten
+  unflatten,
+  reorderObjectKeys
 } from './types'
 
 describe('types', () => {
@@ -252,19 +253,31 @@ describe('types', () => {
         a: {
           b: {
             c: {
-              d: 1
-            }
-          }
-        }
+              d: 1,
+              dd: 2
+            },
+            cc: 2
+          },
+          bb: 2
+        },
+        aa: 2
       }
 
       assert.deepStrictEqual(flatten(filterByPaths(entry, [])), {})
       assert.deepStrictEqual(flatten(filterByPaths(entry, ['b'])), {})
 
-      assert.deepStrictEqual(flatten(filterByPaths(entry, ['a.b.c.d'])), { 'a.b.c.d': 1 })
-      assert.deepStrictEqual(flatten(filterByPaths(entry, ['a.b.c'])), { 'a.b.c.d': 1 })
-      assert.deepStrictEqual(flatten(filterByPaths(entry, ['a.b'])), { 'a.b.c.d': 1 })
-      assert.deepStrictEqual(flatten(filterByPaths(entry, ['a'])), { 'a.b.c.d': 1 })
+      assert.deepStrictEqual(
+        flatten(filterByPaths(entry, ['a.b.c.d'])),
+        { 'a.b.c.d': 1 })
+      assert.deepStrictEqual(
+        flatten(filterByPaths(entry, ['a.b.c'])),
+        { 'a.b.c.d': 1, 'a.b.c.dd': 2 })
+      assert.deepStrictEqual(
+        flatten(filterByPaths(entry, ['a.b'])),
+        { 'a.b.c.d': 1, 'a.b.c.dd': 2, 'a.b.cc': 2 })
+      assert.deepStrictEqual(
+        flatten(filterByPaths(entry, ['a'])),
+        { 'a.b.c.d': 1, 'a.b.c.dd': 2, 'a.b.cc': 2, 'a.bb': 2 })
     })
   })
 
@@ -350,6 +363,223 @@ describe('types', () => {
       ]
 
       assert.deepStrictEqual(cleanJsonPaths(paths), expected)
+    })
+  })
+
+  describe('reorderObjectKeys', () => {
+    describe('should preserve object values but not keys order', () => {
+      it('with simple paths', () => {
+        const entry = {
+          b: 1,
+          c: 2,
+          a: {
+            b: 1,
+            a: 0
+          }
+        }
+        const paths = [
+          'a',
+          'a.a',
+          'a.b',
+          'c',
+          'b'
+        ]
+
+        const oEntry = reorderObjectKeys(entry, paths)
+        assert.deepStrictEqual(oEntry, entry) // it's the same object
+
+        // but `Object.keys` returns different values in each case
+        assert.deepStrictEqual(Object.keys(flatten(entry)), ['b', 'c', 'a.b', 'a.a'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry)), ['a.a', 'a.b', 'c', 'b'])
+      })
+
+      it('with ARRAY paths', () => {
+        const entry = {
+          // array of primitives
+          i: [0, 1, 2],
+          // array of objects
+          l: [
+            { z: 3, x: 1, y: 2 },
+            { z: 3, y: 2, x: 1 },
+            { x: 1, z: 3, y: 2 }
+          ],
+          // array of array of objects
+          m: [[{ b: 1, a: 0 }]],
+          // nested arrays
+          n: [
+            { a: 1 },
+            {
+              b: [
+                { d: [0], c: 1 },
+                { d: [], c: 2 },
+                { c: 3 }
+              ],
+              a: 1
+            }
+          ],
+          // array of array of primitives
+          k: [[0], [1], [2]]
+        }
+        const paths = [
+          'l',
+          'l.#',
+          'l.#.x',
+          'l.#.y',
+          'l.#.z',
+          'i',
+          'i.#',
+          'k',
+          'k.#',
+          'k.#.#',
+          'n',
+          'n.#',
+          'n.#.a',
+          'n.#.b',
+          'n.#.b.#',
+          'n.#.b.#.c',
+          'n.#.b.#.d',
+          'n.#.b.#.d.#',
+          'm',
+          'm.#',
+          'm.#.#',
+          'm.#.#.a',
+          'm.#.#.b'
+        ]
+
+        const oEntry = reorderObjectKeys(entry, paths)
+        assert.deepStrictEqual(oEntry, entry) // it's the same object
+
+        // but `Object.keys` returns different values in each case
+        assert.deepStrictEqual(Object.keys(flatten(entry)), ['i', 'l', 'm', 'n', 'k'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry)), ['l', 'i', 'k', 'n', 'm'])
+
+        assert.deepStrictEqual(Object.keys(flatten(entry.l[0])), ['z', 'x', 'y'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry.l[0])), ['x', 'y', 'z'])
+
+        assert.deepStrictEqual(Object.keys(flatten(entry.l[1])), ['z', 'y', 'x'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry.l[1])), ['x', 'y', 'z'])
+
+        assert.deepStrictEqual(Object.keys(flatten(entry.l[2])), ['x', 'z', 'y'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry.l[2])), ['x', 'y', 'z'])
+
+        assert.deepStrictEqual(Object.keys(flatten(entry.n[1])), ['b', 'a'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry.n[1])), ['a', 'b'])
+
+        assert.deepStrictEqual(Object.keys(flatten(entry.n[1].b[0])), ['d', 'c'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry.n[1].b[0])), ['c', 'd'])
+
+        assert.deepStrictEqual(Object.keys(flatten(entry.m[0][0])), ['b', 'a'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry.m[0][0])), ['a', 'b'])
+      })
+
+      it('with UNION paths', () => {
+        const paths = [
+          'u',
+          'u.?',
+          'u.?.x',
+          'u.?.y',
+          'u.?.z',
+          'w',
+          'w.?',
+          'w.?.#',
+          'w.?.a'
+        ]
+
+        const entry1 = {
+          w: [],
+          u: { y: 2, x: 1 }
+        }
+        const oEntry1 = reorderObjectKeys(entry1, paths)
+        assert.deepStrictEqual(oEntry1, entry1) // it's the same object
+
+        // but `Object.keys` returns different values in each case
+        assert.deepStrictEqual(Object.keys(flatten(entry1)), ['w', 'u.y', 'u.x'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry1)), ['u.x', 'u.y', 'w'])
+
+        const entry2 = {
+          w: { a: 1 },
+          u: { y: 2, x: 1 }
+        }
+
+        const oEntry2 = reorderObjectKeys(entry2, paths)
+        assert.deepStrictEqual(oEntry2, entry2) // it's the same object
+
+        // but `Object.keys` returns different values in each case
+        assert.deepStrictEqual(Object.keys(flatten(entry2)), ['w.a', 'u.y', 'u.x'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry2)), ['u.x', 'u.y', 'w.a'])
+      })
+
+      it('with MAP paths', () => {
+        const entry = {
+          // map of objects
+          r: {
+            // the root keys are not going to be ordered,
+            // but the nested ones yes
+            c: { b: 1, a: 2 },
+            b: { b: 1, a: 2 },
+            a: { b: 1, a: 2 }
+          },
+          // map of primitives
+          s: {
+            z: 0,
+            y: 1,
+            x: 2
+          },
+          // array inside map
+          t: { x: [{ a: 1, b: 1, c: 1 }] },
+          // map inside array
+          w: [{ x: { a: 1, b: 1, c: 1 } }]
+        }
+        const paths = [
+          'r',
+          'r.*',
+          'r.*.a',
+          'r.*.b',
+          's',
+          's.*',
+          't',
+          't.*',
+          't.*.#',
+          't.*.#.c',
+          't.*.#.a',
+          't.*.#.b',
+          'w',
+          'w.#',
+          'w.#.*',
+          'w.#.*.c',
+          'w.#.*.b',
+          'w.#.*.a'
+        ]
+
+        const oEntry = reorderObjectKeys(entry, paths)
+        assert.deepStrictEqual(oEntry, entry) // it's the same object
+
+        // but `Object.keys` returns different values in each case
+        assert.deepStrictEqual(
+          Object.keys(flatten(entry)),
+          [
+            'r.c.b', 'r.c.a',
+            'r.b.b', 'r.b.a',
+            'r.a.b', 'r.a.a',
+            's.z', 's.y', 's.x',
+            't.x', 'w'
+          ])
+        assert.deepStrictEqual(
+          Object.keys(flatten(oEntry)),
+          [
+            'r.c.a', 'r.c.b',
+            'r.b.a', 'r.b.b',
+            'r.a.a', 'r.a.b',
+            's.z', 's.y', 's.x',
+            't.x', 'w'
+          ])
+
+        assert.deepStrictEqual(Object.keys(flatten(entry.t.x[0])), ['a', 'b', 'c'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry.t.x[0])), ['c', 'a', 'b'])
+
+        assert.deepStrictEqual(Object.keys(flatten(entry.w[0].x)), ['a', 'b', 'c'])
+        assert.deepStrictEqual(Object.keys(flatten(oEntry.w[0].x)), ['c', 'b', 'a'])
+      })
     })
   })
 })

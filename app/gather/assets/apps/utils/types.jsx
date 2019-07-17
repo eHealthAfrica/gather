@@ -172,19 +172,19 @@ export const unflatten = (object, separator = '.') => {
  * @param {array}  paths      - The list of allowed paths
  * @param {string} separator  - The properties separator
  *
- * @return {object}           - The resulting unflat object
+ * @return {object}           - The resulting filtered object
  */
 export const filterByPaths = (object, paths, separator = '.') => {
   const flattenObject = flatten(object, separator)
   const filteredFlattenObject = {}
   paths.forEach(path => {
     Object.keys(flattenObject)
-      .filter(key => key.indexOf(path) === 0)
+      .filter(key => key === path || key.indexOf(`${path}${separator}`) === 0)
       .forEach(key => {
         filteredFlattenObject[key] = flattenObject[key]
       })
   })
-  return unflatten(filteredFlattenObject)
+  return unflatten(filteredFlattenObject, separator)
 }
 
 /**
@@ -317,36 +317,26 @@ export const getLabel = (jsonPath, labels = {}, separator = '.') => {
   }
 
   // if there are "union" properties "a.b.?.c.d"
-  const unionKeys = Object.keys(labels)
-    .filter(key => key.indexOf(`${separator}${PATH_UNION}`) > -1)
+  const unionKeys = Object.keys(labels).filter(k => containsPathKey(k, PATH_UNION, separator))
   for (let i = 0; i < unionKeys.length; i++) {
     const current = unionKeys[i]
-    const cleaned = current.replace(`${separator}${PATH_UNION}`, '')
-    if (cleaned === jsonPath) {
+    if (removePathKey(current, PATH_UNION, separator) === jsonPath) {
       return labels[current]
     }
   }
 
   // if there are "map" properties "a.b.*.c.d"
-  const mapKeys = Object.keys(labels)
-    .filter(key => key.indexOf(`${separator}${PATH_MAP}`) > -1)
+  const mapKeys = Object.keys(labels).filter(k => containsPathKey(k, PATH_MAP, separator))
   for (let i = 0; i < mapKeys.length; i++) {
     const current = mapKeys[i]
-    // create the regular expression with the key value
-    // "a.b.*.c.?.d.*.e" => /^a\.b\.([A-Za-z0-9_]+)\.c\.d\.([A-Za-z0-9_]+)\.e$/
-    const re = current
-      .replace(`${separator}${PATH_UNION}`, '') // remove union marks
-      .split(separator)
-      .map(piece => piece === PATH_MAP ? '([A-Za-z0-9_]+)' : piece)
-      .join(`\\${separator}`)
-    if (new RegExp('^' + re + '$').test(jsonPath)) {
+    if (getRegExp(current, separator).test(jsonPath)) {
       return labels[current]
     }
   }
 
   // split the compounded key into pieces and take the last one
   const pieces = jsonPath.split(separator)
-  return sentenceCase(pieces[pieces.length - 1])
+  return toSentenceCase(pieces[pieces.length - 1])
 }
 
 /**
@@ -359,54 +349,14 @@ export const getLabel = (jsonPath, labels = {}, separator = '.') => {
  *
  * @return {string}               - The tree labels
  */
-export const getLabelTree = (jsonPath, labels = {}, separator = '.', labelSeparator = ' / ') => {
-  const pieces = jsonPath.split(separator)
-  return pieces
+export const getLabelTree = (jsonPath, labels = {}, separator = '.', labelSeparator = ' / ') => (
+  jsonPath
+    .split(separator)
     // build the jsonpath based on current index
     // [a0, a1, a2, ...aI, ... aN] => a0.a1.___.aI
-    .map((_, index, array) => getLabel(array.slice(0, index + 1).join(separator), labels, separator))
+    .map((_, index, self) => getLabel(self.slice(0, index + 1).join(separator), labels, separator))
     .join(labelSeparator)
-}
-
-/**
- * Converts property name into sentence case
- *
- * - `my_name_is` into `my name is` (snake case)
- * - `myNameIs` into `my Name Is` (camel case)
- *
- * @param {string} name      - The uggly name
- *
- * @return {string}          - The prettified name (in sentence case)
- */
-const sentenceCase = (name) => (name
-  .replace(/_/g, ' ') //             convert `my_name_is` into `my name is`
-  .replace(/([A-Z]+)/g, ' $1') //    convert `myNameIs` into `my Name Is`
-  .replace(/([A-Z][a-z])/g, ' $1')
 )
-
-// not desired paths
-const forbiddenPath = (jsonPath) => (
-  // attributes "@attr"
-  (jsonPath.charAt(0) === '@') ||
-  // internal xForm properties
-  ([
-    '_id', '_version',
-    'starttime', 'endtime', 'deviceid',
-    'meta'
-  ].indexOf(jsonPath) > -1) ||
-  // "meta" children
-  (jsonPath.indexOf('meta.') === 0) ||
-  // AVRO array/ map/ union properties
-  (
-    jsonPath.indexOf(PATH_ARRAY) > -1 ||
-    jsonPath.indexOf(PATH_MAP) > -1 ||
-    jsonPath.indexOf(PATH_UNION) > -1
-  )
-)
-// ["a", "a.b", "a.c"] => ["a.b", "a.c"]
-const isLeaf = (jsonPath, _, array) => array.filter(
-  anotherPath => anotherPath.indexOf(jsonPath + '.') === 0
-).length === 0
 
 /**
  * Return the cleaned list of jsonpaths.
@@ -423,6 +373,147 @@ const isLeaf = (jsonPath, _, array) => array.filter(
  */
 export const cleanJsonPaths = (jsonPaths) => jsonPaths
   // remove undesired paths
-  .filter(jsonPath => !forbiddenPath(jsonPath))
+  .filter(jsonPath => !isForbiddenPath(jsonPath))
   // keep only the leafs
-  .filter(isLeaf)
+  .filter(isLeafPath)
+  // remove possible duplicates
+  .filter(removeDups)
+
+/**
+ * Rebuild the object keys in the indicated order.
+ *
+ * @param {object} object     - The object to be reordered
+ * @param {array}  jsonPaths  - The list of ordered json paths
+ *
+ * @return {object}           - The resulting "reordered" object
+ */
+export const reorderObjectKeys = (obj, jsonPaths) => {
+  // Issue: the paths contain also the AVRO internal flags, "#", "?", "*"
+
+  // if there are "union" properties "a.b.?.c.d" (remove mark)
+  // if there are "array" properties "a.b.#.c.d" (iterate values)
+  // if there are "map" properties "a.b.*.c.d" (keep keys in appearance order)
+
+  const getChildPaths = (paths, key) => (
+    paths
+      .filter(path => path.indexOf(`${key}.`) === 0)
+      .map(path => path.substring(key.length + 1))
+  )
+
+  const walker = (currentObj, currentPaths) => {
+    const keys = currentPaths.filter(path => path.split('.').length === 1)
+    if (keys.length === 0 || isLeafValue(currentObj)) {
+      return currentObj
+    }
+
+    // ARRAY values take precedence over the rest
+    if (keys.indexOf(PATH_ARRAY) > -1 && isArrayValue(currentObj)) {
+      const aPaths = getChildPaths(currentPaths, PATH_ARRAY)
+      return currentObj.map(item => walker(item, aPaths))
+    }
+
+    // MAP paths take precedence over the rest
+    if (keys.indexOf(PATH_MAP) > -1 && isObjectValue(currentObj)) {
+      const mPaths = getChildPaths(currentPaths, PATH_MAP)
+      const res = {}
+      Object.keys(currentObj).forEach(k => {
+        res[k] = walker(currentObj[k], mPaths)
+      })
+      return res
+    }
+
+    const result = {}
+    keys
+      .filter(key => key !== PATH_ARRAY && key !== PATH_MAP)
+      .forEach(key => {
+        const nextPaths = getChildPaths(currentPaths, key)
+        if (currentObj && currentObj[key] !== undefined) {
+          result[key] = walker(currentObj[key], nextPaths)
+        }
+      })
+    return result
+  }
+
+  // Remove UNION flags (and produced duplicates)
+  // Note: union types could lead to this situation:
+  //       having the union of two types like {a, b, c} and {c, a, x, y}
+  //       with our approach the resultant object would have these
+  //       ordered keys {a, c, x, y}
+  //       but this case is only possible using named types and
+  //       so far we are not supporting them thus we ignore it
+  const paths = jsonPaths
+    .map(path => removePathKey(path, PATH_UNION))
+    .filter(removeDups)
+
+  return walker(obj, paths)
+}
+
+// create the regular expression with the path value
+// "a.b.*.c.?.d.*.e"  =>  /^a\.b\.([A-Za-z0-9_]+)\.c\.d\.([A-Za-z0-9_]+)\.e$/
+const getRegExp = (path, separator) => {
+  const re = path
+    .split(separator)
+    // remove UNION mark
+    .filter(piece => piece !== PATH_UNION)
+    // replace MAP mark with its regular expression
+    // From AVRO specs: start with [A-Za-z_] subsequently contain only [A-Za-z0-9_]
+    // We are less strict.
+    .map(piece => piece === PATH_MAP ? '([A-Za-z0-9_]+)' : piece)
+    .join(`\\${separator}`)
+  return new RegExp('^' + re + '$')
+}
+
+/**
+ * Converts string into sentence case
+ *
+ * - `my_name_is` into `my name is` (snake case)
+ * - `myNameIs` into `my Name Is` (camel case)
+ *
+ * @param {string} value     - The uggly name
+ *
+ * @return {string}          - The prettified name (in sentence case)
+ */
+const toSentenceCase = (value) => (
+  value
+    .replace(/_/g, ' ') //             convert `my_name_is` into `my name is`
+    .replace(/([A-Z]+)/g, ' $1') //    convert `myNameIs` into `my Name Is`
+    .replace(/([A-Z][a-z])/g, ' $1')
+)
+
+// not desired paths
+const isForbiddenPath = (jsonPath) => (
+  // attributes "@attr"
+  (jsonPath.charAt(0) === '@') ||
+  // internal xForm properties
+  (['_id', '_version', 'starttime', 'endtime', 'deviceid'].indexOf(jsonPath) > -1) ||
+  // "meta" xForm object
+  (containsPathKey(jsonPath, 'meta')) ||
+  // AVRO array/ map/ union properties
+  (containsPathKeys(jsonPath, [PATH_ARRAY, PATH_MAP, PATH_UNION]))
+)
+
+// ["a", "a.b", "a.c"] => ["a.b", "a.c"]
+const isLeafPath = (item, _, self) => self.filter(
+  anotherPath => anotherPath.indexOf(item + '.') === 0
+).length === 0
+
+// remove duplicated entries (keep first appearance)
+// ["a", "x", "a"] => ["a", "x"]
+const removeDups = (item, index, self) => self.indexOf(item) === index
+
+// remove property in jsonpath
+const removePathKey = (jsonPath, key, separator = '.') => (
+  jsonPath.split(separator).filter(p => p !== key).join(separator)
+)
+
+const containsPathKey = (jsonPath, key, separator = '.') => (
+  jsonPath.split(separator).filter(p => p === key).length > 0
+)
+
+const containsPathKeys = (jsonPath, keys, separator = '.') => (
+  jsonPath.split(separator).filter(p => keys.indexOf(p) > -1).length > 0
+)
+
+const isObjectValue = (value) => getType(value) === 'object'
+const isArrayValue = (value) => getType(value) === 'array'
+const isLeafValue = (value) => !isObjectValue(value) && !isArrayValue(value)
