@@ -379,7 +379,7 @@ export const cleanJsonPaths = (jsonPaths, separator = PATH_SEPARATOR) => jsonPat
   // keep only the leafs
   // ["a", "a.b", "a.c"] => ["a.b", "a.c"]
   .filter((item, _, self) =>
-    self.filter(entry => entry.indexOf(`${entry}${separator}`) === 0).length === 0
+    self.filter(entry => entry.indexOf(`${item}${separator}`) === 0).length === 0
   )
   // remove possible duplicates
   .filter(removeDups)
