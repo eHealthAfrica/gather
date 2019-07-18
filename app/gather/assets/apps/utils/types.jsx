@@ -369,14 +369,18 @@ export const getLabelTree = (jsonPath, labels = {}, labelSeparator = ' / ', sepa
  *   - intermmediate paths, ["a", "a.b", "a.c"] => ["a.b", "a.c"]
  *
  * @param {array} jsonPaths  - The list of jsonpaths
+ * @param {string} separator - The properties separator
  *
  * @return {array}           - The cleaned list
  */
-export const cleanJsonPaths = (jsonPaths) => jsonPaths
+export const cleanJsonPaths = (jsonPaths, separator = PATH_SEPARATOR) => jsonPaths
   // remove undesired paths
   .filter(jsonPath => !isForbiddenPath(jsonPath))
   // keep only the leafs
-  .filter(isLeafPath)
+  // ["a", "a.b", "a.c"] => ["a.b", "a.c"]
+  .filter((item, _, self) =>
+    self.filter(entry => entry.indexOf(`${entry}${separator}`) === 0).length === 0
+  )
   // remove possible duplicates
   .filter(removeDups)
 
@@ -385,10 +389,11 @@ export const cleanJsonPaths = (jsonPaths) => jsonPaths
  *
  * @param {object} object     - The object to be reordered
  * @param {array}  jsonPaths  - The list of ordered json paths
+ * @param {string} separator  - The properties separator
  *
  * @return {object}           - The resulting "reordered" object
  */
-export const reorderObjectKeys = (obj, jsonPaths) => {
+export const reorderObjectKeys = (obj, jsonPaths, separator = PATH_SEPARATOR) => {
   // Issue: the paths contain also the AVRO internal flags, "#", "?", "*"
 
   // if there are "union" properties "a.b.?.c.d" (remove mark)
@@ -397,12 +402,12 @@ export const reorderObjectKeys = (obj, jsonPaths) => {
 
   const getChildPaths = (paths, key) => (
     paths
-      .filter(path => path.indexOf(`${key}.`) === 0)
-      .map(path => path.substring(key.length + 1))
+      .filter(path => path.indexOf(`${key}${separator}`) === 0)
+      .map(path => path.substring(key.length + separator.length))
   )
 
   const walker = (currentObj, currentPaths) => {
-    const keys = currentPaths.filter(path => path.split('.').length === 1)
+    const keys = currentPaths.filter(path => path.split(separator).length === 1)
     if (keys.length === 0 || isLeafValue(currentObj)) {
       return currentObj
     }
@@ -482,21 +487,16 @@ const toSentenceCase = (value) => (
 )
 
 // not desired paths
-const isForbiddenPath = (jsonPath) => (
+const isForbiddenPath = (jsonPath, separator) => (
   // attributes "@attr"
   (jsonPath.charAt(0) === '@') ||
   // internal xForm properties
   (['_id', '_version', 'starttime', 'endtime', 'deviceid'].indexOf(jsonPath) > -1) ||
   // "meta" xForm object
-  (containsPathKey(jsonPath, 'meta')) ||
+  (containsPathKey(jsonPath, 'meta', separator)) ||
   // AVRO array/ map/ union properties
-  (containsPathKeys(jsonPath, [PATH_ARRAY, PATH_MAP, PATH_UNION]))
+  (containsPathKeys(jsonPath, [PATH_ARRAY, PATH_MAP, PATH_UNION, separator]))
 )
-
-// ["a", "a.b", "a.c"] => ["a.b", "a.c"]
-const isLeafPath = (item, _, self) => self.filter(
-  anotherPath => anotherPath.indexOf(item + '.') === 0
-).length === 0
 
 // remove duplicated entries (keep first appearance)
 // ["a", "x", "a"] => ["a", "x"]
