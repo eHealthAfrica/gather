@@ -23,6 +23,7 @@ import moment from 'moment'
 const PATH_ARRAY = '#'
 const PATH_MAP = '*'
 const PATH_UNION = '?'
+const PATH_SEPARATOR = '.'
 
 const DATE_FORMAT = 'YYYY-MM-DD'
 const DATE_REGEXP = /^(\d{4})-(\d{2})-(\d{2})$/
@@ -127,7 +128,7 @@ export const getType = (value) => {
  *
  * @return {object}           - The resulting flat object
  */
-export const flatten = (object, separator = '.') => {
+export const flatten = (object, separator = PATH_SEPARATOR) => {
   // assumption: no property names contain `separator`
   // https://gist.github.com/penguinboy/762197#gistcomment-2168525
 
@@ -151,7 +152,7 @@ export const flatten = (object, separator = '.') => {
  *
  * @return {object}           - The resulting unflat object
  */
-export const unflatten = (object, separator = '.') => {
+export const unflatten = (object, separator = PATH_SEPARATOR) => {
   const deepObject = {}
   Object.keys(object).forEach(path => {
     path.split(separator)
@@ -174,7 +175,7 @@ export const unflatten = (object, separator = '.') => {
  *
  * @return {object}           - The resulting filtered object
  */
-export const filterByPaths = (object, paths, separator = '.') => {
+export const filterByPaths = (object, paths, separator = PATH_SEPARATOR) => {
   const flattenObject = flatten(object, separator)
   const filteredFlattenObject = {}
   paths.forEach(path => {
@@ -261,8 +262,8 @@ export const filterByPaths = (object, paths, separator = '.') => {
  * @param {array}  jsonPaths - The flat object paths
  * @param {string} separator - The properties separator
  */
-export const inflate = (jsonPaths, separator = '.') => {
-  // assumption: no property names contain `separator`
+export const inflate = (jsonPaths, separator = PATH_SEPARATOR) => {
+  // assumption: no property names contain `separator` or `.`
 
   const depth = jsonPaths.reduce((acc, curr) => Math.max(acc, curr.split(separator).length), 0)
   const tree = []
@@ -280,7 +281,7 @@ export const inflate = (jsonPaths, separator = '.') => {
           key,
 
           // replace `separator` with the common `.`
-          path: key.replace(new RegExp('\\' + separator, 'g'), '.'),
+          path: separator === PATH_SEPARATOR ? key : key.split(separator).join(PATH_SEPARATOR),
 
           // if there are more nested properties
           hasChildren: keys.length > (level + 1),
@@ -311,7 +312,7 @@ export const inflate = (jsonPaths, separator = '.') => {
  *
  * @return {string}          - The label
  */
-export const getLabel = (jsonPath, labels = {}, separator = '.') => {
+export const getLabel = (jsonPath, labels = {}, separator = PATH_SEPARATOR) => {
   if (labels[jsonPath]) {
     return labels[jsonPath]
   }
@@ -344,12 +345,12 @@ export const getLabel = (jsonPath, labels = {}, separator = '.') => {
  *
  * @param {string} jsonPath       - The jsonpath
  * @param {Object} labels         - The labels dictionary
- * @param {string} separator      - The properties separator
  * @param {string} labelSeparator - The separator between path labels
+ * @param {string} separator      - The properties separator
  *
  * @return {string}               - The tree labels
  */
-export const getLabelTree = (jsonPath, labels = {}, separator = '.', labelSeparator = ' / ') => (
+export const getLabelTree = (jsonPath, labels = {}, labelSeparator = ' / ', separator = PATH_SEPARATOR) => (
   jsonPath
     .split(separator)
     // build the jsonpath based on current index
@@ -502,15 +503,15 @@ const isLeafPath = (item, _, self) => self.filter(
 const removeDups = (item, index, self) => self.indexOf(item) === index
 
 // remove property in jsonpath
-const removePathKey = (jsonPath, key, separator = '.') => (
+const removePathKey = (jsonPath, key, separator = PATH_SEPARATOR) => (
   jsonPath.split(separator).filter(p => p !== key).join(separator)
 )
 
-const containsPathKey = (jsonPath, key, separator = '.') => (
+const containsPathKey = (jsonPath, key, separator = PATH_SEPARATOR) => (
   jsonPath.split(separator).filter(p => p === key).length > 0
 )
 
-const containsPathKeys = (jsonPath, keys, separator = '.') => (
+const containsPathKeys = (jsonPath, keys, separator = PATH_SEPARATOR) => (
   jsonPath.split(separator).filter(p => keys.indexOf(p) > -1).length > 0
 )
 

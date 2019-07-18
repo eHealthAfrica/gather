@@ -212,7 +212,36 @@ describe('types', () => {
       assert.deepStrictEqual(inflate([]), [])
     })
 
-    it('should analyze flat JSON objects', () => {
+    it('should analyze flat JSON objects with `.` separator', () => {
+      const keys = [
+        'a.b.c',
+        'a.b.d',
+        'a.e.f',
+        'a.g',
+        'h'
+      ]
+
+      const expectedValue = [
+        {
+          a: { key: 'a', path: 'a', siblings: 4, hasChildren: true, isLeaf: false },
+          h: { key: 'h', path: 'h', siblings: 1, hasChildren: false, isLeaf: true }
+        },
+        {
+          'a.b': { key: 'a.b', path: 'a.b', siblings: 2, hasChildren: true, isLeaf: false },
+          'a.e': { key: 'a.e', path: 'a.e', siblings: 1, hasChildren: true, isLeaf: false },
+          'a.g': { key: 'a.g', path: 'a.g', siblings: 1, hasChildren: false, isLeaf: true }
+        },
+        {
+          'a.b.c': { key: 'a.b.c', path: 'a.b.c', siblings: 1, hasChildren: false, isLeaf: true },
+          'a.b.d': { key: 'a.b.d', path: 'a.b.d', siblings: 1, hasChildren: false, isLeaf: true },
+          'a.e.f': { key: 'a.e.f', path: 'a.e.f', siblings: 1, hasChildren: false, isLeaf: true }
+        }
+      ]
+
+      assert.deepStrictEqual(inflate(keys), expectedValue)
+    })
+
+    it('should analyze flat JSON objects with custom separator', () => {
       const keys = [
         'a|b|c',
         'a|b|d',
@@ -331,8 +360,17 @@ describe('types', () => {
       assert.strictEqual(getLabelTree('a.b.c.d.e'), 'a / b / c / d / e')
       assert.strictEqual(getLabelTree('a.b.c.d.e', labels), 'Root / b / The Big C / d / e')
 
-      assert.strictEqual(getLabelTree('a:b:c:d:e', {}, ':', '$'), 'a$b$c$d$e')
-      assert.strictEqual(getLabelTree('a.b.c.d.e', labels, '.', '$'), 'Root$b$The Big C$d$e')
+      assert.strictEqual(getLabelTree('a.b.c.d.e', labels, '$'), 'Root$b$The Big C$d$e')
+
+      const labels2 = {
+        a: 'Root',
+        'a:d:#:e': 'The indexed E',
+        'a:*:c': 'The Big C',
+        'a:*:c:?:u': 'Join',
+        'x:y:?:z': 'Union'
+      }
+      assert.strictEqual(getLabelTree('a:b:c:d:e', {}, '$', ':'), 'a$b$c$d$e')
+      assert.strictEqual(getLabelTree('a:b:c:d:e', labels2, '-', ':'), 'Root-b-The Big C-d-e')
     })
   })
 
