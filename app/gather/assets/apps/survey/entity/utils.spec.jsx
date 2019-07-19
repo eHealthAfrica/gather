@@ -26,6 +26,7 @@ import { attachmentsToLinks } from './utils'
 describe('Entity utils', () => {
   describe('parseAttachments', () => {
     it('should return the list of attachments with the name and URL', () => {
+      assert.deepStrictEqual(attachmentsToLinks(), [])
       assert.deepStrictEqual(attachmentsToLinks([]), [])
       assert.deepStrictEqual(
         attachmentsToLinks([

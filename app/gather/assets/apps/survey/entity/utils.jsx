@@ -21,7 +21,7 @@
 import { getAttachmentContentPath } from '../../utils/paths'
 
 export const attachmentsToLinks = (attachments) => (
-  attachments.map(({ id, name }) => ({
+  (attachments || []).map(({ id, name }) => ({
     name,
     url: id ? getAttachmentContentPath({ id }) : '#'
   }))
