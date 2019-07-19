@@ -59,6 +59,6 @@ def gather_context(request):
         # to these specific requirements
         url_info = urlparse(context['odk_url'])
         if url_info.scheme != 'https' and url_info.port != 8443:
-            context['odk_url'] = f'http://{url_info.netloc}:8443{url_info.path}'
+            context['odk_url'] = f'http://{url_info.hostname}:8443{url_info.path}'
 
     return context
