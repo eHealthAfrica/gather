@@ -18,6 +18,7 @@
 
 from unittest import mock
 
+from django.conf import settings
 from django.test import RequestFactory, override_settings
 from aether.sdk.unittest import UrlsTestCase
 
@@ -54,6 +55,26 @@ class ContextProcessorsTests(UrlsTestCase):
         self.assertIn('kernel_url', context)
         self.assertNotIn('odk_url', context)
         self.assertNotIn('couchdb_sync_url', context)
+
+    @mock.patch('gather.context_processors.settings.EXTERNAL_APPS',
+                {
+                    **settings.EXTERNAL_APPS,
+                    'aether-odk': {'test': {'url': 'https://localhost'}},
+                })
+    def test_gather_context__odk__https(self):
+        request = RequestFactory().get('/')
+        context = gather_context(request)
+        self.assertEqual(context['odk_url'], 'https://localhost')
+
+    @mock.patch('gather.context_processors.settings.EXTERNAL_APPS',
+                {
+                    **settings.EXTERNAL_APPS,
+                    'aether-odk': {'test': {'url': 'http://localhost:8000/odk'}},
+                })
+    def test_gather_context__odk__http(self):
+        request = RequestFactory().get('/')
+        context = gather_context(request)
+        self.assertEqual(context['odk_url'], 'http://localhost:8443/odk')
 
 
 @override_settings(

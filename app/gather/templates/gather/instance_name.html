@@ -25,14 +25,14 @@ under the License.
 
   <span data-qa="kernel-server" class="url-name">
     {% trans 'Aether Kernel Server' %}
-    <a href="{{ kernel_url }}" target="_blank">{{ kernel_url }}</a>
+    <a href="{{ kernel_url }}/" target="_blank">{{ kernel_url }}/</a>
   </span>
 
   {% if odk_url %}
     {# Include the link to the Aether ODK Server #}
     <span data-qa="odk-server" class="url-name">
       {% trans 'Aether ODK Server' %}
-      <a href="{{ odk_url }}" target="_blank">{{ odk_url }}</a>
+      <a href="{{ odk_url }}/" target="_blank">{{ odk_url }}/</a>
     </span>
   {% endif %}
 
@@ -40,7 +40,7 @@ under the License.
     {# Include the link to the Aether CouchDB Sync Server #}
     <span data-qa="couchdb-sync-server" class="url-name">
       {% trans 'Aether CouchDB Sync Server' %}
-      <a href="{{ couchdb_sync_url }}" target="_blank">{{ couchdb_sync_url }}</a>
+      <a href="{{ couchdb_sync_url }}/" target="_blank">{{ couchdb_sync_url }}/</a>
     </span>
   {% endif %}
 </h1>
