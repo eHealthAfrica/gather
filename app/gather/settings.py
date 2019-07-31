@@ -45,8 +45,6 @@ APP_EXTRA_META = 'Effortless data collection and curation'
 
 ROOT_URLCONF = 'gather.urls'
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = 50 * 1024 * 1024  # 50MB
-
 TEMPLATES[0]['OPTIONS']['context_processors'] += [
     'gather.context_processors.gather_context',
 ]
@@ -70,3 +68,12 @@ AETHER_APPS = [
     for key in EXTERNAL_APPS.keys()
     if key.startswith(AETHER_PREFIX)
 ]
+
+# Upload files
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-DATA_UPLOAD_MAX_MEMORY_SIZE
+# https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-FILE_UPLOAD_MAX_MEMORY_SIZE
+
+_max_size = 50 * 1024 * 1024  # 50MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.environ.get('DATA_UPLOAD_MAX_MEMORY_SIZE', _max_size))
+FILE_UPLOAD_MAX_MEMORY_SIZE = int(os.environ.get('FILE_UPLOAD_MAX_MEMORY_SIZE', _max_size))
