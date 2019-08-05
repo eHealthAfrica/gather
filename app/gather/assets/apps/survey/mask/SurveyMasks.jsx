@@ -67,6 +67,38 @@ const MESSAGES = defineMessages({
   }
 })
 
+const buildStateWithProps = (props, includeColumns = false) => {
+  const { formatMessage } = props.intl
+  const newState = {
+    initialSurvey: props.survey,
+    initialColumns: props.columns,
+    masks: [
+      {
+        id: -2,
+        name: formatMessage(MESSAGES.all),
+        columns: []
+      },
+
+      ...props.survey.masks,
+
+      {
+        id: -1,
+        name: formatMessage(MESSAGES.none),
+        columns: [...props.columns]
+      }
+    ]
+  }
+
+  if (includeColumns) {
+    newState.columns = {}
+    props.columns.forEach(column => {
+      newState.columns[column] = props.initialSelected.indexOf(column) > -1
+    })
+  }
+
+  return newState
+}
+
 /**
  * SurveyMasks component.
  *
@@ -79,59 +111,25 @@ class SurveyMasks extends Component {
 
     this.state = {
       showColumns: false,
-      ...this.buildStateWithProps(props, true)
+      ...buildStateWithProps(props, true)
     }
   }
 
-  getSnapshotBeforeUpdate (prevProps) {
-    if (prevProps.survey !== this.props.survey || prevProps.columns !== this.props.columns) {
+  static getDerivedStateFromProps (props, state) {
+    if (state.initialSurvey !== props.survey || state.initialColumns !== props.columns) {
       return {
-        ...this.buildStateWithProps(this.props, (prevProps.columns !== this.props.columns))
+        ...buildStateWithProps(props, (state.initialColumns !== props.columns))
       }
     }
     return null
   }
 
-  componentDidUpdate (prevProps, prevState, snapshot) {
-    if (snapshot !== null) {
-      return this.setState(snapshot)
-    }
-
+  componentDidUpdate (prevProps, prevState) {
     if (prevState.columns !== this.state.columns) {
       const selectedColumns = Object.keys(this.state.columns)
         .filter(key => this.state.columns[key])
       this.props.onChange(selectedColumns)
     }
-  }
-
-  buildStateWithProps (props, includeColumns = false) {
-    const { formatMessage } = props.intl
-    const newState = {
-      masks: [
-        {
-          id: -2,
-          name: formatMessage(MESSAGES.all),
-          columns: []
-        },
-
-        ...props.survey.masks,
-
-        {
-          id: -1,
-          name: formatMessage(MESSAGES.none),
-          columns: [...props.columns]
-        }
-      ]
-    }
-
-    if (includeColumns) {
-      newState.columns = {}
-      props.columns.forEach(column => {
-        newState.columns[column] = props.initialSelected.indexOf(column) > -1
-      })
-    }
-
-    return newState
   }
 
   isMaskSelected (mask) {

@@ -204,22 +204,44 @@ describe('PaginationContainer', () => {
 
       nock('http://localhost')
         .get('/paginate-page-size')
-        .query({ page: 14, page_size: 100 })
+        .query({ page: 14, page_size: 50 })
+        .reply(200, {
+          count: 1500,
+          results: global.range(0, 50)
+        })
+
+      component.setState({ page: 14, pageSize: 50 })
+      expect(component.state('page')).toEqual(14)
+      expect(component.state('pageSize')).toEqual(50)
+      // change state does not update sizes
+      expect(component.state('sizes')).toEqual([25])
+
+      nock('http://localhost')
+        .get('/paginate-page-size')
+        .query({ page: 1, page_size: 100 })
         .reply(200, {
           count: 1500,
           results: global.range(0, 100)
         })
 
-      component.setState({ page: 14, pageSize: 100 })
-      expect(component.state('page')).toEqual(14)
-      expect(component.state('pageSize')).toEqual(100)
-      // change state does not update sizes
-      expect(component.state('sizes')).toEqual([25])
-
       component.setProps({ pageSize: 100, sizes: [1] })
-      expect(component.state('page')).toEqual(14)
+      expect(component.state('page')).toEqual(1)
       expect(component.state('pageSize')).toEqual(100)
       expect(component.state('sizes')).toEqual([1, 100])
+
+      nock('http://localhost')
+        .get('/paginate-page-size')
+        .query({ page: 12, page_size: 100 })
+        .reply(200, {
+          count: 1500,
+          results: global.range(0, 100)
+        })
+
+      component.setState({ page: 12 })
+      component.setProps({ sizes: [100] })
+      expect(component.state('page')).toEqual(12)
+      expect(component.state('pageSize')).toEqual(100)
+      expect(component.state('sizes')).toEqual([100])
 
       nock('http://localhost')
         .get('/paginate-page-size')
@@ -228,10 +250,6 @@ describe('PaginationContainer', () => {
           count: 1500,
           results: global.range(0, 10)
         })
-
-      component.setProps({ sizes: [100] })
-      expect(component.state('pageSize')).toEqual(100)
-      expect(component.state('sizes')).toEqual([100])
 
       component.setProps({ pageSize: 10, sizes: [100] })
       expect(component.state('page')).toEqual(1)

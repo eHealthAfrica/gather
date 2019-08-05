@@ -331,7 +331,6 @@ describe('PaginationBar', () => {
 
       // SECOND page
       component.setProps({ currentPage: 2 })
-      component.update()
       expect(component.find('[name="currentPage"]').props().value).toEqual(2)
 
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
@@ -341,7 +340,6 @@ describe('PaginationBar', () => {
 
       // between SECOND and PREVIOUS LAST page
       component.setProps({ currentPage: 3 })
-      component.update()
       expect(component.find('[name="currentPage"]').props().value).toEqual(3)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()
@@ -350,7 +348,6 @@ describe('PaginationBar', () => {
 
       // PREVIOUS LAST
       component.setProps({ currentPage: 4 })
-      component.update()
       expect(component.find('[name="currentPage"]').props().value).toEqual(4)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()
@@ -359,7 +356,6 @@ describe('PaginationBar', () => {
 
       // LAST
       component.setProps({ currentPage: 5 })
-      component.update()
       expect(component.find('[name="currentPage"]').props().value).toEqual(5)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()

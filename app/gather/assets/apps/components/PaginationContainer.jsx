@@ -33,6 +33,9 @@ import LoadingSpinner from './LoadingSpinner'
 import PaginationBar from './PaginationBar'
 import RefreshSpinner from './RefreshSpinner'
 
+// sort and remove duplicates
+const buildSizes = (sizes = [], pageSize = 25) => sortNumericArray([...new Set([...sizes, pageSize])])
+
 /**
  * PaginationContainer component.
  *
@@ -62,26 +65,25 @@ class PaginationContainer extends Component {
 
     this.state = {
       // default status variables
+      initialSizes: props.sizes,
+      initialPageSize: props.pageSize,
       isLoading: true,
+      sizes: buildSizes(props.sizes, props.pageSize),
       pageSize: props.pageSize || 25,
-      page: 1,
-      sizes: this.buildSizes(props.sizes, props.pageSize)
+      page: 1
     }
   }
 
-  buildSizes (sizes = [], pageSize = 25) {
-    return sortNumericArray([...new Set([...sizes, pageSize])]) // sort and remove duplicates
-  }
-
-  getSnapshotBeforeUpdate (prevProps, prevState) {
-    if (this.props.sizes !== prevProps.sizes) {
-      let nextState = {
-        sizes: this.buildSizes(this.props.sizes, this.props.pageSize)
+  static getDerivedStateFromProps (props, state) {
+    if (props.sizes !== state.initialSizes) {
+      const pageSize = (props.pageSize !== state.initialPageSize) ? props.pageSize : state.pageSize
+      return {
+        initialSizes: props.sizes,
+        initialPageSize: props.pageSize,
+        sizes: buildSizes(props.sizes, pageSize),
+        pageSize,
+        page: (props.pageSize !== state.initialPageSize) ? 1 : state.page
       }
-      if (this.props.pageSize !== prevState.pageSize) {
-        nextState = { ...nextState, pageSize: this.props.pageSize, page: 1 }
-      }
-      return nextState
     }
     return null
   }
@@ -90,11 +92,7 @@ class PaginationContainer extends Component {
     this.loadData()
   }
 
-  componentDidUpdate (prevProps, prevState, snapshot) {
-    if (snapshot !== null) {
-      return this.setState(snapshot)
-    }
-
+  componentDidUpdate (prevProps, prevState) {
     if (prevState.page !== this.state.page ||
         prevState.pageSize !== this.state.pageSize ||
         prevState.search !== this.state.search) {
