@@ -84,9 +84,16 @@ class PaginationBar extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.currentPage !== this.state.currentPage) {
-      this.setState({ currentPage: Math.min(Math.max(1, nextProps.currentPage), this.getNumberOfPages()) })
+  getSnapshotBeforeUpdate (prevProps, prevState) {
+    if (this.props.currentPage !== prevProps.currentPage) {
+      return { currentPage: Math.min(Math.max(1, this.props.currentPage), this.getNumberOfPages()) }
+    }
+    return null
+  }
+
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    if (snapshot !== null) {
+      this.setState(snapshot)
     }
   }
 

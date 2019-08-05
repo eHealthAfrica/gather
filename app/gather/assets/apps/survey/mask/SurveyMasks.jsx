@@ -83,16 +83,20 @@ class SurveyMasks extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.survey !== this.props.survey ||
-      nextProps.columns !== this.props.columns) {
-      this.setState({
-        ...this.buildStateWithProps(nextProps, (nextProps.columns !== this.props.columns))
-      })
+  getSnapshotBeforeUpdate (prevProps) {
+    if (prevProps.survey !== this.props.survey || prevProps.columns !== this.props.columns) {
+      return {
+        ...this.buildStateWithProps(this.props, (prevProps.columns !== this.props.columns))
+      }
     }
+    return null
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    if (snapshot !== null) {
+      return this.setState(snapshot)
+    }
+
     if (prevState.columns !== this.state.columns) {
       const selectedColumns = Object.keys(this.state.columns)
         .filter(key => this.state.columns[key])

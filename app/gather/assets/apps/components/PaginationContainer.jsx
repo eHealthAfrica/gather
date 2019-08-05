@@ -73,21 +73,28 @@ class PaginationContainer extends Component {
     return sortNumericArray([...new Set([...sizes, pageSize])]) // sort and remove duplicates
   }
 
-  componentWillReceiveProps (nextProps) {
-    this.setState({
-      sizes: this.buildSizes(nextProps.sizes, nextProps.pageSize)
-    }, () => {
-      if (nextProps.pageSize !== this.state.pageSize) {
-        this.setState({ pageSize: nextProps.pageSize, page: 1 })
+  getSnapshotBeforeUpdate (prevProps, prevState) {
+    if (this.props.sizes !== prevProps.sizes) {
+      let nextState = {
+        sizes: this.buildSizes(this.props.sizes, this.props.pageSize)
       }
-    })
+      if (this.props.pageSize !== prevState.pageSize) {
+        nextState = { ...nextState, pageSize: this.props.pageSize, page: 1 }
+      }
+      return nextState
+    }
+    return null
   }
 
   componentDidMount () {
     this.loadData()
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    if (snapshot !== null) {
+      return this.setState(snapshot)
+    }
+
     if (prevState.page !== this.state.page ||
         prevState.pageSize !== this.state.pageSize ||
         prevState.search !== this.state.search) {
