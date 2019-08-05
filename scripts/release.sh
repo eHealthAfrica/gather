@@ -30,8 +30,7 @@ function docker_push {
     docker push ${IMAGE}
 }
 
-if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]
-then
+if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
     echo "--------------------------------------------------------------"
     echo "Skipping a release because this is a pull request: ${TRAVIS_PULL_REQUEST}"
     echo "--------------------------------------------------------------"
@@ -39,18 +38,15 @@ then
 fi
 
 # release version depending on TRAVIS_BRANCH (develop | release-#.#) / TRAVIS_TAG (#.#.#)
-if [[ ${TRAVIS_TAG} =~ ^[0-9]+(\.[0-9]+){2}$ ]]
-then
+if [[ ${TRAVIS_TAG} =~ ^[0-9]+(\.[0-9]+){2}$ ]]; then
     VERSION=${TRAVIS_TAG}
 
-elif [[ ${TRAVIS_BRANCH} =~ ^release\-[0-9]+\.[0-9]+$ ]]
-then
+elif [[ ${TRAVIS_BRANCH} =~ ^release\-[0-9]+\.[0-9]+$ ]]; then
     VERSION=`cat VERSION`
     # append "-rc" suffix
     VERSION=${VERSION}-rc
 
-elif [[ ${TRAVIS_BRANCH} = "develop" ]]
-then
+elif [[ ${TRAVIS_BRANCH} = "develop" ]]; then
     VERSION="alpha"
 
 else
@@ -85,7 +81,3 @@ docker-compose build \
     ${APP}
 
 docker_push ${VERSION}
-if [[ ${VERSION} != "alpha" ]]
-then
-    docker_push "latest"
-fi
