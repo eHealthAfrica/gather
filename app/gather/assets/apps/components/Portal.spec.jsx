@@ -18,7 +18,7 @@
  * under the License.
  */
 
-/* global describe, it, expect */
+/* global describe, it, expect, KeyboardEvent */
 
 import React from 'react'
 import { mount } from 'enzyme'
@@ -43,5 +43,56 @@ describe('Portal', () => {
     component.unmount()
 
     expect(document.body.getElementsByTagName('div').length).toEqual(0)
+  })
+
+  it('should listen to document keydown events', () => {
+    let escape = 0
+    let enter = 0
+
+    const onEscape = () => { escape++ }
+    const onEnter = () => { enter++ }
+
+    const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' })
+    const enterEvent = new KeyboardEvent('keydown', { charCode: 13 })
+
+    const component = mount(<Portal />)
+    document.dispatchEvent(escapeEvent)
+    expect(escape).toEqual(0)
+    expect(enter).toEqual(0)
+
+    document.dispatchEvent(enterEvent)
+    expect(escape).toEqual(0)
+    expect(enter).toEqual(0)
+    component.unmount()
+
+    const componentEscape = mount(<Portal onEscape={onEscape} />)
+    document.dispatchEvent(escapeEvent)
+    expect(escape).toEqual(1)
+    expect(enter).toEqual(0)
+
+    document.dispatchEvent(enterEvent)
+    expect(escape).toEqual(1)
+    expect(enter).toEqual(0)
+    componentEscape.unmount()
+
+    const componentEnter = mount(<Portal onEnter={onEnter} />)
+    document.dispatchEvent(escapeEvent)
+    expect(escape).toEqual(1)
+    expect(enter).toEqual(0)
+
+    document.dispatchEvent(enterEvent)
+    expect(escape).toEqual(1)
+    expect(enter).toEqual(1)
+    componentEnter.unmount()
+
+    const componentKeydown = mount(<Portal onEscape={onEscape} onEnter={onEnter} />)
+    document.dispatchEvent(escapeEvent)
+    expect(escape).toEqual(2)
+    expect(enter).toEqual(1)
+
+    document.dispatchEvent(enterEvent)
+    expect(escape).toEqual(2)
+    expect(enter).toEqual(2)
+    componentKeydown.unmount()
   })
 })

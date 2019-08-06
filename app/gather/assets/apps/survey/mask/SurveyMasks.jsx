@@ -370,8 +370,10 @@ class SurveyMasks extends Component {
       return ''
     }
 
+    const close = () => { this.setState({ message: null }) }
+
     return (
-      <Portal>
+      <Portal onEscape={close} onEnter={close}>
         <div className='modal show'>
           <div className='modal-dialog modal-md'>
             <div className='modal-content'>
@@ -385,7 +387,7 @@ class SurveyMasks extends Component {
                 <button
                   type='button'
                   className='btn btn-secondary'
-                  onClick={() => this.setState({ message: null })}>
+                  onClick={close}>
                   <FormattedMessage
                     id='survey.mask.preset.button.close'
                     defaultMessage='Close' />

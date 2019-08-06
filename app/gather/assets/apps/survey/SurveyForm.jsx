@@ -249,10 +249,10 @@ class SurveyForm extends Component {
     return (
       <Portal>
         <div className='modal show'>
-          <div className='modal-dialog modal-md'>
+          <div className='modal-dialog modal-dialog-scrollable modal-md'>
             <div className='modal-content'>
               <div className='modal-header'>
-                <h5 className='modal-title'>{this.renderTitle()}</h5>
+                <h5 className='modal-title'>{ this.renderTitle() }</h5>
               </div>
 
               <div className='modal-body'>
@@ -264,7 +264,7 @@ class SurveyForm extends Component {
                   <ul>
                     {
                       actionsInProgress.length > 0 &&
-                      actionsInProgress.map((msg, index) => <li key={index}>{msg}</li>)
+                      actionsInProgress.map((msg, index) => <li key={index}>{ msg }</li>)
                     }
                   </ul>
                 </div>
