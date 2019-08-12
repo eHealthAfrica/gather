@@ -139,7 +139,7 @@ class PaginationBar extends Component {
     const onChange = (event) => {
       this.setState({ [event.target.name]: event.target.value })
     }
-    const onKeyPress = (event) => {
+    const onKeyUp = (event) => {
       if (event.key === 'Enter') {
         this.props.onSearch(this.state.search)
         this.state.currentSearch = this.state.search
@@ -156,7 +156,7 @@ class PaginationBar extends Component {
           value={this.state.search || ''}
           className={(this.state.search ? 'value' : '')}
           onChange={onChange}
-          onKeyPress={onKeyPress}
+          onKeyUp={onKeyUp}
         />
       </div>
     )
@@ -218,7 +218,7 @@ class PaginationBar extends Component {
       }
     }
 
-    const onKeyPress = (event) => {
+    const onKeyUp = (event) => {
       if (event.key === 'Enter') {
         onBlurPage()
       }
@@ -236,7 +236,7 @@ class PaginationBar extends Component {
           min={1}
           max={numberOfPages}
           onChange={onChangePage}
-          onKeyPress={onKeyPress}
+          onKeyUp={onKeyUp}
           onBlur={onBlurPage}
         />
       </span>

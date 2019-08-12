@@ -166,7 +166,7 @@ class EntitiesDownload extends Component {
       this.setState({ [event.target.name]: event.target.value })
     }
 
-    const onKeyPress = (event) => {
+    const onKeyUp = (event) => {
       // change to TAB if the input value is "t" or "T" and key pressed is Ctrl+Enter
       if (['t', 'T'].indexOf(this.state[event.target.name]) > -1 && event.ctrlKey && event.key === 'Enter') {
         event.preventDefault()
@@ -248,7 +248,7 @@ class EntitiesDownload extends Component {
                 maxLength={1}
                 value={this.state.csvSeparator || ''}
                 onChange={onInputChange}
-                onKeyPress={onKeyPress}
+                onKeyUp={onKeyUp}
               />
             </div>
             <div className='form-group mr-5'>

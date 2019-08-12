@@ -446,7 +446,7 @@ describe('PaginationContainer', () => {
         })
 
       input.simulate('change', { target: { name: 'search', value: 'something' } })
-      input.simulate('keypress', { key: 'Enter' })
+      input.simulate('keyup', { key: 'Enter' })
 
       expect(component.state('page')).toEqual(1)
       expect(component.state('search')).toEqual('something')

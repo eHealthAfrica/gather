@@ -144,12 +144,12 @@ describe('PaginationBar', () => {
       input.simulate('change', { target: { name: 'search', value: 'something' } })
       expect(text).toBeNull()
 
-      // "onKeyPress" Any key does not trigger `onSearch`
-      input.simulate('keypress', { charCode: 90 })
+      // "onKeyUp" Any key does not trigger `onSearch`
+      input.simulate('keyup', { charCode: 90 })
       expect(text).toBeNull()
 
-      // "onKeyPress" Enter does trigger `onSearch`
-      input.simulate('keypress', { key: 'Enter' })
+      // "onKeyUp" Enter does trigger `onSearch`
+      input.simulate('keyup', { key: 'Enter' })
       expect(text).toEqual('something')
     })
   })
@@ -459,8 +459,8 @@ describe('PaginationBar', () => {
       input.simulate('click')
       expect(page).toEqual(0)
 
-      // "onKeyPress" not Enter does trigger `goToPage`
-      input.simulate('keypress', { charCode: 50 }) // char '2'
+      // "onKeyUp" not Enter does trigger `goToPage`
+      input.simulate('keyup', { charCode: 50 }) // char '2'
       expect(page).toEqual(0)
 
       // "change" event does not trigger `goToPage`
@@ -483,8 +483,8 @@ describe('PaginationBar', () => {
       expect(component.find('[name="currentPage"]').props().value).toEqual(2)
       expect(page).toEqual(0)
 
-      // "onKeyPress" Enter does trigger `goToPage` too
-      input.simulate('keypress', { key: 'Enter' })
+      // "onKeyUp" Enter does trigger `goToPage` too
+      input.simulate('keyup', { key: 'Enter' })
       expect(page).toEqual(2)
     })
   })
