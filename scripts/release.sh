@@ -81,3 +81,4 @@ docker-compose build \
     ${APP}
 
 docker_push ${VERSION}
+docker_push ${TRAVIS_COMMIT}
