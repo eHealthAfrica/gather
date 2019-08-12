@@ -53,7 +53,7 @@ describe('Portal', () => {
     const onEnter = () => { enter++ }
 
     const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' })
-    const enterEvent = new KeyboardEvent('keydown', { charCode: 13 })
+    const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' })
 
     const component = mount(<Portal />)
     document.dispatchEvent(escapeEvent)

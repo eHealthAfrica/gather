@@ -45,7 +45,7 @@ export default class SurveyorsList extends Component {
               <div key={surveyor.id} className='surveyor-list-item'>
                 <div className='surveyor-header'>
                   <i className='fas fa-user mr-2' />
-                  {surveyor.username}
+                  { surveyor.username }
                   <a
                     href={getSurveyorsPath({ action: 'edit', id: surveyor.id })}
                     role='button'

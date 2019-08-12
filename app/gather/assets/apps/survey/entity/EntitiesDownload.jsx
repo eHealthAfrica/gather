@@ -168,7 +168,7 @@ class EntitiesDownload extends Component {
 
     const onKeyPress = (event) => {
       // change to TAB if the input value is "t" or "T" and key pressed is Ctrl+Enter
-      if (['t', 'T'].indexOf(this.state[event.target.name]) > -1 && event.ctrlKey && event.charCode === 13) {
+      if (['t', 'T'].indexOf(this.state[event.target.name]) > -1 && event.ctrlKey && event.key === 'Enter') {
         event.preventDefault()
         this.setState({ [event.target.name]: 'TAB' })
       }

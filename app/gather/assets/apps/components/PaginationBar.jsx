@@ -140,7 +140,7 @@ class PaginationBar extends Component {
       this.setState({ [event.target.name]: event.target.value })
     }
     const onKeyPress = (event) => {
-      if (event.charCode === 13) { // Enter
+      if (event.key === 'Enter') {
         this.props.onSearch(this.state.search)
         this.state.currentSearch = this.state.search
       }
@@ -219,7 +219,7 @@ class PaginationBar extends Component {
     }
 
     const onKeyPress = (event) => {
-      if (event.charCode === 13) { // Enter
+      if (event.key === 'Enter') {
         onBlurPage()
       }
     }

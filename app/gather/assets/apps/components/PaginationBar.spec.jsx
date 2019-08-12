@@ -149,7 +149,7 @@ describe('PaginationBar', () => {
       expect(text).toBeNull()
 
       // "onKeyPress" Enter does trigger `onSearch`
-      input.simulate('keypress', { charCode: 13 })
+      input.simulate('keypress', { key: 'Enter' })
       expect(text).toEqual('something')
     })
   })
@@ -484,7 +484,7 @@ describe('PaginationBar', () => {
       expect(page).toEqual(0)
 
       // "onKeyPress" Enter does trigger `goToPage` too
-      input.simulate('keypress', { charCode: 13 })
+      input.simulate('keypress', { key: 'Enter' })
       expect(page).toEqual(2)
     })
   })

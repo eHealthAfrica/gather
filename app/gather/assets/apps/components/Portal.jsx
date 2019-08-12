@@ -33,7 +33,7 @@ class Portal extends React.Component {
       if (event.key === 'Escape') {
         this.props.onEscape && this.props.onEscape()
       }
-      if (event.charCode === 13) { // Enter
+      if (event.key === 'Enter') {
         this.props.onEnter && this.props.onEnter()
       }
     }
