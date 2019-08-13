@@ -24,7 +24,7 @@ under the License.
 <div class="m-b-1">
   <nav class="navbar navbar-expand-md">
 
-    {% include 'eha/branding.html' with classname='navbar-brand' %}
+    {% include 'eha/branding.html' with classname='navbar-brand' link=gather_url|default:'/' %}
 
     <button
       type="button"
