@@ -60,7 +60,7 @@ under the License.
             <span
               id="logged-in-user-info"
               data-user-id="{{ request.user.id }}">
-              {{ request.user|get_fullname }}
+              {{ request.user|get_fullname:request }}
             </span>
             <a class="logout" href="{{ gather_url }}{% url 'logout' %}">
               <i class="fas fa-sign-out-alt" title="{% trans 'Sign Out' %}" aria-hidden="true"></i>
