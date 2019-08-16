@@ -42,7 +42,6 @@ services:
       - ./.persistent_data/static:/static
     ports:
       - 80:80
-      - 8443:8443
     healthcheck:
       test: nginx -t
       interval: 5s
@@ -237,7 +236,7 @@ services:
       AETHER_KERNEL_URL: http://aether.local/kernel
 
       AETHER_ODK_TOKEN: ${ODK_ADMIN_TOKEN}
-      AETHER_ODK_URL: http://aether.local:8443/odk
+      AETHER_ODK_URL: http://aether.local/odk
 
       DB_NAME: gather
       PGHOST: db # This matches the DB service name

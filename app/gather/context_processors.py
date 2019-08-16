@@ -16,8 +16,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from urllib.parse import urlparse
-
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
@@ -52,13 +50,5 @@ def gather_context(request):
         name = app.replace('-', '_')
         external_app = f'{settings.AETHER_PREFIX}{app}'
         context[f'{name}_url'] = get_external_app_url(external_app, request)
-
-    if 'odk' in settings.AETHER_APPS:
-        # ODK Collect requires or protocol https or port 8443
-        # check the current aether-odk URL and adapt it
-        # to these specific requirements
-        url_info = urlparse(context['odk_url'])
-        if url_info.scheme != 'https' and url_info.port != 8443:
-            context['odk_url'] = f'http://{url_info.hostname}:8443{url_info.path}'
 
     return context
