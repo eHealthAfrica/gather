@@ -74,11 +74,11 @@ class MultiSelect extends Component {
     return (
       <div className='row'>
         <div className='col-6'>
-          { this.renderSelect(this.state.options, this.state.selected) }
+          {this.renderSelect(this.state.options, this.state.selected)}
         </div>
 
         <div className='col-6'>
-          { this.renderSelect(this.state.selected) }
+          {this.renderSelect(this.state.selected)}
         </div>
       </div>
     )

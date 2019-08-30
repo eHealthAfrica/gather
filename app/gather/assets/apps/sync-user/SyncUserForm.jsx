@@ -91,7 +91,8 @@ class SyncUserForm extends Component {
             <label className='form-control-label title'>
               <FormattedMessage
                 id='sync-user.form.email'
-                defaultMessage='email' />
+                defaultMessage='email'
+              />
             </label>
             <input
               name='email'
@@ -109,17 +110,20 @@ class SyncUserForm extends Component {
               <button
                 type='button'
                 className='btn btn-cancel'
-                onClick={goBack}>
+                onClick={goBack}
+              >
                 <FormattedMessage
                   id='sync-user.form.action.cancel'
-                  defaultMessage='Cancel' />
+                  defaultMessage='Cancel'
+                />
               </button>
             </div>
             <div>
               <button type='submit' className='btn btn-primary btn-block'>
                 <FormattedMessage
                   id='sync-user.form.action.submit'
-                  defaultMessage='Add mobile user' />
+                  defaultMessage='Add mobile user'
+                />
               </button>
             </div>
           </div>

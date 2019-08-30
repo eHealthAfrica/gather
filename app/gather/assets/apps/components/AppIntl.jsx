@@ -32,7 +32,7 @@ class AppIntl extends Component {
   render () {
     return (
       <IntlProvider defaultLocale='en' locale={navigator.locale || 'en'}>
-        { this.props.children }
+        {this.props.children}
       </IntlProvider>
     )
   }

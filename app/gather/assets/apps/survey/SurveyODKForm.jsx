@@ -90,9 +90,9 @@ class SurveyODKForm extends Component {
 
     return (
       <div data-qa={dataQA}>
-        { this.renderODK() }
-        { this.renderSurveyors() }
-        { this.renderXForms() }
+        {this.renderODK()}
+        {this.renderSurveyors()}
+        {this.renderXForms()}
       </div>
     )
   }
@@ -104,7 +104,8 @@ class SurveyODKForm extends Component {
         <label>
           <FormattedMessage
             id='survey.odk.form.odk'
-            defaultMessage='ODK Collect' />
+            defaultMessage='ODK Collect'
+          />
         </label>
         <HelpMessage>
           <FormattedMessage
@@ -113,12 +114,18 @@ class SurveyODKForm extends Component {
               Open Data Kit (or ODK for short) is an open-source suite of tools
               that helps organizations author, collect, and manage mobile data
               collection solutions.
-            `} />
+            `}
+          />
           <br />
-          <a href='https://opendatakit.org/' target='_blank'>
+          <a
+            href='https://opendatakit.org/'
+            target='_blank'
+            rel='noopener noreferrer nofollow external'
+          >
             <FormattedMessage
               id='survey.odk.form.odk.help.odk.link'
-              defaultMessage='Click here to see more about Open Data Kit' />
+              defaultMessage='Click here to see more about Open Data Kit'
+            />
           </a>
         </HelpMessage>
         <ErrorAlert errors={errors.generic} />
@@ -139,7 +146,8 @@ class SurveyODKForm extends Component {
         <label className='form-control-label title'>
           <FormattedMessage
             id='survey.odk.form.surveyors'
-            defaultMessage='Granted Surveyors' />
+            defaultMessage='Granted Surveyors'
+          />
         </label>
         <MultiSelect
           selected={selectedSurveyors}
@@ -163,7 +171,8 @@ class SurveyODKForm extends Component {
           <label className='form-control-label title'>
             <FormattedMessage
               id='survey.odk.form.xforms.list'
-              defaultMessage='xForms' />
+              defaultMessage='xForms'
+            />
           </label>
           <HelpMessage>
             <div className='mb-2'>
@@ -174,12 +183,18 @@ class SurveyODKForm extends Component {
                   Authoring is done in a human readable format using a familiar tool that almost
                   everyone knows - Excel. XLSForms provide a practical standard for sharing and
                   collaborating on authoring forms.
-                `} />
+                `}
+              />
               <br />
-              <a href='http://xlsform.org/' target='_blank'>
+              <a
+                href='http://xlsform.org/'
+                target='_blank'
+                rel='noopener noreferrer nofollow external'
+              >
                 <FormattedMessage
                   id='survey.odk.form.odk.help.xlsform.link'
-                  defaultMessage='Click here to see more about XLSForm' />
+                  defaultMessage='Click here to see more about XLSForm'
+                />
               </a>
             </div>
             <div>
@@ -189,12 +204,18 @@ class SurveyODKForm extends Component {
                   The ODK XForms specification is used by tools in the Open Data Kit ecosystem.
                   It is a subset of the far larger W3C XForms 1.0 specification and
                   also contains a few additional features not found in the W3C XForms specification.
-                `} />
+                `}
+              />
               <br />
-              <a href='http://opendatakit.github.io/xforms-spec/' target='_blank'>
+              <a
+                href='http://opendatakit.github.io/xforms-spec/'
+                target='_blank'
+                rel='noopener noreferrer nofollow external'
+              >
                 <FormattedMessage
                   id='survey.odk.form.odk.help.xform.link'
-                  defaultMessage='Click here to see more about XForm specification' />
+                  defaultMessage='Click here to see more about XForm specification'
+                />
               </a>
             </div>
           </HelpMessage>
@@ -226,7 +247,8 @@ class SurveyODKForm extends Component {
           <label className='btn btn-secondary' htmlFor='xFormFiles'>
             <FormattedMessage
               id='survey.odk.form.xforms.file'
-              defaultMessage='Add xForm / XLSForm files' />
+              defaultMessage='Add xForm / XLSForm files'
+            />
           </label>
           <input
             name='files'
@@ -303,7 +325,7 @@ class XForm extends Component {
       ? (
         <aside className='mr-3'>
           <span className='badge badge-info mr-1'>
-            { xform.media_files.length }
+            {xform.media_files.length}
           </span>
           <small>
             <FormattedMessage
@@ -329,12 +351,12 @@ class XForm extends Component {
     )
 
     return (
-      <React.Fragment>
+      <>
         <ErrorAlert errors={allErrors} />
         <div className={`form-item mb-2 ${this.state.editView ? 'expanded' : ''}`}>
-          { title }
-          { date }
-          { mediaFiles }
+          {title}
+          {date}
+          {mediaFiles}
           <ConfirmButton
             className='btn btn-sm icon-only btn-danger ml-2 mr-2'
             cancelable
@@ -344,74 +366,80 @@ class XForm extends Component {
             buttonLabel={<i className='fas fa-times' />}
           />
 
-          { /* only existing xforms can edit */
+          {
+            /* only existing xforms can edit */
             xform.id &&
-            <button
-              type='button'
-              className='btn btn-sm btn-secondary btn-edit icon-only'
-              onClick={this.toggleEditView.bind(this)}>
-              <i className={`fas fa-${this.state.editView ? 'minus' : 'pencil-alt'}`} />
-            </button>
+              <button
+                type='button'
+                className='btn btn-sm btn-secondary btn-edit icon-only'
+                onClick={this.toggleEditView.bind(this)}
+              >
+                <i className={`fas fa-${this.state.editView ? 'minus' : 'pencil-alt'}`} />
+              </button>
           }
 
           {
             this.state.editView &&
-            <div className='edit-form-item mt-3'>
-              <div className='form-group'>
-                <textarea
-                  name='description'
-                  className='form-control code mb-2'
-                  rows={3}
-                  value={xform.description}
-                  placeholder={formatMessage(MESSAGES.description)}
-                  onChange={this.onInputChange.bind(this)}
-                />
+              <div className='edit-form-item mt-3'>
+                <div className='form-group'>
+                  <textarea
+                    name='description'
+                    className='form-control code mb-2'
+                    rows={3}
+                    value={xform.description}
+                    placeholder={formatMessage(MESSAGES.description)}
+                    onChange={this.onInputChange.bind(this)}
+                  />
 
-                <label className='btn btn-secondary' htmlFor='xFormFile'>
-                  <FormattedMessage
-                    id='survey.odk.form.xform.file'
-                    defaultMessage='Upload new xForm/XLSForm file' />
-                </label>
-                <input
-                  name='file'
-                  id='xFormFile'
-                  type='file'
-                  className='hidden-file'
-                  accept='.xls,.xlsx,.xml'
-                  onChange={this.onFileChange.bind(this)}
-                />
-                {
-                  xform.file &&
-                  <span className='ml-4'>
-                    <span>{ xform.file.name }</span>
-                    <button
-                      type='button'
-                      className='btn btn-sm icon-only btn-danger ml-2'
-                      onClick={this.removeFile.bind(this)}><i className='fas fa-times' /></button>
-                  </span>
-                }
+                  <label className='btn btn-secondary' htmlFor='xFormFile'>
+                    <FormattedMessage
+                      id='survey.odk.form.xform.file'
+                      defaultMessage='Upload new xForm/XLSForm file'
+                    />
+                  </label>
+                  <input
+                    name='file'
+                    id='xFormFile'
+                    type='file'
+                    className='hidden-file'
+                    accept='.xls,.xlsx,.xml'
+                    onChange={this.onFileChange.bind(this)}
+                  />
+                  {
+                    xform.file &&
+                      <span className='ml-4'>
+                        <span>{xform.file.name}</span>
+                        <button
+                          type='button'
+                          className='btn btn-sm icon-only btn-danger ml-2'
+                          onClick={this.removeFile.bind(this)}
+                        >
+                          <i className='fas fa-times' />
+                        </button>
+                      </span>
+                  }
 
-                <textarea
-                  name='xml_data'
-                  className={`${errors.xml_data ? 'error' : ''} form-control code`}
-                  disabled={xform.file !== undefined}
-                  rows={10}
-                  value={xform.xml_data}
-                  onChange={this.onInputChange.bind(this)}
+                  <textarea
+                    name='xml_data'
+                    className={`${errors.xml_data ? 'error' : ''} form-control code`}
+                    disabled={xform.file !== undefined}
+                    rows={10}
+                    value={xform.xml_data}
+                    onChange={this.onInputChange.bind(this)}
+                  />
+                  <ErrorAlert errors={errors.xml_data} />
+                </div>
+
+                <MediaFileIntl
+                  id={xform.id}
+                  title={title}
+                  mediaFiles={xform.media_files}
+                  onChange={(mediaFiles) => this.setState({ media_files: mediaFiles })}
                 />
-                <ErrorAlert errors={errors.xml_data} />
               </div>
-
-              <MediaFileIntl
-                id={xform.id}
-                title={title}
-                mediaFiles={xform.media_files}
-                onChange={(mediaFiles) => this.setState({ media_files: mediaFiles })}
-              />
-            </div>
           }
         </div>
-      </React.Fragment>
+      </>
     )
   }
 
@@ -458,24 +486,27 @@ class MediaFile extends Component {
       <div className='mt-4'>
         <FormattedMessage
           id='survey.odk.form.xform.media.files'
-          defaultMessage='Media file(s):' />
+          defaultMessage='Media file(s):'
+        />
 
         {
           mediaFiles.length === 0 &&
-          <span className='ml-2'>
-            <FormattedMessage
-              id='survey.odk.form.xform.media.files.none'
-              defaultMessage='None' />
-          </span>
+            <span className='ml-2'>
+              <FormattedMessage
+                id='survey.odk.form.xform.media.files.none'
+                defaultMessage='None'
+              />
+            </span>
         }
 
-        { mediaFiles.map(mediaFile => this.renderMediaFile(mediaFile)) }
+        {mediaFiles.map(mediaFile => this.renderMediaFile(mediaFile))}
 
         <div className='form-group mt-4 mb-1'>
           <label className='btn btn-secondary' htmlFor={inputFileId}>
             <FormattedMessage
               id='survey.odk.form.xform.media.files.add'
-              defaultMessage='Add media files' />
+              defaultMessage='Add media files'
+            />
           </label>
           <input
             name='files'
@@ -498,8 +529,10 @@ class MediaFile extends Component {
         <a
           className='btn-link text-white'
           href={mediaFile.id ? getMediaFileContentPath(mediaFile) : '#'}
-          target='_blank'>
-          { mediaFile.name }
+          target='_blank'
+          rel='noopener noreferrer nofollow external'
+        >
+          {mediaFile.name}
         </a>
 
         <ConfirmButton

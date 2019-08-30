@@ -165,19 +165,25 @@ class SurveyMasks extends Component {
         <div className='filter-toggles'>
           <FormattedMessage
             id='survey.mask.fields'
-            defaultMessage='Mask fields:' />
+            defaultMessage='Mask fields:'
+          />
           <button
             type='button'
-            className={`btn badge ${currentMask.id !== -1 ? 'active' : ''} ${this.state.showColumns ? 'open' : ''} ${currentMask.id > 0 ? 'custom' : ''}`}
+            className={`
+              btn badge
+              ${currentMask.id !== -1 ? 'active' : ''}
+              ${this.state.showColumns ? 'open' : ''}
+              ${currentMask.id > 0 ? 'custom' : ''}
+            `}
             onClick={() => { this.setState({ showColumns: !this.state.showColumns }) }}
           >
-            { currentMask.name }
+            {currentMask.name}
             <i className='fas fa-angle-down ml-2' />
           </button>
         </div>
 
-        { this.renderMasks() }
-        { this.renderMessage() }
+        {this.renderMasks()}
+        {this.renderMessage()}
       </div>
     )
   }
@@ -189,8 +195,8 @@ class SurveyMasks extends Component {
 
     return (
       <div className='filter-container active'>
-        { this.renderMaskNames() }
-        { this.renderColumnsList() }
+        {this.renderMaskNames()}
+        {this.renderColumnsList()}
 
         <button
           type='button'
@@ -216,7 +222,7 @@ class SurveyMasks extends Component {
 
     return (
       <div className='presets-container'>
-        { this.renderForm() }
+        {this.renderForm()}
         <ul className='filter-presets'>
           {
             this.state.masks.map(mask => (
@@ -224,19 +230,20 @@ class SurveyMasks extends Component {
                 <button
                   type='button'
                   className='preset-action'
-                  onClick={() => selectMaskColumns(mask)}>
+                  onClick={() => selectMaskColumns(mask)}
+                >
                   {mask.name}
                 </button>
                 {
                   (mask.id > 0) &&
-                  <ConfirmButton
-                    className='btn btn-sm icon-only preset-delete'
-                    title={formatMessage(MESSAGES.messageTitle, { ...mask })}
-                    buttonLabel={<i className='fas fa-times' />}
-                    cancelable
-                    message={formatMessage(MESSAGES.confirmDelete)}
-                    onConfirm={() => this.onDelete(mask)}
-                  />
+                    <ConfirmButton
+                      className='btn btn-sm icon-only preset-delete'
+                      title={formatMessage(MESSAGES.messageTitle, { ...mask })}
+                      buttonLabel={<i className='fas fa-times' />}
+                      cancelable
+                      message={formatMessage(MESSAGES.confirmDelete)}
+                      onConfirm={() => this.onDelete(mask)}
+                    />
                 }
               </li>
             ))
@@ -262,10 +269,11 @@ class SurveyMasks extends Component {
               <li
                 key={column}
                 className={`item-title ${getClassName(column)}`}
-                onClick={() => toggleColumn(column)}>
+                onClick={() => toggleColumn(column)}
+              >
                 <div className='marker' />
                 <span>
-                  { getLabelTree(column, this.props.labels) }
+                  {getLabelTree(column, this.props.labels)}
                 </span>
               </li>
             ))
@@ -292,7 +300,8 @@ class SurveyMasks extends Component {
           <label className='form-control-label title mr-2' htmlFor='mask-name'>
             <FormattedMessage
               id='survey.mask.preset.save.label'
-              defaultMessage='Save as' />
+              defaultMessage='Save as'
+            />
           </label>
           <input
             type='text'
@@ -305,7 +314,8 @@ class SurveyMasks extends Component {
           <button type='submit' className='btn btn-secondary ml-2'>
             <FormattedMessage
               id='survey.mask.preset.save.button'
-              defaultMessage='Save' />
+              defaultMessage='Save'
+            />
           </button>
         </form>
       </div>
@@ -378,19 +388,21 @@ class SurveyMasks extends Component {
           <div className='modal-dialog modal-md'>
             <div className='modal-content'>
               <div className='modal-header'>
-                <h5 className='modal-title'>{ this.state.message.title }</h5>
+                <h5 className='modal-title'>{this.state.message.title}</h5>
               </div>
               <div className='modal-body'>
-                { this.state.message.body }
+                {this.state.message.body}
               </div>
               <div className='modal-footer'>
                 <button
                   type='button'
                   className='btn btn-secondary'
-                  onClick={close}>
+                  onClick={close}
+                >
                   <FormattedMessage
                     id='survey.mask.preset.button.close'
-                    defaultMessage='Close' />
+                    defaultMessage='Close'
+                  />
                 </button>
               </div>
             </div>

@@ -151,22 +151,23 @@ class PaginationContainer extends Component {
 
     return (
       <div data-qa='data-loaded'>
-        { this.state.isRefreshing && <RefreshSpinner /> }
+        {this.state.isRefreshing && <RefreshSpinner />}
 
-        { (position === 'top') && this.renderPaginationBar() }
+        {(position === 'top') && this.renderPaginationBar()}
 
-        { count === 0 && this.renderEmptyWarning() }
+        {count === 0 && this.renderEmptyWarning()}
 
-        { count > 0 &&
-          <ListComponent
-            {...this.props.extras}
-            list={list}
-            total={count}
-            start={this.state.pageSize * (this.state.page - 1) + 1}
-          />
+        {
+          count > 0 &&
+            <ListComponent
+              {...this.props.extras}
+              list={list}
+              total={count}
+              start={this.state.pageSize * (this.state.page - 1) + 1}
+            />
         }
 
-        { (position === 'bottom') && this.renderPaginationBar() }
+        {(position === 'bottom') && this.renderPaginationBar()}
       </div>
     )
   }

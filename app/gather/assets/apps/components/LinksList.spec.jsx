@@ -34,11 +34,9 @@ describe('LinksList component', () => {
 
   it('should render a link', () => {
     const component = mount(
-      <LinksList list={
-        [
-          { url: '/link', name: 'click here' }
-        ]
-      }
+      <LinksList list={[
+        { url: '/link', name: 'click here' }
+      ]}
       />
     )
     expect(component.state('collapsed')).toBeFalsy()
@@ -53,13 +51,11 @@ describe('LinksList component', () => {
 
   it('should render a list of links', () => {
     const component = mount(
-      <LinksList list={
-        [
-          { url: '/link-1', name: 'click here 1' },
-          { url: '/link-2', name: 'click here 2' },
-          { url: '/link-3', name: 'click here 3' }
-        ]
-      }
+      <LinksList list={[
+        { url: '/link-1', name: 'click here 1' },
+        { url: '/link-2', name: 'click here 2' },
+        { url: '/link-3', name: 'click here 3' }
+      ]}
       />
     )
     expect(component.state('collapsed')).toBeTruthy()

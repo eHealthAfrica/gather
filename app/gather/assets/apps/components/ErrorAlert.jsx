@@ -45,7 +45,7 @@ class ErrorAlert extends Component {
         {
           list.map((error, index) => (
             <p key={index} data-qa={`data-erred-${index}`} className='error'>
-              { error }
+              {error}
             </p>
           ))
         }

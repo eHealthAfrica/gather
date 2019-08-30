@@ -33,7 +33,8 @@ export default class SurveyDetail extends Component {
           <h5 className='title'>
             <FormattedMessage
               id='survey.detail.date'
-              defaultMessage='Dates' />
+              defaultMessage='Dates'
+            />
           </h5>
           <SurveyDates survey={survey} showDuration />
         </div>
@@ -44,7 +45,8 @@ export default class SurveyDetail extends Component {
           </span>
           <FormattedMessage
             id='survey.detail.entities'
-            defaultMessage='records' />
+            defaultMessage='records'
+          />
         </div>
       </div>
     )

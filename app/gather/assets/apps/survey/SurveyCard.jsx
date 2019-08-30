@@ -32,7 +32,8 @@ export default class SurveyCard extends Component {
       <a
         data-qa={`survey-card-${survey.id}`}
         href={getSurveysPath({ action: 'view', id: survey.id })}
-        className='card'>
+        className='card'
+      >
         <h3 className='card-header'>{survey.name}</h3>
         <div className='card-block'>
           <SurveyDates survey={survey} />
@@ -43,7 +44,8 @@ export default class SurveyCard extends Component {
             </span>
             <FormattedMessage
               id='survey.card.entities'
-              defaultMessage='records' />
+              defaultMessage='records'
+            />
           </p>
         </div>
       </a>

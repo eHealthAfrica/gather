@@ -78,7 +78,8 @@ class SyncUsersList extends Component {
         <h4 className='title'>
           <FormattedMessage
             id='sync-user.list.title'
-            defaultMessage='Sync Users' />
+            defaultMessage='Sync Users'
+          />
         </h4>
 
         <ErrorAlert errors={this.state.errors} />
@@ -89,7 +90,7 @@ class SyncUsersList extends Component {
               <div key={syncUser.id} className='sync-user-list-item'>
                 <div className='sync-user-header'>
                   <i className='fas fa-user mr-2' />
-                  { syncUser.email }
+                  {syncUser.email}
 
                   <ConfirmButton
                     className='btn btn-danger icon-only float-right'
@@ -98,7 +99,7 @@ class SyncUsersList extends Component {
                     title={
                       <span className='email'>
                         <i className='fas fa-user mr-1' />
-                        { syncUser.email }
+                        {syncUser.email}
                       </span>
                     }
                     message={formatMessage(MESSAGES.deleteConfirm)}

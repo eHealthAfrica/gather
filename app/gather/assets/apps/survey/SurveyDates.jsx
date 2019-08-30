@@ -29,23 +29,26 @@ export default class SurveyDates extends Component {
     return (
       <div
         data-qa={`survey-dates-${survey.id}`}
-        className='card-block'>
+        className='card-block'
+      >
         <p className='card-text small'>
           <span className='card-dates pr-2'>
             <span className='label mr-1'>
               <FormattedMessage
                 id='survey.dates.created'
-                defaultMessage='Created at' />
+                defaultMessage='Created at'
+              />
             </span>
             <FormattedDate
               value={survey.created}
               year='numeric'
               month='short'
-              day='numeric' />
+              day='numeric'
+            />
           </span>
 
-          { survey.submissions_count === 0 && this.renderNoSubmissions() }
-          { survey.submissions_count > 0 && this.renderSubmissions() }
+          {survey.submissions_count === 0 && this.renderNoSubmissions()}
+          {survey.submissions_count > 0 && this.renderSubmissions()}
           {
             survey.submissions_count > 0 &&
             this.props.showDuration &&
@@ -61,7 +64,8 @@ export default class SurveyDates extends Component {
       <span className='label mr-1'>
         <FormattedMessage
           id='survey.dates.submissions.zero'
-          defaultMessage='no data entry' />
+          defaultMessage='no data entry'
+        />
       </span>
     )
   }
@@ -76,13 +80,15 @@ export default class SurveyDates extends Component {
           <span className='label mr-1'>
             <FormattedMessage
               id='survey.dates.submissions.on'
-              defaultMessage='data entry on' />
+              defaultMessage='data entry on'
+            />
           </span>
           <FormattedDate
             value={survey.first_submission}
             year='numeric'
             month='short'
-            day='numeric' />
+            day='numeric'
+          />
         </span>
       )
     }
@@ -92,23 +98,27 @@ export default class SurveyDates extends Component {
         <span className='label mr-1'>
           <FormattedMessage
             id='survey.dates.submissions.from'
-            defaultMessage='data entry from' />
+            defaultMessage='data entry from'
+          />
         </span>
         <FormattedDate
           value={survey.first_submission}
           year='numeric'
           month='short'
-          day='numeric' />
+          day='numeric'
+        />
         <span className='label mr-1'>
           <FormattedMessage
             id='survey.dates.submissions.to'
-            defaultMessage='to' />
+            defaultMessage='to'
+          />
         </span>
         <FormattedDate
           value={survey.last_submission}
           year='numeric'
           month='short'
-          day='numeric' />
+          day='numeric'
+        />
       </span>
     )
   }
@@ -122,13 +132,15 @@ export default class SurveyDates extends Component {
         <span className='label mr-1'>
           <FormattedMessage
             id='survey.dates.submissions.duration'
-            defaultMessage='duration' />
+            defaultMessage='duration'
+          />
         </span>
         <FormattedNumber value={days} />
         <span className='ml-1'>
           <FormattedMessage
             id='survey.dates.submissions.duration.days'
-            defaultMessage='days' />
+            defaultMessage='days'
+          />
         </span>
       </span>
     )

@@ -50,7 +50,7 @@ class JSONViewer extends Component {
 
     return (
       <div data-qa='json-data' className='data'>
-        { this.renderValue(data) }
+        {this.renderValue(data)}
       </div>
     )
   }
@@ -139,9 +139,9 @@ class JSONViewer extends Component {
   renderDateTime (value) {
     return (
       <span className='value' title={value}>
-        { this.renderDate(value) }
-        { ' - '}
-        { this.renderTime(value) }
+        {this.renderDate(value)}
+        {' - '}
+        {this.renderTime(value)}
       </span>
     )
   }
@@ -177,9 +177,10 @@ class JSONViewer extends Component {
   renderBoolean (value) {
     return (
       <span className='value' title={value.toString()}>
-        { value
-          ? <FormattedMessage id='json.viewer.boolean.true' defaultMessage='Yes' />
-          : <FormattedMessage id='json.viewer.boolean.false' defaultMessage='No' />
+        {
+          value
+            ? <FormattedMessage id='json.viewer.boolean.true' defaultMessage='Yes' />
+            : <FormattedMessage id='json.viewer.boolean.false' defaultMessage='No' />
         }
       </span>
     )
@@ -227,7 +228,8 @@ class JSONObjectViewer extends Component {
           <button
             type='button'
             className='btn icon-only btn-expand'
-            onClick={this.toggleView.bind(this)}>
+            onClick={this.toggleView.bind(this)}
+          >
             <i className='fas fa-plus' />
           </button>
           <span className='badge'>…</span>
@@ -237,19 +239,21 @@ class JSONObjectViewer extends Component {
 
     return (
       <div>
-        { collapsible &&
-          <button
-            type='button'
-            className='btn icon-only btn-collapse'
-            onClick={this.toggleView.bind(this)}>
-            <i className='fas fa-minus' />
-          </button>
+        {
+          collapsible &&
+            <button
+              type='button'
+              className='btn icon-only btn-collapse'
+              onClick={this.toggleView.bind(this)}
+            >
+              <i className='fas fa-minus' />
+            </button>
         }
         {
           Object.keys(value).map(key => (
             <div key={key} className={`property ${getType(value[key]) || ''}`}>
               <div className={`property-title ${getType(value[key]) ? '' : 'empty'}`}>
-                { getLabel(this.props.labelRoot + key, this.props.labels) }
+                {getLabel(this.props.labelRoot + key, this.props.labels)}
               </div>
               <div className='property-value'>
                 <JSONViewer
@@ -290,7 +294,8 @@ class JSONArrayViewer extends Component {
           <button
             type='button'
             className='btn icon-only btn-expand'
-            onClick={this.toggleView.bind(this)}>
+            onClick={this.toggleView.bind(this)}
+          >
             <i className='fas fa-plus' />
           </button>
 
@@ -306,7 +311,8 @@ class JSONArrayViewer extends Component {
         <button
           type='button'
           className='btn icon-only btn-collapse'
-          onClick={this.toggleView.bind(this)}>
+          onClick={this.toggleView.bind(this)}
+        >
           <i className='fas fa-minus' />
         </button>
         <ol className='property-list'>

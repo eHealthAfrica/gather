@@ -40,7 +40,7 @@ class WarningAlert extends Component {
         {
           warnings.map((warning, index) => (
             <p key={index} data-qa={`data-warning-${index}`} className='warning'>
-              { warning }
+              {warning}
             </p>
           ))
         }

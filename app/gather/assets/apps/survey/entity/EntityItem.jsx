@@ -43,24 +43,27 @@ export default class EntityItem extends Component {
             <h5 className='property-title'>
               <FormattedMessage
                 id='entity.view.status'
-                defaultMessage='Status' />
+                defaultMessage='Status'
+              />
             </h5>
             <div className='property-value'>
-              { entity.status }
+              {entity.status}
             </div>
           </div>
 
-          { attachments.length > 0 &&
-            <div className='property'>
-              <h5 className='property-title'>
-                <FormattedMessage
-                  id='entity.view.attachments'
-                  defaultMessage='Attachments' />
-              </h5>
-              <div className='property-value'>
-                <LinksList list={attachments} />
+          {
+            attachments.length > 0 &&
+              <div className='property'>
+                <h5 className='property-title'>
+                  <FormattedMessage
+                    id='entity.view.attachments'
+                    defaultMessage='Attachments'
+                  />
+                </h5>
+                <div className='property-value'>
+                  <LinksList list={attachments} />
+                </div>
               </div>
-            </div>
           }
 
           <div>

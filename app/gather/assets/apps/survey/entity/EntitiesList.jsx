@@ -37,9 +37,9 @@ export default class EntitiesList extends Component {
       <div data-qa='entities-list' className='x-0'>
         <div className='survey-content'>
           <table className='table table-sm'>
-            { this.renderHeader() }
+            {this.renderHeader()}
             <tbody>
-              { list.map((entity, index) => this.renderEntity(entity, index)) }
+              {list.map((entity, index) => this.renderEntity(entity, index))}
             </tbody>
           </table>
         </div>
@@ -100,12 +100,14 @@ export default class EntitiesList extends Component {
           <th rowSpan={rows || 1}>
             <FormattedMessage
               id='entity.list.table.status'
-              defaultMessage='Status' />
+              defaultMessage='Status'
+            />
           </th>
           <th rowSpan={rows || 1}>
             <FormattedMessage
               id='entity.list.table.attachments'
-              defaultMessage='Attachments' />
+              defaultMessage='Attachments'
+            />
           </th>
 
           {
@@ -117,8 +119,9 @@ export default class EntitiesList extends Component {
                     key={row[column].key}
                     title={row[column].path}
                     rowSpan={row[column].isLeaf ? rows : 1}
-                    colSpan={row[column].siblings}>
-                    { getLabel(row[column].path, labels) }
+                    colSpan={row[column].siblings}
+                  >
+                    {getLabel(row[column].path, labels)}
                   </th>
                 ))
               ))
@@ -136,8 +139,9 @@ export default class EntitiesList extends Component {
                       key={row[column].key}
                       title={row[column].path}
                       rowSpan={row[column].isLeaf ? (rows - index - 1) : 1}
-                      colSpan={row[column].siblings}>
-                      { getLabel(row[column].path, labels) }
+                      colSpan={row[column].siblings}
+                    >
+                      {getLabel(row[column].path, labels)}
                     </th>
                   ))
                 }
@@ -157,7 +161,7 @@ export default class EntitiesList extends Component {
       <tr data-qa={`entity-row-${entity.id}`} key={entity.id}>
         <td scope='row'>{this.props.start + index}</td>
         <td>
-          { entity.status }
+          {entity.status}
         </td>
         <td>
           <LinksList list={attachments} />

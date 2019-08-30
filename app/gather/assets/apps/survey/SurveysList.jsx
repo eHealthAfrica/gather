@@ -36,7 +36,8 @@ export default class SurveysList extends Component {
         <h4 className='title'>
           <FormattedMessage
             id='survey.list.title'
-            defaultMessage='Surveys' />
+            defaultMessage='Surveys'
+          />
         </h4>
 
         <div className='surveys-list-cards'>

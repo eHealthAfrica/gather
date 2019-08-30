@@ -25,7 +25,7 @@ const webpack = require('webpack')
 const buildConfig = require('./webpack.common')
 
 const WEBPACK_PORT = 3005
-const WEBPACK_URL = `http://gather.local`
+const WEBPACK_URL = 'http://gather.local'
 const WEBPACK_HMR_PATH = '/gather-assets/__webpack_hmr'
 
 const HMR_URL = 'webpack-hot-middleware/client?' +

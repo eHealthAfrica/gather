@@ -47,7 +47,8 @@ class FullDateTime extends Component {
             value={date}
             year='numeric'
             month='long'
-            day='numeric' />
+            day='numeric'
+          />
         </span>
         <span className='mr-2'>
           <FormattedTime
@@ -56,7 +57,8 @@ class FullDateTime extends Component {
             hour='2-digit'
             minute='2-digit'
             second='2-digit'
-            timeZoneName='short' />
+            timeZoneName='short'
+          />
         </span>
         <span>
           (<FormattedRelative value={date} />)

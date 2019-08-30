@@ -60,17 +60,19 @@ export default class Survey extends Component {
           <a
             href={getSurveysPath({ action: 'edit', id: survey.id })}
             role='button'
-            className='btn btn-primary btn-icon'>
+            className='btn btn-primary btn-icon'
+          >
             <i className='fas fa-pencil-alt invert mr-3' />
             <FormattedMessage
               id='survey.view.action.edit'
-              defaultMessage='Edit survey' />
+              defaultMessage='Edit survey'
+            />
           </a>
         </div>
 
         <SurveyDetail survey={survey} />
 
-        { this.renderEntities() }
+        {this.renderEntities()}
       </div>
     )
   }
@@ -113,7 +115,8 @@ export default class Survey extends Component {
                 <i className='fas fa-th-list mr-2' />
                 <FormattedMessage
                   id='survey.view.action.table'
-                  defaultMessage='Table' />
+                  defaultMessage='Table'
+                />
               </button>
             </li>
             <li>
@@ -126,7 +129,8 @@ export default class Survey extends Component {
                 <i className='fas fa-file mr-2' />
                 <FormattedMessage
                   id='survey.view.action.single'
-                  defaultMessage='Single' />
+                  defaultMessage='Single'
+                />
               </button>
             </li>
             <li>
@@ -140,7 +144,7 @@ export default class Survey extends Component {
               />
             </li>
             <li className='toolbar-filter'>
-              { this.renderMaskButton() }
+              {this.renderMaskButton()}
             </li>
           </ul>
         </div>
@@ -183,10 +187,12 @@ export default class Survey extends Component {
       }
     ]
 
-    return <FetchUrlsContainer
-      urls={urls}
-      handleResponse={handleResponse}
-      targetComponent={SurveyMasks}
-    />
+    return (
+      <FetchUrlsContainer
+        urls={urls}
+        handleResponse={handleResponse}
+        targetComponent={SurveyMasks}
+      />
+    )
   }
 }

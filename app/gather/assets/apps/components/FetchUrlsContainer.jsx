@@ -124,7 +124,7 @@ class FetchUrlsContainer extends Component {
 
     return (
       <div data-qa='data-loaded'>
-        { !this.props.silent && this.state.isRefreshing && <RefreshSpinner /> }
+        {!this.props.silent && this.state.isRefreshing && <RefreshSpinner />}
         <TargetComponent
           {...this.state.response}
           reload={this.refreshData.bind(this)}

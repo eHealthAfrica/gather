@@ -29,8 +29,12 @@ import { hot } from 'react-hot-loader/root'
 class Link extends Component {
   render () {
     return (
-      <a href={this.props.link.url} target='_blank'>
-        { this.props.link.name }
+      <a
+        href={this.props.link.url}
+        target='_blank'
+        rel='noopener noreferrer nofollow'
+      >
+        {this.props.link.name}
       </a>
     )
   }

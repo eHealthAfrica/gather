@@ -36,7 +36,8 @@ class LoadingSpinner extends Component {
           <i className='loading-spinner mr-2' />
           <FormattedMessage
             id='alert.loading'
-            defaultMessage='Loading data from server…' />
+            defaultMessage='Loading data from server…'
+          />
         </p>
       </div>
     )

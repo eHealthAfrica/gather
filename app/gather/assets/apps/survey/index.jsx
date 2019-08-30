@@ -37,7 +37,7 @@ class SurveyDispatcher extends Component {
     const handleResponse = (response) => ({ ...response, settings: this.props.settings })
 
     switch (action) {
-      case 'add':
+      case 'add': {
         const addUrls = []
 
         if (ODK_ACTIVE) {
@@ -58,8 +58,9 @@ class SurveyDispatcher extends Component {
             handleResponse={handleResponse}
           />
         )
+      }
 
-      case 'edit':
+      case 'edit': {
         const editUrls = [
           {
             name: 'survey',
@@ -94,8 +95,9 @@ class SurveyDispatcher extends Component {
             handleResponse={handleResponse}
           />
         )
+      }
 
-      case 'view':
+      case 'view': {
         const viewUrls = [
           {
             name: 'survey',
@@ -114,6 +116,7 @@ class SurveyDispatcher extends Component {
             handleResponse={handleResponse}
           />
         )
+      }
 
       default:
         return (

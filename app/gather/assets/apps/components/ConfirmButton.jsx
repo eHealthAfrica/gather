@@ -61,8 +61,9 @@ class ConfirmButton extends Component {
         type='button'
         disabled={this.state.open}
         className={this.props.className || 'btn btn-primary'}
-        onClick={onClick}>
-        { this.props.buttonLabel || this.props.title }
+        onClick={onClick}
+      >
+        {this.props.buttonLabel || this.props.title}
       </button>
     )
 
@@ -71,9 +72,9 @@ class ConfirmButton extends Component {
     }
 
     return (
-      <React.Fragment>
-        { /* show disabled button */ }
-        { button }
+      <>
+        {/* show disabled button */}
+        {button}
 
         <Portal onEscape={onCancel} onEnter={execute}>
           <div data-qa='confirm-button-window' className='confirmation-container'>
@@ -81,43 +82,50 @@ class ConfirmButton extends Component {
               <div className='modal-dialog modal-md'>
                 <div className='modal-content'>
                   <div className='modal-header'>
-                    <h5 className='modal-title'>{ this.props.title }</h5>
-                    { this.props.cancelable &&
-                      <button
-                        data-qa='confirm-button-close'
-                        type='button'
-                        className='close'
-                        onClick={onCancel}>
-                        &times;
-                      </button>
+                    <h5 className='modal-title'>{this.props.title}</h5>
+                    {
+                      this.props.cancelable &&
+                        <button
+                          data-qa='confirm-button-close'
+                          type='button'
+                          className='close'
+                          onClick={onCancel}
+                        >
+                          &times;
+                        </button>
                     }
                   </div>
 
                   <div data-qa='confirm-button-message' className='modal-body'>
-                    { this.props.message }
+                    {this.props.message}
                   </div>
 
                   <div className='modal-footer'>
-                    { this.props.cancelable &&
-                      <button
-                        data-qa='confirm-button-cancel'
-                        type='button'
-                        className='btn btn-default'
-                        onClick={onCancel}>
-                        <FormattedMessage
-                          id='confirm.button.action.cancel'
-                          defaultMessage='No' />
-                      </button>
+                    {
+                      this.props.cancelable &&
+                        <button
+                          data-qa='confirm-button-cancel'
+                          type='button'
+                          className='btn btn-default'
+                          onClick={onCancel}
+                        >
+                          <FormattedMessage
+                            id='confirm.button.action.cancel'
+                            defaultMessage='No'
+                          />
+                        </button>
                     }
 
                     <button
                       data-qa='confirm-button-confirm'
                       type='button'
                       className='btn btn-secondary'
-                      onClick={execute}>
+                      onClick={execute}
+                    >
                       <FormattedMessage
                         id='confirm.button.action.confirm'
-                        defaultMessage='Yes' />
+                        defaultMessage='Yes'
+                      />
                     </button>
                   </div>
                 </div>
@@ -125,7 +133,7 @@ class ConfirmButton extends Component {
             </div>
           </div>
         </Portal>
-      </React.Fragment>
+      </>
     )
   }
 }

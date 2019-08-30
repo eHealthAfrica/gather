@@ -45,26 +45,29 @@ class LinksList extends Component {
 
     return (
       <div>
-        { list.length > 1 &&
-          <button
-            type='button'
-            data-qa='link-list-collapse-button'
-            className='btn icon-only btn-collapse'
-            onClick={() => this.setState({ collapsed: !this.state.collapsed })}>
-            <i className={`fas fa-${this.state.collapsed ? 'plus' : 'minus'}`} />
-          </button>
+        {
+          list.length > 1 &&
+            <button
+              type='button'
+              data-qa='link-list-collapse-button'
+              className='btn icon-only btn-collapse'
+              onClick={() => this.setState({ collapsed: !this.state.collapsed })}
+            >
+              <i className={`fas fa-${this.state.collapsed ? 'plus' : 'minus'}`} />
+            </button>
         }
 
-        { !this.state.collapsed &&
-          <ol className='property-list'>
-            {
-              list.map((link, index) => (
-                <li key={index} className='property-item'>
-                  <Link link={link} />
-                </li>
-              ))
-            }
-          </ol>
+        {
+          !this.state.collapsed &&
+            <ol className='property-list'>
+              {
+                list.map((link, index) => (
+                  <li key={index} className='property-item'>
+                    <Link link={link} />
+                  </li>
+                ))
+              }
+            </ol>
         }
       </div>
     )

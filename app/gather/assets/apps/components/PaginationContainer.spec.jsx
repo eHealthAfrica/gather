@@ -508,7 +508,7 @@ describe('PaginationContainer', () => {
       const component = mountWithIntl(
         <PaginationContainer
           listComponent={Foo}
-          url={'/unmounted'}
+          url='/unmounted'
           sizes={[25]}
         />
       )

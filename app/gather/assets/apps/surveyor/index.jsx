@@ -35,7 +35,7 @@ class SurveyorDispatcher extends Component {
       case 'add':
         return <SurveyorForm surveyor={{}} />
 
-      case 'edit':
+      case 'edit': {
         const editUrls = [
           {
             name: 'surveyor',
@@ -44,6 +44,7 @@ class SurveyorDispatcher extends Component {
         ]
 
         return <FetchUrlsContainer urls={editUrls} targetComponent={SurveyorForm} />
+      }
 
       default:
         return (

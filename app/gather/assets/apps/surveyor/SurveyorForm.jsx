@@ -84,14 +84,18 @@ class SurveyorForm extends Component {
     const isNew = (surveyor.id === undefined)
 
     const title = (isNew
-      ? <FormattedMessage
-        id='surveyor.form.title.add'
-        defaultMessage='New surveyor' />
+      ? (
+        <FormattedMessage
+          id='surveyor.form.title.add'
+          defaultMessage='New surveyor'
+        />
+      )
       : (
         <span>
           <FormattedMessage
             id='surveyor.form.title.edit'
-            defaultMessage='Edit surveyor' />
+            defaultMessage='Edit surveyor'
+          />
           <span className='username ml-2'>
             <i className='fas fa-user mr-1' />
             {this.props.surveyor.username}
@@ -115,7 +119,8 @@ class SurveyorForm extends Component {
             <label className='form-control-label title'>
               <FormattedMessage
                 id='surveyor.form.username'
-                defaultMessage='Surveyor username' />
+                defaultMessage='Surveyor username'
+              />
             </label>
             <input
               name='username'
@@ -132,7 +137,8 @@ class SurveyorForm extends Component {
             <label className='form-control-label title'>
               <FormattedMessage
                 id='surveyor.form.password'
-                defaultMessage='Password' />
+                defaultMessage='Password'
+              />
             </label>
             <input
               name='password_1'
@@ -158,7 +164,8 @@ class SurveyorForm extends Component {
             <label className='form-control-label title'>
               <FormattedMessage
                 id='surveyor.form.password.repeat'
-                defaultMessage='Repeat password' />
+                defaultMessage='Repeat password'
+              />
             </label>
             <input
               name='password_2'
@@ -172,37 +179,41 @@ class SurveyorForm extends Component {
 
           <div className='actions'>
             <div>
-              { !isNew &&
-                <ConfirmButton
-                  className='btn btn-delete'
-                  cancelable
-                  onConfirm={this.onDelete.bind(this)}
-                  title={
-                    <span className='username'>
-                      <i className='fas fa-user mr-1' />
-                      {this.props.surveyor.username}
-                    </span>
-                  }
-                  message={formatMessage(MESSAGES.deleteConfirm)}
-                  buttonLabel={formatMessage(MESSAGES.deleteButton)}
-                />
+              {
+                !isNew &&
+                  <ConfirmButton
+                    className='btn btn-delete'
+                    cancelable
+                    onConfirm={this.onDelete.bind(this)}
+                    title={
+                      <span className='username'>
+                        <i className='fas fa-user mr-1' />
+                        {this.props.surveyor.username}
+                      </span>
+                    }
+                    message={formatMessage(MESSAGES.deleteConfirm)}
+                    buttonLabel={formatMessage(MESSAGES.deleteButton)}
+                  />
               }
             </div>
             <div>
               <button
                 type='button'
                 className='btn btn-cancel'
-                onClick={this.onCancel.bind(this)}>
+                onClick={this.onCancel.bind(this)}
+              >
                 <FormattedMessage
                   id='surveyor.form.action.cancel'
-                  defaultMessage='Cancel' />
+                  defaultMessage='Cancel'
+                />
               </button>
             </div>
             <div>
               <button type='submit' className='btn btn-primary btn-block'>
                 <FormattedMessage
                   id='surveyor.form.action.submit'
-                  defaultMessage='Save surveyor' />
+                  defaultMessage='Save surveyor'
+                />
               </button>
             </div>
           </div>

@@ -62,11 +62,11 @@ class EntitiesDownload extends Component {
 
   render () {
     return (
-      <React.Fragment>
-        { this.renderDownloadButton() }
-        { this.renderOptions() }
-        { this.renderError() }
-      </React.Fragment>
+      <>
+        {this.renderDownloadButton()}
+        {this.renderOptions()}
+        {this.renderError()}
+      </>
     )
   }
 
@@ -83,7 +83,8 @@ class EntitiesDownload extends Component {
           <i className='fa fa-spinner fa-pulse mr-2' />
           <FormattedMessage
             id='entities.download.cancel'
-            defaultMessage='Cancel download' />
+            defaultMessage='Cancel download'
+          />
         </button>
       )
     }
@@ -97,7 +98,8 @@ class EntitiesDownload extends Component {
         <i className='fas fa-download mr-2' />
         <FormattedMessage
           id='entities.download.title'
-          defaultMessage='Download' />
+          defaultMessage='Download'
+        />
       </button>
     )
   }
@@ -180,7 +182,8 @@ class EntitiesDownload extends Component {
         label: (
           <FormattedMessage
             id='entities.download.data.format.split'
-            defaultMessage='Normalised into multiple files (better for importing into a relational database)' />
+            defaultMessage='Normalised into multiple files (better for importing into a relational database)'
+          />
         )
       },
       {
@@ -188,7 +191,8 @@ class EntitiesDownload extends Component {
         label: (
           <FormattedMessage
             id='entities.download.data.format.flatten'
-            defaultMessage='Flattened into a single file (better for manual analysis and some other tools)' />
+            defaultMessage='Flattened into a single file (better for manual analysis and some other tools)'
+          />
         )
       }
     ]
@@ -199,7 +203,8 @@ class EntitiesDownload extends Component {
         label: (
           <FormattedMessage
             id='entities.download.headers.labels'
-            defaultMessage='Labels' />
+            defaultMessage='Labels'
+          />
         )
       },
       {
@@ -207,7 +212,8 @@ class EntitiesDownload extends Component {
         label: (
           <FormattedMessage
             id='entities.download.headers.paths'
-            defaultMessage='Names' />
+            defaultMessage='Names'
+          />
         )
       },
       {
@@ -215,7 +221,8 @@ class EntitiesDownload extends Component {
         label: (
           <FormattedMessage
             id='entities.download.headers.both'
-            defaultMessage='Both' />
+            defaultMessage='Both'
+          />
         )
       }
     ]
@@ -234,10 +241,12 @@ class EntitiesDownload extends Component {
             <div className='form-group mr-5'>
               <label
                 className='form-control-label label mr-2'
-                title={formatMessage(MESSAGES.delimiterHint)}>
+                title={formatMessage(MESSAGES.delimiterHint)}
+              >
                 <FormattedMessage
                   id='entities.download.csv.separator'
-                  defaultMessage='Delimiter' />
+                  defaultMessage='Delimiter'
+                />
                 <sup className='ml-1'><b>(*)</b></sup>
               </label>
               <input
@@ -255,7 +264,8 @@ class EntitiesDownload extends Component {
               <label className='form-control-label label mr-2'>
                 <FormattedMessage
                   id='entities.download.csv.quote'
-                  defaultMessage='Quote' />
+                  defaultMessage='Quote'
+                />
               </label>
               <input
                 name='csvQuote'
@@ -271,7 +281,8 @@ class EntitiesDownload extends Component {
               <label className='form-control-label label mr-2'>
                 <FormattedMessage
                   id='entities.download.csv.escape'
-                  defaultMessage='Escape' />
+                  defaultMessage='Escape'
+                />
               </label>
               <input
                 name='csvEscape'
@@ -299,13 +310,15 @@ class EntitiesDownload extends Component {
                 <h3 className='modal-title'>
                   <FormattedMessage
                     id='entities.download.options.title'
-                    defaultMessage='Download' />
+                    defaultMessage='Download'
+                  />
                 </h3>
                 <button
                   data-qa='confirm-button-close'
                   type='button'
                   className='close'
-                  onClick={close}>
+                  onClick={close}
+                >
                   &times;
                 </button>
               </div>
@@ -315,51 +328,57 @@ class EntitiesDownload extends Component {
                   <h5 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.data.format.title'
-                      defaultMessage='Data format' />
+                      defaultMessage='Data format'
+                    />
                   </h5>
-                  { this.renderChoices(DATA_FORMATS, 'dataFormat') }
+                  {this.renderChoices(DATA_FORMATS, 'dataFormat')}
                 </div>
 
                 <div className='m-3'>
                   <h5 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.headers.title'
-                      defaultMessage='Headers' />
+                      defaultMessage='Headers'
+                    />
                   </h5>
 
-                  { this.renderChoices(HEADERS, 'headerContent', 'd-inline mr-5') }
+                  {this.renderChoices(HEADERS, 'headerContent', 'd-inline mr-5')}
 
                   <div className='form-inline p-2'>
                     <div
                       className='form-group mt-2 ml-2'
-                      onClick={() => { this.setState({ headerFull: !this.state.headerFull }) }}>
+                      onClick={() => { this.setState({ headerFull: !this.state.headerFull }) }}
+                    >
                       <i
                         className={`fa ${this.state.headerFull ? 'fa-toggle-on' : 'fa-toggle-off'}`}
                       />
                       <label className='form-control-label ml-2'>
                         <FormattedMessage
                           id='entities.download.headers.full'
-                          defaultMessage='Show full path in headers' />
+                          defaultMessage='Show full path in headers'
+                        />
                       </label>
                     </div>
 
-                    { this.state.headerFull &&
-                      <div className='form-group ml-5'>
-                        <label className='form-control-label label mr-2'>
-                          <FormattedMessage
-                            id='entities.download.headers.separator'
-                            defaultMessage='Delimiter' />
-                        </label>
-                        <input
-                          name='headerSeparator'
-                          type='text'
-                          className='form-control'
-                          size={3}
-                          maxLength={1}
-                          value={this.state.headerSeparator || ''}
-                          onChange={onInputChange}
-                        />
-                      </div>
+                    {
+                      this.state.headerFull &&
+                        <div className='form-group ml-5'>
+                          <label className='form-control-label label mr-2'>
+                            <FormattedMessage
+                              id='entities.download.headers.separator'
+                              defaultMessage='Delimiter'
+                            />
+                          </label>
+                          <input
+                            name='headerSeparator'
+                            type='text'
+                            className='form-control'
+                            size={3}
+                            maxLength={1}
+                            value={this.state.headerSeparator || ''}
+                            onChange={onInputChange}
+                          />
+                        </div>
                     }
                   </div>
                 </div>
@@ -368,71 +387,80 @@ class EntitiesDownload extends Component {
                   <h5 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.file.format.title'
-                      defaultMessage='File format' />
+                      defaultMessage='File format'
+                    />
                   </h5>
 
-                  { this.renderChoices(FILE_FORMATS, 'fileFormat') }
+                  {this.renderChoices(FILE_FORMATS, 'fileFormat')}
                 </div>
 
                 <div className='m-3'>
                   <h5 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.data.content.title'
-                      defaultMessage='Content' />
+                      defaultMessage='Content'
+                    />
                   </h5>
                   <div className='d-flex'>
-                    { page > 1 &&
-                      <button
-                        type='button'
-                        className='btn'
-                        onClick={() => { this.setState({ page: page - 1 }) }}
-                      >
-                        <i className='fa fa-angle-double-left' />
-                      </button>
+                    {
+                      page > 1 &&
+                        <button
+                          type='button'
+                          className='btn'
+                          onClick={() => { this.setState({ page: page - 1 }) }}
+                        >
+                          <i className='fa fa-angle-double-left' />
+                        </button>
                     }
 
                     <div className='flex-grow-1 text-center'>
                       <FormattedMessage
                         id='entities.download.page.from'
-                        defaultMessage='From record' />
+                        defaultMessage='From record'
+                      />
                       <b className='mr-1 ml-1'>
                         <FormattedNumber value={(page - 1) * pageSize + 1} />
                       </b>
 
                       <FormattedMessage
                         id='entities.download.page.to'
-                        defaultMessage='to record' />
+                        defaultMessage='to record'
+                      />
                       <b className='ml-1'>
                         <FormattedNumber value={Math.min((page) * pageSize, total)} />
                       </b>
 
-                      { pages > 1 &&
-                        <React.Fragment>
-                          <b className='mr-2 ml-2'>&ndash;</b>
-                          <FormattedMessage
-                            id='entities.download.page.current'
-                            defaultMessage='Block' />
-                          <b className='mr-1 ml-1'>
-                            <FormattedNumber value={page} />
-                          </b>
-                          <FormattedMessage
-                            id='entities.download.page.of'
-                            defaultMessage='of' />
-                          <b className='mr-1 ml-1'>
-                            <FormattedNumber value={pages} />
-                          </b>
-                        </React.Fragment>
+                      {
+                        pages > 1 &&
+                          <>
+                            <b className='mr-2 ml-2'>&ndash;</b>
+                            <FormattedMessage
+                              id='entities.download.page.current'
+                              defaultMessage='Block'
+                            />
+                            <b className='mr-1 ml-1'>
+                              <FormattedNumber value={page} />
+                            </b>
+                            <FormattedMessage
+                              id='entities.download.page.of'
+                              defaultMessage='of'
+                            />
+                            <b className='mr-1 ml-1'>
+                              <FormattedNumber value={pages} />
+                            </b>
+                          </>
                       }
                     </div>
 
-                    { page < pages &&
-                      <button
-                        type='button'
-                        className='btn'
-                        onClick={() => { this.setState({ page: page + 1 }) }}
-                      >
-                        <i className='fa fa-angle-double-right' />
-                      </button>
+                    {
+                      page < pages &&
+                        <button
+                          type='button'
+                          className='btn'
+                          onClick={() => { this.setState({ page: page + 1 }) }}
+                        >
+                          <i className='fa fa-angle-double-right' />
+                        </button>
                     }
                   </div>
                 </div>
@@ -444,10 +472,12 @@ class EntitiesDownload extends Component {
                     <button
                       type='button'
                       className='btn btn-cancel btn-block'
-                      onClick={close}>
+                      onClick={close}
+                    >
                       <FormattedMessage
                         id='entities.download.cancel'
-                        defaultMessage='Cancel' />
+                        defaultMessage='Cancel'
+                      />
                     </button>
                   </div>
 
@@ -455,10 +485,12 @@ class EntitiesDownload extends Component {
                     <button
                       type='button'
                       className='btn btn-primary btn-block'
-                      onClick={() => { download() }}>
+                      onClick={() => { download() }}
+                    >
                       <FormattedMessage
                         id='entities.download.prepare'
-                        defaultMessage='Prepare file' />
+                        defaultMessage='Prepare file'
+                      />
                     </button>
                   </div>
                 </div>
@@ -474,21 +506,24 @@ class EntitiesDownload extends Component {
     return list.map(option => (
       <div
         key={option.id}
-        className={`p-2 ${className || ''} ${this.state[name] === option.id ? 'selected' : ''}`}>
+        className={`p-2 ${className || ''} ${this.state[name] === option.id ? 'selected' : ''}`}
+      >
         <div
           className='d-inline-flex'
-          onClick={() => { this.setState({ [name]: option.id }) }}>
+          onClick={() => { this.setState({ [name]: option.id }) }}
+        >
           <div className='radio' />
           <label className='ml-1'>
-            { option.label }
+            {option.label}
           </label>
         </div>
 
-        { this.state[name] === option.id &&
+        {
+          this.state[name] === option.id &&
           option.renderChecked &&
-          <div className='d-inline-flex'>
-            { option.renderChecked() }
-          </div>
+            <div className='d-inline-flex'>
+              {option.renderChecked()}
+            </div>
         }
       </div>
     ))
@@ -511,13 +546,15 @@ class EntitiesDownload extends Component {
                 <h5 className='modal-title'>
                   <FormattedMessage
                     id='entities.download.title'
-                    defaultMessage='Download' />
+                    defaultMessage='Download'
+                  />
                 </h5>
                 <button
                   data-qa='confirm-button-close'
                   type='button'
                   className='close'
-                  onClick={close}>
+                  onClick={close}
+                >
                   &times;
                 </button>
               </div>
@@ -530,13 +567,15 @@ class EntitiesDownload extends Component {
                     defaultMessage={`
                       Download was not successful,
                       maybe there was a server error while requesting for it.
-                    `} />
+                    `}
+                  />
                 </p>
-                { error.content && error.content.detail &&
-                  <p>
-                    <i className='fas fa-exclamation-triangle mr-1' />
-                    { error.content.detail }
-                  </p>
+                {
+                  error.content && error.content.detail &&
+                    <p>
+                      <i className='fas fa-exclamation-triangle mr-1' />
+                      {error.content.detail}
+                    </p>
                 }
               </div>
             </div>

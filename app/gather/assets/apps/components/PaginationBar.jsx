@@ -125,12 +125,12 @@ class PaginationBar extends Component {
 
     return (
       <nav data-qa='data-pagination' className='pagination-bar'>
-        { /* render SEARCH */ }
-        { this.props.search && this.renderSearchBar() }
-        { /* render NAVIGATION BUTTONS and CURRENT PAGE input */ }
-        { showNavigationButtons && this.renderNavigationButtons() }
-        { /* render PAGE SIZE options */ }
-        { showPageSizesSelect && this.renderPageSizes() }
+        {/* render SEARCH */}
+        {this.props.search && this.renderSearchBar()}
+        {/* render NAVIGATION BUTTONS and CURRENT PAGE input */}
+        {showNavigationButtons && this.renderNavigationButtons()}
+        {/* render PAGE SIZE options */}
+        {showPageSizesSelect && this.renderPageSizes()}
       </nav>
     )
   }
@@ -165,13 +165,13 @@ class PaginationBar extends Component {
   renderNavigationButtons () {
     return (
       <ul data-qa='data-pagination-buttons' className='pagination'>
-        { /* go to FIRST page */}
-        { this.renderLinkToPage('first') }
+        {/* go to FIRST page */}
+        {this.renderLinkToPage('first')}
 
-        { /* go to PREVIOUS page */}
-        { this.renderLinkToPage('previous') }
+        {/* go to PREVIOUS page */}
+        {this.renderLinkToPage('previous')}
 
-        { /* CURRENT page */}
+        {/* CURRENT page */}
         <li className='page-item disabled'>
           <FormattedMessage
             {...MESSAGES[(this.props.pageSize === 1 ? 'record' : 'page')]}
@@ -182,11 +182,11 @@ class PaginationBar extends Component {
           />
         </li>
 
-        { /* go to NEXT page */}
-        { this.renderLinkToPage('next') }
+        {/* go to NEXT page */}
+        {this.renderLinkToPage('next')}
 
-        { /* go to LAST page */}
-        { this.renderLinkToPage('last') }
+        {/* go to LAST page */}
+        {this.renderLinkToPage('last')}
       </ul>
     )
   }
@@ -227,7 +227,8 @@ class PaginationBar extends Component {
     return (
       <span
         data-qa='data-pagination-page'
-        className={`current-page ${isPending ? 'pending' : ''}`}>
+        className={`current-page ${isPending ? 'pending' : ''}`}
+      >
         <input
           type='number'
           name='currentPage'
@@ -293,7 +294,8 @@ class PaginationBar extends Component {
           type='button'
           className='page-link'
           onClick={() => this.props.goToPage(newPage)}
-          aria-label={formatMessage(MESSAGES[pageName])}>
+          aria-label={formatMessage(MESSAGES[pageName])}
+        >
           <FormattedMessage {...MESSAGES[pageName]} />
         </button>
       </li>
@@ -316,14 +318,17 @@ class PaginationBar extends Component {
           defaultMessage='Choose size'
         />
         <select value={this.props.pageSize} onChange={onChange}>
-          { this.props.sizes.map(size => (
-            <option
-              key={size}
-              value={size}
-              data-qa={`data-pagination-size-${size}`}>
-              {size}
-            </option>
-          )) }
+          {
+            this.props.sizes.map(size => (
+              <option
+                key={size}
+                value={size}
+                data-qa={`data-pagination-size-${size}`}
+              >
+                {size}
+              </option>
+            ))
+          }
         </select>
       </div>
     )

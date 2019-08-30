@@ -39,12 +39,13 @@ class HelpMessage extends Component {
           type='button'
           className='btn btn-sm btn-info rounded-circle float-right'
           data-toggle='collapse'
-          data-target={'#' + randomId}>
+          data-target={'#' + randomId}
+        >
           <i className='fas fa-question' />
         </button>
         <div className='collapse' id={randomId}>
           <div className='help-container'>
-            { this.props.children }
+            {this.props.children}
           </div>
         </div>
       </div>

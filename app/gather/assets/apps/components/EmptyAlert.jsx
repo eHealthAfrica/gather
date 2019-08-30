@@ -37,7 +37,8 @@ class EmptyAlert extends Component {
           <i className='fas fa-exclamation-triangle mr-1' />
           <FormattedMessage
             id='alert.empty'
-            defaultMessage='Nothing to display.' />
+            defaultMessage='Nothing to display.'
+          />
         </p>
       </div>
     )

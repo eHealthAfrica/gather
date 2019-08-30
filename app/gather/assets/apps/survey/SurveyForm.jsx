@@ -138,24 +138,24 @@ class SurveyForm extends Component {
 
     return (
       <div data-qa={dataQA} className='survey-edit'>
-        <h3 className='page-title'>{ this.renderTitle() }</h3>
+        <h3 className='page-title'>{this.renderTitle()}</h3>
 
         <ErrorAlert errors={errors.generic} />
-        { isUpdating && this.renderUpdating() }
+        {isUpdating && this.renderUpdating()}
 
         <form onSubmit={this.onSubmit.bind(this)} encType='multipart/form-data'>
-          { this.renderName() }
+          {this.renderName()}
           {
             this.props.settings.ODK_ACTIVE &&
-            <SurveyODKForm
-              survey={this.state.odk}
-              surveyors={this.props.surveyors}
-              settings={this.props.settings}
-              onChange={(odk) => this.setState({ odk })}
-              errors={errors.odk}
-            />
+              <SurveyODKForm
+                survey={this.state.odk}
+                surveyors={this.props.surveyors}
+                settings={this.props.settings}
+                onChange={(odk) => this.setState({ odk })}
+                errors={errors.odk}
+              />
           }
-          { this.renderButtons() }
+          {this.renderButtons()}
         </form>
       </div>
     )
@@ -167,14 +167,16 @@ class SurveyForm extends Component {
       return (
         <FormattedMessage
           id='survey.form.title.add'
-          defaultMessage='New survey' />
+          defaultMessage='New survey'
+        />
       )
     } else {
       return (
         <span>
           <FormattedMessage
             id='survey.form.title.edit'
-            defaultMessage='Edit survey' />
+            defaultMessage='Edit survey'
+          />
           <span className='survey-name ml-1'>{survey.name}</span>
         </span>
       )
@@ -190,7 +192,8 @@ class SurveyForm extends Component {
         <label className='form-control-label title'>
           <FormattedMessage
             id='survey.form.name'
-            defaultMessage='Name' />
+            defaultMessage='Name'
+          />
         </label>
         <input
           name='name'
@@ -210,17 +213,18 @@ class SurveyForm extends Component {
 
     return (
       <div className='actions'>
-        { this.state.id &&
-          <div>
-            <ConfirmButton
-              className='btn btn-delete'
-              cancelable
-              onConfirm={this.onDelete.bind(this)}
-              title={this.renderTitle()}
-              message={formatMessage(MESSAGES.deleteConfirm, { name: this.state.name })}
-              buttonLabel={formatMessage(MESSAGES.deleteButton)}
-            />
-          </div>
+        {
+          this.state.id &&
+            <div>
+              <ConfirmButton
+                className='btn btn-delete'
+                cancelable
+                onConfirm={this.onDelete.bind(this)}
+                title={this.renderTitle()}
+                message={formatMessage(MESSAGES.deleteConfirm, { name: this.state.name })}
+                buttonLabel={formatMessage(MESSAGES.deleteButton)}
+              />
+            </div>
         }
         <div>
           <ConfirmButton
@@ -237,7 +241,8 @@ class SurveyForm extends Component {
           <button type='submit' className='btn btn-primary btn-block'>
             <FormattedMessage
               id='survey.form.action.submit'
-              defaultMessage='Save survey' />
+              defaultMessage='Save survey'
+            />
           </button>
         </div>
       </div>
@@ -252,19 +257,20 @@ class SurveyForm extends Component {
           <div className='modal-dialog modal-dialog-scrollable modal-md'>
             <div className='modal-content'>
               <div className='modal-header'>
-                <h5 className='modal-title'>{ this.renderTitle() }</h5>
+                <h5 className='modal-title'>{this.renderTitle()}</h5>
               </div>
 
               <div className='modal-body'>
                 <i className='fas fa-spin fa-cog mr-2' />
                 <FormattedMessage
                   id='survey.form.action.updating'
-                  defaultMessage='Saving data in progress…' />
+                  defaultMessage='Saving data in progress…'
+                />
                 <div className='mt-2'>
                   <ul>
                     {
                       actionsInProgress.length > 0 &&
-                      actionsInProgress.map((msg, index) => <li key={index}>{ msg }</li>)
+                      actionsInProgress.map((msg, index) => <li key={index}>{msg}</li>)
                     }
                   </ul>
                 </div>
@@ -547,10 +553,12 @@ class SurveyForm extends Component {
 
       // execute next action
       const action = actions.shift()
-      this.setState({ actionsInProgress: [
-        ...this.state.actionsInProgress,
-        action.message
-      ] })
+      this.setState({
+        actionsInProgress: [
+          ...this.state.actionsInProgress,
+          action.message
+        ]
+      })
       action.method(action.url, action.data, action.options)
         .then(response => {
           this.setState({
