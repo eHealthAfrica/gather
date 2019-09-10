@@ -23,16 +23,11 @@ under the License.
 <h1>
   <span data-qa='instance-name'>{{ instance_name }}</span>
 
-  <span data-qa="kernel-server" class="url-name">
-    {% trans 'Aether Kernel Server' %}
-    <a href="{{ kernel_url }}" target="_blank">{{ kernel_url }}</a>
-  </span>
-
   {% if odk_url %}
     {# Include the link to the Aether ODK Server #}
     <span data-qa="odk-server" class="url-name">
       {% trans 'Aether ODK Server' %}
-      <a href="{{ odk_url }}" target="_blank">{{ odk_url }}</a>
+      {{ odk_url }}
     </span>
   {% endif %}
 
