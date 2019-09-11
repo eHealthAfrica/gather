@@ -17,6 +17,7 @@
 - [Development](#development)
   - [Code style](#code-style)
   - [Naming conventions](#naming-conventions)
+  - [Commit Message Format](#commit-message-format)
   - [Frontend assets](#frontend-assets)
 - [Containers and services](#containers-and-services)
 - [Run commands in the containers](#run-commands-in-the-containers)
@@ -274,6 +275,50 @@ Python modules and the React Components:
 - - -
 **Comments are warmly welcome!!!**
 - - -
+
+*[Return to TOC](#table-of-contents)*
+
+### Commit Message Format
+
+Each commit message consists of a header, a body and an optional footer.
+The header has a special format that includes a type, a scope, and a subject:
+
+```text
+<type>(<scope>): <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
+```
+
+#### Types of commit messages:
+- *build*: Changes that affect the build system or external dependencies
+- *ci*: Changes to CI configuration files and scripts
+- *docs*: Documentation only changes
+- *feat*: A new feature
+- *fix*: A bug fix
+- *perf*: A code change that improves performance
+- *refactor*: A code change that neither fixes a bug nor adds a feature
+- *style*: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- *test*: Adding missing tests or correcting existing tests
+
+#### Scope
+The candidates for scope depends on the project and the technologies being used. It is fairly up to the developer to select a scope.
+
+#### Subject
+The subject contains a succinct description of the change:
+- use the imperative, present tense: “change” not “changed” nor “changes”
+- don’t capitalize the first letter
+- no dot/period (.) at the end
+
+#### Footer (Optional)
+Footer is used for citing issues that this commit closes (if any).
+
+*[Return to TOC](#table-of-contents)*
+
+## Release Management
+
+To learn more about the Aether release process, refer to the [release management](https://github.com/eHealthAfrica/aether/wiki/Release-Management) page on the wiki.
 
 *[Return to TOC](#table-of-contents)*
 
