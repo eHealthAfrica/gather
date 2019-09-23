@@ -53,8 +53,14 @@ class Survey extends Component {
       labels: props.skeleton.docs,
       allPaths: paths,
       selectedPaths: paths,
-      activationError: null
+      activationError: null,
+      dashboardConfig: null
     }
+    this.saveDashboardConfig = this.saveDashboardConfig.bind(this)
+  }
+
+  saveDashboardConfig (dashboardConfig) {
+    this.setState({ dashboardConfig }, () => console.log(' Saved! ==>> ', this.state.dashboardConfig))
   }
 
   render () {
@@ -87,16 +93,15 @@ class Survey extends Component {
   }
 
   renderEntities () {
-    if (this.state.total === 0) {
-      return ''
-    }
+    const { total } = this.state;
+    if (total === 0) return ''
 
-    const { skeleton, survey } = this.props
-    const { viewMode } = this.state
+    const { skeleton, survey, settings } = this.props
+    const { viewMode, labels, allPaths, selectedPaths, dashboardConfig } = this.state
     const listComponent = (viewMode === SINGLE_VIEW ? EntityItem : EntitiesList)
     const extras = {
-      labels: this.state.labels,
-      paths: this.state.selectedPaths
+      labels: labels,
+      paths: selectedPaths
     }
     const filename = skeleton.name || survey.name
 
@@ -158,16 +163,16 @@ class Survey extends Component {
             </li>
             <li>
               <EntitiesDownload
-                survey={this.props.survey}
-                total={this.state.total}
-                paths={this.state.selectedPaths}
-                labels={this.state.labels}
-                settings={this.props.settings}
+                survey={survey}
+                total={total}
+                paths={selectedPaths}
+                labels={labels}
+                settings={settings}
                 filename={filename}
               />
             </li>
             {
-              this.state.viewMode !== DASHBOARD_VIEW &&
+              viewMode !== DASHBOARD_VIEW &&
                 <li className='toolbar-filter'>
                   {this.renderMaskButton()}
                 </li>
@@ -176,9 +181,15 @@ class Survey extends Component {
           </ul>
         </div>
         {
-          this.state.viewMode === DASHBOARD_VIEW
+          viewMode === DASHBOARD_VIEW
             ? (
-              <SurveyDashboard />
+              <SurveyDashboard
+                columns={allPaths}
+                labels={labels}
+                entities_count={total}
+                dashboardConfig={dashboardConfig}
+                saveDashboardConfig={this.saveDashboardConfig}
+              />
             )
             : (
               <PaginationContainer

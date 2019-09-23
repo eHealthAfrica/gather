@@ -376,6 +376,41 @@
   }
 }
 
+.config-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .content {
+    text-align: center;
+    width: 90%;
+    margin: 2rem;
+
+    .row {
+      padding: 1vh 1vw;
+    }
+
+    .item-title {
+      list-style: none;
+      padding: .3rem;
+      font-style: italic;
+      font-size: $font-size-s;
+
+      .row-item {
+        border-bottom: 1px solid #dfdfdf;
+      }
+
+      .label-col {
+        text-align: left;
+      }
+    }
+  }
+
+  .config-btn {
+    margin: 3rem;
+  }
+}
+
 @media screen and (max-width: 576px) {
 
   .tab {
