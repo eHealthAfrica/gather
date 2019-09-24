@@ -4,7 +4,7 @@
  * See the NOTICE file distributed with this work for additional information
  * regarding copyright ownership.
  *
- * Licensed under the Apache License, Version 2.0 (the 'License');
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -12,7 +12,7 @@
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
- * 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
@@ -23,37 +23,37 @@ import { FormattedMessage } from 'react-intl'
 import SurveyConfig from './mask/surveyConfig'
 
 const SurveyDashboard = ({ columns, labels, entities_count, dashboardConfig, saveDashboardConfig }) => {
-  const [showConf, setShowConf] = useState(false)
+  const [showConfig, setShowConfig] = useState(false)
   return (
     <div>
       {
         entities_count > 0 && (
           <p className='alert alert-info'>
-            <a href='#!' role='button' onClick={() => setShowConf(!showConf)}>
+            <a href='#!' role='button' onClick={() => setShowConfig(!showConfig)}>
               <FormattedMessage
                 id='alert.loading'
-                defaultMessage={showConf ? 'Close' : 'Dashboard Configuration'}
+                defaultMessage={showConfig ? 'Close' : 'Dashboard Configuration'}
               />
             </a>
           </p>
         )
       }
       {
-        showConf &&
+        showConfig &&
         <SurveyConfig
-          setShowConf={setShowConf}
+          setShowConfig={setShowConfig}
           dashboardConfig={dashboardConfig}
           saveDashboardConfig={saveDashboardConfig}
           columns={columns}
           labels={labels}
         />
       }
-      {entities_count > 0 && !columns.length && !showConf && renderNoDashboard(setShowConf)}
+      {entities_count > 0 && !columns.length && !showConfig && renderNoDashboard(setShowConfig)}
     </div>
   )
 }
 
-const renderNoDashboard = setShowConf => (
+const renderNoDashboard = setShowConfig => (
   <div className='survey-content no-dashboard'>
     <h4 className='headline'>
       <FormattedMessage
@@ -69,7 +69,7 @@ const renderNoDashboard = setShowConf => (
     <button
       type='button'
       className='btn btn-primary btn-secondary'
-      onClick={() => setShowConf(true)}
+      onClick={() => setShowConfig(true)}
     >
       <FormattedMessage
         id='survey.no.dashboard.button'

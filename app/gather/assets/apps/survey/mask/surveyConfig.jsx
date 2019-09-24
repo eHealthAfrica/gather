@@ -19,7 +19,7 @@ const MESSAGES = {
   )
 }
 
-export default ({ dashboardConfig, saveDashboardConfig, setShowConf, columns, labels }) => {
+export default ({ dashboardConfig, saveDashboardConfig, setShowConfig, columns, labels }) => {
   const [newDashboardConfig, setNewDashboardConfig] = useState({})
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export default ({ dashboardConfig, saveDashboardConfig, setShowConf, columns, la
             type='button'
             className='btn btn-primary btn-secondary'
             onClick={() => {
-              setShowConf(false)
+              setShowConfig(false)
               saveDashboardConfig(newDashboardConfig)
             }}
           >
