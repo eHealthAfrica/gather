@@ -93,7 +93,7 @@ class Survey extends Component {
   }
 
   renderEntities () {
-    const { total } = this.state;
+    const { total } = this.state
     if (total === 0) return ''
 
     const { skeleton, survey, settings } = this.props
@@ -186,7 +186,7 @@ class Survey extends Component {
               <SurveyDashboard
                 columns={allPaths}
                 labels={labels}
-                entities_count={total}
+                entitiesCount={total}
                 dashboardConfig={dashboardConfig}
                 saveDashboardConfig={this.saveDashboardConfig}
               />

@@ -22,12 +22,12 @@ import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import SurveyConfig from './mask/surveyConfig'
 
-const SurveyDashboard = ({ columns, labels, entities_count, dashboardConfig, saveDashboardConfig }) => {
+const SurveyDashboard = ({ columns, labels, entitiesCount, dashboardConfig, saveDashboardConfig }) => {
   const [showConfig, setShowConfig] = useState(false)
   return (
     <div>
       {
-        entities_count > 0 && (
+        entitiesCount > 0 && (
           <p className='alert alert-info'>
             <a href='#!' role='button' onClick={() => setShowConfig(!showConfig)}>
               <FormattedMessage
@@ -40,15 +40,15 @@ const SurveyDashboard = ({ columns, labels, entities_count, dashboardConfig, sav
       }
       {
         showConfig &&
-        <SurveyConfig
-          setShowConfig={setShowConfig}
-          dashboardConfig={dashboardConfig}
-          saveDashboardConfig={saveDashboardConfig}
-          columns={columns}
-          labels={labels}
-        />
+          <SurveyConfig
+            setShowConfig={setShowConfig}
+            dashboardConfig={dashboardConfig}
+            saveDashboardConfig={saveDashboardConfig}
+            columns={columns}
+            labels={labels}
+          />
       }
-      {entities_count > 0 && !columns.length && !showConfig && renderNoDashboard(setShowConfig)}
+      {entitiesCount > 0 && !columns.length && !showConfig && renderNoDashboard(setShowConfig)}
     </div>
   )
 }

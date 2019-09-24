@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import { getLabelTree } from '../../utils/types'
 
 const prefix = 'survey.dashboard.config'
@@ -52,7 +52,7 @@ export default ({ dashboardConfig, saveDashboardConfig, setShowConfig, columns, 
         <ul>
           {
             Object.keys(newDashboardConfig).map((key, index) => {
-              const item = newDashboardConfig[key];
+              const item = newDashboardConfig[key]
               const itemName = `${index + 1}. ${key}`
               return (
                 <li key={itemName} className='item-title'>
@@ -74,8 +74,8 @@ export default ({ dashboardConfig, saveDashboardConfig, setShowConfig, columns, 
                               <FormattedMessage
                                 id={
                                   item.dashboard
-                                  ? MESSAGES.visualizations[item.dashboard].id
-                                  : `${prefix}.${visualizations[0].replace(' ', '_')}`
+                                    ? MESSAGES.visualizations[item.dashboard].id
+                                    : `${prefix}.${visualizations[0].replace(' ', '_')}`
                                 }
                                 defaultMessage={item.dashboard || visualizations[0]}
                               />
@@ -108,20 +108,20 @@ export default ({ dashboardConfig, saveDashboardConfig, setShowConfig, columns, 
         </ul>
       </div>
       <div className='config-btn'>
-          <button
-            type='button'
-            className='btn btn-primary btn-secondary'
-            onClick={() => {
-              setShowConfig(false)
-              saveDashboardConfig(newDashboardConfig)
-            }}
-          >
-            <FormattedMessage
-              id={MESSAGES.button.id}
-              defaultMessage={MESSAGES.button.defaultMessage}
-            />
-          </button>
-        </div>
+        <button
+          type='button'
+          className='btn btn-primary btn-secondary'
+          onClick={() => {
+            setShowConfig(false)
+            saveDashboardConfig(newDashboardConfig)
+          }}
+        >
+          <FormattedMessage
+            id={MESSAGES.button.id}
+            defaultMessage={MESSAGES.button.defaultMessage}
+          />
+        </button>
+      </div>
     </div>
   )
 }
