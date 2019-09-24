@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { getLabelTree } from '../../utils/types'
 
@@ -20,14 +20,12 @@ const MESSAGES = {
 }
 
 export default ({ dashboardConfig, saveDashboardConfig, setShowConfig, columns, labels }) => {
-  const [newDashboardConfig, setNewDashboardConfig] = useState({})
+  const initialState = dashboardConfig || columns.reduce(
+    (acc, column) => ({ ...acc, [getLabelTree(column, labels)]: { elastic: false, dashboard: null } }),
+    {}
+  )
 
-  useEffect(() => {
-    setNewDashboardConfig(dashboardConfig || columns.reduce(
-      (acc, column) => ({ ...acc, [getLabelTree(column, labels)]: { elastic: false, dashboard: null } }),
-      {}
-    ))
-  }, [])
+  const [newDashboardConfig, setNewDashboardConfig] = useState(initialState)
 
   const handleElastic = (key, { target: { checked } }) =>
     setNewDashboardConfig({
