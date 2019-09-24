@@ -41,6 +41,10 @@
     box-shadow: 2px 2px 4px $darker-grey;
     border: 0;
     border-radius: $border-radius;
+
+    // limit modal height to viewport height
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
   }
 
   .title {
