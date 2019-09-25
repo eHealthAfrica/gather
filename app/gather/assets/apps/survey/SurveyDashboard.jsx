@@ -22,7 +22,14 @@ import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import SurveyConfig from './mask/surveyConfig'
 
-const SurveyDashboard = ({ columns, labels, entitiesCount, dashboardConfig, saveDashboardConfig }) => {
+const SurveyDashboard = ({
+  columns,
+  labels,
+  entitiesCount,
+  dashboardConfig,
+  saveDashboardConfig,
+  visualizations
+}) => {
   const [showConfig, setShowConfig] = useState(false)
   return (
     <div>
@@ -46,6 +53,7 @@ const SurveyDashboard = ({ columns, labels, entitiesCount, dashboardConfig, save
             saveDashboardConfig={saveDashboardConfig}
             columns={columns}
             labels={labels}
+            visualizations={visualizations}
           />
       }
       {entitiesCount > 0 && !columns.length && !showConfig && renderNoDashboard(setShowConfig)}
