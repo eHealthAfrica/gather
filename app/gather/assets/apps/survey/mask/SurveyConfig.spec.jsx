@@ -21,7 +21,7 @@
 /* global describe, it, expect */
 
 import React from 'react'
-import SurveyConfig from './SurveyConfig'
+import SurveyConfig from './surveyConfig'
 import { mountComponent } from '../../../tests/enzyme-helpers'
 
 describe('Survey Configuration', () => {
