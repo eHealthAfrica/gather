@@ -386,23 +386,26 @@
     width: 90%;
     margin: 2rem;
 
-    .row {
-      padding: 1vh 1vw;
+    .wrap {
+      padding: 5px;
     }
 
     .item-title {
       list-style: none;
-      padding: .3rem;
       font-style: italic;
       font-size: $font-size-s;
 
       .row-item {
-        border-bottom: 1px solid #dfdfdf;
+        border-bottom: 1px solid $lighter-grey;
       }
 
       .label-col {
         text-align: left;
       }
+    }
+
+    .vLine {
+      border-right: 1px solid $grey;
     }
   }
 

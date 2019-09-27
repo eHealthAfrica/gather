@@ -74,7 +74,14 @@ export default ({
         <div className='row'>
           <div className='col-8' />
           <div className='col-2'><h5>Elastic Search</h5></div>
-          <div className='col-2'><h5>Dashboard</h5></div>
+          <div className='col-2'>
+            <h5>
+              <FormattedMessage
+                id='survey.dashboard.config.dashboard_column'
+                defaultMessage='Dashboard'
+              />
+            </h5>
+          </div>
         </div>
         <ul>
           {
@@ -84,8 +91,8 @@ export default ({
               return (
                 <li key={itemName} className='item-title' data-qa='config-item'>
                   <div className='row row-item'>
-                    <div className='col-8 label-col'>{itemName}</div>
-                    <div className='col-2 form-check'>
+                    <div className='col-8 label-col wrap vLine'>{itemName}</div>
+                    <div className='col-2 wrap vLine'>
                       <input
                         className='form-check-input'
                         type='checkbox'
@@ -97,7 +104,7 @@ export default ({
                     </div>
                     {
                       item.elastic && (
-                        <div className='col-2'>
+                        <div className='col-2 wrap'>
                           <div className='dropdown'>
                             <div
                               className='dropdown-toggle'

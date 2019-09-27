@@ -37,10 +37,21 @@ const SurveyDashboard = ({
         entitiesCount > 0 && (
           <p className='alert alert-info'>
             <a href='#!' role='button' onClick={() => setShowConfig(!showConfig)}>
-              <FormattedMessage
-                id='alert.loading'
-                defaultMessage={showConfig ? 'Close' : 'Dashboard Configuration'}
-              />
+              {
+                showConfig
+                  ? (
+                    <FormattedMessage
+                      id='alert.config.close'
+                      defaultMessage='Close'
+                    />
+                  )
+                  : (
+                    <FormattedMessage
+                      id='alert.config.dashboard'
+                      defaultMessage='Dashboard Configuration'
+                    />
+                  )
+              }
             </a>
           </p>
         )
@@ -77,7 +88,7 @@ const renderNoDashboard = setShowConfig => (
     <button
       type='button'
       className='btn btn-primary btn-secondary'
-      onClick={() => setShowConfig(true)}
+      onClick={() => { setShowConfig(true) }}
     >
       <FormattedMessage
         id='survey.no.dashboard.button'
