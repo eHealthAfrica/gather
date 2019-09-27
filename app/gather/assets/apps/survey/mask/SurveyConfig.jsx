@@ -19,35 +19,36 @@
  */
 
 import React, { useState } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { defineMessages, injectIntl } from 'react-intl'
 import { getLabelTree } from '../../utils/types'
 
-const createMessages = (visualizations, prefix) => ({
-  button: {
-    id: `${prefix}.button`,
-    defaultMessage: 'Activate dashboard'
-  },
-  visualizations: visualizations.reduce(
+const createMessages = visualizations => {
+  const prefix = 'survey.dashboard.config'
+  const messages = visualizations.reduce(
     (acc, curr) => ({
       ...acc,
       [curr]: { id: `${prefix}.${curr.replace(' ', '_')}`, defaultMessage: curr }
     }),
-    {}
+    {
+      button: { id: `${prefix}.button`, defaultMessage: 'Activate dashboard' },
+      dashboard: { id: `${prefix}.dashboard_column`, defaultMessage: 'Dashboard' }
+    }
   )
-})
+  return defineMessages(messages)
+}
 
-export default ({
+const SurveyConfig = ({
   dashboardConfig,
   saveDashboardConfig,
   setShowConfig,
   columns,
   labels,
-  visualizations: visualize
+  visualizations: visualize,
+  intl: { formatMessage }
 }) => {
-  const prefix = 'survey.dashboard.config'
   const visualizations = ['No Visualization', ...visualize]
 
-  const messages = createMessages(visualizations, prefix)
+  const messages = createMessages(visualizations)
 
   const initialState = dashboardConfig || columns.reduce(
     (acc, column) => ({ ...acc, [getLabelTree(column, labels)]: { elastic: false, dashboard: null } }),
@@ -75,12 +76,7 @@ export default ({
           <div className='col-8' />
           <div className='col-2'><h5>Elastic Search</h5></div>
           <div className='col-2'>
-            <h5>
-              <FormattedMessage
-                id='survey.dashboard.config.dashboard_column'
-                defaultMessage='Dashboard'
-              />
-            </h5>
+            <h5>{formatMessage(messages.dashboard)}</h5>
           </div>
         </div>
         <ul>
@@ -113,14 +109,11 @@ export default ({
                               data-toggle='dropdown'
                               data-qa='config-item-dropdown'
                             >
-                              <FormattedMessage
-                                id={
-                                  item.dashboard
-                                    ? messages.visualizations[item.dashboard].id
-                                    : `${prefix}.${visualizations[0].replace(' ', '_')}`
-                                }
-                                defaultMessage={item.dashboard || visualizations[0]}
-                              />
+                              {
+                                formatMessage(
+                                  item.dashboard ? messages[item.dashboard] : messages['No Visualization']
+                                )
+                              }
                               <span className='caret' />
                             </div>
                             <div className='dropdown-menu'>
@@ -132,10 +125,7 @@ export default ({
                                   onClick={() => handleDashboard(key, elem)}
                                   data-qa={`config-item-dropdown-${key}`}
                                 >
-                                  <FormattedMessage
-                                    id={messages.visualizations[elem].id}
-                                    defaultMessage={messages.visualizations[elem].defaultMessage}
-                                  />
+                                  {formatMessage(messages[elem])}
                                 </a>
                               ))}
                             </div>
@@ -160,12 +150,11 @@ export default ({
           }}
           data-qa='config-button'
         >
-          <FormattedMessage
-            id={messages.button.id}
-            defaultMessage={messages.button.defaultMessage}
-          />
+          {formatMessage(messages.button)}
         </button>
       </div>
     </div>
   )
 }
+
+export default injectIntl(SurveyConfig)
