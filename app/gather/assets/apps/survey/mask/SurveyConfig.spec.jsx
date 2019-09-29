@@ -44,13 +44,14 @@ describe('Survey Configuration', () => {
 
     expect(component.find("[data-qa='config']").exists()).toBeTruthy()
     expect(component.find("[data-qa='config-item']")).toHaveLength(columns.length)
+    expect(component.find("[data-qa='config-item-dropdown']")).toHaveLength(0)
 
     component.find("[data-qa='config-item-checkbox']").forEach(el => {
       expect(el.props().checked).toEqual(false)
       el.simulate('change', { target: { checked: true } })
     })
 
-    expect(component.find("[data-qa='config-item-dropdown']")).toHaveLength(0)
+    expect(component.find("[data-qa='config-item-dropdown']")).toHaveLength(columns.length)
   })
 
   it('should render config-component for survey that has existing configs', () => {
@@ -73,14 +74,12 @@ describe('Survey Configuration', () => {
 
     expect(component.find("[data-qa='config']").exists()).toBeTruthy()
     expect(component.find("[data-qa='config-item']")).toHaveLength(columns.length)
+    expect(component.find("[data-qa='config-item-dropdown']")).toHaveLength(columns.length)
 
     component.find("[data-qa='config-item-checkbox']").forEach(el => {
       const { checked, name } = el.props()
       expect(checked).toEqual(dashboardConfig[name].elastic)
-      el.simulate('change', { target: { checked: false } })
     })
-
-    expect(component.find("[data-qa='config-item-dropdown']")).toHaveLength(columns.length)
 
     component.find("[data-qa='config-item-dropdown']").forEach(el => {
       const text = el.getDOMNode().textContent
@@ -90,12 +89,16 @@ describe('Survey Configuration', () => {
       if (expectation === null) expect(text).toEqual('No Visualization')
       else expect(text).toEqual(expectation)
 
-      el.simulate('click', { target: { checked: false } })
-
       component.find(`[data-qa='config-item-dropdown-${name}']`).forEach(el => {
         el.simulate('click')
       })
     })
+
+    component.find("[data-qa='config-item-checkbox']").forEach(el => {
+      el.simulate('change', { target: { checked: false } })
+    })
+
+    expect(component.find("[data-qa='config-item-dropdown']")).toHaveLength(0)
 
     component.find("[data-qa='config-button']").simulate('click')
   })
