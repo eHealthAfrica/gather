@@ -87,8 +87,8 @@ const SurveyConfig = ({
               return (
                 <li key={itemName} className='item-title' data-qa='config-item'>
                   <div className='row row-item'>
-                    <div className='col-8 label-col wrap vLine'>{itemName}</div>
-                    <div className='col-2 wrap vLine'>
+                    <div className='col-8 label-col wrap v-line'>{itemName}</div>
+                    <div className='col-2 wrap v-line'>
                       <input
                         className='form-check-input'
                         type='checkbox'
