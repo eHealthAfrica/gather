@@ -41,7 +41,6 @@ const TABLE_VIEW = 'table'
 const SINGLE_VIEW = 'single'
 const DASHBOARD_VIEW = 'dashboard'
 const TABLE_SIZES = [10, 25, 50, 100]
-const VISUALIZATIONS = ['Bar Chart', 'Line Chart', 'Pie Chart']
 
 class Survey extends Component {
   constructor (props) {
@@ -55,8 +54,7 @@ class Survey extends Component {
       allPaths: paths,
       selectedPaths: paths,
       activationError: null,
-      dashboardConfig: null,
-      visualizations: VISUALIZATIONS
+      dashboardConfig: null
     }
     this.saveDashboardConfig = this.saveDashboardConfig.bind(this)
   }
@@ -99,7 +97,7 @@ class Survey extends Component {
     if (total === 0) return ''
 
     const { skeleton, survey, settings } = this.props
-    const { viewMode, labels, allPaths, selectedPaths, dashboardConfig, visualizations } = this.state
+    const { viewMode, labels, allPaths, selectedPaths, dashboardConfig } = this.state
     const listComponent = (viewMode === SINGLE_VIEW ? EntityItem : EntitiesList)
     const extras = {
       labels: labels,
@@ -191,7 +189,6 @@ class Survey extends Component {
                 entitiesCount={total}
                 dashboardConfig={dashboardConfig}
                 saveDashboardConfig={this.saveDashboardConfig}
-                visualizations={visualizations}
               />
             )
             : (

@@ -25,20 +25,18 @@ import SurveyConfig from './SurveyConfig'
 import { mountComponent } from '../../../tests/enzyme-helpers'
 
 describe('Survey Configuration', () => {
+  const columns = ['surveyor', 'gender', 'what']
   const labels = {
     surveyor: 'Which surveyor is entering this data?',
     gender: 'What is the gender of this occupant?',
     what: 'What?'
   }
-  const columns = ['surveyor', 'gender', 'what']
-  const visualizations = ['Bar Chart', 'Line Chart', 'Pie Chart']
 
   it('should render config-component for survey that has no existing configs', () => {
     const component = mountComponent(
       <SurveyConfig
         labels={labels}
         columns={columns}
-        visualizations={visualizations}
       />
     )
 
@@ -56,8 +54,8 @@ describe('Survey Configuration', () => {
 
   it('should render config-component for survey that has existing configs', () => {
     const dashboardConfig = {
-      'Which surveyor is entering this data?': { elastic: true, dashboard: 'Bar Chart' },
-      'What is the gender of this occupant?': { elastic: true, dashboard: 'Pie Chart' },
+      'Which surveyor is entering this data?': { elastic: true, dashboard: 'barChart' },
+      'What is the gender of this occupant?': { elastic: true, dashboard: 'pieChart' },
       'What?': { elastic: true, dashboard: null }
     }
 
@@ -68,7 +66,6 @@ describe('Survey Configuration', () => {
         saveDashboardConfig={() => {}}
         labels={labels}
         columns={columns}
-        visualizations={visualizations}
       />
     )
 
@@ -82,12 +79,21 @@ describe('Survey Configuration', () => {
     })
 
     component.find("[data-qa='config-item-dropdown']").forEach(el => {
-      const text = el.getDOMNode().textContent
       const name = el.props().name
+      const text = el.getDOMNode().textContent
       const expectation = dashboardConfig[name].dashboard
+      let actual = null
 
-      if (expectation === null) expect(text).toEqual('No Visualization')
-      else expect(text).toEqual(expectation)
+      switch (text) {
+        case 'Bar Chart':
+          actual = 'barChart'
+          break;
+        case 'Pie Chart':
+          actual = 'pieChart'
+        default:
+      }
+
+      expect(actual).toEqual(expectation)
 
       component.find(`[data-qa='config-item-dropdown-${name}']`).forEach(el => {
         el.simulate('click')

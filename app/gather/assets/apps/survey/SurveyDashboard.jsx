@@ -27,8 +27,7 @@ const SurveyDashboard = ({
   labels,
   entitiesCount,
   dashboardConfig,
-  saveDashboardConfig,
-  visualizations
+  saveDashboardConfig
 }) => {
   const [showConfig, setShowConfig] = useState(false)
   return (
@@ -64,7 +63,6 @@ const SurveyDashboard = ({
             saveDashboardConfig={saveDashboardConfig}
             columns={columns}
             labels={labels}
-            visualizations={visualizations}
           />
       }
       {entitiesCount > 0 && !columns.length && !showConfig && renderNoDashboard(setShowConfig)}
