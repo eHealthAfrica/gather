@@ -85,9 +85,10 @@ describe('Survey Configuration', () => {
       switch (text) {
         case 'Bar Chart':
           actual = 'barChart'
-          break;
+          break
         case 'Pie Chart':
           actual = 'pieChart'
+          break
         default:
       }
 

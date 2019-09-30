@@ -25,7 +25,7 @@ import { getLabelTree } from '../../utils/types'
 const MESSAGES = defineMessages({
   noChart: {
     id: 'survey.dashboard.config.no.chart',
-    defaultMessage: 'No visualization',
+    defaultMessage: 'No visualization'
   },
   barChart: {
     id: 'survey.dashboard.config.bar.chart',
