@@ -64,8 +64,6 @@ describe('Survey Configuration', () => {
         dashboardConfig={dashboardConfig}
         setShowConfig={() => {}}
         saveDashboardConfig={() => {}}
-        labels={labels}
-        columns={columns}
       />
     )
 
