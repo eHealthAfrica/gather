@@ -356,7 +356,7 @@ describe('request utils', () => {
       it('should catch aborted signals', () => {
         nock('http://localhost')
           .get('/to-be-aborted')
-          .reply({ aborted: false })
+          .reply(200, { aborted: false })
 
         const controller = new window.AbortController()
         const opts = { signal: controller.signal }
