@@ -67,6 +67,7 @@ services:
       KEYCLOAK_SERVER_URL: null
     volumes:
       # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
+      # - ${AETHER_PYTHON_PATH:-../aether-python-library}/aether/python:/usr/local/lib/python3.7/site-packages/aether/python
       - ./.persistent_data/backups/kernel:/backups
       - ./.persistent_data/static/kernel:/var/www/static
     depends_on:
@@ -74,6 +75,8 @@ services:
         condition: service_healthy
       nginx:
         condition: service_healthy
+      minio:
+        condition: service_started
     networks:
       - local
     extra_hosts:
@@ -101,6 +104,8 @@ services:
         condition: service_healthy
       nginx:
         condition: service_healthy
+      minio:
+        condition: service_started
       kernel:
         condition: service_started
     networks:

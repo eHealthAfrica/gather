@@ -69,9 +69,13 @@ AETHER_VERSION=1.5.1-rc
 # used in docker-compose-local.yml
 AETHER_PATH=../aether
 
-# to speed up development changes in the SDK library
+# to speed up development changes in the Aether Django SDK library
 # https://github.com/eHealthAfrica/aether-django-sdk-library
 AETHER_SDK_PATH=../aether-django-sdk-library
+
+# to speed up development changes in the Aether Python library
+# https://github.com/eHealthAfrica/aether-python-library
+AETHER_PYTHON_PATH=../aether-python-library
 # ------------------------------------------------------------------
 
 
