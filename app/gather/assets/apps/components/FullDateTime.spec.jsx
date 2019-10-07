@@ -24,7 +24,7 @@ import React from 'react'
 import { mountWithIntl } from 'enzyme-react-intl'
 import {
   FormattedDate,
-  FormattedRelative,
+  FormattedRelativeTime,
   FormattedTime
 } from 'react-intl'
 
@@ -36,7 +36,7 @@ describe('FullDateTime', () => {
 
     expect(component.find(FormattedDate).exists()).toBeFalsy()
     expect(component.find(FormattedTime).exists()).toBeFalsy()
-    expect(component.find(FormattedRelative).exists()).toBeFalsy()
+    expect(component.find(FormattedRelativeTime).exists()).toBeFalsy()
   })
 
   it('should render the full date time', () => {
@@ -44,6 +44,6 @@ describe('FullDateTime', () => {
 
     expect(component.find(FormattedDate).exists()).toBeTruthy()
     expect(component.find(FormattedTime).exists()).toBeTruthy()
-    expect(component.find(FormattedRelative).exists()).toBeTruthy()
+    expect(component.find(FormattedRelativeTime).exists()).toBeTruthy()
   })
 })

@@ -21,7 +21,7 @@
 import React, { Component } from 'react'
 import {
   FormattedDate,
-  FormattedRelative,
+  FormattedRelativeTime,
   FormattedTime
 } from 'react-intl'
 import { hot } from 'react-hot-loader/root'
@@ -61,7 +61,7 @@ class FullDateTime extends Component {
           />
         </span>
         <span>
-          (<FormattedRelative value={date} />)
+          (<FormattedRelativeTime value={date} />)
         </span>
       </span>
     )

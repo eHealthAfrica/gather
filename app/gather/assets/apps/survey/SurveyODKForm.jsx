@@ -23,7 +23,7 @@ import {
   defineMessages,
   injectIntl,
   FormattedMessage,
-  FormattedRelative
+  FormattedRelativeTime
 } from 'react-intl'
 
 import { clone, generateRandomId } from '../utils'
@@ -346,7 +346,7 @@ class XForm extends Component {
     )
 
     const date = (xform.id
-      ? <small className='mr-4'>(<FormattedRelative value={xform.created_at} />)</small>
+      ? <small className='mr-4'>(<FormattedRelativeTime value={xform.created_at} />)</small>
       : ''
     )
 

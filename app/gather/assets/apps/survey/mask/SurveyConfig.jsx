@@ -19,7 +19,7 @@
  */
 
 import React, { useState } from 'react'
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
 import { getLabelTree } from '../../utils/types'
 
 const MESSAGES = defineMessages({
@@ -45,20 +45,14 @@ const NO_CHART = 'noChart'
 
 const VISUALIZATIONS = [NO_CHART, 'barChart', 'pieChart', 'lineChart']
 
-const SurveyConfig = ({
-  dashboardConfig,
-  saveDashboardConfig,
-  setShowConfig,
-  columns,
-  labels,
-  intl: { formatMessage }
-}) => {
+const SurveyConfig = ({ dashboardConfig, saveDashboardConfig, setShowConfig, columns, labels }) => {
   const initialState = dashboardConfig || columns.reduce(
     (acc, column) => ({ ...acc, [getLabelTree(column, labels)]: { elastic: false, dashboard: null } }),
     {}
   )
 
   const [newDashboardConfig, setNewDashboardConfig] = useState(initialState)
+  const { formatMessage } = useIntl()
 
   const handleElastic = (key, { target: { checked } }) =>
     setNewDashboardConfig({
@@ -168,4 +162,4 @@ const SurveyConfig = ({
   )
 }
 
-export default injectIntl(SurveyConfig)
+export default SurveyConfig
