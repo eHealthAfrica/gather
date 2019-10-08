@@ -18,7 +18,18 @@
  * under the License.
  */
 
-import { mountWithIntl, shallowWithIntl } from 'enzyme-react-intl'
+import { IntlProvider } from 'react-intl'
+import Enzyme from 'enzyme'
+
+const wrapper = (component, type) =>
+  Enzyme[type](component, {
+    wrappingComponent: IntlProvider,
+    wrappingComponentProps: { locale: 'en', messages: {} }
+  })
+
+export const mountWithIntl = component => wrapper(component, 'mount')
+
+export const shallowWithIntl = component => wrapper(component, 'shallow')
 
 /*
  * Workaround to get real component state in tests

@@ -308,9 +308,9 @@ describe('PaginationBar', () => {
     })
 
     it('should render the navigation button with "showXXX"', () => {
-      const component = mountComponent(
+      const wrapper = (currentPage = 1) => (
         <PaginationBar
-          currentPage={1}
+          currentPage={currentPage}
           pageSize={10}
           records={50}
           goToPage={() => {}}
@@ -320,6 +320,8 @@ describe('PaginationBar', () => {
           showLast
         />
       )
+
+      const component = mountComponent(wrapper())
       expect(component.find('[data-qa="data-pagination-total"]').text()).toEqual('5')
 
       // FIRST page
@@ -328,9 +330,9 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeFalsy()
       expect(component.find('[data-qa="data-pagination-next"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
-
+      
       // SECOND page
-      component.setProps({ currentPage: 2 })
+      component.setProps({ children: () => wrapper(2) })
       expect(component.find('[name="currentPage"]').props().value).toEqual(2)
 
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
@@ -339,7 +341,7 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
 
       // between SECOND and PREVIOUS LAST page
-      component.setProps({ currentPage: 3 })
+      component.setProps({ children: () => wrapper(3) })
       expect(component.find('[name="currentPage"]').props().value).toEqual(3)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()
@@ -347,7 +349,7 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
 
       // PREVIOUS LAST
-      component.setProps({ currentPage: 4 })
+      component.setProps({ children: () => wrapper(4) })
       expect(component.find('[name="currentPage"]').props().value).toEqual(4)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()
@@ -355,7 +357,7 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
 
       // LAST
-      component.setProps({ currentPage: 5 })
+      component.setProps({ children: () => wrapper(5) })
       expect(component.find('[name="currentPage"]').props().value).toEqual(5)
       expect(component.find('[data-qa="data-pagination-first"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeTruthy()
