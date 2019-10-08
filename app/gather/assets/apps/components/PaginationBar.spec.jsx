@@ -330,7 +330,7 @@ describe('PaginationBar', () => {
       expect(component.find('[data-qa="data-pagination-previous"]').exists()).toBeFalsy()
       expect(component.find('[data-qa="data-pagination-next"]').exists()).toBeTruthy()
       expect(component.find('[data-qa="data-pagination-last"]').exists()).toBeTruthy()
-      
+
       // SECOND page
       component.setProps({ children: () => wrapper(2) })
       expect(component.find('[name="currentPage"]').props().value).toEqual(2)
