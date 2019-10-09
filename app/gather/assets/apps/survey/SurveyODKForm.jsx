@@ -25,6 +25,7 @@ import {
   FormattedMessage,
   FormattedRelativeTime
 } from 'react-intl'
+import { selectUnit } from '@formatjs/intl-utils'
 
 import { clone, generateRandomId } from '../utils'
 import {
@@ -35,7 +36,6 @@ import {
 } from '../components'
 
 import { getMediaFileContentPath } from '../utils/paths'
-import { selectUnit } from '@formatjs/intl-utils';
 
 const MESSAGES = defineMessages({
   newForm: {
@@ -309,7 +309,7 @@ class XForm extends Component {
     const allErrors = []
     Object.keys(errors).forEach(key => { allErrors.push(errors[key]) })
 
-    const { value, unit } = selectUnit(new Date(xform.created_at));
+    const { value, unit } = selectUnit(new Date(xform.created_at))
     const date = (xform.id
       ? (
         <small className='mr-4'>
