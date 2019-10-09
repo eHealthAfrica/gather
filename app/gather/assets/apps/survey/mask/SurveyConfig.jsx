@@ -45,14 +45,20 @@ const NO_CHART = 'noChart'
 
 const VISUALIZATIONS = [NO_CHART, 'barChart', 'pieChart', 'lineChart']
 
-const SurveyConfig = ({ dashboardConfig, saveDashboardConfig, setShowConfig, columns, labels, intl }) => {
+const SurveyConfig = ({
+  dashboardConfig,
+  saveDashboardConfig,
+  setShowConfig,
+  columns,
+  labels,
+  intl: { formatMessage }
+}) => {
   const initialState = dashboardConfig || columns.reduce(
     (acc, column) => ({ ...acc, [getLabelTree(column, labels)]: { elastic: false, dashboard: null } }),
     {}
   )
 
   const [newDashboardConfig, setNewDashboardConfig] = useState(initialState)
-  const { formatMessage } = intl
 
   const handleElastic = (key, { target: { checked } }) =>
     setNewDashboardConfig({
