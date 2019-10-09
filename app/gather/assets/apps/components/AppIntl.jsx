@@ -28,6 +28,12 @@ import { hot } from 'react-hot-loader/root'
  * Wraps the children with the IntlProvider component to enable i18n and L11n.
  */
 
+// Import intl-relativetimeformat polyfill for unsupported environments
+if (!window.Intl || !Object.keys(window.Intl).length) {
+  import('@formatjs/intl-relativetimeformat/polyfill')
+  import('@formatjs/intl-relativetimeformat/dist/locale-data/en')
+}
+
 class AppIntl extends Component {
   render () {
     return (

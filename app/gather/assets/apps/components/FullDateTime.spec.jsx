@@ -30,6 +30,12 @@ import {
 
 import FullDateTime from './FullDateTime'
 
+// Import intl-relativetimeformat polyfill for unsupported environments
+if (!window.Intl || !Object.keys(window.Intl).length) {
+  import('@formatjs/intl-relativetimeformat/polyfill')
+  import('@formatjs/intl-relativetimeformat/dist/locale-data/en')
+}
+
 describe('FullDateTime', () => {
   it('should render nothing without a date', () => {
     const component = mountWithIntl(<FullDateTime />)
