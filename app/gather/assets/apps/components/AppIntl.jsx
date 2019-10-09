@@ -30,8 +30,8 @@ import { hot } from 'react-hot-loader/root'
 
 // Import intl-relativetimeformat polyfill for unsupported environments
 if (!window.Intl || !Object.keys(window.Intl).length) {
-  import('@formatjs/intl-relativetimeformat/polyfill')
-  import('@formatjs/intl-relativetimeformat/dist/locale-data/en')
+  require('@formatjs/intl-relativetimeformat/polyfill')
+  require('@formatjs/intl-relativetimeformat/dist/locale-data/en')
 }
 
 class AppIntl extends Component {

@@ -32,8 +32,8 @@ import FullDateTime from './FullDateTime'
 
 // Import intl-relativetimeformat polyfill for unsupported environments
 if (!window.Intl || !Object.keys(window.Intl).length) {
-  import('@formatjs/intl-relativetimeformat/polyfill')
-  import('@formatjs/intl-relativetimeformat/dist/locale-data/en')
+  require('@formatjs/intl-relativetimeformat/polyfill')
+  require('@formatjs/intl-relativetimeformat/dist/locale-data/en')
 }
 
 describe('FullDateTime', () => {
