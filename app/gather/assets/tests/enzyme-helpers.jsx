@@ -19,17 +19,17 @@
  */
 
 import { IntlProvider } from 'react-intl'
-import Enzyme from 'enzyme'
+import { mount, shallow } from 'enzyme'
 
-const wrapper = (component, type) =>
-  Enzyme[type](component, {
+const wrapper = (component, fn) =>
+  fn(component, {
     wrappingComponent: IntlProvider,
     wrappingComponentProps: { locale: 'en', messages: {} }
   })
 
-export const mountWithIntl = component => wrapper(component, 'mount')
+export const mountWithIntl = component => wrapper(component, mount)
 
-export const shallowWithIntl = component => wrapper(component, 'shallow')
+export const shallowWithIntl = component => wrapper(component, shallow)
 
 /*
  * Workaround to get real component state in tests
