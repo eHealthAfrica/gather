@@ -44,6 +44,8 @@ services:
       AETHER_COUCHDB_SYNC_TOKEN: couchdb-sync-test-token
       AETHER_COUCHDB_SYNC_URL: http://couchdb-sync-test
 
+      ES_CONSUMER_URL: http://es-consumer-url
+
       DB_NAME: gather-test
       PGHOST: db-test
       PGPASSWORD: this-is-really-really-secret.trust-me!

@@ -41,14 +41,16 @@ describe('Settings utils', () => {
         .get('/assets-settings')
         .reply(200, {
           aether_apps: ['kernel', 'odk', 'couchdb-sync'],
-          export_max_rows_size: 10000
+          export_max_rows_size: 10000,
+          es_consumer_url: 'http://localhost:5601/'
         })
 
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: true,
           COUCHDB_SYNC_ACTIVE: true,
-          EXPORT_MAX_ROWS_SIZE: 10000
+          EXPORT_MAX_ROWS_SIZE: 10000,
+          ES_CONSUMER_URL: 'http://localhost:5601/'
         })
       })
     })
@@ -64,7 +66,8 @@ describe('Settings utils', () => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: false,
           COUCHDB_SYNC_ACTIVE: false,
-          EXPORT_MAX_ROWS_SIZE: 0
+          EXPORT_MAX_ROWS_SIZE: 0,
+          ES_CONSUMER_URL: null
         })
       })
     })
@@ -78,7 +81,8 @@ describe('Settings utils', () => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: true,
           COUCHDB_SYNC_ACTIVE: false,
-          EXPORT_MAX_ROWS_SIZE: 0
+          EXPORT_MAX_ROWS_SIZE: 0,
+          ES_CONSUMER_URL: null
         })
       })
     })
