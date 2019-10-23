@@ -69,6 +69,8 @@ AETHER_APPS = [
     if key.startswith(AETHER_PREFIX)
 ]
 
+# ElasticSearch consumer URL used to push the project chart visualization settings
+# for each AVRO Schema field defined in the Dashboard settings page.
 ES_CONSUMER_URL = os.environ.get('ES_CONSUMER_URL')
 
 
