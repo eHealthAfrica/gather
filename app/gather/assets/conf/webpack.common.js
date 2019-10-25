@@ -35,7 +35,7 @@ module.exports = (custom) => ({
   output: Object.assign(
     {},
     {
-      filename: '[name]-[hash].js',
+      filename: custom.jsFilename,
       library: ['gather', '[name]'],
       libraryTarget: 'var',
       path: BUNDLES_DIR
@@ -110,7 +110,7 @@ module.exports = (custom) => ({
 
     // extract styles as a CSS file not JS file
     ...(custom.stylesAsCss
-      ? [new MiniCssExtractPlugin({ filename: '[name]-[chunkhash].css' })]
+      ? [new MiniCssExtractPlugin({ filename: custom.cssFilename })]
       : []
     ),
 
