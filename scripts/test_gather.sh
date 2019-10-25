@@ -21,18 +21,26 @@
 set -Eeuo pipefail
 
 function prepare_and_test_container {
-    container="$1"-test
+    local container="$1-test"
 
     echo "_____________________________________________ Building $1"
-    $DC_TEST build $container
+    $DC_TEST build \
+        --build-arg GIT_REVISION="${GIT_REVISION}" \
+        --build-arg VERSION="${VERSION}" \
+        $container
     echo "_____________________________________________ Testing $1"
     $DC_TEST run --rm "$1"-test test
     echo "_____________________________________________ $1 Done"
 }
 
 DC_TEST="docker-compose -f docker-compose-test.yml"
+GIT_REVISION=rev-$(date "+%Y%m%d%H%M%S")
+VERSION="t.s.t"
 
 echo "_____________________________________________ TESTING"
+echo "_____________________________________________ Version:  ${VERSION}"
+echo "_____________________________________________ Revision: ${GIT_REVISION}"
+echo "_____________________________________________"
 
 echo "_____________________________________________ Killing ALL containers"
 docker-compose kill

@@ -19,6 +19,17 @@
 # under the License.
 #
 
+function build_container {
+    local container=$1
+
+    echo "_____________________________________________ Building container ${container}"
+    $DC build \
+        ${BUILD_OPTIONS} \
+        --build-arg GIT_REVISION=${GIT_REVISION} \
+        --build-arg VERSION=${VERSION} \
+        ${container}
+}
+
 # Generate credentials if missing
 if [ -e ".env" ]; then
     echo "[.env] file already exists! Remove it if you want to generate a new one."
@@ -29,34 +40,29 @@ fi
 set -Eeuo pipefail
 
 DC="docker-compose -f docker-compose-local.yml"
-VERSION=`cat ./VERSION`
+
+if [ ! -f ./VERSION ]; then
+    VERSION="0.0.0"
+else
+    VERSION=`cat ./VERSION`
+fi
 GIT_REVISION=`git rev-parse HEAD`
+BUILD_OPTIONS="--no-cache --force-rm --pull"
 
 echo "_____________________________________________"
 echo "Version:     ${VERSION}"
 echo "Revision:    ${GIT_REVISION}"
 echo "_____________________________________________"
 
-BUILD_OPTIONS="--no-cache --force-rm --pull"
-
 # build assets containers
 containers=( ui gather )
-for container in "${containers[@]}"
-do
-    echo "_____________________________________________ Building container ${container}-assets"
-    $DC build ${BUILD_OPTIONS} ${container}-assets
+for container in "${containers[@]}"; do
+    build_container ${container}-assets
     $DC run --rm ${container}-assets build
 done
 
-
 # build containers
 containers=( kernel ui odk gather )
-for container in "${containers[@]}"
-do
-    echo "_____________________________________________ Building container ${container}"
-    $DC build \
-        ${BUILD_OPTIONS} \
-        --build-arg GIT_REVISION=${GIT_REVISION} \
-        --build-arg VERSION=${VERSION} \
-        ${container}
+for container in "${containers[@]}"; do
+    build_container ${container}
 done

@@ -20,10 +20,21 @@
 #
 set -Eeuo pipefail
 
+function build_container {
+    local container=$1
+    local BUILD_OPTIONS="--no-cache --force-rm --pull"
+
+    docker-compose build \
+        ${BUILD_OPTIONS} \
+        --build-arg GIT_REVISION=${TRAVIS_COMMIT} \
+        --build-arg VERSION=${VERSION} \
+        ${container}
+}
+
 function docker_push {
-    ORG="ehealthafrica"
-    TAG=$1
-    IMAGE=${ORG}/${APP}:${TAG}
+    local ORG="ehealthafrica"
+    local TAG=$1
+    local IMAGE=${ORG}/${APP}:${TAG}
 
     echo "Pushing Docker image ${IMAGE}"
     docker tag ${APP} ${IMAGE}
@@ -64,21 +75,19 @@ echo "--------------------------------------------------------------"
 
 APP="gather"
 
-# Login in docker hub
-docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-
-BUILD_OPTIONS="--no-cache --force-rm --pull"
-
 # Build and distribute the JS assets
-docker-compose build ${BUILD_OPTIONS} gather-assets
+build_container gather-assets
 docker-compose run --rm gather-assets build
 
 # Build and push docker image to docker hub
-docker-compose build \
-    ${BUILD_OPTIONS} \
-    --build-arg GIT_REVISION=${TRAVIS_COMMIT} \
-    --build-arg VERSION=${VERSION} \
-    ${APP}
+build_container ${APP}
+
+# Login in docker hub
+docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
 
 docker_push ${VERSION}
-docker_push ${TRAVIS_COMMIT}
+if [ -z "$TRAVIS_TAG" ]; then
+    docker_push "${VERSION}--${TRAVIS_COMMIT}"
+fi
+
+docker logout

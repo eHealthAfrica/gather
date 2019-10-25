@@ -19,6 +19,17 @@
 # under the License.
 #
 
+function build_container {
+    local container=$1
+
+    echo "_____________________________________________ Building container ${container}"
+    docker-compose build \
+        ${BUILD_OPTIONS} \
+        --build-arg GIT_REVISION=${GIT_REVISION} \
+        --build-arg VERSION=${VERSION} \
+        ${container}
+}
+
 # Generate credentials if missing
 if [ -e ".env" ]; then
     echo "[.env] file already exists! Remove it if you want to generate a new one."
@@ -36,23 +47,22 @@ docker volume create gather_minio_data    2>/dev/null || true
 docker-compose pull db
 docker-compose pull kernel odk ui
 
-BUILD_OPTIONS="--no-cache --force-rm --pull"
-
-# build Gather assets
-docker-compose build ${BUILD_OPTIONS} gather-assets
-docker-compose run --rm gather-assets build
-
-VERSION=`cat ./VERSION`
+if [ ! -f ./VERSION ]; then
+    VERSION="0.0.0"
+else
+    VERSION=`cat ./VERSION`
+fi
 GIT_REVISION=`git rev-parse HEAD`
+BUILD_OPTIONS="--no-cache --force-rm --pull"
 
 echo "_____________________________________________"
 echo "Version:     ${VERSION}"
 echo "Revision:    ${GIT_REVISION}"
 echo "_____________________________________________"
 
+# build Gather assets
+build_container gather-assets
+docker-compose run --rm gather-assets build
+
 # build Gather
-docker-compose build \
-    ${BUILD_OPTIONS} \
-    --build-arg GIT_REVISION=${GIT_REVISION} \
-    --build-arg VERSION=${VERSION} \
-    gather
+build_container gather
