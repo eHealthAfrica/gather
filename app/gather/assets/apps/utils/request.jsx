@@ -27,7 +27,11 @@ const buildFetchOptions = (method, payload, multipart, extras) => {
     credentials: 'same-origin',
     headers: {
       'X-CSRFToken': csrfToken,
-      'X-METHOD': method // See comment below
+      'X-METHOD': method, // See comment below
+      // The default behavior of Kong is to redirect to the login page
+      // if the user is not authorized, with this header we try to receive
+      // the real status code "403" and redirect us to the logout page
+      'X-Oauth-Unauthorized': 'status_code'
     },
     ...extras
   }
@@ -127,6 +131,9 @@ const inspectResponse = ({ download, filename }, resolve, reject, response) => {
     return response
       .json()
       .then(content => resolve(content))
+  } else if (response.status === 403) {
+    const logoutUrl = document.getElementById('logout-link').href
+    return window.location.assign(logoutUrl)
   } else {
     const error = new Error(response.statusText)
     return response
