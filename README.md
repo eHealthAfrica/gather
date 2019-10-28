@@ -155,6 +155,11 @@ See also [Aether Django SDK environment variables](https://github.com/eHealthAfr
       Token to connect to Aether ODK Server.
     - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8106` Aether CouchDB Sync Server url.
 
+  - Aether consumers:
+    - `ES_CONSUMER_URL`: ElasticSearch consumer URL used to push the project
+      chart visualization settings for each AVRO Schema field defined
+      in the Survey Dashboard settings page.
+
 *[Return to TOC](#table-of-contents)*
 
 
