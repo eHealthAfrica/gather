@@ -20,24 +20,26 @@
 
 .surveyors-list {
   @extend .page-content;
-}
 
-.surveyors {
-  @include in-columns;
-
-  .surveyor-list-item {
-    border-top: 1px solid $light-grey;
-    display: inline-block;
-    width: 100%;
-
-    .fa-user {
-      font-size: .9rem;
-      color: $dark-grey;
-    }
+  .header {
+    border-bottom: 1px solid;
+    margin-bottom: .5rem;
   }
 
-  .surveyor-header {
-    padding: .4rem;
+  .surveyors {
+    .row {
+      border-bottom: 1px solid $light-grey;
+      padding: .4rem;
+  
+      .fa-user {
+        font-size: .9rem;
+        color: $dark-grey;
+      }
+
+      .surveys {
+        color: $action-color;
+      }
+    }
   }
 }
 
@@ -45,6 +47,10 @@
   background: $background-color;
   min-height: calc(100vh - #{$navbar-height});
   padding: 2rem 5vw;
+
+  .password-reset {
+    margin-bottom: 2rem;
+  }
 }
 
 @media screen and (min-width: 992px) {

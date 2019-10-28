@@ -18,48 +18,56 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
-
 import { getSurveyorsPath } from '../utils/paths'
 
-export default class SurveyorsList extends Component {
-  render () {
-    const { list } = this.props
-
-    if (list.length === 0) {
-      return <div data-qa='surveyors-list-empty' />
-    }
-
-    return (
-      <div data-qa='surveyors-list' className='surveyors-list'>
-        <h4 className='title'>
-          <FormattedMessage
-            id='surveyor.list.title'
-            defaultMessage='Surveyors'
-          />
-        </h4>
-
-        <div className='surveyors'>
-          {
-            list.map((surveyor) => (
-              <div key={surveyor.id} className='surveyor-list-item'>
-                <div className='surveyor-header'>
-                  <i className='fas fa-user mr-2' />
-                  {surveyor.username}
-                  <a
-                    href={getSurveyorsPath({ action: 'edit', id: surveyor.id })}
-                    role='button'
-                    className='btn btn-sm btn-secondary icon-only float-right'
-                  >
-                    <i className='fas fa-pencil-alt' />
-                  </a>
-                </div>
+export default ({ list }) => list.length ? (
+  <div data-qa='surveyors-list' className='surveyors-list'>
+    <div className='content'>
+      <div className='row header'>
+        <div className='col-4'>
+          <h4 className='title'>
+            <FormattedMessage
+              id='surveyor.list.title.surveyors'
+              defaultMessage='Surveyors'
+            />
+          </h4>
+        </div>
+        <div className='col-6'>
+          <h4 className='title'>
+            <FormattedMessage
+              id='surveyor.list.title.surveys'
+              defaultMessage='Assigned Surveys'
+            />
+          </h4>
+        </div>
+        <div className='col-2' />
+      </div>
+      <div className='surveyors'>
+        {
+          list.map(({ id, username, project_names }) => (
+            <div key={id} data-qa='surveyor-list-item' className='row'>
+              <div data-qa='surveyor-name' className='col-4'>
+                <i className='fas fa-user mr-2' />
+                {username}
               </div>
+              <div data-qa='surveyor-projects' className='col-6 surveys'>
+                {project_names && project_names.length ? project_names.join(', ') : '-'}
+              </div>
+              <div className='col-2'>
+                <a
+                  href={getSurveyorsPath({ action: 'edit', id })}
+                  role='button'
+                  className='btn btn-sm btn-secondary icon-only float-right'
+                >
+                  <i className='fas fa-pencil-alt' />
+                </a>
+              </div>
+            </div>
             ))
           }
         </div>
       </div>
-    )
-  }
-}
+    </div>
+) : <div data-qa='surveyors-list-empty' />

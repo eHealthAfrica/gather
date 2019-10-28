@@ -22,7 +22,8 @@ import React, { Component } from 'react'
 import { hot } from 'react-hot-loader/root'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
-import { getSurveyorsAPIPath } from '../utils/paths'
+import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
+import { ODK_APP } from '../utils/constants'
 
 import SurveyorForm from './SurveyorForm'
 import SurveyorsList from './SurveyorsList'
@@ -40,6 +41,10 @@ class SurveyorDispatcher extends Component {
           {
             name: 'surveyor',
             url: getSurveyorsAPIPath({ id: surveyorId })
+          },
+          {
+            name: 'surveys',
+            url: getSurveysAPIPath({ app: ODK_APP, fields: ['project_id', 'name'].join(',') })
           }
         ]
 
