@@ -46,14 +46,14 @@ export default ({ list }) => list.length ? (
       </div>
       <div className='surveyors'>
         {
-          list.map(({ id, username, project_names }) => (
+          list.map(({ id, username, project_names: projects }) => (
             <div key={id} data-qa='surveyor-list-item' className='row'>
               <div data-qa='surveyor-name' className='col-4'>
                 <i className='fas fa-user mr-2' />
                 {username}
               </div>
               <div data-qa='surveyor-projects' className='col-6 surveys'>
-                {project_names && project_names.length ? project_names.join(', ') : '-'}
+                {projects && projects.length ? projects.join(', ') : '-'}
               </div>
               <div className='col-2'>
                 <a
@@ -65,9 +65,9 @@ export default ({ list }) => list.length ? (
                 </a>
               </div>
             </div>
-            ))
-          }
-        </div>
+          ))
+        }
       </div>
     </div>
+  </div>
 ) : <div data-qa='surveyors-list-empty' />

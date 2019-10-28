@@ -33,8 +33,16 @@ class SurveyorDispatcher extends Component {
     const { action, surveyorId } = this.props
 
     switch (action) {
-      case 'add':
-        return <SurveyorForm surveyor={{}} />
+      case 'add': {
+        const addUrls = [
+          {
+            name: 'surveys',
+            url: getSurveysAPIPath({ app: ODK_APP, fields: ['project_id', 'name'].join(',') })
+          }
+        ]
+
+        return <FetchUrlsContainer urls={addUrls} targetComponent={SurveyorForm} />
+      }
 
       case 'edit': {
         const editUrls = [

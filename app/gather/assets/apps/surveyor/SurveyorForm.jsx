@@ -79,9 +79,9 @@ class SurveyorForm extends Component {
     const { surveyor, surveys: { results } } = props
 
     this.state = {
-      surveyor: clone(surveyor),
-      assignedSurveys: surveyor.projects,
-      availableSurveys: results.map(({ project_id, name }) => ({ id: project_id, name })),
+      surveyor: surveyor ? clone(surveyor) : {},
+      assignedSurveys: surveyor ? surveyor.projects : [],
+      availableSurveys: results.map(({ project_id: id, name }) => ({ id, name })),
       errors: {},
       showPasswordFields: false
     }
@@ -89,11 +89,7 @@ class SurveyorForm extends Component {
 
   render () {
     const { surveyor, intl: { formatMessage } } = this.props
-    const {
-      surveyor: { id, username },
-      errors,
-      showPasswordFields
-    } = this.state
+    const { surveyor: { id, username }, errors } = this.state
     const isNew = (id === undefined)
 
     const title = (isNew
@@ -197,7 +193,7 @@ class SurveyorForm extends Component {
   renderPassword (isNew) {
     const { intl: { formatMessage } } = this.props
     const {
-      surveyor: { password_1, password_2 },
+      surveyor: { password, confirmPassword },
       errors,
       showPasswordFields
     } = this.state
@@ -209,7 +205,7 @@ class SurveyorForm extends Component {
     if (!isNew && !showPasswordFields) {
       return (
         <div className='password-reset'>
-          <a href="#!" onClick={show}>Reset Password</a>
+          <a href='#!' onClick={show}>Reset Password</a>
         </div>
       )
     }
@@ -224,11 +220,11 @@ class SurveyorForm extends Component {
             />
           </label>
           <input
-            name='password_1'
+            name='password'
             type='password'
             className='form-control'
             required={isNew}
-            value={password_1 || ''}
+            value={password || ''}
             onChange={this.onInputChange.bind(this)}
           />
           <ErrorAlert errors={errors.password} />
@@ -251,11 +247,11 @@ class SurveyorForm extends Component {
             />
           </label>
           <input
-            name='password_2'
+            name='confirmPassword'
             type='password'
             className='form-control'
-            required={isNew || password_1}
-            value={password_2 || ''}
+            required={isNew || password}
+            value={confirmPassword || ''}
             onChange={this.onInputChange.bind(this)}
           />
         </div>
@@ -264,7 +260,7 @@ class SurveyorForm extends Component {
   }
 
   renderSurveys () {
-    const { assignedSurveys, availableSurveys, errors } = this.state
+    const { assignedSurveys, availableSurveys } = this.state
     const selectedSurveys = availableSurveys.filter(survey => assignedSurveys.indexOf(survey.id) > -1)
 
     const onChange = (surveys) => {
@@ -297,11 +293,11 @@ class SurveyorForm extends Component {
 
   validatePassword () {
     const { formatMessage } = this.props.intl
-    const { id, password_1, password_2 } = this.state.surveyor
+    const { id, password, confirmPassword } = this.state.surveyor
 
-    if (!id || password_1) {
+    if (!id || password) {
       // validate password
-      if (password_1 !== password_2) {
+      if (password !== confirmPassword) {
         this.setState({
           errors: {
             password: [formatMessage(MESSAGES.passwordRepeatedError)]
@@ -310,7 +306,7 @@ class SurveyorForm extends Component {
         return false
       }
 
-      if (password_1.length < 10) {
+      if (password.length < 10) {
         this.setState({
           errors: {
             password: [formatMessage(MESSAGES.passwordShortError)]
@@ -331,23 +327,21 @@ class SurveyorForm extends Component {
     event.preventDefault()
     this.setState({ errors: {} })
 
-    if (!this.validatePassword()) {
-      return
-    }
+    if (!this.validatePassword()) return
 
-    const { id, password } = this.props.surveyor
+    const { id, password: oldPassword } = this.props.surveyor || {}
     const {
-      surveyor: { id: surveyorId, username, password_1 },
+      surveyor: { username, password },
       assignedSurveys
     } = this.state
 
     const surveyor = {
       username: username,
-      password: password_1 || password,
+      password: oldPassword || password,
       projects: assignedSurveys
     }
 
-    const saveMethod = (surveyorId ? putData : postData)
+    const saveMethod = (id ? putData : postData)
     const url = getSurveyorsAPIPath({ id })
 
     return saveMethod(url, surveyor)
