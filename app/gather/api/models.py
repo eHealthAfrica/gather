@@ -96,6 +96,8 @@ class Mask(ExportModelOperationsMixin('gather_mask'), MtModelChildAbstract):
     class Meta:
         app_label = 'gather'
         default_related_name = 'masks'
-        unique_together = ('survey', 'name')
         verbose_name = _('mask')
         verbose_name_plural = _('masks')
+        constraints = [
+            models.UniqueConstraint(fields=['survey', 'name'], name='unique_mask_name_by_survey'),
+        ]
