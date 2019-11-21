@@ -27,14 +27,6 @@
     font-weight: 500;
     color: $dark-grey;
   }
-
-  .form-group {
-    margin-bottom: 3rem;
-  }
-}
-
-textarea.code {
-  font-family: monospace;
 }
 
 input.hidden-file {
@@ -63,34 +55,31 @@ input.hidden-file {
 }
 
 .form-item {
-  display: inline-flex;
-  flex-wrap: wrap;
   background: $white;
   padding: 1rem;
+  margin-bottom: 1rem;
   border-radius: $border-radius;
   box-shadow: 1px 1px 2px $shadow-color;
-  width: auto;
+  width: 100%;
   align-items: baseline;
-
-  &.expanded {
-    width: 100%;
-  }
 
   .form-title {
     align-items: baseline;
     margin-bottom: .2rem;
   }
 
-  .edit-form-item {
-    width: 100%;
-  }
-
   .fa-file {
     font-size: 1.3rem;
   }
 
-  .btn-edit {
-    margin-left: auto;
+  .row-xform {
+    padding: 0 0 1rem .5rem;
+    border-bottom: 1px solid $grey;
+  }
+
+  .row-mediafiles {
+    margin: 0;
+    padding: 0.5rem 0 0 0;
   }
 
   small {

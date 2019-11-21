@@ -42,10 +42,6 @@ const MESSAGES = defineMessages({
     defaultMessage: 'new',
     id: 'survey.odk.form.xform.new'
   },
-  description: {
-    defaultMessage: 'Write optional xForm description…',
-    id: 'survey.odk.form.xform.description.placeholder'
-  },
   deleteConfirm: {
     defaultMessage: 'Are you sure you want to delete the xForm “{title}”?',
     id: 'survey.odk.form.xform.action.delete.confirm'
@@ -138,9 +134,11 @@ class SurveyODKForm extends Component {
     const errors = this.props.errors || {}
     const { surveyors, availableSurveyors } = this.state
     const selectedSurveyors = availableSurveyors.filter(surveyor => surveyors.indexOf(surveyor.id) > -1)
-    const onChange = (surveyors) => this.setState({
-      surveyors: surveyors.map(surveyor => surveyor.id)
-    })
+    const onChange = (surveyors) => {
+      this.setState({
+        surveyors: surveyors.map(surveyor => surveyor.id)
+      })
+    }
 
     return (
       <div className={`form-group ${errors.surveyors ? 'error' : ''}`}>
@@ -230,20 +228,25 @@ class SurveyODKForm extends Component {
                 xform={xform}
                 errors={errors[xform.key]}
                 surveyors={surveyors}
-                onRemove={() => this.setState({
-                  xforms: xforms.filter((_, jndex) => jndex !== index)
-                })}
-                onChange={(changedXForm) => this.setState({
-                  xforms: [
-                    ...xforms.filter((_, jndex) => jndex < index),
-                    changedXForm,
-                    ...xforms.filter((_, jndex) => jndex > index)
-                  ]
-                })}
+                onRemove={() => {
+                  this.setState({
+                    xforms: xforms.filter((_, jndex) => jndex !== index)
+                  })
+                }}
+                onChange={(changedXForm) => {
+                  this.setState({
+                    xforms: [
+                      ...xforms.filter((_, jndex) => jndex < index),
+                      changedXForm,
+                      ...xforms.filter((_, jndex) => jndex > index)
+                    ]
+                  })
+                }}
               />
             ))
           }
         </div>
+
         <div className='form-group mt-4'>
           <label className='btn btn-secondary' htmlFor='xFormFiles'>
             <FormattedMessage
@@ -290,8 +293,7 @@ class XForm extends Component {
     super(props)
 
     this.state = {
-      ...clone(props.xform),
-      editView: false
+      ...clone(props.xform)
     }
   }
 
@@ -332,126 +334,85 @@ class XForm extends Component {
       </span>
     )
 
-    const mediaFiles = (xform.id
-      ? (
-        <aside className='mr-3'>
-          <span className='badge badge-info mr-1'>
-            {xform.media_files.length}
-          </span>
-          <small>
-            <FormattedMessage
-              id='survey.odk.form.xform.media.files.count'
-              defaultMessage='media files'
-            />
-          </small>
-        </aside>
-      )
-      : (
-        <small className='mx-4'>
-          <FormattedMessage
-            id='survey.odk.form.xforms.file.media.files'
-            defaultMessage='To add media files you need to save the survey first'
-          />
-        </small>
-      )
-    )
-
     return (
       <>
         <ErrorAlert errors={allErrors} />
-        <div className={`form-item mb-2 ${this.state.editView ? 'expanded' : ''}`}>
-          {title}
-          {date}
-          {mediaFiles}
-          <ConfirmButton
-            className='btn btn-sm icon-only btn-danger ml-2 mr-2'
-            cancelable
-            onConfirm={this.props.onRemove}
-            title={title}
-            message={formatMessage(MESSAGES.deleteConfirm, { ...xform })}
-            buttonLabel={<i className='fas fa-times' />}
-          />
 
-          {
-            /* only existing xforms can edit */
-            xform.id &&
-              <button
-                type='button'
-                className='btn btn-sm btn-secondary btn-edit icon-only'
-                onClick={this.toggleEditView.bind(this)}
-              >
-                <i className={`fas fa-${this.state.editView ? 'minus' : 'pencil-alt'}`} />
-              </button>
-          }
+        <div className='form-item'>
+          <div className='row-xform'>
+            {title}
+            {date}
 
-          {
-            this.state.editView &&
-              <div className='edit-form-item mt-3'>
-                <div className='form-group'>
-                  <textarea
-                    name='description'
-                    className='form-control code mb-2'
-                    rows={3}
-                    value={xform.description}
-                    placeholder={formatMessage(MESSAGES.description)}
-                    onChange={this.onInputChange.bind(this)}
-                  />
-
-                  <label className='btn btn-secondary' htmlFor='xFormFile'>
-                    <FormattedMessage
-                      id='survey.odk.form.xform.file'
-                      defaultMessage='Upload new xForm/XLSForm file'
+            <div className='d-inline float-right'>
+              {
+                xform.id &&
+                  <>
+                    <label className='btn btn-default' htmlFor='xFormFile'>
+                      <FormattedMessage
+                        id='survey.odk.form.xform.file'
+                        defaultMessage='Upload new version'
+                      />
+                    </label>
+                    <input
+                      name='file'
+                      id='xFormFile'
+                      type='file'
+                      className='hidden-file'
+                      accept='.xls,.xlsx,.xml'
+                      onChange={this.onFileChange.bind(this)}
                     />
-                  </label>
-                  <input
-                    name='file'
-                    id='xFormFile'
-                    type='file'
-                    className='hidden-file'
-                    accept='.xls,.xlsx,.xml'
-                    onChange={this.onFileChange.bind(this)}
-                  />
-                  {
-                    xform.file &&
-                      <span className='ml-4'>
-                        <span>{xform.file.name}</span>
-                        <button
-                          type='button'
-                          className='btn btn-sm icon-only btn-danger ml-2'
-                          onClick={this.removeFile.bind(this)}
-                        >
-                          <i className='fas fa-times' />
-                        </button>
-                      </span>
-                  }
+                    {
+                      xform.file &&
+                        <span className='ml-2 badge badge-default'>
+                          <span>{xform.file.name}</span>
+                          <button
+                            type='button'
+                            className='btn btn-sm icon-only btn-danger ml-2'
+                            onClick={this.removeFile.bind(this)}
+                          >
+                            <i className='fas fa-times' />
+                          </button>
+                        </span>
+                    }
+                  </>
+              }
 
-                  <textarea
-                    name='xml_data'
-                    className={`${errors.xml_data ? 'error' : ''} form-control code`}
-                    disabled={xform.file !== undefined}
-                    rows={10}
-                    value={xform.xml_data}
-                    onChange={this.onInputChange.bind(this)}
-                  />
-                  <ErrorAlert errors={errors.xml_data} />
-                </div>
+              <ConfirmButton
+                className='btn btn-sm icon-only btn-danger mx-2'
+                cancelable
+                condition={() => xform.id}
+                onConfirm={this.props.onRemove}
+                title={title}
+                message={formatMessage(MESSAGES.deleteConfirm, { ...xform })}
+                buttonLabel={<i className='fas fa-times' />}
+              />
+            </div>
+          </div>
 
-                <MediaFileIntl
-                  id={xform.id}
-                  title={title}
-                  mediaFiles={xform.media_files}
-                  onChange={(mediaFiles) => this.setState({ media_files: mediaFiles })}
-                />
-              </div>
-          }
+          <div className='row-mediafiles'>
+            {
+              xform.id
+                ? (
+                  <MediaFileIntl
+                    id={xform.id}
+                    title={title}
+                    mediaFiles={xform.media_files}
+                    onChange={(mediaFiles) => { this.setState({ media_files: mediaFiles }) }}
+                  />
+                )
+                : (
+                  <small className='ml-4'>
+                    <FormattedMessage
+                      id='survey.odk.form.xforms.file.media.files'
+                      defaultMessage='To add media files you need to save the survey first'
+                    />
+                  </small>
+                )
+            }
+          </div>
         </div>
       </>
     )
-  }
-
-  toggleEditView (event) {
-    event.preventDefault()
-    this.setState({ editView: !this.state.editView })
   }
 
   onInputChange (event) {
@@ -489,40 +450,24 @@ class MediaFile extends Component {
     const inputFileId = `media-files-${this.props.id}`
 
     return (
-      <div className='mt-4'>
-        <FormattedMessage
-          id='survey.odk.form.xform.media.files'
-          defaultMessage='Media file(s):'
-        />
-
-        {
-          mediaFiles.length === 0 &&
-            <span className='ml-2'>
-              <FormattedMessage
-                id='survey.odk.form.xform.media.files.none'
-                defaultMessage='None'
-              />
-            </span>
-        }
-
+      <div className=''>
         {mediaFiles.map(mediaFile => this.renderMediaFile(mediaFile))}
 
-        <div className='form-group mt-4 mb-1'>
-          <label className='btn btn-secondary' htmlFor={inputFileId}>
-            <FormattedMessage
-              id='survey.odk.form.xform.media.files.add'
-              defaultMessage='Add media files'
-            />
-          </label>
-          <input
-            name='files'
-            id={inputFileId}
-            type='file'
-            multiple
-            className='hidden-file'
-            onChange={this.onFileChange.bind(this)}
+        <label className='btn btn-default' htmlFor={inputFileId}>
+          <i className='fas fa-plus mr-2' />
+          <FormattedMessage
+            id='survey.odk.form.xform.media.files.add'
+            defaultMessage='Add media files'
           />
-        </div>
+        </label>
+        <input
+          name='files'
+          id={inputFileId}
+          type='file'
+          multiple
+          className='hidden-file'
+          onChange={this.onFileChange.bind(this)}
+        />
       </div>
     )
   }
@@ -531,22 +476,31 @@ class MediaFile extends Component {
     const { formatMessage } = this.props.intl
 
     return (
-      <span key={mediaFile.id || mediaFile.key} className='ml-2 mb-1 badge badge-info'>
-        <a
-          className='btn-link text-white'
-          href={mediaFile.id ? getMediaFileContentPath(mediaFile) : '#'}
-          target='_blank'
-          rel='noopener noreferrer nofollow external'
-        >
-          {mediaFile.name}
-        </a>
+      <span key={mediaFile.id || mediaFile.key} className='ml-2 mb-1 badge badge-default'>
+        {
+          mediaFile.id
+            ? (
+              <a
+                className='btn-link text-primary'
+                href={getMediaFileContentPath(mediaFile)}
+                target='_blank'
+                rel='noopener noreferrer nofollow external'
+              >
+                {mediaFile.name}
+              </a>
+            )
+            : mediaFile.name
+        }
 
         <ConfirmButton
           className='btn btn-sm icon-only btn-danger ml-2'
           cancelable
-          onConfirm={() => this.setState({
-            mediaFiles: this.state.mediaFiles.filter(mf => mf.key !== mediaFile.key)
-          })}
+          condition={() => mediaFile.id}
+          onConfirm={() => {
+            this.setState({
+              mediaFiles: this.state.mediaFiles.filter(mf => mf.key !== mediaFile.key)
+            })
+          }}
           title={this.props.title}
           message={formatMessage(MESSAGES.deleteMediaConfirm, { ...mediaFile })}
           buttonLabel={<i className='fas fa-times' />}
