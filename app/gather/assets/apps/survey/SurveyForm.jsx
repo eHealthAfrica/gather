@@ -19,21 +19,33 @@
  */
 
 import React, { Component } from 'react'
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
+import {
+  defineMessages,
+  injectIntl,
+  FormattedMessage,
+  FormattedRelativeTime
+} from 'react-intl'
+import { selectUnit } from '@formatjs/intl-utils'
 
-import { clone, deepEqual } from '../utils'
+import { clone, deepEqual, generateRandomId } from '../utils'
 import { deleteData, postData, putData, patchData } from '../utils/request'
 import {
   getMediaFileAPIPath,
   getSurveysAPIPath,
   getSurveysPath,
-  getXFormsAPIPath
+  getXFormsAPIPath,
+  getMediaFileContentPath
 } from '../utils/paths'
 
 import { ODK_APP, GATHER_APP } from '../utils/constants'
 
-import { ConfirmButton, ErrorAlert, Portal } from '../components'
-import SurveyODKForm from './SurveyODKForm'
+import {
+  ConfirmButton,
+  ErrorAlert,
+  HelpMessage,
+  MultiSelect,
+  Portal
+} from '../components'
 
 const MESSAGES = defineMessages({
   cancelButton: {
@@ -52,6 +64,14 @@ const MESSAGES = defineMessages({
   deleteConfirm: {
     defaultMessage: 'Are you sure you want to delete the survey “{name}”?',
     id: 'survey.form.action.delete.confirm'
+  },
+  deleteXFormConfirm: {
+    defaultMessage: 'Are you sure you want to delete the xForm “{title}”?',
+    id: 'survey.odk.form.xform.action.delete.confirm'
+  },
+  deleteMediafileConfirm: {
+    defaultMessage: 'Are you sure you want to delete the media file “{name}”?',
+    id: 'survey.odk.form.xform.media.file.action.delete.confirm'
   },
   deleteError: {
     defaultMessage: 'An error occurred while deleting the survey “{name}”',
@@ -108,6 +128,11 @@ const MESSAGES = defineMessages({
   errorWhile: {
     defaultMessage: 'An error occurred while: {action}',
     id: 'survey.form.action.handle.error'
+  },
+
+  newForm: {
+    defaultMessage: 'new',
+    id: 'survey.odk.form.xform.new'
   }
 })
 
@@ -124,7 +149,26 @@ class SurveyForm extends Component {
     }
 
     if (props.settings.ODK_ACTIVE) {
-      this.state.odk = { ...clone(props.odkSurvey || {}) }
+      const odk = { ...clone(props.odkSurvey || {}) }
+
+      const xforms = (odk.xforms || [])
+        .map(xform => ({
+          ...xform,
+          key: xform.id,
+          media_files: (xform.media_files || []).sort((a, b) => a.name > b.name) // order by name
+        }))
+        // order by title + created_at
+        .sort((a, b) => (
+          (a.title > b.title) ||
+          (a.title === b.title && a.created_at > b.created_at)
+        ))
+
+      const availableSurveyors = props.surveyors.results || []
+      const surveyors = availableSurveyors
+        .filter(surveyor => (odk.surveyors || []).indexOf(surveyor.id) > -1)
+        .map(surveyor => surveyor.id)
+
+      this.state.odk = { ...odk, xforms, surveyors }
     }
   }
 
@@ -145,16 +189,7 @@ class SurveyForm extends Component {
 
         <form onSubmit={this.onSubmit.bind(this)} encType='multipart/form-data'>
           {this.renderName()}
-          {
-            this.props.settings.ODK_ACTIVE &&
-              <SurveyODKForm
-                survey={this.state.odk}
-                surveyors={this.props.surveyors}
-                settings={this.props.settings}
-                onChange={(odk) => this.setState({ odk })}
-                errors={errors.odk}
-              />
-          }
+          {this.renderODK()}
           {this.renderButtons()}
         </form>
       </div>
@@ -187,6 +222,11 @@ class SurveyForm extends Component {
     const survey = this.state
     const { errors } = survey
 
+    const onInputChange = (event) => {
+      event.preventDefault()
+      this.setState({ [event.target.name]: event.target.value })
+    }
+
     return (
       <div className={`form-group big-input ${errors.name ? 'error' : ''}`}>
         <label className='form-control-label title'>
@@ -201,10 +241,435 @@ class SurveyForm extends Component {
           className='form-control'
           required
           value={survey.name || ''}
-          onChange={this.onInputChange.bind(this)}
+          onChange={onInputChange}
         />
         <ErrorAlert errors={errors.name} />
       </div>
+    )
+  }
+
+  renderODK () {
+    if (!this.props.settings.ODK_ACTIVE) {
+      return ''
+    }
+
+    const dataQA = (!this.state.odk.project_id
+      ? 'survey-odk-add'
+      : `survey-odk-edit-${this.state.odk.project_id}`
+    )
+
+    return (
+      <div data-qa={dataQA}>
+        {this.renderODKCollectTitle()}
+        {this.renderSurveyors()}
+        {this.renderXForms()}
+      </div>
+    )
+  }
+
+  renderODKCollectTitle () {
+    const errors = this.state.errors.odk || {}
+
+    return (
+      <div className='survey-section'>
+        <label>
+          <FormattedMessage
+            id='survey.odk.form.odk'
+            defaultMessage='ODK Collect'
+          />
+        </label>
+        <HelpMessage>
+          <FormattedMessage
+            id='survey.odk.form.odk.help.odk'
+            defaultMessage={`
+              Open Data Kit (or ODK for short) is an open-source suite of tools
+              that helps organizations author, collect, and manage mobile data
+              collection solutions.
+            `}
+          />
+          <br />
+          <a
+            href='https://opendatakit.org/'
+            target='_blank'
+            rel='noopener noreferrer nofollow external'
+          >
+            <FormattedMessage
+              id='survey.odk.form.odk.help.odk.link'
+              defaultMessage='Click here to see more about Open Data Kit'
+            />
+          </a>
+        </HelpMessage>
+        <ErrorAlert errors={errors.generic} />
+      </div>
+    )
+  }
+
+  renderSurveyors () {
+    const errors = this.state.errors.odk || {}
+    const availableSurveyors = this.props.surveyors.results || []
+    const selectedSurveyors = availableSurveyors
+      .filter(surveyor => this.state.odk.surveyors.indexOf(surveyor.id) > -1)
+    const onChange = (surveyors) => {
+      this.setState({
+        odk: {
+          ...this.state.odk,
+          surveyors: surveyors.map(surveyor => surveyor.id)
+        }
+      })
+    }
+
+    return (
+      <div className={`form-group ${errors.surveyors ? 'error' : ''}`}>
+        <label className='form-control-label title'>
+          <FormattedMessage
+            id='survey.odk.form.surveyors'
+            defaultMessage='Granted Surveyors'
+          />
+        </label>
+        <MultiSelect
+          selected={selectedSurveyors}
+          options={availableSurveyors}
+          valueProp='id'
+          textProp='username'
+          onChange={onChange}
+        />
+        <ErrorAlert errors={errors.surveyors} />
+      </div>
+    )
+  }
+
+  renderXForms () {
+    const errors = this.state.errors.odk || {}
+    const { xforms } = this.state.odk
+
+    const onFileChange = (event) => {
+      event.preventDefault()
+      const newXForms = []
+      const { formatMessage } = this.props.intl
+
+      // https://developer.mozilla.org/en-US/docs/Web/API/FileList
+      for (let i = 0; i < event.target.files.length; i++) {
+        const file = event.target.files.item(i)
+        newXForms.push({
+          key: generateRandomId(),
+          title: file.name,
+          version: formatMessage(MESSAGES.newForm),
+          file
+        })
+      }
+
+      this.setState({
+        odk: {
+          ...this.state.odk,
+          xforms: [...this.state.odk.xforms, ...newXForms]
+        }
+      })
+    }
+
+    return (
+      <>
+        <div className='my-3'>
+          <label className='form-control-label title'>
+            <FormattedMessage
+              id='survey.odk.form.xforms.list'
+              defaultMessage='xForms'
+            />
+          </label>
+          <HelpMessage>
+            <div className='mb-2'>
+              <FormattedMessage
+                id='survey.odk.form.xform.file.help'
+                defaultMessage={`
+                  XLSForm is a form standard created to help simplify the authoring of forms in Excel.
+                  Authoring is done in a human readable format using a familiar tool that almost
+                  everyone knows - Excel. XLSForms provide a practical standard for sharing and
+                  collaborating on authoring forms.
+                `}
+              />
+              <br />
+              <a
+                href='http://xlsform.org/'
+                target='_blank'
+                rel='noopener noreferrer nofollow external'
+              >
+                <FormattedMessage
+                  id='survey.odk.form.odk.help.xlsform.link'
+                  defaultMessage='Click here to see more about XLSForm'
+                />
+              </a>
+            </div>
+            <div>
+              <FormattedMessage
+                id='survey.odk.form.xform.odk.help'
+                defaultMessage={`
+                  The ODK XForms specification is used by tools in the Open Data Kit ecosystem.
+                  It is a subset of the far larger W3C XForms 1.0 specification and
+                  also contains a few additional features not found in the W3C XForms specification.
+                `}
+              />
+              <br />
+              <a
+                href='http://opendatakit.github.io/xforms-spec/'
+                target='_blank'
+                rel='noopener noreferrer nofollow external'
+              >
+                <FormattedMessage
+                  id='survey.odk.form.odk.help.xform.link'
+                  defaultMessage='Click here to see more about XForm specification'
+                />
+              </a>
+            </div>
+          </HelpMessage>
+        </div>
+
+        <div className='form-items'>
+          {
+            xforms.map((xform, index) => {
+              const onChange = (changedXForm) => {
+                this.setState({
+                  odk: {
+                    ...this.state.odk,
+                    xforms: [
+                      ...xforms.filter((_, jndex) => jndex < index),
+                      changedXForm,
+                      ...xforms.filter((_, jndex) => jndex > index)
+                    ]
+                  }
+                })
+              }
+
+              const onRemove = () => {
+                this.setState({
+                  odk: {
+                    ...this.state.odk,
+                    xforms: xforms.filter((_, jndex) => jndex !== index)
+                  }
+                })
+              }
+
+              return this.renderXForm(xform, errors[xform.key], onChange, onRemove)
+            })
+          }
+        </div>
+
+        <div className='form-group mt-4'>
+          <label className='btn btn-secondary' htmlFor='xFormFiles'>
+            <FormattedMessage
+              id='survey.odk.form.xforms.file'
+              defaultMessage='Add xForm / XLSForm files'
+            />
+          </label>
+          <input
+            name='files'
+            id='xFormFiles'
+            type='file'
+            multiple
+            className='hidden-file'
+            accept='.xls,.xlsx,.xml'
+            onChange={onFileChange}
+          />
+        </div>
+      </>
+    )
+  }
+
+  renderXForm (xform, errors, onChange, onRemove) {
+    const { formatMessage } = this.props.intl
+
+    const allErrors = []
+    Object.keys(errors || {}).forEach(key => { allErrors.push(errors[key]) })
+
+    const { value, unit } = selectUnit(new Date(xform.created_at))
+    const date = (xform.id
+      ? (
+        <small className='mr-4'>
+          (<FormattedRelativeTime value={value} unit={unit} />)
+        </small>
+      )
+      : ''
+    )
+
+    const title = (
+      <span title={xform.description} className='form-title'>
+        <i className='fas fa-file mr-2' />
+        {xform.title}
+        <span className='badge badge-default mx-2'>
+          <FormattedMessage
+            id='survey.odk.form.xform.version'
+            defaultMessage='version'
+          />: {xform.version}
+        </span>
+      </span>
+    )
+
+    const onFileChange = (event) => {
+      event.preventDefault()
+      onChange({ ...xform, file: event.target.files.item(0) })
+    }
+
+    const removeFile = (event) => {
+      event.preventDefault()
+      onChange({ ...xform, file: undefined })
+    }
+
+    const onChangeMediaFiles = (mediaFiles) => {
+      onChange({ ...xform, media_files: mediaFiles })
+    }
+
+    return (
+      <div key={xform.key} className='form-item'>
+        <ErrorAlert errors={allErrors} />
+
+        <div className='row-xform'>
+          {title}
+          {date}
+
+          <div className='d-inline float-right'>
+            {
+              xform.id &&
+                <>
+                  <label className='btn btn-default' htmlFor='xFormFile'>
+                    <FormattedMessage
+                      id='survey.odk.form.xform.file'
+                      defaultMessage='Upload new version'
+                    />
+                  </label>
+                  <input
+                    name='file'
+                    id='xFormFile'
+                    type='file'
+                    className='hidden-file'
+                    accept='.xls,.xlsx,.xml'
+                    onChange={onFileChange}
+                  />
+                  {
+                    xform.file &&
+                      <span className='ml-2 badge badge-default'>
+                        <span>{xform.file.name}</span>
+                        <button
+                          type='button'
+                          className='btn btn-sm icon-only btn-danger ml-2'
+                          onClick={removeFile}
+                        >
+                          <i className='fas fa-times' />
+                        </button>
+                      </span>
+                  }
+                </>
+            }
+
+            <ConfirmButton
+              className='btn btn-sm icon-only btn-danger mx-2'
+              cancelable
+              condition={() => xform.id}
+              onConfirm={onRemove}
+              title={title}
+              message={formatMessage(MESSAGES.deleteXFormConfirm, { ...xform })}
+              buttonLabel={<i className='fas fa-times' />}
+            />
+          </div>
+        </div>
+
+        <div className='row-mediafiles'>
+          {
+            xform.id
+              ? this.renderMediaFiles(xform, title, onChangeMediaFiles)
+              : (
+                <small className='ml-4'>
+                  <FormattedMessage
+                    id='survey.odk.form.xforms.file.media.files'
+                    defaultMessage='To add media files you need to save the survey first'
+                  />
+                </small>
+              )
+          }
+        </div>
+      </div>
+    )
+  }
+
+  renderMediaFiles (xform, title, onChange) {
+    const inputFileId = `media-files-${xform.id}`
+
+    const onFileChange = (event) => {
+      event.preventDefault()
+      const mediaFiles = []
+
+      // https://developer.mozilla.org/en-US/docs/Web/API/FileList
+      for (let i = 0; i < event.target.files.length; i++) {
+        const file = event.target.files.item(i)
+        // do not duplicate media files
+        if (!xform.media_files.find(mf => mf.name === file.name)) {
+          mediaFiles.push({
+            name: file.name,
+            file
+          })
+        }
+      }
+
+      onChange([...xform.media_files, ...mediaFiles])
+    }
+
+    const onRemoveMediaFile = (mediaFile) => {
+      onChange(xform.media_files.filter(mf => mf.name !== mediaFile.name))
+    }
+
+    return (
+      <div className=''>
+        {
+          (xform.media_files || [])
+            .map(mediaFile => this.renderMediaFile(mediaFile, title, onRemoveMediaFile))
+        }
+
+        <label className='btn btn-default' htmlFor={inputFileId}>
+          <i className='fas fa-plus mr-2' />
+          <FormattedMessage
+            id='survey.odk.form.xform.media.files.add'
+            defaultMessage='Add media files'
+          />
+        </label>
+        <input
+          name='files'
+          id={inputFileId}
+          type='file'
+          multiple
+          className='hidden-file'
+          onChange={onFileChange}
+        />
+      </div>
+    )
+  }
+
+  renderMediaFile (mediaFile, title, onRemove) {
+    const { formatMessage } = this.props.intl
+
+    return (
+      <span key={mediaFile.name} className='ml-2 mb-1 badge badge-default'>
+        {
+          mediaFile.id
+            ? (
+              <a
+                className='btn-link text-primary'
+                href={getMediaFileContentPath(mediaFile)}
+                target='_blank'
+                rel='noopener noreferrer nofollow external'
+              >
+                {mediaFile.name}
+              </a>
+            )
+            : mediaFile.name
+        }
+
+        <ConfirmButton
+          className='btn btn-sm icon-only btn-danger ml-2'
+          cancelable
+          condition={() => mediaFile.id}
+          onConfirm={() => { onRemove(mediaFile) }}
+          title={title}
+          message={formatMessage(MESSAGES.deleteMediafileConfirm, { ...mediaFile })}
+          buttonLabel={<i className='fas fa-times' />}
+        />
+      </span>
     )
   }
 
@@ -280,11 +745,6 @@ class SurveyForm extends Component {
         </div>
       </Portal>
     )
-  }
-
-  onInputChange (event) {
-    event.preventDefault()
-    this.setState({ [event.target.name]: event.target.value })
   }
 
   onCancelCondition () {
@@ -480,7 +940,21 @@ class SurveyForm extends Component {
           xml_file: xform.file,
           project: this.state.id
         },
-        options: { multipart: !!xform.file }
+        options: { multipart: !!xform.file },
+        // set the id to the new xform
+        onSuccess: (response) => {
+          if (!xform.id) {
+            this.setState({
+              odk: {
+                ...this.state.odk,
+                xforms: this.state.odk.xforms.map(xf => xf.key === xform.key
+                  ? ({ ...xf, id: response.id, media_files: [] })
+                  : xf
+                )
+              }
+            })
+          }
+        }
       })
 
       if (!xform.id) {
@@ -504,7 +978,27 @@ class SurveyForm extends Component {
               media_file: mf.file,
               xform: xform.id
             },
-            options: { multipart: true }
+            options: { multipart: true },
+            // set the id to the new media file
+            onSuccess: (response) => {
+              if (!mf.id) {
+                this.setState({
+                  odk: {
+                    ...this.state.odk,
+                    xforms: this.state.odk.xforms.map(xf => xf.key === xform.key
+                      ? ({
+                        ...xf,
+                        media_files: xform.media_files.map(mf2 => mf2.key === mf.key
+                          ? ({ ...mf2, id: response.id })
+                          : mf2
+                        )
+                      })
+                      : xf
+                    )
+                  }
+                })
+              }
+            }
           })
         })
 
@@ -566,10 +1060,13 @@ class SurveyForm extends Component {
               ...this.state.actionsInProgress,
               formatMessage(MESSAGES.handleDone)
             ]
+          }, () => {
+            if (action.onSuccess) {
+              action.onSuccess(response)
+            }
           })
 
-          // recursive call
-          executeActions()
+          executeActions() // recursive call
         })
         .catch(error => {
           this.setState({ isUpdating: false, actionsInProgress: [] })
@@ -584,7 +1081,8 @@ class SurveyForm extends Component {
           }
         })
     }
-    executeActions()
+
+    executeActions() // start
   }
 
   handleError (error, action) {
