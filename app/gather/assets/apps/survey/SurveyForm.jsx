@@ -482,7 +482,7 @@ class SurveyForm extends Component {
     const { value, unit } = selectUnit(new Date(xform.created_at))
     const date = (xform.id
       ? (
-        <small className='mr-4'>
+        <small className='mr-3'>
           (<FormattedRelativeTime value={value} unit={unit} />)
         </small>
       )
@@ -523,51 +523,57 @@ class SurveyForm extends Component {
         <div className='row-xform'>
           {title}
           {date}
-
-          <div className='d-inline float-right'>
-            {
-              xform.id &&
-                <>
-                  <label className='btn btn-default' htmlFor='xFormFile'>
-                    <FormattedMessage
-                      id='survey.odk.form.xform.file'
-                      defaultMessage='Upload new version'
+          {
+            xform.id &&
+              <>
+                {
+                  !xform.file &&
+                  <div className='upload-new'>
+                    <label className='btn btn-default' htmlFor='xFormFile'>
+                      <FormattedMessage
+                        id='survey.odk.form.xform.file'
+                        defaultMessage='Upload new version'
+                      />
+                    </label>
+                    <input
+                      name='file'
+                      id='xFormFile'
+                      type='file'
+                      className='hidden-file'
+                      accept='.xls,.xlsx,.xml'
+                      onChange={onFileChange}
                     />
-                  </label>
-                  <input
-                    name='file'
-                    id='xFormFile'
-                    type='file'
-                    className='hidden-file'
-                    accept='.xls,.xlsx,.xml'
-                    onChange={onFileChange}
-                  />
-                  {
+                  </div>
+                }
+                {
                     xform.file &&
-                      <span className='ml-2 badge badge-default'>
-                        <span>{xform.file.name}</span>
-                        <button
-                          type='button'
-                          className='btn btn-sm icon-only btn-danger ml-2'
-                          onClick={removeFile}
-                        >
-                          <i className='fas fa-times' />
-                        </button>
-                      </span>
-                  }
-                </>
-            }
+                      <>
+                        <small>| New form version: </small>
+                        <span className='ml-2 badge badge-default'>
+                          <span>{xform.file.name}</span>
+                          <button
+                            type='button'
+                            className='btn btn-sm icon-only btn-danger ml-2'
+                            onClick={removeFile}
+                          >
+                            <i className='fas fa-times' />
+                          </button>
+                        </span>
+                      </>
 
-            <ConfirmButton
-              className='btn btn-sm icon-only btn-danger mx-2'
-              cancelable
-              condition={() => xform.id}
-              onConfirm={onRemove}
-              title={title}
-              message={formatMessage(MESSAGES.deleteXFormConfirm, { ...xform })}
-              buttonLabel={<i className='fas fa-times' />}
-            />
-          </div>
+                  }
+              </>
+          }
+
+          <ConfirmButton
+            className='btn btn-sm icon-only btn-danger delete-form-button mr-2'
+            cancelable
+            condition={() => xform.id}
+            onConfirm={onRemove}
+            title={title}
+            message={formatMessage(MESSAGES.deleteXFormConfirm, { ...xform })}
+            buttonLabel={<i className='fas fa-times' />}
+          />
         </div>
 
         <div className='row-mediafiles'>
@@ -622,7 +628,7 @@ class SurveyForm extends Component {
         }
 
         <label className='btn btn-default' htmlFor={inputFileId}>
-          <i className='fas fa-plus mr-2' />
+          <i className='fas fa-plus-circle fa-lg mr-1' />
           <FormattedMessage
             id='survey.odk.form.xform.media.files.add'
             defaultMessage='Add media files'
