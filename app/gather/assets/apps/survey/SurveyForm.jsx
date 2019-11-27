@@ -528,40 +528,39 @@ class SurveyForm extends Component {
               <>
                 {
                   !xform.file &&
-                  <div className='upload-new'>
-                    <label className='btn btn-default' htmlFor='xFormFile'>
-                      <FormattedMessage
-                        id='survey.odk.form.xform.file'
-                        defaultMessage='Upload new version'
+                    <div className='upload-new'>
+                      <label className='btn btn-default' htmlFor='xFormFile'>
+                        <FormattedMessage
+                          id='survey.odk.form.xform.file'
+                          defaultMessage='Upload new version'
+                        />
+                      </label>
+                      <input
+                        name='file'
+                        id='xFormFile'
+                        type='file'
+                        className='hidden-file'
+                        accept='.xls,.xlsx,.xml'
+                        onChange={onFileChange}
                       />
-                    </label>
-                    <input
-                      name='file'
-                      id='xFormFile'
-                      type='file'
-                      className='hidden-file'
-                      accept='.xls,.xlsx,.xml'
-                      onChange={onFileChange}
-                    />
-                  </div>
+                    </div>
                 }
                 {
-                    xform.file &&
-                      <>
-                        <small>| New form version: </small>
-                        <span className='ml-2 badge badge-default'>
-                          <span>{xform.file.name}</span>
-                          <button
-                            type='button'
-                            className='btn btn-sm icon-only btn-danger ml-2'
-                            onClick={removeFile}
-                          >
-                            <i className='fas fa-times' />
-                          </button>
-                        </span>
-                      </>
-
-                  }
+                  xform.file &&
+                    <>
+                      <small>| New form version: </small>
+                      <span className='ml-2 badge badge-default'>
+                        <span>{xform.file.name}</span>
+                        <button
+                          type='button'
+                          className='btn btn-sm icon-only btn-danger ml-2'
+                          onClick={removeFile}
+                        >
+                          <i className='fas fa-times' />
+                        </button>
+                      </span>
+                    </>
+                }
               </>
           }
 
