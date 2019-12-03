@@ -360,7 +360,7 @@ Frontend assets are mounted on the pages via the
   They spit out a webpack build called `styles.css`.
 
 * Each page has their own JS entry point (needs to be defined in `webpack.apps.js`).
-  On top of that, they load a common chunk, containing `jquery`, `bootstrap` and other
+  On top of that, they load a common chunk, containing `bootstrap`, `popper.js` and other
   stuff that the `webpack common chunk` plugin finds is shared between the apps.
 
 *[Return to TOC](#table-of-contents)*
