@@ -36,7 +36,7 @@ export default class EntitiesList extends Component {
     return (
       <div data-qa='entities-list' className='x-0'>
         <div className='survey-content'>
-          <table className='table table-sm'>
+          <table className='table table-sm table-hover'>
             {this.renderHeader()}
             <tbody>
               {list.map((entity, index) => this.renderEntity(entity, index))}
