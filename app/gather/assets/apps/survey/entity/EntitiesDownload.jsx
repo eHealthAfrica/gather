@@ -44,11 +44,13 @@ class EntitiesDownload extends Component {
     super(props)
 
     this.state = {
+      task: null,
       controller: false,
       open: false,
 
       // default export options
       page: 1,
+      generateRecords: true,
       dataFormat: 'split',
       fileFormat: EXPORT_CSV_FORMAT,
       headerContent: 'labels',
@@ -56,7 +58,8 @@ class EntitiesDownload extends Component {
       headerFull: true,
       csvEscape: '\\',
       csvSeparator: ',',
-      csvQuote: '"'
+      csvQuote: '"',
+      generateAttachments: false
     }
   }
 
@@ -66,6 +69,7 @@ class EntitiesDownload extends Component {
         {this.renderDownloadButton()}
         {this.renderOptions()}
         {this.renderError()}
+        {this.renderTask()}
       </>
     )
   }
@@ -133,11 +137,18 @@ class EntitiesDownload extends Component {
 
     const download = () => {
       const controller = new window.AbortController()
-      this.setState({ controller, open: false, error: null })
+      this.setState({ task: null, controller, open: false, error: null })
 
-      return postData(
-        getEntitiesAPIPath(params),
-        {
+      let payload = {
+        background: 'true',
+        filename: total > pageSize ? `${filename}-${page}` : filename,
+        include_records: 'f',
+        include_attachments: 'f'
+      }
+      if (this.state.generateRecords) {
+        payload = {
+          ...payload,
+          include_records: 't',
           paths: this.props.paths,
           labels: this.props.labels,
           data_format: this.state.dataFormat,
@@ -146,19 +157,25 @@ class EntitiesDownload extends Component {
           header_shorten: this.state.headerFull ? 'no' : 'yes',
           csv_escape: this.state.csvEscape,
           csv_separator: this.state.csvSeparator === 'TAB' ? '\t' : this.state.csvSeparator.charAt(0),
-          csv_quote: this.state.csvQuote,
-          filename: total > pageSize ? `${filename}-${page}` : filename
-        },
-        { download: true, signal: controller.signal }
-      )
-        .then(() => {
-          this.setState({ controller: null, error: null })
+          csv_quote: this.state.csvQuote
+        }
+      }
+      if (this.state.generateAttachments) {
+        payload = {
+          ...payload,
+          include_attachments: 't'
+        }
+      }
+
+      return postData(getEntitiesAPIPath(params), payload, { signal: controller.signal })
+        .then(({ task }) => {
+          this.setState({ task, controller: null, error: null })
         })
         .catch(error => {
           if (error.name === 'AbortError') {
-            this.setState({ controller: null, error: null })
+            this.setState({ task: null, controller: null, error: null })
           } else {
-            this.setState({ controller: null, error })
+            this.setState({ task: null, controller: null, error })
           }
         })
     }
@@ -300,170 +317,212 @@ class EntitiesDownload extends Component {
     ]
 
     const close = () => { this.setState({ open: false }) }
+    const noDownload = !this.state.generateRecords && !this.state.generateAttachments
 
     return (
       <Portal onEscape={close} onEnter={download}>
         <div className='modal show'>
           <div className='modal-dialog modal-dialog-centered modal-lg'>
             <div className='modal-content modal-options'>
-              <div className='modal-header'>
-                <h3 className='modal-title'>
-                  <FormattedMessage
-                    id='entities.download.options.title'
-                    defaultMessage='Download'
-                  />
-                </h3>
-                <button
-                  data-qa='confirm-button-close'
-                  type='button'
-                  className='close'
-                  onClick={close}
-                >
-                  &times;
-                </button>
-              </div>
+              {this.renderPortalHeader(close)}
 
               <div className='modal-body'>
                 <div className='m-3'>
                   <h5 className='title mb-3'>
                     <FormattedMessage
-                      id='entities.download.data.format.title'
-                      defaultMessage='Data format'
+                      id='entities.download.data.records'
+                      defaultMessage='Records'
                     />
                   </h5>
-                  {this.renderChoices(DATA_FORMATS, 'dataFormat')}
+
+                  <div
+                    className='form-group mt-2 ml-2'
+                    onClick={() => { this.setState({ generateRecords: !this.state.generateRecords }) }}
+                  >
+                    <i
+                      className={`fa ${this.state.generateRecords ? 'fa-toggle-on' : 'fa-toggle-off'}`}
+                    />
+                    <label className='form-control-label ml-2'>
+                      <FormattedMessage
+                        id='entities.download.records.include'
+                        defaultMessage='Generate file for records'
+                      />
+                    </label>
+                  </div>
                 </div>
 
-                <div className='m-3'>
-                  <h5 className='title mb-3'>
-                    <FormattedMessage
-                      id='entities.download.headers.title'
-                      defaultMessage='Headers'
-                    />
-                  </h5>
-
-                  {this.renderChoices(HEADERS, 'headerContent', 'd-inline mr-5')}
-
-                  <div className='form-inline p-2'>
-                    <div
-                      className='form-group mt-2 ml-2'
-                      onClick={() => { this.setState({ headerFull: !this.state.headerFull }) }}
-                    >
-                      <i
-                        className={`fa ${this.state.headerFull ? 'fa-toggle-on' : 'fa-toggle-off'}`}
-                      />
-                      <label className='form-control-label ml-2'>
-                        <FormattedMessage
-                          id='entities.download.headers.full'
-                          defaultMessage='Show full path in headers'
-                        />
-                      </label>
-                    </div>
-
-                    {
-                      this.state.headerFull &&
-                        <div className='form-group ml-5'>
-                          <label className='form-control-label label mr-2'>
-                            <FormattedMessage
-                              id='entities.download.headers.separator'
-                              defaultMessage='Delimiter'
-                            />
-                          </label>
-                          <input
-                            name='headerSeparator'
-                            type='text'
-                            className='form-control'
-                            size={3}
-                            maxLength={1}
-                            value={this.state.headerSeparator || ''}
-                            onChange={onInputChange}
+                {
+                  this.state.generateRecords &&
+                    <>
+                      <div className='m-3'>
+                        <h5 className='title mb-3'>
+                          <FormattedMessage
+                            id='entities.download.data.format.title'
+                            defaultMessage='Data format'
                           />
+                        </h5>
+                        {this.renderChoices(DATA_FORMATS, 'dataFormat')}
+                      </div>
+
+                      <div className='m-3'>
+                        <h5 className='title mb-3'>
+                          <FormattedMessage
+                            id='entities.download.headers.title'
+                            defaultMessage='Headers'
+                          />
+                        </h5>
+
+                        {this.renderChoices(HEADERS, 'headerContent', 'd-inline mr-5')}
+
+                        <div className='form-inline p-2'>
+                          <div
+                            className='form-group mt-2 ml-2'
+                            onClick={() => { this.setState({ headerFull: !this.state.headerFull }) }}
+                          >
+                            <i
+                              className={`fa ${this.state.headerFull ? 'fa-toggle-on' : 'fa-toggle-off'}`}
+                            />
+                            <label className='form-control-label ml-2'>
+                              <FormattedMessage
+                                id='entities.download.headers.full'
+                                defaultMessage='Show full path in headers'
+                              />
+                            </label>
+                          </div>
+
+                          {
+                            this.state.headerFull &&
+                              <div className='form-group ml-5'>
+                                <label className='form-control-label label mr-2'>
+                                  <FormattedMessage
+                                    id='entities.download.headers.separator'
+                                    defaultMessage='Delimiter'
+                                  />
+                                </label>
+                                <input
+                                  name='headerSeparator'
+                                  type='text'
+                                  className='form-control'
+                                  size={3}
+                                  maxLength={1}
+                                  value={this.state.headerSeparator || ''}
+                                  onChange={onInputChange}
+                                />
+                              </div>
+                          }
                         </div>
-                    }
+                      </div>
+
+                      <div className='m-3'>
+                        <h5 className='title mb-3'>
+                          <FormattedMessage
+                            id='entities.download.file.format.title'
+                            defaultMessage='File format'
+                          />
+                        </h5>
+
+                        {this.renderChoices(FILE_FORMATS, 'fileFormat')}
+                      </div>
+                    </>
+                }
+
+                <div className='m-3'>
+                  <h5 className='title mb-3'>
+                    <FormattedMessage
+                      id='entities.download.data.attachments'
+                      defaultMessage='Record Attachments'
+                    />
+                  </h5>
+
+                  <div
+                    className='form-group mt-2 ml-2'
+                    onClick={() => { this.setState({ generateAttachments: !this.state.generateAttachments }) }}
+                  >
+                    <i
+                      className={`fa ${this.state.generateAttachments ? 'fa-toggle-on' : 'fa-toggle-off'}`}
+                    />
+                    <label className='form-control-label ml-2'>
+                      <FormattedMessage
+                        id='entities.download.attachments.full'
+                        defaultMessage='Generate files(s) for all attachments'
+                      />
+                    </label>
                   </div>
                 </div>
 
-                <div className='m-3'>
-                  <h5 className='title mb-3'>
-                    <FormattedMessage
-                      id='entities.download.file.format.title'
-                      defaultMessage='File format'
-                    />
-                  </h5>
+                {
+                  !noDownload &&
+                    <div className='m-3'>
+                      <h5 className='title mb-3'>
+                        <FormattedMessage
+                          id='entities.download.data.content.title'
+                          defaultMessage='Content'
+                        />
+                      </h5>
+                      <div className='d-flex'>
+                        {
+                          page > 1 &&
+                            <button
+                              type='button'
+                              className='btn'
+                              onClick={() => { this.setState({ page: page - 1 }) }}
+                            >
+                              <i className='fa fa-angle-double-left' />
+                            </button>
+                        }
 
-                  {this.renderChoices(FILE_FORMATS, 'fileFormat')}
-                </div>
+                        <div className='flex-grow-1 text-center'>
+                          <FormattedMessage
+                            id='entities.download.page.from'
+                            defaultMessage='From record'
+                          />
+                          <b className='mr-1 ml-1'>
+                            <FormattedNumber value={(page - 1) * pageSize + 1} />
+                          </b>
 
-                <div className='m-3'>
-                  <h5 className='title mb-3'>
-                    <FormattedMessage
-                      id='entities.download.data.content.title'
-                      defaultMessage='Content'
-                    />
-                  </h5>
-                  <div className='d-flex'>
-                    {
-                      page > 1 &&
-                        <button
-                          type='button'
-                          className='btn'
-                          onClick={() => { this.setState({ page: page - 1 }) }}
-                        >
-                          <i className='fa fa-angle-double-left' />
-                        </button>
-                    }
+                          <FormattedMessage
+                            id='entities.download.page.to'
+                            defaultMessage='to record'
+                          />
+                          <b className='ml-1'>
+                            <FormattedNumber value={Math.min((page) * pageSize, total)} />
+                          </b>
 
-                    <div className='flex-grow-1 text-center'>
-                      <FormattedMessage
-                        id='entities.download.page.from'
-                        defaultMessage='From record'
-                      />
-                      <b className='mr-1 ml-1'>
-                        <FormattedNumber value={(page - 1) * pageSize + 1} />
-                      </b>
+                          {
+                            pages > 1 &&
+                              <>
+                                <b className='mr-2 ml-2'>&ndash;</b>
+                                <FormattedMessage
+                                  id='entities.download.page.current'
+                                  defaultMessage='Block'
+                                />
+                                <b className='mr-1 ml-1'>
+                                  <FormattedNumber value={page} />
+                                </b>
+                                <FormattedMessage
+                                  id='entities.download.page.of'
+                                  defaultMessage='of'
+                                />
+                                <b className='mr-1 ml-1'>
+                                  <FormattedNumber value={pages} />
+                                </b>
+                              </>
+                          }
+                        </div>
 
-                      <FormattedMessage
-                        id='entities.download.page.to'
-                        defaultMessage='to record'
-                      />
-                      <b className='ml-1'>
-                        <FormattedNumber value={Math.min((page) * pageSize, total)} />
-                      </b>
-
-                      {
-                        pages > 1 &&
-                          <>
-                            <b className='mr-2 ml-2'>&ndash;</b>
-                            <FormattedMessage
-                              id='entities.download.page.current'
-                              defaultMessage='Block'
-                            />
-                            <b className='mr-1 ml-1'>
-                              <FormattedNumber value={page} />
-                            </b>
-                            <FormattedMessage
-                              id='entities.download.page.of'
-                              defaultMessage='of'
-                            />
-                            <b className='mr-1 ml-1'>
-                              <FormattedNumber value={pages} />
-                            </b>
-                          </>
-                      }
+                        {
+                          page < pages &&
+                            <button
+                              type='button'
+                              className='btn'
+                              onClick={() => { this.setState({ page: page + 1 }) }}
+                            >
+                              <i className='fa fa-angle-double-right' />
+                            </button>
+                        }
+                      </div>
                     </div>
-
-                    {
-                      page < pages &&
-                        <button
-                          type='button'
-                          className='btn'
-                          onClick={() => { this.setState({ page: page + 1 }) }}
-                        >
-                          <i className='fa fa-angle-double-right' />
-                        </button>
-                    }
-                  </div>
-                </div>
+                }
               </div>
 
               <div className='modal-footer'>
@@ -484,12 +543,13 @@ class EntitiesDownload extends Component {
                   <div>
                     <button
                       type='button'
-                      className='btn btn-primary btn-block'
+                      className={`btn ${noDownload ? 'btn-cancel' : 'btn-primary'} btn-block`}
+                      disabled={noDownload}
                       onClick={() => { download() }}
                     >
                       <FormattedMessage
                         id='entities.download.prepare'
-                        defaultMessage='Prepare file'
+                        defaultMessage='Prepare file(s)'
                       />
                     </button>
                   </div>
@@ -530,58 +590,100 @@ class EntitiesDownload extends Component {
   }
 
   renderError () {
-    const { error } = this.state
-    if (!error) {
+    const renderBody = (error) => (
+      <>
+        <p>
+          <i className='fas fa-exclamation-triangle mr-1' />
+          <FormattedMessage
+            id='entities.download.error'
+            defaultMessage={`
+              Download was not successful,
+              maybe there was a server error while requesting for it.
+            `}
+          />
+        </p>
+        {
+          error.content && error.content.detail &&
+            <p>
+              <i className='fas fa-exclamation-triangle mr-1' />
+              {error.content.detail}
+            </p>
+        }
+      </>
+    )
+    return this.renderPortal('error', renderBody)
+  }
+
+  renderTask () {
+    const renderBody = (task) => (
+      <>
+        <p>
+          <FormattedMessage
+            id='entities.download.task.warning.1'
+            defaultMessage='Download was started in background mode.'
+          />
+          <br />
+          <FormattedMessage
+            id='entities.download.task.warning.2'
+            defaultMessage='Check the given task id within the generated files list.'
+          />
+        </p>
+        <p>
+          <FormattedMessage
+            id='entities.download.task.id'
+            defaultMessage='Task ID'
+            values={{ task }}
+          />: <b>{task}</b>
+        </p>
+      </>
+    )
+    return this.renderPortal('task', renderBody)
+  }
+
+  renderPortal (property, renderBody) {
+    const value = this.state[property]
+    if (!value) {
       return ''
     }
 
-    const close = () => { this.setState({ error: null }) }
+    const close = () => { this.setState({ [property]: null }) }
 
     return (
       <Portal onEscape={close} onEnter={close}>
         <div className='modal show'>
           <div className='modal-dialog modal-md'>
             <div className='modal-content'>
-              <div className='modal-header'>
-                <h5 className='modal-title'>
-                  <FormattedMessage
-                    id='entities.download.title'
-                    defaultMessage='Download'
-                  />
-                </h5>
-                <button
-                  data-qa='confirm-button-close'
-                  type='button'
-                  className='close'
-                  onClick={close}
-                >
-                  &times;
-                </button>
-              </div>
+              {this.renderPortalHeader(close)}
 
               <div className='modal-body'>
-                <p>
-                  <i className='fas fa-exclamation-triangle mr-1' />
-                  <FormattedMessage
-                    id='entities.download.error'
-                    defaultMessage={`
-                      Download was not successful,
-                      maybe there was a server error while requesting for it.
-                    `}
-                  />
-                </p>
-                {
-                  error.content && error.content.detail &&
-                    <p>
-                      <i className='fas fa-exclamation-triangle mr-1' />
-                      {error.content.detail}
-                    </p>
-                }
+                {renderBody(value)}
               </div>
             </div>
           </div>
         </div>
       </Portal>
+    )
+  }
+
+  renderPortalHeader (close) {
+    return (
+      <div className='modal-header'>
+        <h5 className='modal-title'>
+          <i className='fas fa-download mr-2' />
+          <FormattedMessage
+            id='entities.download.title'
+            defaultMessage='Download'
+          />
+        </h5>
+        <button
+          data-qa='confirm-button-close'
+          type='button'
+          className='close'
+          onClick={close}
+        >
+          &times;
+        </button>
+      </div>
     )
   }
 }

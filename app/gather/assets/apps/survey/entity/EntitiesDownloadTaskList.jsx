@@ -87,8 +87,8 @@ export default ({ start, list }) => list.length === 0
                     <i className='fas fa-clock mr-2' />
                     <FormattedRelativeTime value={value} unit={unit} />
                   </td>
-                  <td className={`status ${task.status.toLowerCase()}`}>
-                    {task.status}
+                  <td className={`status ${(task.status || '').toLowerCase()}`}>
+                    {task.status || '—'}
                   </td>
                   <td className={`status ${(task.status_attachments || '').toLowerCase()}`}>
                     {task.status_attachments || '—'}

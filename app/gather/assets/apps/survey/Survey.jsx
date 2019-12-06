@@ -180,16 +180,6 @@ class Survey extends Component {
               </button>
             </li>
             <li>
-              <EntitiesDownload
-                survey={survey}
-                total={total}
-                paths={selectedPaths}
-                labels={labels}
-                settings={settings}
-                filename={filename}
-              />
-            </li>
-            <li>
               <button
                 type='button'
                 disabled={viewMode === TASKS_VIEW}
@@ -202,6 +192,16 @@ class Survey extends Component {
                   defaultMessage='Generated files'
                 />
               </button>
+            </li>
+            <li>
+              <EntitiesDownload
+                survey={survey}
+                total={total}
+                paths={selectedPaths}
+                labels={labels}
+                settings={settings}
+                filename={filename}
+              />
             </li>
             {
               viewMode !== DASHBOARD_VIEW &&
