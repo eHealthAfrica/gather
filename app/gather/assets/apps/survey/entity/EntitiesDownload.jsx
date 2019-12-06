@@ -142,13 +142,13 @@ class EntitiesDownload extends Component {
       let payload = {
         background: 'true',
         filename: total > pageSize ? `${filename}-${page}` : filename,
-        include_records: 'f',
-        include_attachments: 'f'
+        generate_records: 'f',
+        generate_attachments: 'f'
       }
       if (this.state.generateRecords) {
         payload = {
           ...payload,
-          include_records: 't',
+          generate_records: 't',
           paths: this.props.paths,
           labels: this.props.labels,
           data_format: this.state.dataFormat,
@@ -163,7 +163,7 @@ class EntitiesDownload extends Component {
       if (this.state.generateAttachments) {
         payload = {
           ...payload,
-          include_attachments: 't'
+          generate_attachments: 't'
         }
       }
 

@@ -50,7 +50,7 @@ export default ({ start, list }) => list.length === 0
             </th>
             <th scope='col'>
               <FormattedMessage
-                id='entities.download.task.list.status'
+                id='entities.download.task.list.status.records'
                 defaultMessage='Status records'
               />
             </th>
@@ -87,8 +87,8 @@ export default ({ start, list }) => list.length === 0
                     <i className='fas fa-clock mr-2' />
                     <FormattedRelativeTime value={value} unit={unit} />
                   </td>
-                  <td className={`status ${(task.status || '').toLowerCase()}`}>
-                    {task.status || '—'}
+                  <td className={`status ${(task.status_records || '').toLowerCase()}`}>
+                    {task.status_records || '—'}
                   </td>
                   <td className={`status ${(task.status_attachments || '').toLowerCase()}`}>
                     {task.status_attachments || '—'}
