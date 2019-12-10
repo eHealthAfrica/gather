@@ -139,7 +139,6 @@ class Survey extends Component {
                 <li className='dashboard-tab'>
                   <button
                     type='button'
-                    disabled={viewMode === DASHBOARD_VIEW}
                     className={`tab ${viewMode === DASHBOARD_VIEW ? 'active' : ''}`}
                     onClick={() => { this.setState({ viewMode: DASHBOARD_VIEW }) }}
                   >
@@ -154,7 +153,6 @@ class Survey extends Component {
             <li>
               <button
                 type='button'
-                disabled={viewMode === TABLE_VIEW}
                 className={`tab ${viewMode === TABLE_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: TABLE_VIEW }) }}
               >
@@ -168,7 +166,6 @@ class Survey extends Component {
             <li>
               <button
                 type='button'
-                disabled={viewMode === SINGLE_VIEW}
                 className={`tab ${viewMode === SINGLE_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: SINGLE_VIEW }) }}
               >
@@ -182,7 +179,6 @@ class Survey extends Component {
             <li>
               <button
                 type='button'
-                disabled={viewMode === TASKS_VIEW}
                 className={`tab ${viewMode === TASKS_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: TASKS_VIEW }) }}
               >
@@ -215,6 +211,7 @@ class Survey extends Component {
           viewMode === DASHBOARD_VIEW
             ? (
               <SurveyDashboard
+                key={viewMode + new Date()}
                 columns={allPaths}
                 labels={labels}
                 entitiesCount={total}
@@ -224,7 +221,7 @@ class Survey extends Component {
             )
             : (
               <PaginationContainer
-                key={viewMode}
+                key={viewMode + new Date()}
                 pageSize={viewMode === SINGLE_VIEW ? 1 : TABLE_SIZES[0]}
                 sizes={viewMode === SINGLE_VIEW ? [] : TABLE_SIZES}
                 url={url}
