@@ -36,6 +36,10 @@ const MESSAGES = defineMessages({
   delimiterHint: {
     defaultMessage: 'Write «T» and press «Ctrl+Enter» to use «TAB» as delimiter',
     id: 'export.csv.delimiter.hint.first'
+  },
+  noAttachments: {
+    defaultMessage: 'Found no attachments to download',
+    id: 'export.no.attachments'
   }
 })
 
@@ -168,8 +172,22 @@ class EntitiesDownload extends Component {
       }
 
       return postData(getEntitiesAPIPath(params), payload, { signal: controller.signal })
-        .then(({ task }) => {
-          this.setState({ task, controller: null, error: null })
+        .then(response => {
+          if (!response) {
+            // no attachments found
+            this.setState({
+              task: null,
+              controller: null,
+              error: {
+                content: {
+                  detail: formatMessage(MESSAGES.noAttachments)
+                }
+              }
+            })
+          } else {
+            const { task } = response
+            this.setState({ task, controller: null, error: null })
+          }
         })
         .catch(error => {
           if (error.name === 'AbortError') {

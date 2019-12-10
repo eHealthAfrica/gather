@@ -19,8 +19,9 @@
  */
 
 import React from 'react'
-import { FormattedMessage, FormattedRelativeTime } from 'react-intl'
+import { FormattedMessage, FormattedNumber, FormattedRelativeTime } from 'react-intl'
 import { selectUnit } from '@formatjs/intl-utils'
+import { getFileName, selectDigitalUnit  } from '../../utils'
 
 export default ({ start, list }) => list.length === 0
   ? <div data-qa='tasks-list-empty' />
@@ -94,14 +95,44 @@ export default ({ start, list }) => list.length === 0
                     {task.status_attachments || '—'}
                   </td>
                   <td>
-                    {
-                      task.files.map((file, jndex) => (
-                        <a key={jndex} href={file.file_url}>
-                          <i className='fas fa-download mr-2' />
-                          (md5: {file.md5sum})
-                        </a>
-                      ))
-                    }
+                    <ul className='files'>
+                      {
+                        task.files.map((file, jndex) => {
+                          const { unit, value } = selectDigitalUnit(file.size)
+                          return (
+                            <li key={jndex} className='mb-2'>
+                              <a href={file.file_url} className='mr-2'>
+                                <i className='fas fa-download mr-2' />
+                                {getFileName(file.name)}
+                              </a>
+                              <div className='ml-4'>
+                                (
+                                <small title={`${file.size} bytes`}>
+                                  <FormattedMessage
+                                    id='entities.download.task.list.file.size'
+                                    defaultMessage='size'
+                                  />:&nbsp;
+                                  <FormattedNumber
+                                    maximumFractionDigits='1'
+                                    style='unit'
+                                    unit={unit}
+                                    unitDisplay='narrow'
+                                    value={value}
+                                  />
+                                </small>,
+                                <small className='ml-2'>
+                                  <FormattedMessage
+                                    id='entities.download.task.list.file.md5'
+                                    defaultMessage='md5'
+                                  />: {file.md5sum}
+                                </small>
+                                )
+                              </div>
+                            </li>
+                          )
+                        })
+                      }
+                    </ul>
                   </td>
                 </tr>
               )
