@@ -21,7 +21,7 @@
 import React from 'react'
 import { FormattedMessage, FormattedNumber, FormattedRelativeTime } from 'react-intl'
 import { selectUnit } from '@formatjs/intl-utils'
-import { getFileName, selectDigitalUnit  } from '../../utils'
+import { getFileName, selectDigitalUnit } from '../../utils'
 
 export default ({ start, list }) => list.length === 0
   ? <div data-qa='tasks-list-empty' />
