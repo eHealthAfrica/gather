@@ -27,7 +27,9 @@ import {
   generateRandomId,
   range,
   sortBy,
-  sortNumericArray
+  sortNumericArray,
+  selectDigitalUnit,
+  getFileName
 } from './index'
 
 describe('utils', () => {
@@ -162,6 +164,60 @@ describe('utils', () => {
       // not sorted
       const array3 = [10, 1, 111, 11, 100]
       assert.deepStrictEqual(sortNumericArray(array3), expected)
+    })
+  })
+
+  describe('selectDigitalUnit', () => {
+    it('should return the unit and the adjusted value', () => {
+      assert.deepStrictEqual(
+        selectDigitalUnit(0),
+        { unit: 'byte', value: 0.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(-10),
+        { unit: 'byte', value: -10.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(1000),
+        { unit: 'kilobyte', value: 1.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(1000 ** 2),
+        { unit: 'megabyte', value: 1.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(1000 ** 3),
+        { unit: 'gigabyte', value: 1.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(1000 ** 4),
+        { unit: 'terabyte', value: 1.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(1000 ** 5),
+        { unit: 'petabyte', value: 1.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(1000 ** 6),
+        { unit: 'exabyte', value: 1.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(1000 ** 7),
+        { unit: 'zettabyte', value: 1.0 }
+      )
+      assert.deepStrictEqual(
+        selectDigitalUnit(1000 ** 8),
+        { unit: 'yottabyte', value: 1.0 }
+      )
+    })
+  })
+
+  describe('getFileName', () => {
+    it('should return the last part of a path', () => {
+      assert.deepStrictEqual(getFileName(''), '')
+      assert.deepStrictEqual(getFileName('/'), '')
+      assert.deepStrictEqual(getFileName('/a'), 'a')
+      assert.deepStrictEqual(getFileName('/a/b/c/d'), 'd')
     })
   })
 })
