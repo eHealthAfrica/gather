@@ -76,7 +76,7 @@ export default ({ start, list }) => list.length === 0
               const { value, unit } = selectUnit(new Date(task.created))
               return (
                 <tr key={task.id} data-qa='task-item'>
-                  <td scope='row'>{start + index}</td>
+                  <td scope='row'>{(start || 0) + index}</td>
                   <td data-qa='id'>
                     {task.id}
                   </td>
@@ -95,7 +95,7 @@ export default ({ start, list }) => list.length === 0
                     {task.status_attachments || '—'}
                   </td>
                   <td>
-                    <ul className='files'>
+                    <ul data-qa='task-files' className='files'>
                       {
                         task.files.map((file, jndex) => {
                           const { unit, value } = selectDigitalUnit(file.size)
