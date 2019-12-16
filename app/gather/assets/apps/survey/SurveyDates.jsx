@@ -107,7 +107,7 @@ export default class SurveyDates extends Component {
           month='short'
           day='numeric'
         />
-        <span className='label mr-1'>
+        <span className='label mx-1'>
           <FormattedMessage
             id='survey.dates.submissions.to'
             defaultMessage='to'
