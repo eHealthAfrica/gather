@@ -352,6 +352,7 @@ class SurveyForm extends Component {
         const file = event.target.files.item(i)
         newXForms.push({
           key: generateRandomId(),
+          active: true,
           title: file.name,
           version: formatMessage(MESSAGES.newForm),
           file
