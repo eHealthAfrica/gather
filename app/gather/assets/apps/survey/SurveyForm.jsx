@@ -517,8 +517,14 @@ class SurveyForm extends Component {
       onChange({ ...xform, media_files: mediaFiles })
     }
 
+    const toggleFlagActive = (event) => {
+      event.preventDefault()
+      onChange({ ...xform, active: !xform.active })
+    }
+    const activeStatus = xform.active ? 'on' : 'off'
+
     return (
-      <div key={xform.key} className='form-item'>
+      <div key={xform.key} className={`form-item ${activeStatus}`}>
         <ErrorAlert errors={allErrors} />
 
         <div className='row-xform'>
@@ -590,6 +596,33 @@ class SurveyForm extends Component {
               )
           }
         </div>
+
+        {
+          xform.id &&
+            <div className='row-extras'>
+              <div
+                className={`form-toggle ${activeStatus} float-right`}
+                onClick={toggleFlagActive}
+              >
+                {
+                  xform.active
+                    ? (
+                      <FormattedMessage
+                        id='survey.odk.form.xforms.active'
+                        defaultMessage='active'
+                      />
+                    )
+                    : (
+                      <FormattedMessage
+                        id='survey.odk.form.xforms.inactive'
+                        defaultMessage='inactive'
+                      />
+                    )
+                }
+                <i className={`ml-1 fas fa-toggle-${activeStatus}`} />
+              </div>
+            </div>
+        }
       </div>
     )
   }

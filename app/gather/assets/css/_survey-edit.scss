@@ -63,6 +63,14 @@ input.hidden-file {
   width: 100%;
   align-items: baseline;
 
+  &.on {
+    background-color: $white;
+  }
+
+  &.off {
+    background-color: $lighter-grey;
+  }
+
   .form-title {
     align-items: baseline;
     margin-bottom: .2rem;
@@ -90,6 +98,10 @@ input.hidden-file {
     padding: 1rem 0 0 0;
     display: flex;
     flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  .row-extras {
     align-items: baseline;
   }
 
