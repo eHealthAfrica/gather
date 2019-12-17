@@ -29,9 +29,9 @@ from . import views
 router = routers.DefaultRouter()
 
 # create `projects` entry for concordance with aether
-router.register('projects', views.SurveyViewSet, base_name='projects')
-router.register('surveys', views.SurveyViewSet, base_name='surveys')
-router.register('masks', views.MaskViewSet, base_name='masks')
+router.register('projects', views.SurveyViewSet)
+router.register('surveys', views.SurveyViewSet)
+router.register('masks', views.MaskViewSet)
 
 urlpatterns = [
     path(route='gather/', view=include(router.urls)),
