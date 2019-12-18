@@ -19,11 +19,42 @@
  */
 
 import React from 'react'
-import { FormattedMessage, FormattedNumber, FormattedRelativeTime } from 'react-intl'
+import {
+  defineMessages,
+  injectIntl,
+  FormattedMessage,
+  FormattedNumber,
+  FormattedRelativeTime
+} from 'react-intl'
 import { selectUnit } from '@formatjs/intl-utils'
-import { getFileName, selectDigitalUnit } from '../../utils'
 
-export default ({ start, list }) => list.length === 0
+import { getFileName, selectDigitalUnit } from '../../utils'
+import { getExportTasksAPIPath } from '../../utils/paths'
+import { deleteData } from '../../utils/request'
+
+import { ConfirmButton } from '../../components'
+
+const MESSAGES = defineMessages({
+  deleteButton: {
+    defaultMessage: 'Delete task',
+    id: 'task.item.action.delete'
+  },
+  deleteConfirm: {
+    defaultMessage: 'Are you sure you want to delete the task “{id}”?',
+    id: 'task.item.action.delete.confirm'
+  },
+  deleteError: {
+    defaultMessage: 'An error occurred while deleting the task “{id}”.',
+    id: 'task.list.action.delete.error'
+  }
+})
+
+const EntitiesDownloadTaskList = ({
+  start,
+  list,
+  refresh,
+  intl: { formatMessage }
+}) => list.length === 0
   ? <div data-qa='tasks-list-empty' />
   : (
     <div data-qa='tasks-list' className='tasks-list'>
@@ -67,6 +98,7 @@ export default ({ start, list }) => list.length === 0
                 defaultMessage='Files'
               />
             </th>
+            <th />
           </tr>
         </thead>
 
@@ -134,6 +166,34 @@ export default ({ start, list }) => list.length === 0
                       }
                     </ul>
                   </td>
+                  <td>
+                    <ConfirmButton
+                      className='btn btn-sm icon-only btn-danger delete-form-button mr-2'
+                      cancelable
+                      onConfirm={() => {
+                        const url = getExportTasksAPIPath({ id: task.id })
+                        return deleteData(url)
+                          .then(() => {
+                            refresh()
+                          })
+                          .catch(() => {
+                            window.alert(formatMessage(MESSAGES.deleteError, { ...task }))
+                            refresh()
+                          })
+                      }}
+                      title={
+                        <span>
+                          <i className='fas fa-trash mr-1' />
+                          <FormattedMessage
+                            id='task.item.delete.title'
+                            defaultMessage='Delete task'
+                          />
+                        </span>
+                      }
+                      message={formatMessage(MESSAGES.deleteConfirm, { ...task })}
+                      buttonLabel={<i className='fas fa-times' />}
+                    />
+                  </td>
                 </tr>
               )
             })
@@ -142,3 +202,6 @@ export default ({ start, list }) => list.length === 0
       </table>
     </div>
   )
+
+// Include this to enable `this.props.intl` for this component.
+export default injectIntl(EntitiesDownloadTaskList)
