@@ -110,8 +110,9 @@ function setup {
 
     # copy assets bundles folder into static folder
     local WEBPACK_FILES="./gather/assets/bundles"
-    if [ $COLLECT_STATIC_FILES_ON_STORAGE ]; then
-        if [ $COLLECT_STATIC_FILES_VERSIONED ]; then
+    if [ ${COLLECT_STATIC_FILES_ON_STORAGE:-} ]; then
+        echo "Publish static files..."
+        if [ ${COLLECT_STATIC_FILES_VERSIONED:-} ]; then
             local APP_VERSION=`cat /var/tmp/VERSION`
         else
             local APP_VERSION=""
