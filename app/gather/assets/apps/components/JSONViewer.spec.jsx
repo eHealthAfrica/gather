@@ -91,7 +91,7 @@ describe('JSONViewer', () => {
       expect(componentTime.text()).toEqual('13:24:16')
 
       const componentDateTime = mountWithIntl(<JSONViewer data='2018-01-02T13:24:16.000Z' />)
-      expect(componentDateTime.text()).toEqual('January 2, 2018 - 13:24:16 UTC')
+      expect(componentDateTime.text()).toEqual('January 2, 2018 – 13:24:16 UTC')
     })
   })
 
