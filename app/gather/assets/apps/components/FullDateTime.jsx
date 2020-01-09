@@ -19,13 +19,10 @@
  */
 
 import React, { Component } from 'react'
-import {
-  FormattedDate,
-  FormattedRelativeTime,
-  FormattedTime
-} from 'react-intl'
-import { selectUnit } from '@formatjs/intl-utils'
+import { FormattedDate, FormattedTime } from 'react-intl'
 import { hot } from 'react-hot-loader/root'
+
+import RelativeTime from './RelativeTime'
 
 /**
  * FullDateTime component.
@@ -39,8 +36,6 @@ class FullDateTime extends Component {
     const { date } = this.props
 
     if (!date) return <div />
-
-    const { value, unit } = selectUnit(new Date(date))
 
     return (
       <span>
@@ -63,7 +58,7 @@ class FullDateTime extends Component {
           />
         </span>
         <span>
-          (<FormattedRelativeTime value={value} unit={unit} />)
+          (<RelativeTime date={date} />)
         </span>
       </span>
     )

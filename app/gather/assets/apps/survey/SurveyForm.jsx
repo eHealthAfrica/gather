@@ -19,13 +19,7 @@
  */
 
 import React, { Component } from 'react'
-import {
-  defineMessages,
-  injectIntl,
-  FormattedMessage,
-  FormattedRelativeTime
-} from 'react-intl'
-import { selectUnit } from '@formatjs/intl-utils'
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
 import { clone, deepEqual, generateRandomId } from '../utils'
 import { deleteData, postData, putData, patchData } from '../utils/request'
@@ -44,7 +38,8 @@ import {
   ErrorAlert,
   HelpMessage,
   MultiSelect,
-  Portal
+  Portal,
+  RelativeTime
 } from '../components'
 
 const MESSAGES = defineMessages({
@@ -480,11 +475,10 @@ class SurveyForm extends Component {
     const allErrors = []
     Object.keys(errors || {}).forEach(key => { allErrors.push(errors[key]) })
 
-    const { value, unit } = selectUnit(new Date(xform.created_at))
     const date = (xform.id
       ? (
         <small className='mr-3'>
-          (<FormattedRelativeTime value={value} unit={unit} />)
+          (<RelativeTime date={xform.created_at} />)
         </small>
       )
       : ''

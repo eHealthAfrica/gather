@@ -36,6 +36,7 @@ import PaginationBar from './PaginationBar'
 import PaginationContainer from './PaginationContainer'
 import Portal from './Portal'
 import RefreshSpinner from './RefreshSpinner'
+import RelativeTime from './RelativeTime'
 import WarningAlert from './WarningAlert'
 
 // export all components
@@ -57,5 +58,6 @@ export {
   PaginationContainer,
   Portal,
   RefreshSpinner,
+  RelativeTime,
   WarningAlert
 }

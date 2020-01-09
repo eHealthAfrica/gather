@@ -22,25 +22,18 @@
 
 import React from 'react'
 import { mountWithIntl } from '../../tests/enzyme-helpers'
-import { FormattedDate, FormattedTime } from 'react-intl'
+import { FormattedRelativeTime } from 'react-intl'
 
-import FullDateTime from './FullDateTime'
 import RelativeTime from './RelativeTime'
 
-describe('FullDateTime', () => {
+describe('RelativeTime', () => {
   it('should render nothing without a date', () => {
-    const component = mountWithIntl(<FullDateTime />)
-
-    expect(component.find(FormattedDate).exists()).toBeFalsy()
-    expect(component.find(FormattedTime).exists()).toBeFalsy()
-    expect(component.find(RelativeTime).exists()).toBeFalsy()
+    const component = mountWithIntl(<RelativeTime />)
+    expect(component.find(FormattedRelativeTime).exists()).toBeFalsy()
   })
 
   it('should render the full date time', () => {
-    const component = mountWithIntl(<FullDateTime date={new Date()} />)
-
-    expect(component.find(FormattedDate).exists()).toBeTruthy()
-    expect(component.find(FormattedTime).exists()).toBeTruthy()
-    expect(component.find(RelativeTime).exists()).toBeTruthy()
+    const component = mountWithIntl(<RelativeTime date={new Date()} />)
+    expect(component.find(FormattedRelativeTime).exists()).toBeTruthy()
   })
 })
