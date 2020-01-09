@@ -23,16 +23,14 @@ import {
   defineMessages,
   injectIntl,
   FormattedMessage,
-  FormattedNumber,
-  FormattedRelativeTime
+  FormattedNumber
 } from 'react-intl'
-import { selectUnit } from '@formatjs/intl-utils'
 
 import { getFileName, selectDigitalUnit } from '../../utils'
 import { getExportTasksAPIPath } from '../../utils/paths'
 import { deleteData } from '../../utils/request'
 
-import { ConfirmButton } from '../../components'
+import { ConfirmButton, RelativeTime } from '../../components'
 
 const MESSAGES = defineMessages({
   deleteButton: {
@@ -104,99 +102,102 @@ const EntitiesDownloadTaskList = ({
 
         <tbody className='tasks'>
           {
-            list.map((task, index) => {
-              const { value, unit } = selectUnit(new Date(task.created))
-              return (
-                <tr key={task.id} data-qa='task-item'>
-                  <td scope='row'>{(start || 0) + index}</td>
-                  <td data-qa='id'>
-                    {task.id}
-                  </td>
-                  <td>
-                    <i className='fas fa-user mr-2' />
-                    {task.created_by}
-                  </td>
-                  <td>
-                    <i className='fas fa-clock mr-2' />
-                    <FormattedRelativeTime value={value} unit={unit} />
-                  </td>
-                  <td className={`status ${(task.status_records || '').toLowerCase()}`}>
-                    {task.status_records || '—'}
-                  </td>
-                  <td className={`status ${(task.status_attachments || '').toLowerCase()}`}>
-                    {task.status_attachments || '—'}
-                  </td>
-                  <td>
-                    <ul data-qa='task-files' className='files'>
-                      {
-                        task.files.map((file, jndex) => {
-                          const { unit, value } = selectDigitalUnit(file.size)
-                          return (
-                            <li key={jndex} className='mb-2'>
-                              <a href={file.file_url} className='mr-2'>
-                                <i className='fas fa-download mr-2' />
-                                {getFileName(file.name)}
-                              </a>
-                              <div className='ml-4'>
-                                (
-                                <small title={`${file.size} bytes`}>
-                                  <FormattedMessage
-                                    id='entities.download.task.list.file.size'
-                                    defaultMessage='size'
-                                  />:&nbsp;
-                                  <FormattedNumber
-                                    maximumFractionDigits='1'
-                                    style='unit'
-                                    unit={unit}
-                                    unitDisplay='narrow'
-                                    value={value}
-                                  />
-                                </small>,
-                                <small className='ml-2'>
-                                  <FormattedMessage
-                                    id='entities.download.task.list.file.md5'
-                                    defaultMessage='md5'
-                                  />: {file.md5sum}
-                                </small>
-                                )
-                              </div>
-                            </li>
-                          )
+            list.map((task, index) => (
+              <tr key={task.id} data-qa='task-item'>
+                <td scope='row'>{(start || 0) + index}</td>
+                <td data-qa='id'>
+                  {task.id}
+                </td>
+                <td>
+                  <i className='fas fa-user mr-2' />
+                  {task.created_by}
+                </td>
+                <td>
+                  <i className='fas fa-clock mr-2' />
+                  <RelativeTime date={task.created} />
+                </td>
+                <td
+                  className={`status ${(task.status_records || '').toLowerCase()}`}
+                  title={task.error_records || ''}
+                >
+                  {task.status_records || '—'}
+                </td>
+                <td
+                  className={`status ${(task.status_attachments || '').toLowerCase()}`}
+                  title={task.error_attachments || ''}
+                >
+                  {task.status_attachments || '—'}
+                </td>
+                <td>
+                  <ul data-qa='task-files' className='files'>
+                    {
+                      task.files.map((file, jndex) => {
+                        const { unit, value } = selectDigitalUnit(file.size)
+                        return (
+                          <li key={jndex} className='mb-2'>
+                            <a href={file.file_url} className='mr-2'>
+                              <i className='fas fa-download mr-2' />
+                              {getFileName(file.name)}
+                            </a>
+                            <div className='ml-4'>
+                              (
+                              <small title={`${file.size} bytes`}>
+                                <FormattedMessage
+                                  id='entities.download.task.list.file.size'
+                                  defaultMessage='size'
+                                />:&nbsp;
+                                <FormattedNumber
+                                  maximumFractionDigits='1'
+                                  style='unit'
+                                  unit={unit}
+                                  unitDisplay='narrow'
+                                  value={value}
+                                />
+                              </small>,
+                              <small className='ml-2'>
+                                <FormattedMessage
+                                  id='entities.download.task.list.file.md5'
+                                  defaultMessage='md5'
+                                />: {file.md5sum}
+                              </small>
+                              )
+                            </div>
+                          </li>
+                        )
+                      })
+                    }
+                  </ul>
+                </td>
+                <td>
+                  <ConfirmButton
+                    className='btn btn-sm icon-only btn-danger delete-form-button mr-2'
+                    cancelable
+                    onConfirm={() => {
+                      const url = getExportTasksAPIPath({ id: task.id })
+                      return deleteData(url)
+                        .then(() => {
+                          refresh()
                         })
-                      }
-                    </ul>
-                  </td>
-                  <td>
-                    <ConfirmButton
-                      className='btn btn-sm icon-only btn-danger delete-form-button mr-2'
-                      cancelable
-                      onConfirm={() => {
-                        const url = getExportTasksAPIPath({ id: task.id })
-                        return deleteData(url)
-                          .then(() => {
-                            refresh()
-                          })
-                          .catch(() => {
-                            window.alert(formatMessage(MESSAGES.deleteError, { ...task }))
-                            refresh()
-                          })
-                      }}
-                      title={
-                        <span>
-                          <i className='fas fa-trash mr-1' />
-                          <FormattedMessage
-                            id='task.item.delete.title'
-                            defaultMessage='Delete task'
-                          />
-                        </span>
-                      }
-                      message={formatMessage(MESSAGES.deleteConfirm, { ...task })}
-                      buttonLabel={<i className='fas fa-times' />}
-                    />
-                  </td>
-                </tr>
-              )
-            })
+                        .catch(() => {
+                          window.alert(formatMessage(MESSAGES.deleteError, { ...task }))
+                          refresh()
+                        })
+                    }}
+                    title={
+                      <span>
+                        <i className='fas fa-trash mr-1' />
+                        <FormattedMessage
+                          id='task.item.delete.title'
+                          defaultMessage='Delete task'
+                        />
+                      </span>
+                    }
+                    message={formatMessage(MESSAGES.deleteConfirm, { ...task })}
+                    buttonLabel={<i className='fas fa-times' />}
+                  />
+                </td>
+              </tr>
+            ))
           }
         </tbody>
       </table>
