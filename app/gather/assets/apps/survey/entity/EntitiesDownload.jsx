@@ -49,7 +49,6 @@ class EntitiesDownload extends Component {
 
     this.state = {
       task: null,
-      controller: false,
       open: false,
 
       // default export options
@@ -79,34 +78,16 @@ class EntitiesDownload extends Component {
   }
 
   renderDownloadButton () {
-    const { controller } = this.state
-
-    if (controller) { // download in progress
-      return (
-        <button
-          type='button'
-          className='tab'
-          onClick={() => { controller.abort() }}
-        >
-          <i className='fa fa-spinner fa-pulse mr-2' />
-          <FormattedMessage
-            id='entities.download.cancel'
-            defaultMessage='Cancel download'
-          />
-        </button>
-      )
-    }
-
     return (
       <button
         type='button'
-        className='tab'
+        className='btn btn-secondary'
         onClick={() => { this.setState({ open: true }) }}
       >
         <i className='fas fa-download mr-2' />
         <FormattedMessage
           id='entities.download.title'
-          defaultMessage='Download'
+          defaultMessage='Generate file for download'
         />
       </button>
     )
@@ -140,8 +121,7 @@ class EntitiesDownload extends Component {
     }
 
     const download = () => {
-      const controller = new window.AbortController()
-      this.setState({ task: null, controller, open: false, error: null })
+      this.setState({ task: null, open: false, error: null })
 
       let payload = {
         background: 'true',
@@ -171,13 +151,12 @@ class EntitiesDownload extends Component {
         }
       }
 
-      return postData(getEntitiesAPIPath(params), payload, { signal: controller.signal })
+      return postData(getEntitiesAPIPath(params), payload)
         .then(response => {
           if (!response) {
             // no attachments found
             this.setState({
               task: null,
-              controller: null,
               error: {
                 content: {
                   detail: formatMessage(MESSAGES.noAttachments)
@@ -186,14 +165,14 @@ class EntitiesDownload extends Component {
             })
           } else {
             const { task } = response
-            this.setState({ task, controller: null, error: null })
+            this.setState({ task, error: null })
           }
         })
         .catch(error => {
           if (error.name === 'AbortError') {
-            this.setState({ task: null, controller: null, error: null })
+            this.setState({ task: null, error: null })
           } else {
-            this.setState({ task: null, controller: null, error })
+            this.setState({ task: null, error })
           }
         })
     }
@@ -205,7 +184,10 @@ class EntitiesDownload extends Component {
 
     const onKeyUp = (event) => {
       // change to TAB if the input value is "t" or "T" and key pressed is Ctrl+Enter
-      if (['t', 'T'].indexOf(this.state[event.target.name]) > -1 && event.ctrlKey && event.key === 'Enter') {
+      if (
+        ['t', 'T'].indexOf(this.state[event.target.name]) > -1 &&
+        event.ctrlKey && event.key === 'Enter'
+      ) {
         event.preventDefault()
         this.setState({ [event.target.name]: 'TAB' })
       }
@@ -363,8 +345,11 @@ class EntitiesDownload extends Component {
                     <label className='form-control-label ml-2'>
                       <FormattedMessage
                         id='entities.download.records.include'
-                        defaultMessage='Generate file for records'
+                        defaultMessage='Generate file with records'
                       />
+                      <small className='ml-1'>
+                        (<FormattedNumber value={this.props.total} />)
+                      </small>
                     </label>
                   </div>
                 </div>
@@ -462,8 +447,11 @@ class EntitiesDownload extends Component {
                     <label className='form-control-label ml-2'>
                       <FormattedMessage
                         id='entities.download.attachments.full'
-                        defaultMessage='Generate files(s) for all attachments'
+                        defaultMessage='Generate zip file with all attachments'
                       />
+                      <small className='ml-1'>
+                        (<FormattedNumber value={this.props.attachments} />)
+                      </small>
                     </label>
                   </div>
                 </div>

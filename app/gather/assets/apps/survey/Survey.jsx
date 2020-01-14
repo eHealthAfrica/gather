@@ -53,6 +53,7 @@ class Survey extends Component {
     this.state = {
       viewMode: TABLE_VIEW,
       total: props.survey.entities_count,
+      attachments: props.survey.attachments_count,
       labels: props.skeleton.docs,
       allPaths: paths,
       selectedPaths: paths,
@@ -182,22 +183,12 @@ class Survey extends Component {
                 className={`tab ${viewMode === TASKS_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: TASKS_VIEW }) }}
               >
-                <i className='fas fa-file-download mr-2' />
+                <i className='fas fa-download mr-2' />
                 <FormattedMessage
                   id='survey.view.action.tasks'
-                  defaultMessage='Generated files'
+                  defaultMessage='Downloads'
                 />
               </button>
-            </li>
-            <li>
-              <EntitiesDownload
-                survey={survey}
-                total={total}
-                paths={selectedPaths}
-                labels={labels}
-                settings={settings}
-                filename={filename}
-              />
             </li>
             {
               viewMode !== DASHBOARD_VIEW &&
@@ -207,6 +198,22 @@ class Survey extends Component {
             }
           </ul>
         </div>
+
+        {
+          viewMode === TASKS_VIEW &&
+            <div className='ml-5 m-3'>
+              <EntitiesDownload
+                survey={survey}
+                total={total}
+                attachments={this.state.attachments}
+                paths={selectedPaths}
+                labels={labels}
+                settings={settings}
+                filename={filename}
+              />
+            </div>
+        }
+
         {
           viewMode === DASHBOARD_VIEW
             ? (
