@@ -120,12 +120,14 @@ const EntitiesDownloadTaskList = ({
                   className={`status ${(task.status_records || '').toLowerCase()}`}
                   title={task.error_records || ''}
                 >
+                  {task.error_records && <i className='mr-2 fas fa-exclamation-triangle' />}
                   {task.status_records || '—'}
                 </td>
                 <td
                   className={`status ${(task.status_attachments || '').toLowerCase()}`}
                   title={task.error_attachments || ''}
                 >
+                  {task.error_attachments && <i className='mr-2 fas fa-exclamation-triangle' />}
                   {task.status_attachments || '—'}
                 </td>
                 <td>

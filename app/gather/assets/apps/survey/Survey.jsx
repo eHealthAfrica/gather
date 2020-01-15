@@ -140,6 +140,7 @@ class Survey extends Component {
                 <li className='dashboard-tab'>
                   <button
                     type='button'
+                    disabled={viewMode === DASHBOARD_VIEW}
                     className={`tab ${viewMode === DASHBOARD_VIEW ? 'active' : ''}`}
                     onClick={() => { this.setState({ viewMode: DASHBOARD_VIEW }) }}
                   >
@@ -154,6 +155,7 @@ class Survey extends Component {
             <li>
               <button
                 type='button'
+                disabled={viewMode === TABLE_VIEW}
                 className={`tab ${viewMode === TABLE_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: TABLE_VIEW }) }}
               >
@@ -167,6 +169,7 @@ class Survey extends Component {
             <li>
               <button
                 type='button'
+                disabled={viewMode === SINGLE_VIEW}
                 className={`tab ${viewMode === SINGLE_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: SINGLE_VIEW }) }}
               >
@@ -180,21 +183,37 @@ class Survey extends Component {
             <li>
               <button
                 type='button'
+                disabled={viewMode === TASKS_VIEW}
                 className={`tab ${viewMode === TASKS_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: TASKS_VIEW }) }}
               >
                 <i className='fas fa-download mr-2' />
                 <FormattedMessage
                   id='survey.view.action.tasks'
-                  defaultMessage='Downloads'
+                  defaultMessage='Download'
                 />
               </button>
             </li>
             {
               viewMode !== DASHBOARD_VIEW &&
-                <li className='toolbar-filter'>
-                  {this.renderMaskButton()}
-                </li>
+                <>
+                  <li className='toolbar-filter'>
+                    {this.renderMaskButton()}
+                  </li>
+                  <li>
+                    <button
+                      type='button'
+                      className='tab'
+                      onClick={() => { this.setState({ viewMode }) }}
+                    >
+                      <i className='fas fa-redo mr-2' />
+                      <FormattedMessage
+                        id='survey.view.action.refresh'
+                        defaultMessage='Refresh'
+                      />
+                    </button>
+                  </li>
+                </>
             }
           </ul>
         </div>

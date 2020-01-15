@@ -190,6 +190,8 @@ services:
         condition: service_started
       odk:
         condition: service_started
+      gather-assets:
+        condition: service_started
     networks:
       - local
     extra_hosts:
