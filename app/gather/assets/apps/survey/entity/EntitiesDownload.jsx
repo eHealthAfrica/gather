@@ -43,6 +43,9 @@ const MESSAGES = defineMessages({
   }
 })
 
+const ODK_SUBMISSION_REGEX = '\\.xml$'
+const ODK_AUDIT_REGEX = 'audit\\.csv$'
+
 class EntitiesDownload extends Component {
   constructor (props) {
     super(props)
@@ -62,7 +65,8 @@ class EntitiesDownload extends Component {
       csvEscape: '\\',
       csvSeparator: ',',
       csvQuote: '"',
-      generateAttachments: false
+      generateAttachments: false,
+      excludeFiles: props.settings.ODK_ACTIVE ? [ODK_SUBMISSION_REGEX, ODK_AUDIT_REGEX] : []
     }
   }
 
@@ -81,7 +85,7 @@ class EntitiesDownload extends Component {
     return (
       <button
         type='button'
-        className='btn btn-secondary'
+        className='btn btn-primary'
         onClick={() => { this.setState({ open: true }) }}
       >
         <i className='fas fa-download mr-2' />
@@ -148,6 +152,11 @@ class EntitiesDownload extends Component {
         payload = {
           ...payload,
           generate_attachments: 't'
+        }
+
+        const { excludeFiles } = this.state
+        if (excludeFiles.length > 0) {
+          payload.exclude_files = '(' + excludeFiles.join('|') + ')'
         }
       }
 
@@ -316,6 +325,29 @@ class EntitiesDownload extends Component {
       }
     ]
 
+    const EXCLUDE_FILES = []
+    if (this.props.settings.ODK_ACTIVE) {
+      EXCLUDE_FILES.push({
+        id: ODK_SUBMISSION_REGEX,
+        label: (
+          <FormattedMessage
+            id='entities.download.exclude.files.xml'
+            defaultMessage='ODK Collect submission file'
+          />
+        )
+      })
+
+      EXCLUDE_FILES.push({
+        id: ODK_AUDIT_REGEX,
+        label: (
+          <FormattedMessage
+            id='entities.download.exclude.files.audit'
+            defaultMessage='ODK Collect audit file'
+          />
+        )
+      })
+    }
+
     const close = () => { this.setState({ open: false }) }
     const noDownload = !this.state.generateRecords && !this.state.generateAttachments
 
@@ -327,13 +359,90 @@ class EntitiesDownload extends Component {
               {this.renderPortalHeader(close)}
 
               <div className='modal-body'>
+                {/* ------------------------------------------------------ */}
+                {/* Blocks */}
+                {/* ------------------------------------------------------ */}
                 <div className='m-3'>
-                  <h5 className='title mb-3'>
+                  <h4 className='title mb-3'>
+                    <FormattedMessage
+                      id='entities.download.data.content.title'
+                      defaultMessage='Content'
+                    />
+                  </h4>
+                  <div className='d-flex'>
+                    {
+                      page > 1 &&
+                        <button
+                          type='button'
+                          className='btn'
+                          onClick={() => { this.setState({ page: page - 1 }) }}
+                        >
+                          <i className='fa fa-angle-double-left' />
+                        </button>
+                    }
+
+                    <div className='flex-grow-1 text-center'>
+                      <FormattedMessage
+                        id='entities.download.page.from'
+                        defaultMessage='From record'
+                      />
+                      <b className='mr-1 ml-1'>
+                        <FormattedNumber value={(page - 1) * pageSize + 1} />
+                      </b>
+
+                      <FormattedMessage
+                        id='entities.download.page.to'
+                        defaultMessage='to record'
+                      />
+                      <b className='ml-1'>
+                        <FormattedNumber value={Math.min((page) * pageSize, total)} />
+                      </b>
+
+                      {
+                        pages > 1 &&
+                          <>
+                            <b className='mr-2 ml-2'>&ndash;</b>
+                            <FormattedMessage
+                              id='entities.download.page.current'
+                              defaultMessage='Block'
+                            />
+                            <b className='mr-1 ml-1'>
+                              <FormattedNumber value={page} />
+                            </b>
+                            <FormattedMessage
+                              id='entities.download.page.of'
+                              defaultMessage='of'
+                            />
+                            <b className='mr-1 ml-1'>
+                              <FormattedNumber value={pages} />
+                            </b>
+                          </>
+                      }
+                    </div>
+
+                    {
+                      page < pages &&
+                        <button
+                          type='button'
+                          className='btn'
+                          onClick={() => { this.setState({ page: page + 1 }) }}
+                        >
+                          <i className='fa fa-angle-double-right' />
+                        </button>
+                    }
+                  </div>
+                </div>
+
+                {/* ------------------------------------------------------ */}
+                {/* Records */}
+                {/* ------------------------------------------------------ */}
+                <div className='m-3'>
+                  <h4 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.data.records'
                       defaultMessage='Records'
                     />
-                  </h5>
+                  </h4>
 
                   <div
                     className='form-group mt-2 ml-2'
@@ -347,9 +456,6 @@ class EntitiesDownload extends Component {
                         id='entities.download.records.include'
                         defaultMessage='Generate file with records'
                       />
-                      <small className='ml-1'>
-                        (<FormattedNumber value={this.props.total} />)
-                      </small>
                     </label>
                   </div>
                 </div>
@@ -429,13 +535,16 @@ class EntitiesDownload extends Component {
                     </>
                 }
 
+                {/* ------------------------------------------------------ */}
+                {/* Attachments */}
+                {/* ------------------------------------------------------ */}
                 <div className='m-3'>
-                  <h5 className='title mb-3'>
+                  <h4 className='title mb-3'>
                     <FormattedMessage
                       id='entities.download.data.attachments'
-                      defaultMessage='Record Attachments'
+                      defaultMessage='Attachments'
                     />
-                  </h5>
+                  </h4>
 
                   <div
                     className='form-group mt-2 ml-2'
@@ -449,84 +558,20 @@ class EntitiesDownload extends Component {
                         id='entities.download.attachments.full'
                         defaultMessage='Generate zip file with all attachments'
                       />
-                      <small className='ml-1'>
-                        (<FormattedNumber value={this.props.attachments} />)
-                      </small>
                     </label>
                   </div>
                 </div>
 
                 {
-                  !noDownload &&
+                  this.state.generateAttachments && EXCLUDE_FILES.length > 0 &&
                     <div className='m-3'>
                       <h5 className='title mb-3'>
                         <FormattedMessage
-                          id='entities.download.data.content.title'
-                          defaultMessage='Content'
+                          id='entities.download.data.exclude.file'
+                          defaultMessage='Exclude the following files'
                         />
                       </h5>
-                      <div className='d-flex'>
-                        {
-                          page > 1 &&
-                            <button
-                              type='button'
-                              className='btn'
-                              onClick={() => { this.setState({ page: page - 1 }) }}
-                            >
-                              <i className='fa fa-angle-double-left' />
-                            </button>
-                        }
-
-                        <div className='flex-grow-1 text-center'>
-                          <FormattedMessage
-                            id='entities.download.page.from'
-                            defaultMessage='From record'
-                          />
-                          <b className='mr-1 ml-1'>
-                            <FormattedNumber value={(page - 1) * pageSize + 1} />
-                          </b>
-
-                          <FormattedMessage
-                            id='entities.download.page.to'
-                            defaultMessage='to record'
-                          />
-                          <b className='ml-1'>
-                            <FormattedNumber value={Math.min((page) * pageSize, total)} />
-                          </b>
-
-                          {
-                            pages > 1 &&
-                              <>
-                                <b className='mr-2 ml-2'>&ndash;</b>
-                                <FormattedMessage
-                                  id='entities.download.page.current'
-                                  defaultMessage='Block'
-                                />
-                                <b className='mr-1 ml-1'>
-                                  <FormattedNumber value={page} />
-                                </b>
-                                <FormattedMessage
-                                  id='entities.download.page.of'
-                                  defaultMessage='of'
-                                />
-                                <b className='mr-1 ml-1'>
-                                  <FormattedNumber value={pages} />
-                                </b>
-                              </>
-                          }
-                        </div>
-
-                        {
-                          page < pages &&
-                            <button
-                              type='button'
-                              className='btn'
-                              onClick={() => { this.setState({ page: page + 1 }) }}
-                            >
-                              <i className='fa fa-angle-double-right' />
-                            </button>
-                        }
-                      </div>
+                      {this.renderToggles(EXCLUDE_FILES, 'excludeFiles')}
                     </div>
                 }
               </div>
@@ -591,6 +636,30 @@ class EntitiesDownload extends Component {
               {option.renderChecked()}
             </div>
         }
+      </div>
+    ))
+  }
+
+  renderToggles (list, name, className) {
+    return list.map(option => (
+      <div
+        key={option.id}
+        className='form-group mt-2 ml-2'
+        onClick={() => {
+          const choices = this.state[name]
+          if (choices.indexOf(option.id) > -1) {
+            this.setState({ [name]: choices.filter(c => c !== option.id) })
+          } else {
+            this.setState({ [name]: [...choices, option.id] })
+          }
+        }}
+      >
+        <i
+          className={`fas ${this.state[name].indexOf(option.id) > -1 ? 'fa-toggle-on' : 'fa-toggle-off'}`}
+        />
+        <label className='ml-1'>
+          {option.label}
+        </label>
       </div>
     ))
   }
