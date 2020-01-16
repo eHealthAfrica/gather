@@ -62,6 +62,12 @@ class JestTestsEnvironment extends JSDOMEnvironment {
       fetch(url.indexOf('/') === 0 ? testURL + url : url, opts)
     )
     this.global.window.AbortController = AbortController
+
+    // Import intl-relativetimeformat polyfill for unsupported environments
+    if (!this.global.window.Intl || !Object.keys(this.global.window.Intl).length) {
+      require('@formatjs/intl-relativetimeformat/polyfill')
+      require('@formatjs/intl-relativetimeformat/dist/locale-data/en')
+    }
   }
 
   async teardown () {

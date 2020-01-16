@@ -140,7 +140,7 @@ class JSONViewer extends Component {
     return (
       <span className='value' title={value}>
         {this.renderDate(value)}
-        {' - '}
+        {' – '}
         {this.renderTime(value)}
       </span>
     )

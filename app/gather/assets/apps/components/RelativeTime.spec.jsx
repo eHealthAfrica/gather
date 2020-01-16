@@ -18,28 +18,22 @@
  * under the License.
  */
 
+/* global describe, it, expect */
+
 import React from 'react'
+import { mountWithIntl } from '../../tests/enzyme-helpers'
+import { FormattedRelativeTime } from 'react-intl'
 
-import ActiveSurveys from './ActiveSurveys'
-import InactiveSurveys from './InactiveSurveys'
+import RelativeTime from './RelativeTime'
 
-const SurveysList = ({ list }) => {
-  if (list.length === 0) return <div data-qa='surveys-list-empty' />
-
-  const activeSurveys = []
-  const inactiveSurveys = []
-
-  list.forEach(survey => {
-    if (survey.active) activeSurveys.push(survey)
-    else inactiveSurveys.push(survey)
+describe('RelativeTime', () => {
+  it('should render nothing without a date', () => {
+    const component = mountWithIntl(<RelativeTime />)
+    expect(component.find(FormattedRelativeTime).exists()).toBeFalsy()
   })
 
-  return (
-    <div data-qa='surveys-list' className='surveys-list'>
-      <ActiveSurveys list={activeSurveys} />
-      <InactiveSurveys list={inactiveSurveys} />
-    </div>
-  )
-}
-
-export default SurveysList
+  it('should render the full date time', () => {
+    const component = mountWithIntl(<RelativeTime date={new Date()} />)
+    expect(component.find(FormattedRelativeTime).exists()).toBeTruthy()
+  })
+})
