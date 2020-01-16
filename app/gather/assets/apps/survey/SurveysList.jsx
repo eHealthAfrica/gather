@@ -23,23 +23,11 @@ import React from 'react'
 import ActiveSurveys from './ActiveSurveys'
 import InactiveSurveys from './InactiveSurveys'
 
-const SurveysList = ({ list }) => {
-  if (list.length === 0) return <div data-qa='surveys-list-empty' />
-
-  const activeSurveys = []
-  const inactiveSurveys = []
-
-  list.forEach(survey => {
-    if (survey.active) activeSurveys.push(survey)
-    else inactiveSurveys.push(survey)
-  })
-
-  return (
-    <div data-qa='surveys-list' className='surveys-list'>
-      <ActiveSurveys list={activeSurveys} />
-      <InactiveSurveys list={inactiveSurveys} />
-    </div>
-  )
-}
+const SurveysList = ({ list }) => list.length ? (
+  <div data-qa='surveys-list' className='surveys-list'>
+    <ActiveSurveys list={list.filter(({ active }) => active)} />
+    <InactiveSurveys list={list.filter(({ active }) => !active)} />
+  </div>
+) : <div data-qa='surveys-list-empty' />
 
 export default SurveysList
