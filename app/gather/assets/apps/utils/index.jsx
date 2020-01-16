@@ -124,6 +124,6 @@ export const sortNumericArray = (array) => {
 /**
  * Navigate to a given url
  */
-export const backTo = (url) => {
+export const goTo = (url) => {
   window.location.assign(url)
 }

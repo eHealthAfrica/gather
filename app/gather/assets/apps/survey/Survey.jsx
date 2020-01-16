@@ -22,7 +22,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
-import { backTo } from '../utils'
+import { goTo } from '../utils'
 import { GATHER_APP, ODK_APP } from '../utils/constants'
 import { getSurveysPath, getSurveysAPIPath, getEntitiesAPIPath } from '../utils/paths'
 import { cleanJsonPaths, reorderObjectKeys } from '../utils/types'
@@ -288,7 +288,7 @@ class Survey extends Component {
 
   backToList () {
     // navigate to Surveys list page
-    backTo(getSurveysPath({ action: 'list' }))
+    goTo(getSurveysPath({ action: 'list' }))
   }
 }
 
