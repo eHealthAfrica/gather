@@ -120,3 +120,10 @@ export const sortNumericArray = (array) => {
   array.sort((a, b) => a - b)
   return array
 }
+
+/**
+ * Navigate to a given url
+ */
+export const backTo = (url) => {
+  window.location.assign(url)
+}

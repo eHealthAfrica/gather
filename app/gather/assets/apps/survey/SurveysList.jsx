@@ -18,40 +18,29 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
+import React from 'react'
 
-import SurveyCard from './SurveyCard'
+import ActiveSurveys from './ActiveSurveys'
+import InactiveSurveys from './InactiveSurveys'
 
-export default class SurveysList extends Component {
-  render () {
-    const { list } = this.props
+const SurveysList = ({ list }) => {
+  if (list.length === 0) return <div data-qa='surveys-list-empty' />
+  console.log('LIST => ', list)
 
-    if (list.length === 0) {
-      return <div data-qa='surveys-list-empty' />
-    }
+  const activeSurveys = []
+  const inactiveSurveys = []
 
-    return (
-      <div data-qa='surveys-list' className='surveys-list'>
-        <h4 className='title'>
-          <FormattedMessage
-            id='survey.list.title'
-            defaultMessage='Surveys'
-          />
-        </h4>
+  list.forEach(survey => {
+    if (!survey.active) activeSurveys.push(survey)
+    else inactiveSurveys.push(survey)
+  })
 
-        <div className='surveys-list-cards'>
-          {
-            list.map(survey => (
-              <SurveyCard
-                key={survey.id}
-                className='col-6 col-sm-4 col-md-3'
-                survey={survey}
-              />
-            ))
-          }
-        </div>
-      </div>
-    )
-  }
+  return (
+    <div data-qa='surveys-list' className='surveys-list'>
+      <ActiveSurveys list={activeSurveys} />
+      <InactiveSurveys list={inactiveSurveys} />
+    </div>
+  )
 }
+
+export default SurveysList

@@ -22,6 +22,37 @@
   @extend .page-content;
 }
 
+.inactive-surveys-list {
+  .section-title {
+    padding: 20px 0 10px;
+    border-bottom: 1px solid $text-color;
+  }
+
+  .col-1,
+  .col-2,
+  .col-6 {
+    padding: 10px;
+  }
+
+  .entries {
+    border-bottom: 1px solid $grey;
+
+    .name {
+      color: $action-color;
+      font-size: $font-size-standard;
+    }
+
+    .record {
+      font-weight: bold;
+      font-size: $font-size-standard;
+    }
+  }
+
+  .vline {
+    border-right: 1px solid $grey;
+  }
+}
+
 .surveys-list-cards {
   display: flex;
   flex-wrap: wrap;
