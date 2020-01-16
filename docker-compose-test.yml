@@ -33,16 +33,13 @@ services:
       ADMIN_USERNAME: testing
       ADMIN_PASSWORD: this-is-really-secret
 
-      EXTERNAL_APPS: aether-kernel,aether-odk,aether-couchdb-sync
+      EXTERNAL_APPS: aether-kernel,aether-odk
 
       AETHER_KERNEL_TOKEN: kernel-test-token
       AETHER_KERNEL_URL: http://kernel-test
 
       AETHER_ODK_TOKEN: odk-test-token
       AETHER_ODK_URL: http://odk-test
-
-      AETHER_COUCHDB_SYNC_TOKEN: couchdb-sync-test-token
-      AETHER_COUCHDB_SYNC_URL: http://couchdb-sync-test
 
       ES_CONSUMER_URL: http://es-consumer-url
 

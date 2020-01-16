@@ -37,8 +37,6 @@ def gather_context(request):
     navigation_list = [('surveys', _('Surveys')), ]
     if 'odk' in settings.AETHER_APPS:
         navigation_list.append(('odk-surveyors', _('Surveyors')))
-    if 'couchdb-sync' in settings.AETHER_APPS:
-        navigation_list.append(('couchdb-sync-mobile-users', _('Mobile users')))
 
     context = {
         'instance_name': settings.INSTANCE_NAME,

@@ -30,14 +30,12 @@ class ContextProcessorsTests(UrlsTestCase):
 
         self.assertEqual(context['gather_url'], '')
 
-        self.assertEqual(len(context['navigation_list']), 3)
+        self.assertEqual(len(context['navigation_list']), 2)
         self.assertEqual(context['navigation_list'][0][0], 'surveys')
         self.assertEqual(context['navigation_list'][1][0], 'odk-surveyors')
-        self.assertEqual(context['navigation_list'][2][0], 'couchdb-sync-mobile-users')
 
         self.assertIn('kernel_url', context)
         self.assertIn('odk_url', context)
-        self.assertIn('couchdb_sync_url', context)
 
     @override_settings(
         AETHER_APPS=['kernel'],
@@ -52,7 +50,6 @@ class ContextProcessorsTests(UrlsTestCase):
 
         self.assertIn('kernel_url', context)
         self.assertNotIn('odk_url', context)
-        self.assertNotIn('couchdb_sync_url', context)
 
 
 @override_settings(

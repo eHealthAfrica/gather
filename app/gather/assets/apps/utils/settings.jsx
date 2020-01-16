@@ -20,11 +20,10 @@
 
 import { getSettingsPath } from './paths'
 import { getData } from './request'
-import { ODK_APP, COUCHDB_SYNC_APP } from './constants'
+import { ODK_APP } from './constants'
 
 const DEFAULT_SETTINGS = {
   ODK_ACTIVE: true,
-  COUCHDB_SYNC_ACTIVE: false,
   EXPORT_MAX_ROWS_SIZE: 0,
   ES_CONSUMER_URL: null
 }
@@ -34,7 +33,6 @@ export const getSettings = () => new Promise(resolve => {
     .then(response => {
       resolve({
         ODK_ACTIVE: (response.aether_apps || []).indexOf(ODK_APP) > -1,
-        COUCHDB_SYNC_ACTIVE: (response.aether_apps || []).indexOf(COUCHDB_SYNC_APP) > -1,
         EXPORT_MAX_ROWS_SIZE: response.export_max_rows_size || DEFAULT_SETTINGS.EXPORT_MAX_ROWS_SIZE,
         ES_CONSUMER_URL: response.es_consumer_url || null
       })

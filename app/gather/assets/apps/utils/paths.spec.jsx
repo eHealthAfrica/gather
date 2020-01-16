@@ -32,8 +32,6 @@ import {
   getSurveyorsPath,
   getSurveysAPIPath,
   getSurveysPath,
-  getSyncUsersAPIPath,
-  getSyncUsersPath,
   getXFormsAPIPath
 } from './paths'
 
@@ -65,13 +63,6 @@ describe('paths utils', () => {
   describe('getMediaFileContentPath', () => {
     it('should return the Media Files content path', () => {
       assert.strictEqual(getMediaFileContentPath({ id: 1 }), '/api/odk/media-files/1/content/')
-    })
-  })
-
-  describe('getSyncUsersAPIPath', () => {
-    it('should return the Sync Users API path', () => {
-      assert.strictEqual(getSyncUsersAPIPath({}), '/api/couchdb-sync/sync-users.json')
-      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/api/couchdb-sync/sync-users/1.json')
     })
   })
 
@@ -245,18 +236,6 @@ describe('paths utils', () => {
       assert.strictEqual(getSurveyorsPath({ action: 'add' }), '/surveyors/add/')
       assert.strictEqual(getSurveyorsPath({ action: 'edit' }), '/surveyors/add/', '"edit" without "id" is "add"')
       assert.strictEqual(getSurveyorsPath({ action: 'edit', id: 1 }), '/surveyors/edit/1')
-    })
-  })
-
-  describe('getSyncUsersPath', () => {
-    it('should return the Sync Users path based on arguments', () => {
-      assert.strictEqual(getSyncUsersPath({}), '/mobile-users/list')
-      assert.strictEqual(getSyncUsersPath({ action: 'list' }), '/mobile-users/list')
-      assert.strictEqual(getSyncUsersPath({ action: 'list', id: 1 }), '/mobile-users/list')
-      assert.strictEqual(getSyncUsersPath({ action: 'unknown-action', id: 1 }), '/mobile-users/list')
-      assert.strictEqual(getSyncUsersPath({ action: 'view' }), '/mobile-users/list', 'no "view" action available')
-      assert.strictEqual(getSyncUsersPath({ action: 'edit', id: 1 }), '/mobile-users/list', 'no "edit" action available')
-      assert.strictEqual(getSyncUsersPath({ action: 'add' }), '/mobile-users/add')
     })
   })
 
