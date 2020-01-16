@@ -23,8 +23,8 @@ import { FormattedMessage } from 'react-intl'
 
 import SurveyCard from './SurveyCard'
 
-const ActiveSurveys = ({ list }) => list.length ? (
-  <div data-qa='active-surveys' className='active-surveys-list'>
+const ActiveSurveysList = ({ list }) => (
+  <div data-qa='surveys-list-active' className='surveys-list'>
     <h4 className='title'>
       <FormattedMessage
         id='surveys.list.active.title'
@@ -44,6 +44,6 @@ const ActiveSurveys = ({ list }) => list.length ? (
       }
     </div>
   </div>
-) : <div data-qa='active-surveys-empty' />
+)
 
-export default ActiveSurveys
+export default ActiveSurveysList

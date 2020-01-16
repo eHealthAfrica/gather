@@ -23,8 +23,8 @@ import moment from 'moment'
 import { FormattedMessage, FormattedNumber, FormattedDate } from 'react-intl'
 import { getSurveysPath } from '../utils/paths'
 
-const InactiveSurveys = ({ list }) => list.length ? (
-  <div data-qa='inactive-surveys' className='inactive-surveys-list'>
+const InactiveSurveysList = ({ list }) => (
+  <div data-qa='surveys-list-inactive' className='surveys-list inactive-surveys-list'>
     <div className='section-title title'>
       <FormattedMessage
         id='surveys.list.inactive.title'
@@ -75,38 +75,55 @@ const InactiveSurveys = ({ list }) => list.length ? (
           name,
           first_submission: firstSubmission,
           last_submission: lastSubmission,
-          entities_count: entitiesCount
+          entities_count: entitiesCount,
+          submissions_count: submissionsCount
         }) => (
           <div key={id} data-qa='inactive-survey' className='row entries'>
             <div className='col-6 name'>
               <a href={getSurveysPath({ action: 'view', id })}>{name}</a>
             </div>
             <div className='col-2 title'>
-              <FormattedDate
-                value={firstSubmission}
-                year='numeric'
-                month='short'
-                day='numeric'
-              />
+              {
+                submissionsCount ? (
+                  <FormattedDate
+                    value={firstSubmission}
+                    year='numeric'
+                    month='short'
+                    day='numeric'
+                  />
+                ) : '-'
+              }
             </div>
             <div className='col-2 title'>
-              <FormattedDate
-                value={lastSubmission}
-                year='numeric'
-                month='short'
-                day='numeric'
-              />
+              {
+                submissionsCount ? (
+                  <FormattedDate
+                    value={lastSubmission}
+                    year='numeric'
+                    month='short'
+                    day='numeric'
+                  />
+                ) : '-'
+              }
             </div>
             <div className='col-1 title vline'>
-              <FormattedNumber
-                value={moment(lastSubmission).diff(moment(firstSubmission), 'days') + 1}
-              />
-              <span className='ml-1'>
-                <FormattedMessage
-                  id='surveys.list.inactive.duration.days'
-                  defaultMessage='days'
-                />
-              </span>
+              {
+                submissionsCount ? (
+                  <>
+                    <FormattedNumber
+                      value={
+                        moment(lastSubmission).diff(moment(firstSubmission), 'days') + 1
+                      }
+                    />
+                    <span className='ml-1'>
+                      <FormattedMessage
+                        id='surveys.list.inactive.duration.days'
+                        defaultMessage='days'
+                      />
+                    </span>
+                  </>
+                ) : '-'
+              }
             </div>
             <div className='col-1 record'>
               <FormattedNumber value={entitiesCount} />
@@ -116,6 +133,6 @@ const InactiveSurveys = ({ list }) => list.length ? (
       }
     </div>
   </div>
-) : <div data-qa='inactive-surveys-empty' />
+)
 
-export default InactiveSurveys
+export default InactiveSurveysList

@@ -27,7 +27,8 @@ import { ODK_APP } from '../utils/constants'
 
 import Survey from './Survey'
 import SurveyForm from './SurveyForm'
-import SurveysList from './SurveysList'
+import ActiveSurveysList from './ActiveSurveysList'
+import InactiveSurveysList from './InactiveSurveysList'
 
 class SurveyDispatcher extends Component {
   render () {
@@ -120,15 +121,26 @@ class SurveyDispatcher extends Component {
 
       default:
         return (
-          <PaginationContainer
-            pageSize={12}
-            url={getSurveysAPIPath({ withStats: true })}
-            position='top'
-            listComponent={SurveysList}
-            search
-            showPrevious
-            showNext
-          />
+          <>
+            <PaginationContainer
+              pageSize={12}
+              url={getSurveysAPIPath({ withStats: true, active: true })}
+              position='top'
+              listComponent={ActiveSurveysList}
+              search
+              showPrevious
+              showNext
+            />
+            <PaginationContainer
+              pageSize={12}
+              url={getSurveysAPIPath({ withStats: true, active: false })}
+              position='top'
+              listComponent={InactiveSurveysList}
+              search
+              showPrevious
+              showNext
+            />
+          </>
         )
     }
   }
