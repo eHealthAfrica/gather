@@ -32,9 +32,8 @@ function build_container {
 }
 
 function docker_push {
-    local ORG="ehealthafrica"
     local TAG=$1
-    local IMAGE=${ORG}/${APP}:${TAG}
+    local IMAGE=${$2}/${APP}:${TAG}
 
     echo "Pushing Docker image ${IMAGE}"
     docker tag ${APP} ${IMAGE}
@@ -82,13 +81,23 @@ docker-compose run --rm gather-assets build
 # Build and push docker image to docker hub
 build_container ${APP}
 
-# Login in docker hub
-docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+if [[ ${VERSION} = "develop" ]]; then
+    # ===========================================================
+    # push images to deployment repository
 
-docker_push ${VERSION}
-if [ -z "$TRAVIS_TAG" ]; then
-    docker_push "${VERSION}--${TRAVIS_COMMIT}"
-fi
+    GCR_REPO_URL="https://eu.gcr.io"
+    IMAGE_REPO="eu.gcr.io/development-223016/gather"
+
+    docker login -u _json_key -p "$(cat gcs_key.json)" $GCR_REPO_URL
+    docker_push ${VERSION} ${IMAGE_REPO}
+else
+    # Login in docker hub
+    docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+
+    docker_push ${VERSION} ${IMAGE_URL}
+    if [ -z "$TRAVIS_TAG" ]; then
+        docker_push "${VERSION}--${TRAVIS_COMMIT}" ${IMAGE_URL}
+    fi
 
 docker logout
 
