@@ -81,27 +81,24 @@ docker-compose run --rm gather-assets build
 # Build and push docker image to docker hub
 build_container ${APP}
 
-if [[ ${VERSION} = "develop" ]]; then
+if [[ ${VERSION} = "alpha" ]]; then
     # ===========================================================
     # push images to deployment repository
 
     GCR_REPO_URL="https://eu.gcr.io"
-    IMAGE_REPO="eu.gcr.io/development-223016/gather"
+    IMAGE_REPO="eu.gcr.io/development-223016"
 
     docker login -u _json_key -p "$(cat gcs_key.json)" $GCR_REPO_URL
     docker_push ${VERSION} ${IMAGE_REPO}
+    openssl aes-256-cbc -K $encrypted_422343ef1cd5_key -iv $encrypted_422343ef1cd5_iv -in gcs_key.json.enc -out gcs_key.json -d
+    push-app-version --project gather-alpha --version $TRAVIS_COMMIT
 else
     # Login in docker hub
     docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
 
-    docker_push ${VERSION} ${IMAGE_URL}
+    docker_push ${VERSION} ehealthafrica
     if [ -z "$TRAVIS_TAG" ]; then
-        docker_push "${VERSION}--${TRAVIS_COMMIT}" ${IMAGE_URL}
+        docker_push "${VERSION}--${TRAVIS_COMMIT}" ehealthafrica
     fi
 
 docker logout
-
-if [ "$TRAVIS_BRANCH" == 'develop' ]; then
-    openssl aes-256-cbc -K $encrypted_422343ef1cd5_key -iv $encrypted_422343ef1cd5_iv -in gcs_key.json.enc -out gcs_key.json -d
-    push-app-version --project gather-alpha --version $TRAVIS_COMMIT
-fi
