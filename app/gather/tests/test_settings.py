@@ -43,4 +43,3 @@ class SettingsTest(TestCase):
 
         self.assertIn('kernel', settings.AETHER_APPS)
         self.assertIn('odk', settings.AETHER_APPS)
-        self.assertIn('couchdb-sync', settings.AETHER_APPS)

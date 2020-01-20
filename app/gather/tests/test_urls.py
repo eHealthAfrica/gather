@@ -27,11 +27,9 @@ class UrlsTest(UrlsTestCase):
     def test__urls__aether(self):
         self.assertEqual(reverse('surveys', kwargs={'action': 'a'}), '/surveys/a/')
         self.assertEqual(reverse('odk-surveyors', kwargs={'action': 'b'}), '/surveyors/b/')
-        self.assertEqual(reverse('couchdb-sync-mobile-users', kwargs={'action': 'c'}), '/mobile-users/c')
 
         self.assertEqual(reverse('kernel-proxy-root'), '/api/kernel/')
         self.assertEqual(reverse('odk-proxy-root'), '/api/odk/')
-        self.assertEqual(reverse('couchdb-sync-proxy-root'), '/api/couchdb-sync/')
 
 
 @override_settings(AETHER_APPS=['aether-kernel'])
@@ -40,4 +38,3 @@ class UrlsAetherAppsTest(UrlsTestCase):
     def test__urls__aether(self):
         self.assertEqual(reverse('surveys', kwargs={'action': 'a'}), '/surveys/a/')
         self.assertRaises(exceptions.NoReverseMatch, reverse, 'odk-surveyors')
-        self.assertRaises(exceptions.NoReverseMatch, reverse, 'couchdb-sync-mobile-users')

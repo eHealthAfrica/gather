@@ -138,7 +138,7 @@ See also [Aether Django SDK environment variables](https://github.com/eHealthAfr
   - `EXTERNAL_APPS`: `aether-kernel,aether-odk`
     Comma separated list with the available modules.
     To avoid confusion, the values will match the container name prepending `aether-`,
-    `kernel`, `odk`, `couchdb-sync`.
+    `kernel`, `odk`.
 
   - Aether Kernel:
     - `AETHER_KERNEL_TOKEN`: `aether_kernel_admin_user_auth_token`
@@ -149,11 +149,6 @@ See also [Aether Django SDK environment variables](https://github.com/eHealthAfr
     - `AETHER_ODK_TOKEN`: `aether_odk_admin_user_auth_token`
       Token to connect to Aether ODK Server.
     - `AETHER_ODK_URL`: `http://odk:8102` Aether ODK Server url.
-
-  - Aether CouchDB Sync (*disabled*):
-    - `AETHER_COUCHDB_SYNC_TOKEN`: `aether_couchdb_sync_admin_user_auth_token`
-      Token to connect to Aether ODK Server.
-    - `AETHER_COUCHDB_SYNC_URL`: `http://sync:8106` Aether CouchDB Sync Server url.
 
   - Aether consumers:
     - `ES_CONSUMER_URL`: ElasticSearch consumer URL used to push the project
@@ -191,7 +186,7 @@ The communication with the Aether servers is done via
 
 In `gather` there are tokens per user to connect to other servers.
 This means that every time a logged in user tries to visit any page that requires
-to fetch data from any of the other apps, `aether-kernel`, `aether-odk`, `aether-couchdb-sync`,
+to fetch data from any of the other apps, `aether-kernel`, `aether-odk`,
 the system will verify that the user token for that app is valid or will request
 a new one using the global token, `AETHER_<<APP>>_TOKEN`;
 the user token is going to be used for all requests and will allow the system to

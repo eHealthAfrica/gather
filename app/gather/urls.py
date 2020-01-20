@@ -58,12 +58,5 @@ if 'odk' in settings.AETHER_APPS:
                 name='odk-surveyors'),
     ]
 
-if 'couchdb-sync' in settings.AETHER_APPS:
-    app_urls += [
-        re_path(route=r'^mobile-users/(?P<action>\w+)$',
-                view=app_token_required(TemplateView.as_view(template_name='gather/pages/sync-users.html')),
-                name='couchdb-sync-mobile-users'),
-    ]
-
 
 urlpatterns = generate_urlpatterns(app=app_urls)
