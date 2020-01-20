@@ -33,8 +33,9 @@ function build_container {
 
 function docker_push {
     local TAG=$1
-    local IMAGE=${ORG}/${APP}:${TAG}
-    local IMAGE_SHA=${ORG}/${APP}:${TRAVIS_COMMIT}
+    local IMAGE_REPO=$2
+    local IMAGE=${IMAGE_REPO}/${APP}:${TAG}
+    local IMAGE_SHA=${IMAGE_REPO}/${APP}:${TRAVIS_COMMIT}
     local PUSH_SHA=$3
 
     echo "Pushing Docker image ${IMAGE}"
