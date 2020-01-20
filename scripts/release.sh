@@ -96,9 +96,9 @@ if [[ ${VERSION} = "alpha" ]]; then
     GCR_REPO_URL="https://eu.gcr.io"
     IMAGE_REPO="eu.gcr.io/development-223016"
 
+    openssl aes-256-cbc -K $encrypted_422343ef1cd5_key -iv $encrypted_422343ef1cd5_iv -in gcs_key.json.enc -out gcs_key.json -d
     docker login -u _json_key -p "$(cat gcs_key.json)" $GCR_REPO_URL
     docker_push ${VERSION} ${IMAGE_REPO} true
-    openssl aes-256-cbc -K $encrypted_422343ef1cd5_key -iv $encrypted_422343ef1cd5_iv -in gcs_key.json.enc -out gcs_key.json -d
     push-app-version --project gather-alpha --version $TRAVIS_COMMIT
 
     docker logout
