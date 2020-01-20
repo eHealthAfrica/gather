@@ -105,5 +105,6 @@ else
     if [ -z "$TRAVIS_TAG" ]; then
         docker_push "${VERSION}--${TRAVIS_COMMIT}" ehealthafrica
     fi
+fi
 
 docker logout
