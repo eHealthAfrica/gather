@@ -35,14 +35,17 @@ function docker_push {
     local TAG=$1
     local IMAGE=${ORG}/${APP}:${TAG}
     local IMAGE_SHA=${ORG}/${APP}:${TRAVIS_COMMIT}
+    local PUSH_SHA=$3
 
     echo "Pushing Docker image ${IMAGE}"
     docker tag ${APP} ${IMAGE}
     docker push ${IMAGE}
 
-    echo "Pushing Docker image ${IMAGE_SHA}"
-    docker tag ${APP} ${IMAGE_SHA}
-    docker push ${IMAGE_SHA}
+    if [[ $PUSH_SHA == 'true' ]]; then
+        echo "Pushing Docker image ${IMAGE_SHA}"
+        docker tag ${APP} ${IMAGE_SHA}
+        docker push ${IMAGE_SHA}
+    fi
 }
 
 if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
@@ -94,16 +97,22 @@ if [[ ${VERSION} = "alpha" ]]; then
     IMAGE_REPO="eu.gcr.io/development-223016"
 
     docker login -u _json_key -p "$(cat gcs_key.json)" $GCR_REPO_URL
-    docker_push ${VERSION} ${IMAGE_REPO}
+    docker_push ${VERSION} ${IMAGE_REPO} true
     openssl aes-256-cbc -K $encrypted_422343ef1cd5_key -iv $encrypted_422343ef1cd5_iv -in gcs_key.json.enc -out gcs_key.json -d
     push-app-version --project gather-alpha --version $TRAVIS_COMMIT
+
+    docker logout
+
+    # Login in docker hub
+    docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+    docker_push ${VERSION} ehealthafrica false
 else
     # Login in docker hub
     docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
 
     docker_push ${VERSION} ehealthafrica
     if [ -z "$TRAVIS_TAG" ]; then
-        docker_push "${VERSION}--${TRAVIS_COMMIT}" ehealthafrica
+        docker_push "${VERSION}--${TRAVIS_COMMIT}" ehealthafrica false
     fi
 fi
 
