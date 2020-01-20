@@ -39,6 +39,7 @@ const handleUnexpectedError = (error) => { assert(!!error, `Unexpected error ${e
 const WINDOW_URL = window.URL
 const DOCUMENT_BODY_APPEND = document.body.appendChild
 const DOCUMENT_BODY_REMOVE = document.body.removeChild
+const WINDOW_LOCATION_ASSIGN = window.location.assign
 
 describe('request utils', () => {
   describe('request', () => {
@@ -310,13 +311,23 @@ describe('request utils', () => {
     })
 
     describe('error handling', () => {
+      const LOGOUT_URL = 'http://localhost/logout'
+
       beforeEach(() => {
         nock.cleanAll()
+
+        const element = document.createElement('a')
+        element.id = 'logout-link'
+        element.href = LOGOUT_URL
+        document.body.appendChild(element)
       })
 
       afterEach(() => {
         nock.isDone()
         nock.cleanAll()
+
+        document.body.removeChild(document.getElementById('logout-link'))
+        window.location.assign = WINDOW_LOCATION_ASSIGN
       })
 
       it('should throw an error with JSON content', () => {
@@ -368,6 +379,24 @@ describe('request utils', () => {
             assert(error, 'Expected error')
             assert.strictEqual(error.name, 'AbortError')
             assert.strictEqual(error.message, 'The user aborted a request.')
+          })
+      })
+
+      it('should redirect to logout page on 403 responses', () => {
+        nock('http://localhost')
+          .get('/unauthorized')
+          .reply(403)
+
+        let assignCalled = false
+        window.location.assign = (url) => {
+          assert.strictEqual(url, LOGOUT_URL)
+          assignCalled = true
+        }
+
+        return getData('http://localhost/unauthorized')
+          .then(handleUnexpectedBody)
+          .catch(() => {
+            assert(assignCalled, 'window.location.assign was called')
           })
       })
     })

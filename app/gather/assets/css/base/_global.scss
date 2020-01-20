@@ -283,6 +283,19 @@ input:active {
   }
 }
 
+.form-toggle {
+  align-items: baseline;
+  cursor: pointer;
+
+  &.on {
+    color: $action-color;
+  }
+
+  &.off {
+    color: $grey;
+  }
+}
+
 .dropdown-list {
   max-height: 16rem;
   overflow: auto;

@@ -91,22 +91,42 @@ function setup {
     #    -t=01234656789abcdefghij
     python ./manage.py setup_admin -u=$ADMIN_USERNAME -p=$ADMIN_PASSWORD -t=${ADMIN_TOKEN:-}
 
-    # copy assets bundles folder into static folder
-    rm -r -f ./gather/static/*.*
-    cp -r ./gather/assets/bundles/* ./gather/static/
-
-    # copy static files to "/var/www/static" to be served by nginx (even in DEBUG mode)
-    STATIC_ROOT=/var/www/static
-
     # create static assets
-    python ./manage.py collectstatic --noinput --clear --verbosity 0
+    echo "Collecting static files..."
+
+    STATIC_ROOT=${STATIC_ROOT:-/var/www/static}
+    mkdir -p $STATIC_ROOT
+
+    # cleaning local
+    local STATIC_DIR="./gather/static"
+    rm -r -f ${STATIC_DIR}/*.*
+    rm -r -f ${STATIC_DIR}/VERSION
+    rm -r -f ${STATIC_DIR}/REVISION
 
     # expose version number (if exists)
-    cp /var/tmp/VERSION $STATIC_ROOT/VERSION   2>/dev/null || true
+    cp /var/tmp/VERSION ${STATIC_DIR}/VERSION   2>/dev/null || true
     # add git revision (if exists)
-    cp /var/tmp/REVISION $STATIC_ROOT/REVISION 2>/dev/null || true
+    cp /var/tmp/REVISION ${STATIC_DIR}/REVISION 2>/dev/null || true
 
-    chmod -R 755 $STATIC_ROOT
+    # copy assets bundles folder into static folder
+    local WEBPACK_FILES="./gather/assets/bundles"
+    if [ ${COLLECT_STATIC_FILES_ON_STORAGE:-} ]; then
+        echo "Publish static files..."
+        if [ ${COLLECT_STATIC_FILES_VERSIONED:-} ]; then
+            local APP_VERSION=`cat /var/tmp/VERSION`
+        else
+            local APP_VERSION=""
+        fi
+
+        ./manage.py cdn_publish \
+            -u="${CDN_URL}/${APP_VERSION}" \
+            -w=$WEBPACK_FILES \
+            -s="${APP_VERSION}/"
+    fi
+    cp -r ${WEBPACK_FILES}/* $STATIC_DIR
+
+    ./manage.py collectstatic --noinput --verbosity 0
+    chmod -R 755 ${STATIC_ROOT}
 }
 
 function backup_db {

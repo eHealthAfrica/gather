@@ -33,11 +33,16 @@ function build_container {
 
 function docker_push {
     local TAG=$1
-    local IMAGE=${$2}/${APP}:${TAG}
+    local IMAGE=${ORG}/${APP}:${TAG}
+    local IMAGE_SHA=${ORG}/${APP}:${TRAVIS_COMMIT}
 
     echo "Pushing Docker image ${IMAGE}"
     docker tag ${APP} ${IMAGE}
     docker push ${IMAGE}
+
+    echo "Pushing Docker image ${IMAGE_SHA}"
+    docker tag ${APP} ${IMAGE_SHA}
+    docker push ${IMAGE_SHA}
 }
 
 if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then

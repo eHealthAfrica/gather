@@ -133,7 +133,8 @@ const inspectResponse = ({ download, filename }, resolve, reject, response) => {
       .then(content => resolve(content))
   } else if (response.status === 403) {
     const logoutUrl = document.getElementById('logout-link').href
-    return window.location.assign(logoutUrl)
+    window.location.assign(logoutUrl)
+    return reject(new Error())
   } else {
     const error = new Error(response.statusText)
     return response

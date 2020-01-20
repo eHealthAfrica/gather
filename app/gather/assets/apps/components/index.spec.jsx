@@ -88,6 +88,10 @@ describe('Common components', () => {
     expect(components.RefreshSpinner).toBeTruthy()
   })
 
+  it('RelativeTime should be declared', () => {
+    expect(components.RelativeTime).toBeTruthy()
+  })
+
   it('WarningAlert should be declared', () => {
     expect(components.WarningAlert).toBeTruthy()
   })

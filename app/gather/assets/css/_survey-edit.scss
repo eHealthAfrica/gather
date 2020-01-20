@@ -27,14 +27,6 @@
     font-weight: 500;
     color: $dark-grey;
   }
-
-  .form-group {
-    margin-bottom: 3rem;
-  }
-}
-
-textarea.code {
-  font-family: monospace;
 }
 
 input.hidden-file {
@@ -63,17 +55,20 @@ input.hidden-file {
 }
 
 .form-item {
-  display: inline-flex;
-  flex-wrap: wrap;
   background: $white;
   padding: 1rem;
+  margin-bottom: 1rem;
   border-radius: $border-radius;
   box-shadow: 1px 1px 2px $shadow-color;
-  width: auto;
+  width: 100%;
   align-items: baseline;
 
-  &.expanded {
-    width: 100%;
+  &.on {
+    background-color: $white;
+  }
+
+  &.off {
+    background-color: $lighter-grey;
   }
 
   .form-title {
@@ -81,20 +76,49 @@ input.hidden-file {
     margin-bottom: .2rem;
   }
 
-  .edit-form-item {
-    width: 100%;
-  }
-
   .fa-file {
     font-size: 1.3rem;
   }
 
-  .btn-edit {
+  .row-xform {
+    padding: .2rem 2rem 1rem .5rem;
+    border-bottom: 1px solid $grey;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    position: relative;
+  }
+
+  .upload-new {
     margin-left: auto;
+  }
+
+  .row-mediafiles {
+    margin: 0;
+    padding: 0;
+    padding-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  .row-extras {
+    align-items: baseline;
+  }
+
+  label.btn {
+    margin: 0;
   }
 
   small {
     font-style: italic;
+    font-size: .8rem;
+  }
+
+  .delete-form-button {
+    position: absolute;
+    top: .4rem;
+    right: 0;
   }
 
   textarea,

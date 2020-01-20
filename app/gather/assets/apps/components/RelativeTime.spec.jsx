@@ -18,26 +18,22 @@
  * under the License.
  */
 
+/* global describe, it, expect */
 
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css?family=Asap:400,400i|Quicksand:400,500,700');
+import React from 'react'
+import { mountWithIntl } from '../../tests/enzyme-helpers'
+import { FormattedRelativeTime } from 'react-intl'
 
-/* Font Awesome 5  https://fontawesome.com/ */
-@import url('https://use.fontawesome.com/releases/v5.12.0/css/fontawesome.css');
-@import url('https://use.fontawesome.com/releases/v5.12.0/css/solid.css');
+import RelativeTime from './RelativeTime'
 
+describe('RelativeTime', () => {
+  it('should render nothing without a date', () => {
+    const component = mountWithIntl(<RelativeTime />)
+    expect(component.find(FormattedRelativeTime).exists()).toBeFalsy()
+  })
 
-/* override eha-bg */
-
-.eha-bg {
-  background: #4f6b81;
-  font-family: Quicksand, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.3rem;
-}
-
-/* overrride tokens page */
-
-.tokens-info table td {
-  font-family: Asap, Helvetica, Arial, sans-serif;
-}
+  it('should render the full date time', () => {
+    const component = mountWithIntl(<RelativeTime date={new Date()} />)
+    expect(component.find(FormattedRelativeTime).exists()).toBeTruthy()
+  })
+})
