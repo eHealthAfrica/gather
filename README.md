@@ -473,7 +473,7 @@ and [Enzyme](http://airbnb.io/enzyme/).
 This will stop ALL running containers and execute `gather` tests.
 
 ```bash
-./scripts/test_gather.sh
+./scripts/test.sh
 ```
 
 or
