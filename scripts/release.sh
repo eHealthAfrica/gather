@@ -100,6 +100,8 @@ if [[ ${VERSION} = "alpha" ]]; then
     openssl aes-256-cbc -K $encrypted_422343ef1cd5_key -iv $encrypted_422343ef1cd5_iv -in gcs_key.json.enc -out gcs_key.json -d
     docker login -u _json_key -p "$(cat gcs_key.json)" $GCR_REPO_URL
     docker_push ${VERSION} ${IMAGE_REPO} true
+
+    export GOOGLE_APPLICATION_CREDENTIALS=gcs_key.json
     push-app-version --project gather-alpha --version $TRAVIS_COMMIT
     docker logout
 
