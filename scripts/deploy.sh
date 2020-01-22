@@ -115,7 +115,7 @@ echo "${LINE}"
 # push images to deployment repository
 
 GCR_REPO_URL="https://eu.gcr.io"
-GCR_IMAGE_REPO="eu.gcr.io/${GCR_PROJECT}/gather"
+GCR_IMAGE_REPO="eu.gcr.io/${GCR_PROJECT}"
 
 DEST_IMG="${GCR_IMAGE_REPO}/${APP}:${GCR_VERSION}"
 
