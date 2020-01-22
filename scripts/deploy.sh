@@ -67,7 +67,8 @@ elif [[ ${TRAVIS_BRANCH} =~ ^release\-[0-9]+\.[0-9]+$ ]]; then
         -K $encrypted_422343ef1cd5_key \
         -iv $encrypted_422343ef1cd5_iv \
         -in dev.json.enc \
-        -out gcs_key.json -d
+        -out gcs_key.json \
+        -d
 
 else
 
@@ -81,7 +82,8 @@ else
         -K $encrypted_422343ef1cd5_key \
         -iv $encrypted_422343ef1cd5_iv \
         -in dev.json.enc \
-        -out gcs_key.json -d
+        -out gcs_key.json \
+        -d
 fi
 
 echo "${LINE}"
