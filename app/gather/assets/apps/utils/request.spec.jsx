@@ -18,7 +18,7 @@
  * under the License.
  */
 
-/* global describe, it, beforeEach, afterEach */
+/* global describe, it, beforeEach, afterEach, jest */
 
 import assert from 'assert'
 import nock from 'nock'
@@ -39,7 +39,7 @@ const handleUnexpectedError = (error) => { assert(!!error, `Unexpected error ${e
 const WINDOW_URL = window.URL
 const DOCUMENT_BODY_APPEND = document.body.appendChild
 const DOCUMENT_BODY_REMOVE = document.body.removeChild
-const WINDOW_LOCATION_ASSIGN = window.location.assign
+const WINDOW_LOCATION = window.location
 
 describe('request utils', () => {
   describe('request', () => {
@@ -320,6 +320,8 @@ describe('request utils', () => {
         element.id = 'logout-link'
         element.href = LOGOUT_URL
         document.body.appendChild(element)
+
+        delete window.location
       })
 
       afterEach(() => {
@@ -327,7 +329,7 @@ describe('request utils', () => {
         nock.cleanAll()
 
         document.body.removeChild(document.getElementById('logout-link'))
-        window.location.assign = WINDOW_LOCATION_ASSIGN
+        window.location = WINDOW_LOCATION
       })
 
       it('should throw an error with JSON content', () => {
@@ -388,14 +390,16 @@ describe('request utils', () => {
           .reply(403)
 
         let assignCalled = false
-        window.location.assign = (url) => {
+        const assignFn = (url) => {
           assert.strictEqual(url, LOGOUT_URL)
           assignCalled = true
         }
+        window.location = { assign: jest.fn(assignFn) }
 
         return getData('http://localhost/unauthorized')
           .then(handleUnexpectedBody)
           .catch(() => {
+            assert(jest.isMockFunction(window.location.assign))
             assert(assignCalled, 'window.location.assign was called')
           })
       })
