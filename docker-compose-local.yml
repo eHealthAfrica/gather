@@ -18,6 +18,10 @@ networks:
       config:
         - subnet: 192.168.33.0/24
 
+volumes:
+  gather_local_database_data: {}
+  gather_local_minio_data: {}
+
 services:
 
   # ---------------------------------
@@ -28,6 +32,8 @@ services:
     extends:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: postgres-base
+    volumes:
+      - gather_local_database_data:/var/lib/postgresql/data
     networks:
       - local
 
@@ -35,6 +41,8 @@ services:
     extends:
       file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
       service: minio-base
+    volumes:
+      - gather_local_minio_data:/data
     networks:
       - local
 
@@ -181,6 +189,8 @@ services:
       kernel:
         condition: service_started
       odk:
+        condition: service_started
+      gather-assets:
         condition: service_started
     networks:
       - local

@@ -26,7 +26,8 @@ import { GATHER_APP } from '../utils/constants'
 import {
   getSurveysPath,
   getSurveysAPIPath,
-  getEntitiesAPIPath
+  getEntitiesAPIPath,
+  getExportTasksAPIPath
 } from '../utils/paths'
 import { cleanJsonPaths, reorderObjectKeys } from '../utils/types'
 
@@ -36,10 +37,12 @@ import SurveyMasks from './mask/SurveyMasks'
 import EntitiesList from './entity/EntitiesList'
 import EntityItem from './entity/EntityItem'
 import EntitiesDownload from './entity/EntitiesDownload'
+import EntitiesDownloadTaskList from './entity/EntitiesDownloadTaskList'
 
 const TABLE_VIEW = 'table'
 const SINGLE_VIEW = 'single'
 const DASHBOARD_VIEW = 'dashboard'
+const TASKS_VIEW = 'tasks'
 const TABLE_SIZES = [10, 25, 50, 100]
 
 class Survey extends Component {
@@ -50,6 +53,7 @@ class Survey extends Component {
     this.state = {
       viewMode: TABLE_VIEW,
       total: props.survey.entities_count,
+      attachments: props.survey.attachments_count,
       labels: props.skeleton.docs,
       allPaths: paths,
       selectedPaths: paths,
@@ -98,7 +102,18 @@ class Survey extends Component {
 
     const { skeleton, survey, settings } = this.props
     const { viewMode, labels, allPaths, selectedPaths, dashboardConfig } = this.state
-    const listComponent = (viewMode === SINGLE_VIEW ? EntityItem : EntitiesList)
+    const listComponent = (
+      viewMode === TASKS_VIEW
+        ? EntitiesDownloadTaskList
+        : viewMode === SINGLE_VIEW
+          ? EntityItem
+          : EntitiesList
+    )
+    const url = (
+      viewMode === TASKS_VIEW
+        ? getExportTasksAPIPath({ project: survey.id, omit: ['settings'] })
+        : getEntitiesAPIPath({ project: survey.id })
+    )
     const extras = {
       labels: labels,
       paths: selectedPaths
@@ -166,28 +181,63 @@ class Survey extends Component {
               </button>
             </li>
             <li>
+              <button
+                type='button'
+                disabled={viewMode === TASKS_VIEW}
+                className={`tab ${viewMode === TASKS_VIEW ? 'active' : ''}`}
+                onClick={() => { this.setState({ viewMode: TASKS_VIEW }) }}
+              >
+                <i className='fas fa-download mr-2' />
+                <FormattedMessage
+                  id='survey.view.action.tasks'
+                  defaultMessage='Download'
+                />
+              </button>
+            </li>
+            {
+              viewMode !== DASHBOARD_VIEW &&
+                <>
+                  <li className='toolbar-filter'>
+                    {this.renderMaskButton()}
+                  </li>
+                  <li>
+                    <button
+                      type='button'
+                      className='tab'
+                      onClick={() => { this.setState({ viewMode }) }}
+                    >
+                      <i className='fas fa-redo mr-2' />
+                      <FormattedMessage
+                        id='survey.view.action.refresh'
+                        defaultMessage='Refresh'
+                      />
+                    </button>
+                  </li>
+                </>
+            }
+          </ul>
+        </div>
+
+        {
+          viewMode === TASKS_VIEW &&
+            <div className='ml-5 m-3'>
               <EntitiesDownload
                 survey={survey}
                 total={total}
+                attachments={this.state.attachments}
                 paths={selectedPaths}
                 labels={labels}
                 settings={settings}
                 filename={filename}
               />
-            </li>
-            {
-              viewMode !== DASHBOARD_VIEW &&
-                <li className='toolbar-filter'>
-                  {this.renderMaskButton()}
-                </li>
-            }
+            </div>
+        }
 
-          </ul>
-        </div>
         {
           viewMode === DASHBOARD_VIEW
             ? (
               <SurveyDashboard
+                key={viewMode + new Date()}
                 columns={allPaths}
                 labels={labels}
                 entitiesCount={total}
@@ -197,15 +247,16 @@ class Survey extends Component {
             )
             : (
               <PaginationContainer
+                key={viewMode + new Date()}
                 pageSize={viewMode === SINGLE_VIEW ? 1 : TABLE_SIZES[0]}
                 sizes={viewMode === SINGLE_VIEW ? [] : TABLE_SIZES}
-                url={getEntitiesAPIPath({ project: survey.id })}
+                url={url}
                 position='top'
                 listComponent={listComponent}
                 showPrevious
                 showNext
-                extras={extras}
-                mapResponse={mapResponse}
+                extras={viewMode === TASKS_VIEW ? null : extras}
+                mapResponse={viewMode === TASKS_VIEW ? null : mapResponse}
               />
             )
         }

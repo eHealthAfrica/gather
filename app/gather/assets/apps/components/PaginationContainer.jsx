@@ -164,6 +164,10 @@ class PaginationContainer extends Component {
               list={list}
               total={count}
               start={this.state.pageSize * (this.state.page - 1) + 1}
+              refresh={() => {
+                this.setState({ isRefreshing: true })
+                this.loadData()
+              }}
             />
         }
 

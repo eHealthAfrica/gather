@@ -120,3 +120,45 @@ export const sortNumericArray = (array) => {
   array.sort((a, b) => a - b)
   return array
 }
+
+/**
+ *  Multiples of bytes (decimal):
+ *
+ *    Value     Unit
+ *    -------   --------------
+ *    1000      KB  kilobyte
+ *    1000^2    MB  megabyte
+ *    1000^3    GB  gigabyte
+ *    1000^4    TB  terabyte
+ *    1000^5    PB  petabyte
+ *    1000^6    EB  exabyte
+ *    1000^7    ZB  zettabyte
+ *    1000^8    YB  yottabyte
+ */
+export const selectDigitalUnit = (num) => {
+  const UNITS = [
+    'byte', 'kilobyte', 'megabyte',
+    'gigabyte', 'terabyte', 'petabyte',
+    'exabyte', 'zettabyte'
+  ]
+  let value = parseFloat(num)
+
+  for (const u in UNITS) {
+    if (Math.abs(value) < 1000.0) {
+      return { unit: UNITS[u], value }
+    }
+    value /= 1000.0
+  }
+
+  return { unit: 'yottabyte', value }
+}
+
+/**
+ * Take last part of file path
+ *
+ * @param {String}  filepath - full path `/a/b/c/d.ext`
+ */
+export const getFileName = (filepath) => {
+  const parts = filepath.split('/')
+  return parts[parts.length - 1]
+}

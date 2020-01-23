@@ -36,7 +36,7 @@ export const getSettingsPath = () => `${getAppPath()}/assets-settings`
  * Internally in Aether the concept is Project but in Gather it refers to Survey.
  *
  * @param {string}  app          - app source: `kernel` (default), `odk` or `gather`
- * @param {number}  id           - project/survey id
+ * @param {uuid}    id           - project/survey id
  * @param {boolean} withStats    - include project/survey stats?
  * @param {object}  params       - query string parameters
  */
@@ -70,7 +70,7 @@ export const getXFormsAPIPath = ({ id, ...params }) => {
 /**
  * Returns the API url to get the Media Files data
  *
- * @param {number}  id          - Media file id *
+ * @param {number}  id          - Media file id
  * @param {object}  params      - query string parameters
  */
 export const getMediaFileAPIPath = ({ id, ...params }) => {
@@ -89,7 +89,7 @@ export const getMediaFileContentPath = ({ id }) => {
 /**
  * Returns the API url to get the Entities data by Survey
  *
- * @param {number}  id          - Entity id
+ * @param {uuid}    id          - Entity id
  * @param {object}  params      - query string parameters
  */
 export const getEntitiesAPIPath = ({ id, ...params }) => {
@@ -97,9 +97,19 @@ export const getEntitiesAPIPath = ({ id, ...params }) => {
 }
 
 /**
+ * Returns the API url to get the Entities data by Survey
+ *
+ * @param {uuid}    id          - Export task id
+ * @param {object}  params      - query string parameters
+ */
+export const getExportTasksAPIPath = ({ id, ...params }) => {
+  return buildAPIPath(KERNEL_APP, 'export-tasks', id, params)
+}
+
+/**
  * Returns the API url to get the Attachment content data
  *
- * @param {string}  id          - Attachment id
+ * @param {uuid}   id          - Attachment id
  */
 export const getAttachmentContentPath = ({ id }) => {
   return buildAPIPath(KERNEL_APP, 'attachments', id, { format: '', action: 'content' })
@@ -108,7 +118,7 @@ export const getAttachmentContentPath = ({ id }) => {
 /**
  * Returns the API url to get the Masks data
  *
- * @param {number}  id          - mask id *
+ * @param {number}  id          - Mask id
  * @param {object}  params      - query string parameters
  */
 export const getMasksAPIPath = ({ id, ...params }) => {
