@@ -18,7 +18,7 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
@@ -27,50 +27,46 @@ import { ODK_APP } from '../utils/constants'
 import SurveyorForm from './SurveyorForm'
 import SurveyorsList from './SurveyorsList'
 
-class SurveyorDispatcher extends Component {
-  render () {
-    const { action, surveyorId } = this.props
+const SurveyorDispatcher = ({ action, surveyorId }) => {
+  switch (action) {
+    case 'add': {
+      const addUrls = [
+        {
+          name: 'surveys',
+          url: getSurveysAPIPath({ app: ODK_APP, fields: ['project_id', 'name'].join(',') })
+        }
+      ]
 
-    switch (action) {
-      case 'add': {
-        const addUrls = [
-          {
-            name: 'surveys',
-            url: getSurveysAPIPath({ app: ODK_APP, fields: ['project_id', 'name'].join(',') })
-          }
-        ]
-
-        return <FetchUrlsContainer urls={addUrls} targetComponent={SurveyorForm} />
-      }
-
-      case 'edit': {
-        const editUrls = [
-          {
-            name: 'surveyor',
-            url: getSurveyorsAPIPath({ id: surveyorId })
-          },
-          {
-            name: 'surveys',
-            url: getSurveysAPIPath({ app: ODK_APP, fields: ['project_id', 'name'].join(',') })
-          }
-        ]
-
-        return <FetchUrlsContainer urls={editUrls} targetComponent={SurveyorForm} />
-      }
-
-      default:
-        return (
-          <PaginationContainer
-            pageSize={36}
-            url={getSurveyorsAPIPath({})}
-            position='top'
-            listComponent={SurveyorsList}
-            search
-            showPrevious
-            showNext
-          />
-        )
+      return <FetchUrlsContainer urls={addUrls} targetComponent={SurveyorForm} />
     }
+
+    case 'edit': {
+      const editUrls = [
+        {
+          name: 'surveyor',
+          url: getSurveyorsAPIPath({ id: surveyorId })
+        },
+        {
+          name: 'surveys',
+          url: getSurveysAPIPath({ app: ODK_APP, fields: ['project_id', 'name'].join(',') })
+        }
+      ]
+
+      return <FetchUrlsContainer urls={editUrls} targetComponent={SurveyorForm} />
+    }
+
+    default:
+      return (
+        <PaginationContainer
+          pageSize={36}
+          url={getSurveyorsAPIPath({})}
+          position='top'
+          listComponent={SurveyorsList}
+          search
+          showPrevious
+          showNext
+        />
+      )
   }
 }
 
