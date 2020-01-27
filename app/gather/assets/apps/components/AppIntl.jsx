@@ -18,7 +18,6 @@
  * under the License.
  */
 
-// import { hot } from 'react-hot-loader/root'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
