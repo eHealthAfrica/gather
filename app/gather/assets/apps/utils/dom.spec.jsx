@@ -25,7 +25,7 @@ import { mount } from 'enzyme'
 
 import { isMounted } from './dom'
 
-const Foo = (props) => 'foo ' + JSON.stringify(this.props)
+const Foo = (props) => 'foo ' + JSON.stringify(props)
 
 describe('DOM utils', () => {
   let element = null
