@@ -18,8 +18,7 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
-import { hot } from 'react-hot-loader/root'
+import React, { useState } from 'react'
 
 import Link from './Link'
 
@@ -28,51 +27,41 @@ import Link from './Link'
  *
  * Renders a collapsable list of links.
  */
-class LinksList extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      collapsed: (props.list && props.list.length > 1)
-    }
+const LinksList = ({ list }) => {
+  const [collapsed, toggle] = useState(list && list.length > 1)
+
+  if (!list || list.length === 0) {
+    return ''
   }
 
-  render () {
-    const { list } = this.props
+  return (
+    <div>
+      {
+        list.length > 1 &&
+          <button
+            type='button'
+            data-qa='link-list-collapse-button'
+            className='btn icon-only btn-collapse'
+            onClick={() => toggle(!collapsed)}
+          >
+            <i className={`fas fa-${collapsed ? 'plus' : 'minus'}`} />
+          </button>
+      }
 
-    if (!list || list.length === 0) {
-      return ''
-    }
-
-    return (
-      <div>
-        {
-          list.length > 1 &&
-            <button
-              type='button'
-              data-qa='link-list-collapse-button'
-              className='btn icon-only btn-collapse'
-              onClick={() => this.setState({ collapsed: !this.state.collapsed })}
-            >
-              <i className={`fas fa-${this.state.collapsed ? 'plus' : 'minus'}`} />
-            </button>
-        }
-
-        {
-          !this.state.collapsed &&
-            <ol className='property-list'>
-              {
-                list.map((link, index) => (
-                  <li key={index} className='property-item'>
-                    <Link link={link} />
-                  </li>
-                ))
-              }
-            </ol>
-        }
-      </div>
-    )
-  }
+      {
+        !collapsed &&
+          <ol className='property-list'>
+            {
+              list.map((link, index) => (
+                <li key={index} className='property-item'>
+                  <Link link={link} />
+                </li>
+              ))
+            }
+          </ol>
+      }
+    </div>
+  )
 }
 
-// Include this to enable HMR for this module
-export default hot(LinksList)
+export default LinksList

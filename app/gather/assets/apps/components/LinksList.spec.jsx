@@ -28,7 +28,6 @@ import LinksList from './LinksList'
 describe('LinksList component', () => {
   it('should render nothing with an empty list', () => {
     const component = mount(<LinksList />)
-    expect(component.state('collapsed')).toBeFalsy()
     expect(component.text()).toEqual('')
   })
 
@@ -39,7 +38,6 @@ describe('LinksList component', () => {
       ]}
       />
     )
-    expect(component.state('collapsed')).toBeFalsy()
     const button = component.find('[data-qa="link-list-collapse-button"]')
     expect(button.exists()).toBeFalsy()
 
@@ -58,7 +56,6 @@ describe('LinksList component', () => {
       ]}
       />
     )
-    expect(component.state('collapsed')).toBeTruthy()
     const button = component.find('[data-qa="link-list-collapse-button"]')
     expect(button.exists()).toBeTruthy()
 
