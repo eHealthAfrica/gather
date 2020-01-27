@@ -33,7 +33,7 @@ import {
   RefreshSpinner
 } from './index'
 
-const Foo = ({ list }) =>  `foo: [${list}]`
+const Foo = ({ list }) => `foo: [${list}]`
 
 const BLANK_STATE = {
   isLoading: false,
