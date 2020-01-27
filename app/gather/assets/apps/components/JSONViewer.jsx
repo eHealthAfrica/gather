@@ -30,19 +30,19 @@ import { BLANK, DASH } from '../utils/constants'
 import { getLabel, getType } from '../utils/types'
 import Link from './Link'
 
-const renderEmptyValue = () => (
+const EmptyValue = () => (
   <span className='empty'>
     {BLANK}
   </span>
 )
 
-const renderInteger = (value) => (
+const IntegerValue = ({ value }) => (
   <span className='value' title={value}>
     <FormattedNumber value={value} />
   </span>
 )
 
-const renderFloat = (value) => (
+const FloatValue = ({ value }) => (
   <span className='value' title={value}>
     <FormattedNumber
       value={value}
@@ -52,7 +52,7 @@ const renderFloat = (value) => (
   </span>
 )
 
-const renderBoolean = (value) => (
+const BoolValue = ({ value }) => (
   <span className='value' title={value.toString()}>
     {
       value
@@ -62,7 +62,7 @@ const renderBoolean = (value) => (
   </span>
 )
 
-const renderDate = (value) => (
+const DateValue = ({ value }) => (
   <span className='value' title={value}>
     <FormattedDate
       value={value}
@@ -73,7 +73,7 @@ const renderDate = (value) => (
   </span>
 )
 
-const renderTime = (value) => (
+const TimeValue = ({ value }) => (
   <span className='value' title={value}>
     <FormattedTime
       value={value}
@@ -86,13 +86,13 @@ const renderTime = (value) => (
   </span>
 )
 
-const renderDateTime = (value) => (
+const DateTimeValue = ({ value }) => (
   <span className='value' title={value}>
-    {renderDate(value)} {DASH} {renderTime(value)}
+    <DateValue value={value} /> {DASH} <TimeValue value={value} />
   </span>
 )
 
-const renderString = (value, { links }) => {
+const StringValue = ({ value, links }) => {
   // There is an special case with strings,
   // they can also be one of the linked attachments.
   // In those case we should be able to replace
@@ -107,7 +107,7 @@ const renderString = (value, { links }) => {
   return <span className='value'>{value}</span>
 }
 
-const renderArray = (values, { links, labels, labelRoot }) => {
+const ArrayValue = ({ values, links, labels, labelRoot }) => {
   const [collapsed, toggle] = useState(true)
 
   if (collapsed) {
@@ -155,7 +155,7 @@ const renderArray = (values, { links, labels, labelRoot }) => {
   )
 }
 
-const renderObject = (value, { links, labels, labelRoot, collapsible }) => {
+const ObjectValue = ({ value, links, labels, labelRoot, collapsible }) => {
   const [collapsed, toggle] = useState(collapsible)
 
   if (collapsible && collapsed) {
@@ -207,41 +207,56 @@ const renderObject = (value, { links, labels, labelRoot, collapsible }) => {
   )
 }
 
-const renderValue = (value, { links, labels, labelRoot, collapsible }) => {
+const Value = ({ value, links, labels, labelRoot, collapsible }) => {
   if (!getType(value)) {
-    return renderEmptyValue()
+    return <EmptyValue />
   }
 
   // check the object type
   switch (getType(value)) {
     case 'int':
-      return renderInteger(value)
+      return <IntegerValue value={value} />
 
     case 'float':
-      return renderFloat(value)
+      return <FloatValue value={value} />
 
     case 'bool':
-      return renderBoolean(value)
+      return <BoolValue value={value} />
 
     case 'date':
-      return renderDate(value)
+      return <DateValue value={value} />
 
     case 'time':
       // special case with `react-intl`, it needs the full date with time
       // workaround: print it as it comes
-      return renderString(value, {})
+      return <StringValue value={value} />
 
     case 'datetime':
-      return renderDateTime(value)
+      return <DateTimeValue value={value} />
 
     case 'array':
-      return renderArray(value, { links, labels, labelRoot })
+      return (
+        <ArrayValue
+          values={value}
+          links={links}
+          labels={labels}
+          labelRoot={labelRoot}
+        />
+      )
 
     case 'object':
-      return renderObject(value, { links, labels, labelRoot, collapsible })
+      return (
+        <ObjectValue
+          value={value}
+          links={links}
+          labels={labels}
+          labelRoot={labelRoot}
+          collapsible={collapsible}
+        />
+      )
 
     default:
-      return renderString(value, { links })
+      return <StringValue value={value} links={links} />
   }
 }
 
@@ -262,7 +277,13 @@ const renderValue = (value, { links, labels, labelRoot, collapsible }) => {
 
 const JSONViewer = ({ data, links, labels, labelRoot, collapsible }) => (
   <div data-qa='json-data' className='data'>
-    {renderValue(data, { links, labels, labelRoot, collapsible })}
+    <Value
+      value={data}
+      links={links}
+      labels={labels}
+      labelRoot={labelRoot}
+      collapsible={collapsible}
+    />
   </div>
 )
 
