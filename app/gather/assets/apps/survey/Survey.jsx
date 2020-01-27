@@ -21,8 +21,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { goTo } from '../utils'
-import { GATHER_APP, ODK_APP } from '../utils/constants'
+import { GATHER_APP } from '../utils/constants'
 import {
   getSurveysPath,
   getSurveysAPIPath,
@@ -30,9 +29,10 @@ import {
   getExportTasksAPIPath
 } from '../utils/paths'
 import { cleanJsonPaths, reorderObjectKeys } from '../utils/types'
-import { patchData } from '../utils/request'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
+
+import ActivateButton from './components/ActivateButton'
 import SurveyDetail from './SurveyDetail'
 import SurveyDashboard from './SurveyDashboard'
 import SurveyMasks from './components/SurveyMasks'
@@ -64,39 +64,17 @@ class Survey extends Component {
       error: null,
       loading: false
     }
-    this.saveDashboardConfig = this.saveDashboardConfig.bind(this)
   }
 
   render () {
     const { survey, settings } = this.props
-    const active = survey.active !== false
 
     return (
       <div data-qa={`survey-item-${survey.id}`} className='survey-view'>
         <div className='survey-header'>
           <h2>{survey.name}</h2>
           <div className='header-actions'>
-            <button
-              type='button'
-              className='btn btn-secondary btn-icon mr-3'
-              disabled={this.state.loading}
-              onClick={() => { this.toggleSurvey(survey, settings) }}
-            >
-              <i className={`fas fa-${active ? 'stop' : 'play'} invert mr-3`} />
-              {
-                active ? (
-                  <FormattedMessage
-                    id='survey.view.action.deactivate'
-                    defaultMessage='Deactivate survey'
-                  />
-                ) : (
-                  <FormattedMessage
-                    id='survey.view.action.activate'
-                    defaultMessage='Activate survey'
-                  />
-                )
-              }
-            </button>
+            <ActivateButton survey={survey} settings={settings} />
             <a
               href={getSurveysPath({ action: 'edit', id: survey.id })}
               role='button'
@@ -264,7 +242,7 @@ class Survey extends Component {
                 labels={labels}
                 entitiesCount={total}
                 dashboardConfig={dashboardConfig}
-                saveDashboardConfig={this.saveDashboardConfig}
+                saveDashboardConfig={(dashboardConfig) => { this.setState({ dashboardConfig }) }}
               />
             )
             : (
@@ -317,33 +295,6 @@ class Survey extends Component {
         targetComponent={SurveyMasks}
       />
     )
-  }
-
-  saveDashboardConfig (dashboardConfig) {
-    this.setState({ dashboardConfig })
-  }
-
-  toggleSurvey ({ id, active }, settings) {
-    this.setState({ loading: true })
-    patchData(getSurveysAPIPath({ id }), { active: !active })
-      .then(response => {
-        if (settings.ODK_ACTIVE) {
-          patchData(getSurveysAPIPath({ app: ODK_APP, id }), { active: !active })
-            .then(response => { this.onDone(response) })
-            .catch(error => { this.onDone(null, error) })
-        } else this.onDone(response)
-      })
-      .catch(error => { this.onDone(null, error) })
-  }
-
-  onDone (success, error) {
-    this.setState({ loading: false, error: error || null })
-    if (success) this.backToList()
-  }
-
-  backToList () {
-    // navigate to Surveys list page
-    goTo(getSurveysPath({ action: 'list' }))
   }
 }
 
