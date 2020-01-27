@@ -108,7 +108,7 @@ class PaginationBar extends Component {
     )
 
     const componentShouldRender = () => {
-      if (this.props.search && this.state.search) {
+      if (this.props.search && this.state.search !== undefined) {
         return true // searching, no matter the number of records
       }
 
@@ -125,6 +125,8 @@ class PaginationBar extends Component {
 
     return (
       <nav data-qa='data-pagination' className='pagination-bar'>
+        {/* render TITLE */}
+        {this.props.title && <span className='title'>{this.props.title}</span>}
         {/* render SEARCH */}
         {this.props.search && this.renderSearchBar()}
         {/* render NAVIGATION BUTTONS and CURRENT PAGE input */}
