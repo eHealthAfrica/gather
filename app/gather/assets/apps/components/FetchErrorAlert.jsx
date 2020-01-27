@@ -18,9 +18,8 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { hot } from 'react-hot-loader/root'
 
 /**
  * FetchErrorAlert component.
@@ -29,31 +28,26 @@ import { hot } from 'react-hot-loader/root'
  * while requesting data from server.
  */
 
-class FetchErrorAlert extends Component {
-  render () {
-    return (
-      <div data-qa='data-erred' className='container-fluid'>
-        <p className='alert alert-danger'>
+const FetchErrorAlert = ({ error }) => (
+  <div data-qa='data-erred' className='container-fluid'>
+    <p className='alert alert-danger'>
+      <i className='fas fa-exclamation-triangle mr-1' />
+      <FormattedMessage
+        id='alert.error.fetch'
+        defaultMessage={`
+          Request was not successful, maybe requested resource does
+          not exists or there was a server error while requesting for it.
+        `}
+      />
+    </p>
+    {
+      error && error.content && error.content.detail &&
+        <p data-qa='data-erred-reason' className='alert alert-danger'>
           <i className='fas fa-exclamation-triangle mr-1' />
-          <FormattedMessage
-            id='alert.error.fetch'
-            defaultMessage={`
-              Request was not successful, maybe requested resource does
-              not exists or there was a server error while requesting for it.
-            `}
-          />
+          {error.content.detail}
         </p>
-        {
-          this.props.error && this.props.error.content && this.props.error.content.detail &&
-            <p data-qa='data-erred-reason' className='alert alert-danger'>
-              <i className='fas fa-exclamation-triangle mr-1' />
-              {this.props.error.content.detail}
-            </p>
-        }
-      </div>
-    )
-  }
-}
+    }
+  </div>
+)
 
-// Include this to enable HMR for this module
-export default hot(FetchErrorAlert)
+export default FetchErrorAlert
