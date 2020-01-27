@@ -18,9 +18,8 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { hot } from 'react-hot-loader/root'
 
 import Portal from './Portal'
 
@@ -31,112 +30,116 @@ import Portal from './Portal'
  * to continue executing the expected action.
  */
 
-class ConfirmButton extends Component {
-  constructor (props) {
-    super(props)
-    this.state = { open: false }
+const ConfirmButton = ({
+  buttonLabel,
+  cancelable,
+  className,
+  condition,
+  message,
+  onConfirm,
+  title
+}) => {
+  const [open, setOpen] = useState(false)
+
+  const onCancel = () => {
+    cancelable && setOpen(false)
+  }
+  const execute = () => {
+    setOpen(false)
+    onConfirm()
+  }
+  const onClick = () => {
+    // if there is a condition but it is not satisfied
+    if (condition && !condition()) {
+      execute()
+      return
+    }
+
+    // show modal
+    setOpen(true)
   }
 
-  render () {
-    const onCancel = () => {
-      this.props.cancelable && this.setState({ open: false })
-    }
-    const execute = () => {
-      this.setState({ open: false }, this.props.onConfirm)
-    }
-    const onClick = () => {
-      // if there is a condition but it is not satisfied
-      if (this.props.condition && !this.props.condition()) {
-        execute()
-        return
-      }
+  const button = (
+    <button
+      data-qa='confirm-button'
+      type='button'
+      disabled={open}
+      className={className || 'btn btn-primary'}
+      onClick={onClick}
+    >
+      {buttonLabel || title}
+    </button>
+  )
 
-      // show modal
-      this.setState({ open: true })
-    }
+  if (!open) {
+    return button
+  }
 
-    const button = (
-      <button
-        data-qa='confirm-button'
-        type='button'
-        disabled={this.state.open}
-        className={this.props.className || 'btn btn-primary'}
-        onClick={onClick}
-      >
-        {this.props.buttonLabel || this.props.title}
-      </button>
-    )
+  return (
+    <>
+      {/* show disabled button */}
+      {button}
 
-    if (!this.state.open) {
-      return button
-    }
+      <Portal onEscape={onCancel} onEnter={execute}>
+        <div data-qa='confirm-button-window' className='confirmation-container'>
+          <div className='modal show'>
+            <div className='modal-dialog modal-md'>
+              <div className='modal-content'>
+                <div className='modal-header'>
+                  <h5 className='modal-title'>{title}</h5>
+                  {
+                    cancelable &&
+                      <button
+                        data-qa='confirm-button-close'
+                        type='button'
+                        className='close'
+                        onClick={onCancel}
+                      >
+                        &times;
+                      </button>
+                  }
+                </div>
 
-    return (
-      <>
-        {/* show disabled button */}
-        {button}
+                <div data-qa='confirm-button-message' className='modal-body'>
+                  {message}
+                </div>
 
-        <Portal onEscape={onCancel} onEnter={execute}>
-          <div data-qa='confirm-button-window' className='confirmation-container'>
-            <div className='modal show'>
-              <div className='modal-dialog modal-md'>
-                <div className='modal-content'>
-                  <div className='modal-header'>
-                    <h5 className='modal-title'>{this.props.title}</h5>
-                    {
-                      this.props.cancelable &&
-                        <button
-                          data-qa='confirm-button-close'
-                          type='button'
-                          className='close'
-                          onClick={onCancel}
-                        >
-                          &times;
-                        </button>
-                    }
-                  </div>
+                <div className='modal-footer'>
+                  {
+                    cancelable &&
+                      <button
+                        data-qa='confirm-button-cancel'
+                        type='button'
+                        className='btn btn-default'
+                        onClick={onCancel}
+                      >
+                        <FormattedMessage
+                          id='confirm.button.action.cancel'
+                          defaultMessage='No'
+                        />
+                      </button>
+                  }
 
-                  <div data-qa='confirm-button-message' className='modal-body'>
-                    {this.props.message}
-                  </div>
-
-                  <div className='modal-footer'>
-                    {
-                      this.props.cancelable &&
-                        <button
-                          data-qa='confirm-button-cancel'
-                          type='button'
-                          className='btn btn-default'
-                          onClick={onCancel}
-                        >
-                          <FormattedMessage
-                            id='confirm.button.action.cancel'
-                            defaultMessage='No'
-                          />
-                        </button>
-                    }
-
-                    <button
-                      data-qa='confirm-button-confirm'
-                      type='button'
-                      className='btn btn-secondary'
-                      onClick={execute}
-                    >
-                      <FormattedMessage
-                        id='confirm.button.action.confirm'
-                        defaultMessage='Yes'
-                      />
-                    </button>
-                  </div>
+                  <button
+                    data-qa='confirm-button-confirm'
+                    type='button'
+                    className='btn btn-secondary'
+                    onClick={execute}
+                  >
+                    <FormattedMessage
+                      id='confirm.button.action.confirm'
+                      defaultMessage='Yes'
+                    />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </Portal>
-      </>
-    )
-  }
+        </div>
+      </Portal>
+    </>
+  )
 }
 
 // Include this to enable HMR for this module
-export default hot(ConfirmButton)
+export default ConfirmButton

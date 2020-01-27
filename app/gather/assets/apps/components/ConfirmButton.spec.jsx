@@ -45,110 +45,6 @@ import ConfirmButton from './ConfirmButton'
 const CLICK_ARGS = { preventDefault: () => {} }
 
 describe('ConfirmButton', () => {
-  describe('if "open" is false', () => {
-    describe('and not "cancelable"', () => {
-      it('should render only the initial confirm button', () => {
-        const component = mountWithIntl(
-          <ConfirmButton
-            title='do'
-            message='do?'
-            onConfirm={() => { }}
-          />
-        )
-        expect(component.instance().props.cancelable).toBeFalsy()
-        expect(component.state('open')).toEqual(false)
-
-        component.setState({ open: false })
-
-        expect(component.state('open')).toEqual(false)
-        expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeFalsy()
-      })
-    })
-
-    describe('and "cancelable"', () => {
-      it('should render only the initial confirm button', () => {
-        const component = mountWithIntl(
-          <ConfirmButton
-            title='do'
-            message='do?'
-            cancelable
-            onConfirm={() => { }}
-          />
-        )
-        expect(component.instance().props.cancelable).toBeTruthy()
-        expect(component.state('open')).toEqual(false)
-
-        component.setState({ open: false })
-
-        expect(component.state('open')).toEqual(false)
-        expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeFalsy()
-      })
-    })
-  })
-
-  describe('if "open" is true', () => {
-    describe('and not "cancelable"', () => {
-      it('should render only the two confirm buttons and the message', () => {
-        const component = mountWithIntl(
-          <ConfirmButton
-            title='do'
-            message='do?'
-            onConfirm={() => { }}
-          />
-        )
-        expect(component.instance().props.cancelable).toBeFalsy()
-        expect(component.state('open')).toEqual(false)
-
-        component.setState({ open: true })
-
-        expect(component.state('open')).toEqual(true)
-        expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
-        expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-message"]').text()).toContain('do?')
-      })
-    })
-
-    describe('and "cancelable"', () => {
-      it('should render all the buttons and the message', () => {
-        const component = mountWithIntl(
-          <ConfirmButton
-            title='do'
-            message='do?'
-            cancelable
-            onConfirm={() => { }}
-          />
-        )
-        expect(component.instance().props.cancelable).toBeTruthy()
-        expect(component.state('open')).toEqual(false)
-
-        component.setState({ open: true })
-
-        expect(component.state('open')).toEqual(true)
-        expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeTruthy()
-        expect(component.find('[data-qa="confirm-button-message"]').text()).toContain('do?')
-      })
-    })
-  })
-
   it('should initially render only the confirm button', () => {
     const component = mountWithIntl(
       <ConfirmButton
@@ -157,7 +53,13 @@ describe('ConfirmButton', () => {
         onConfirm={() => { }}
       />
     )
-    expect(component.state('open')).toBeFalsy()
+
+    expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
+    expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeFalsy()
+    expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
+    expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
+    expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeFalsy()
+    expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeFalsy()
   })
 
   it('should execute the "onConfirm" action if the condition is not satisfied', () => {
@@ -171,14 +73,9 @@ describe('ConfirmButton', () => {
       />
     )
 
-    expect(component.instance().props.cancelable).toBeFalsy()
-    expect(component.state('open')).toBeFalsy()
     expect(action).toEqual(0)
-
     component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
-
     expect(action).toEqual(1)
-    expect(component.state('open')).toBeFalsy()
   })
 
   it('should render the window message after clicking the button if there is no condition', () => {
@@ -191,14 +88,10 @@ describe('ConfirmButton', () => {
       />
     )
 
-    expect(component.instance().props.cancelable).toBeFalsy()
-    expect(component.state('open')).toBeFalsy()
     expect(action).toEqual(0)
-
     component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
-
     expect(action).toEqual(0)
-    expect(component.state('open')).toBeTruthy()
+    expect(component.find('[data-qa="confirm-button-message"]').text()).toContain('do?')
   })
 
   it('should render the window message after clicking the button if the condition is satisfied', () => {
@@ -212,14 +105,10 @@ describe('ConfirmButton', () => {
       />
     )
 
-    expect(component.instance().props.cancelable).toBeFalsy()
-    expect(component.state('open')).toBeFalsy()
     expect(action).toEqual(0)
-
     component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
-
     expect(action).toEqual(0)
-    expect(component.state('open')).toBeTruthy()
+    expect(component.find('[data-qa="confirm-button-message"]').text()).toContain('do?')
   })
 
   it('should execute the onConfirm action after clicking the second confirm button', () => {
@@ -232,66 +121,148 @@ describe('ConfirmButton', () => {
       />
     )
     expect(action).toEqual(0)
-    expect(component.state('open')).toBeFalsy()
-
     component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
     expect(action).toEqual(0)
-    expect(component.state('open')).toBeTruthy()
-
     component.find('[data-qa="confirm-button-confirm"]').simulate('click', CLICK_ARGS)
     expect(action).toEqual(1)
-    expect(component.state('open')).toBeFalsy()
   })
 
-  describe('if cancelable', () => {
-    it('should render only the button again after clicking the close button', () => {
-      let action = 0
-      const component = mountWithIntl(
-        <ConfirmButton
-          title='do'
-          message='do?'
-          cancelable
-          onConfirm={() => { action++ }}
-        />
-      )
-      expect(component.instance().props.cancelable).toEqual(true)
-      expect(action).toEqual(0)
-      expect(component.state('open')).toBeFalsy()
+  describe('states', () => {
+    describe('if "open" is false', () => {
+      describe('and not "cancelable"', () => {
+        it('should render only the initial confirm button', () => {
+          const component = mountWithIntl(
+            <ConfirmButton
+              title='do'
+              message='do?'
+              onConfirm={() => { }}
+            />
+          )
 
-      component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
+          expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeFalsy()
+        })
+      })
 
-      expect(action).toEqual(0)
-      expect(component.state('open')).toBeTruthy()
+      describe('and "cancelable"', () => {
+        it('should render only the initial confirm button', () => {
+          const component = mountWithIntl(
+            <ConfirmButton
+              title='do'
+              message='do?'
+              cancelable
+              onConfirm={() => { }}
+            />
+          )
 
-      component.find('[data-qa="confirm-button-close"]').simulate('click', CLICK_ARGS)
-
-      expect(action).toEqual(0)
-      expect(component.state('open')).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeFalsy()
+        })
+      })
     })
 
-    it('should render only the button again after clicking the cancel button', () => {
-      let action = 0
-      const component = mountWithIntl(
-        <ConfirmButton
-          title='do'
-          message='do?'
-          cancelable
-          onConfirm={() => { action++ }}
-        />
-      )
-      expect(component.instance().props.cancelable).toEqual(true)
-      expect(action).toEqual(0)
-      expect(component.state('open')).toBeFalsy()
+    describe('if "open" is true', () => {
+      describe('and not "cancelable"', () => {
+        it('should render only the two confirm buttons and the message', () => {
+          const component = mountWithIntl(
+            <ConfirmButton
+              title='do'
+              message='do?'
+              onConfirm={() => { }}
+            />
+          )
+          component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
 
-      component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
+          expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-message"]').text()).toContain('do?')
+        })
+      })
 
-      expect(action).toEqual(0)
-      expect(component.state('open')).toBeTruthy()
+      describe('and "cancelable"', () => {
+        it('should render all the buttons and the message', () => {
+          const component = mountWithIntl(
+            <ConfirmButton
+              title='do'
+              message='do?'
+              cancelable
+              onConfirm={() => { }}
+            />
+          )
 
-      component.find('[data-qa="confirm-button-cancel"]').simulate('click', CLICK_ARGS)
+          component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
 
-      expect(action).toEqual(0)
-      expect(component.state('open')).toBeFalsy()
+          expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeTruthy()
+          expect(component.find('[data-qa="confirm-button-message"]').text()).toContain('do?')
+        })
+      })
+    })
+
+    describe('if cancelable', () => {
+      it('should render only the button again after clicking the close button', () => {
+        let action = 0
+        const component = mountWithIntl(
+          <ConfirmButton
+            title='do'
+            message='do?'
+            cancelable
+            onConfirm={() => { action++ }}
+          />
+        )
+        expect(action).toEqual(0)
+        component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
+        expect(action).toEqual(0)
+        component.find('[data-qa="confirm-button-close"]').simulate('click', CLICK_ARGS)
+        expect(action).toEqual(0)
+
+        expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
+        expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeFalsy()
+        expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
+        expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
+        expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeFalsy()
+        expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeFalsy()
+      })
+
+      it('should render only the button again after clicking the cancel button', () => {
+        let action = 0
+        const component = mountWithIntl(
+          <ConfirmButton
+            title='do'
+            message='do?'
+            cancelable
+            onConfirm={() => { action++ }}
+          />
+        )
+        expect(action).toEqual(0)
+        component.find('[data-qa="confirm-button"]').simulate('click', CLICK_ARGS)
+        expect(action).toEqual(0)
+        component.find('[data-qa="confirm-button-cancel"]').simulate('click', CLICK_ARGS)
+        expect(action).toEqual(0)
+
+        expect(component.find('[data-qa="confirm-button"]').exists()).toBeTruthy()
+        expect(component.find('[data-qa="confirm-button-window"]').exists()).toBeFalsy()
+        expect(component.find('[data-qa="confirm-button-close"]').exists()).toBeFalsy()
+        expect(component.find('[data-qa="confirm-button-cancel"]').exists()).toBeFalsy()
+        expect(component.find('[data-qa="confirm-button-confirm"]').exists()).toBeFalsy()
+        expect(component.find('[data-qa="confirm-button-message"]').exists()).toBeFalsy()
+      })
     })
   })
 })
