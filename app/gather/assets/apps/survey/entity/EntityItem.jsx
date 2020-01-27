@@ -18,63 +18,61 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { attachmentsToLinks } from './utils'
 import { filterByPaths } from '../../utils/types'
 import { JSONViewer, LinksList } from '../../components'
 
-export default class EntityItem extends Component {
-  render () {
-    const { list } = this.props
+const EntityItem = ({ list, paths, labels }) => {
+  if (list.length !== 1) {
+    return ''
+  }
 
-    if (list.length !== 1) {
-      return <div />
-    }
+  const entity = list[0]
+  const attachments = attachmentsToLinks(entity.attachments)
 
-    const entity = list[0]
-    const attachments = attachmentsToLinks(entity.attachments)
-
-    return (
-      <div data-qa={`entity-item-${entity.id}`} className='x-2'>
-        <div className='survey-content single'>
-          <div className='property'>
-            <h5 className='property-title'>
-              <FormattedMessage
-                id='entity.view.status'
-                defaultMessage='Status'
-              />
-            </h5>
-            <div className='property-value'>
-              {entity.status}
-            </div>
-          </div>
-
-          {
-            attachments.length > 0 &&
-              <div className='property'>
-                <h5 className='property-title'>
-                  <FormattedMessage
-                    id='entity.view.attachments'
-                    defaultMessage='Attachments'
-                  />
-                </h5>
-                <div className='property-value'>
-                  <LinksList list={attachments} />
-                </div>
-              </div>
-          }
-
-          <div>
-            <JSONViewer
-              data={filterByPaths(entity.payload, this.props.paths)}
-              labels={this.props.labels}
-              links={attachments}
+  return (
+    <div data-qa={`entity-item-${entity.id}`} className='x-2'>
+      <div className='survey-content single'>
+        <div className='property'>
+          <h5 className='property-title'>
+            <FormattedMessage
+              id='entity.view.status'
+              defaultMessage='Status'
             />
+          </h5>
+          <div className='property-value'>
+            {entity.status}
           </div>
         </div>
+
+        {
+          attachments.length > 0 &&
+            <div className='property'>
+              <h5 className='property-title'>
+                <FormattedMessage
+                  id='entity.view.attachments'
+                  defaultMessage='Attachments'
+                />
+              </h5>
+              <div className='property-value'>
+                <LinksList list={attachments} />
+              </div>
+            </div>
+        }
+
+        <div>
+          <JSONViewer
+            data={filterByPaths(entity.payload, paths)}
+            labels={labels}
+            links={attachments}
+          />
+        </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
+
+export default EntityItem
