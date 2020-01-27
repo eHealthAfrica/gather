@@ -20,7 +20,7 @@
 
 import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-import SurveyConfig from './mask/SurveyConfig'
+import SurveyConfig from './components/SurveyConfig'
 
 const SurveyDashboard = ({
   columns,
