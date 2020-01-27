@@ -21,14 +21,13 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader/root'
 
-import { FetchUrlsContainer, PaginationContainer } from '../components'
+import { FetchUrlsContainer } from '../components'
 import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
 import { ODK_APP } from '../utils/constants'
 
 import Survey from './Survey'
 import SurveyForm from './SurveyForm'
-import ActiveSurveysList from './ActiveSurveysList'
-import InactiveSurveysList from './InactiveSurveysList'
+import SurveysList from './SurveysList'
 
 class SurveyDispatcher extends Component {
   render () {
@@ -120,28 +119,7 @@ class SurveyDispatcher extends Component {
       }
 
       default:
-        return (
-          <>
-            <PaginationContainer
-              pageSize={12}
-              url={getSurveysAPIPath({ withStats: true, active: true })}
-              position='top'
-              listComponent={ActiveSurveysList}
-              search
-              showPrevious
-              showNext
-            />
-            <PaginationContainer
-              pageSize={12}
-              url={getSurveysAPIPath({ withStats: true, active: false })}
-              position='top'
-              listComponent={InactiveSurveysList}
-              search
-              showPrevious
-              showNext
-            />
-          </>
-        )
+        return <SurveysList />
     }
   }
 }

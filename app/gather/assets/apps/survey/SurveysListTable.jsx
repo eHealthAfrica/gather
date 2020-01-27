@@ -21,24 +21,19 @@
 import React from 'react'
 import moment from 'moment'
 import { FormattedMessage, FormattedNumber, FormattedDate } from 'react-intl'
+
 import { getSurveysPath } from '../utils/paths'
+import { BLANK } from '../utils/constants'
 
-const InactiveSurveysList = ({ list }) => (
-  <div data-qa='surveys-list-inactive' className='surveys-list inactive-surveys-list'>
-    <div className='section-title title'>
-      <FormattedMessage
-        id='surveys.list.inactive.title'
-        defaultMessage='Inactive Surveys'
-      />
-    </div>
-
+const SurveysListTable = ({ list }) => (
+  <div className='surveys-table px-3 mb-3'>
     <div className='content'>
       <div className='row headers'>
         <div className='col-6' />
         <div className='col-2'>
           <h4 className='title vline'>
             <FormattedMessage
-              id='surveys.list.inactive.first.data.entry'
+              id='surveys.list.first.data.entry'
               defaultMessage='first data entry'
             />
           </h4>
@@ -46,7 +41,7 @@ const InactiveSurveysList = ({ list }) => (
         <div className='col-2'>
           <h4 className='title vline'>
             <FormattedMessage
-              id='surveys.list.inactive.last.data.entry'
+              id='surveys.list.last.data.entry'
               defaultMessage='last data entry'
             />
           </h4>
@@ -54,7 +49,7 @@ const InactiveSurveysList = ({ list }) => (
         <div className='col-1'>
           <h4 className='title'>
             <FormattedMessage
-              id='surveys.list.inactive.duration'
+              id='surveys.list.duration'
               defaultMessage='duration'
             />
           </h4>
@@ -62,7 +57,7 @@ const InactiveSurveysList = ({ list }) => (
         <div className='col-1'>
           <h4 className='title records'>
             <FormattedMessage
-              id='surveys.list.inactive.records'
+              id='surveys.list.records'
               defaultMessage='records'
             />
           </h4>
@@ -91,7 +86,7 @@ const InactiveSurveysList = ({ list }) => (
                     month='short'
                     day='numeric'
                   />
-                ) : '-'
+                ) : BLANK
               }
             </div>
             <div className='col-2 title'>
@@ -103,7 +98,7 @@ const InactiveSurveysList = ({ list }) => (
                     month='short'
                     day='numeric'
                   />
-                ) : '-'
+                ) : BLANK
               }
             </div>
             <div className='col-1 title vline'>
@@ -117,12 +112,12 @@ const InactiveSurveysList = ({ list }) => (
                     />
                     <span className='ml-1'>
                       <FormattedMessage
-                        id='surveys.list.inactive.duration.days'
+                        id='surveys.list.duration.days'
                         defaultMessage='days'
                       />
                     </span>
                   </>
-                ) : '-'
+                ) : BLANK
               }
             </div>
             <div className='col-1 record'>
@@ -135,4 +130,4 @@ const InactiveSurveysList = ({ list }) => (
   </div>
 )
 
-export default InactiveSurveysList
+export default SurveysListTable

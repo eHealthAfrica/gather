@@ -20,14 +20,14 @@
 
 .surveys-list {
   @extend .page-content;
-}
 
-.inactive-surveys-list {
   .section-title {
     padding: 20px 0 10px;
     border-bottom: 1px solid $text-color;
   }
+}
 
+.surveys-table {
   .col-1,
   .col-2,
   .col-6 {
@@ -53,7 +53,7 @@
   }
 }
 
-.surveys-list-cards {
+.survey-cards {
   display: flex;
   flex-wrap: wrap;
   margin: 0 -1rem;

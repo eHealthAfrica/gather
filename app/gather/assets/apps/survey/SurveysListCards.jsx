@@ -19,31 +19,21 @@
  */
 
 import React from 'react'
-import { FormattedMessage } from 'react-intl'
 
 import SurveyCard from './SurveyCard'
 
-const ActiveSurveysList = ({ list }) => (
-  <div data-qa='surveys-list-active' className='surveys-list'>
-    <h4 className='title'>
-      <FormattedMessage
-        id='surveys.list.active.title'
-        defaultMessage='Active Surveys'
-      />
-    </h4>
-
-    <div className='surveys-list-cards'>
-      {
-        list.map(survey => (
-          <SurveyCard
-            key={survey.id}
-            className='col-6 col-sm-4 col-md-3'
-            survey={survey}
-          />
-        ))
-      }
-    </div>
+const SurveysListCard = ({ list }) => (
+  <div className='survey-cards'>
+    {
+      list.map(survey => (
+        <SurveyCard
+          key={survey.id}
+          className='col-6 col-sm-4 col-md-3'
+          survey={survey}
+        />
+      ))
+    }
   </div>
 )
 
-export default ActiveSurveysList
+export default SurveysListCard
