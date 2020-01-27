@@ -24,6 +24,7 @@ import assert from 'assert'
 import {
   buildQueryString,
   getEntitiesAPIPath,
+  getExportTasksAPIPath,
   getAttachmentContentPath,
   getMediaFileContentPath,
   getMasksAPIPath,
@@ -32,8 +33,6 @@ import {
   getSurveyorsPath,
   getSurveysAPIPath,
   getSurveysPath,
-  getSyncUsersAPIPath,
-  getSyncUsersPath,
   getXFormsAPIPath
 } from './paths'
 
@@ -65,13 +64,6 @@ describe('paths utils', () => {
   describe('getMediaFileContentPath', () => {
     it('should return the Media Files content path', () => {
       assert.strictEqual(getMediaFileContentPath({ id: 1 }), '/api/odk/media-files/1/content/')
-    })
-  })
-
-  describe('getSyncUsersAPIPath', () => {
-    it('should return the Sync Users API path', () => {
-      assert.strictEqual(getSyncUsersAPIPath({}), '/api/couchdb-sync/sync-users.json')
-      assert.strictEqual(getSyncUsersAPIPath({ id: 1 }), '/api/couchdb-sync/sync-users/1.json')
     })
   })
 
@@ -179,6 +171,35 @@ describe('paths utils', () => {
     })
   })
 
+  describe('getExportTasksAPIPath', () => {
+    const prefix = '/api/kernel/'
+
+    // NOTE: the `passthrough` parameter is ALWAYS included,
+    // this does not apply to rest of parameters
+
+    it('should return the Export Taks API path', () => {
+      assert.strictEqual(getExportTasksAPIPath({}), prefix + 'export-tasks.json?passthrough=true')
+    })
+
+    it('should return the Survey Export Taks API path', () => {
+      assert.strictEqual(
+        getExportTasksAPIPath({ project: 1 }),
+        prefix + 'export-tasks.json?passthrough=true&project=1')
+    })
+
+    it('should return the Surveys Export Taks API path with search', () => {
+      assert.strictEqual(
+        getExportTasksAPIPath({ search: 'survey' }),
+        prefix + 'export-tasks.json?passthrough=true&search=survey')
+    })
+
+    it('should return the Surveys Export Taks API path without search', () => {
+      assert.strictEqual(
+        getExportTasksAPIPath({ search: 'survey', id: 1 }),
+        prefix + 'export-tasks/1.json?passthrough=true')
+    })
+  })
+
   describe('getSurveyorsAPIPath', () => {
     const prefix = '/api/odk/'
 
@@ -245,18 +266,6 @@ describe('paths utils', () => {
       assert.strictEqual(getSurveyorsPath({ action: 'add' }), '/surveyors/add/')
       assert.strictEqual(getSurveyorsPath({ action: 'edit' }), '/surveyors/add/', '"edit" without "id" is "add"')
       assert.strictEqual(getSurveyorsPath({ action: 'edit', id: 1 }), '/surveyors/edit/1')
-    })
-  })
-
-  describe('getSyncUsersPath', () => {
-    it('should return the Sync Users path based on arguments', () => {
-      assert.strictEqual(getSyncUsersPath({}), '/mobile-users/list')
-      assert.strictEqual(getSyncUsersPath({ action: 'list' }), '/mobile-users/list')
-      assert.strictEqual(getSyncUsersPath({ action: 'list', id: 1 }), '/mobile-users/list')
-      assert.strictEqual(getSyncUsersPath({ action: 'unknown-action', id: 1 }), '/mobile-users/list')
-      assert.strictEqual(getSyncUsersPath({ action: 'view' }), '/mobile-users/list', 'no "view" action available')
-      assert.strictEqual(getSyncUsersPath({ action: 'edit', id: 1 }), '/mobile-users/list', 'no "edit" action available')
-      assert.strictEqual(getSyncUsersPath({ action: 'add' }), '/mobile-users/add')
     })
   })
 

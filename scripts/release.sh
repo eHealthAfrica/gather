@@ -31,28 +31,6 @@ function build_container {
         ${container}
 }
 
-function docker_push {
-    local ORG="ehealthafrica"
-    local TAG=$1
-    local IMAGE=${ORG}/${APP}:${TAG}
-    local IMAGE_SHA=${ORG}/${APP}:${TRAVIS_COMMIT}
-
-    echo "Pushing Docker image ${IMAGE}"
-    docker tag ${APP} ${IMAGE}
-    docker push ${IMAGE}
-
-    echo "Pushing Docker image ${IMAGE_SHA}"
-    docker tag ${APP} ${IMAGE_SHA}
-    docker push ${IMAGE_SHA}
-}
-
-if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
-    echo "--------------------------------------------------------------"
-    echo "Skipping a release because this is a pull request: ${TRAVIS_PULL_REQUEST}"
-    echo "--------------------------------------------------------------"
-    exit 0
-fi
-
 # release version depending on TRAVIS_BRANCH (develop | release-#.#) / TRAVIS_TAG (#.#.#)
 if [[ ${TRAVIS_TAG} =~ ^[0-9]+(\.[0-9]+){2}$ ]]; then
     VERSION=${TRAVIS_TAG}
@@ -60,16 +38,10 @@ if [[ ${TRAVIS_TAG} =~ ^[0-9]+(\.[0-9]+){2}$ ]]; then
 elif [[ ${TRAVIS_BRANCH} =~ ^release\-[0-9]+\.[0-9]+$ ]]; then
     VERSION=`cat VERSION`
     # append "-rc" suffix
-    VERSION=${VERSION}-rc
-
-elif [[ ${TRAVIS_BRANCH} = "develop" ]]; then
-    VERSION="alpha"
+    VERSION="${VERSION}-rc"
 
 else
-    echo "--------------------------------------------------------------"
-    echo "Skipping a release because this branch is not permitted: ${TRAVIS_BRANCH}"
-    echo "--------------------------------------------------------------"
-    exit 0
+    VERSION="alpha"
 fi
 
 echo "--------------------------------------------------------------"
@@ -79,6 +51,7 @@ echo "Release revision:    ${TRAVIS_COMMIT}"
 echo "--------------------------------------------------------------"
 
 APP="gather"
+DOCKER_IMAGE="ehealthafrica/${APP}:${VERSION}"
 
 # Build and distribute the JS assets
 build_container gather-assets
@@ -90,14 +63,8 @@ build_container ${APP}
 # Login in docker hub
 docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
 
-docker_push ${VERSION}
-if [ -z "$TRAVIS_TAG" ]; then
-    docker_push "${VERSION}--${TRAVIS_COMMIT}"
-fi
+echo "Pushing Docker image ${DOCKER_IMAGE}"
+docker tag ${APP} ${DOCKER_IMAGE}
+docker push ${DOCKER_IMAGE}
 
 docker logout
-
-if [ "$TRAVIS_BRANCH" == 'develop' ]; then
-    openssl aes-256-cbc -K $encrypted_422343ef1cd5_key -iv $encrypted_422343ef1cd5_iv -in gcs_key.json.enc -out gcs_key.json -d
-    push-app-version --project gather-alpha --version $TRAVIS_COMMIT
-fi

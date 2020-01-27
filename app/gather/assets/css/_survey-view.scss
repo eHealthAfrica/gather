@@ -418,6 +418,79 @@
   }
 }
 
+.tasks-list {
+
+  thead {
+    background: $bg-grey;
+    border-bottom: 1px solid $dark-grey;
+  }
+
+  th {
+    border: 0;
+    font-weight: 400;
+    font-style: italic;
+    padding: 1rem .6rem;
+    position: relative;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      top: .6rem;
+      bottom: .6rem;
+      width: 1px;
+      border-left: 1px solid $dark-grey;
+    }
+  }
+
+  tr:first-child th:first-child {
+    &::before {
+      content: none;
+    }
+  }
+
+  td {
+    border: 0;
+    border-bottom: 1px solid $lighter-grey;
+    padding: .6rem;
+
+    &:first-child {
+      border-right: 1px solid $dark-grey;
+      font-size: $font-size-l;
+      text-align: right;
+    }
+  }
+
+  .tasks {
+    .fa-clock,
+    .fa-user {
+      font-size: .9rem;
+      color: $dark-grey;
+    }
+
+    .status.done {
+      color: $green;
+    }
+
+    .status.wip {
+      color: $orange;
+    }
+
+    .status.error {
+      color: $red;
+    }
+
+    .status.cancelled {
+      color: $darker-grey;
+    }
+
+    ul.files {
+      list-style: none;
+    }
+  }
+}
+
 @media screen and (max-width: 576px) {
 
   .tab {

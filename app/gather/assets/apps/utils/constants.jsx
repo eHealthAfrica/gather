@@ -30,5 +30,4 @@ export const EXPORT_EXCEL_FORMAT = 'xlsx'
 // app names (match container names)
 export const KERNEL_APP = 'kernel'
 export const ODK_APP = 'odk'
-export const COUCHDB_SYNC_APP = 'couchdb-sync'
 export const GATHER_APP = 'gather'

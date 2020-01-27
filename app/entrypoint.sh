@@ -259,15 +259,6 @@ case "$1" in
         else
             echo "No ODK module enabled!"
         fi
-
-        if [[ "$EXTERNAL_APPS" == *couchdb-sync* ]];
-        then
-            python ./manage.py check_url \
-                --url=$AETHER_COUCHDB_SYNC_URL \
-                --token=$AETHER_COUCHDB_SYNC_TOKEN
-        else
-            echo "No CouchDB-Sync module enabled!"
-        fi
     ;;
 
     test )
