@@ -24,6 +24,12 @@ import { selectUnit } from '@formatjs/intl-utils'
 
 import { DASH } from '../utils/constants'
 
+// Import intl-relativetimeformat polyfill for unsupported environments
+if (!window.Intl || !Object.keys(window.Intl).length) {
+  require('@formatjs/intl-relativetimeformat/polyfill')
+  require('@formatjs/intl-relativetimeformat/dist/locale-data/en')
+}
+
 const DATE_OPTIONS = {
   year: 'numeric',
   month: 'long',
