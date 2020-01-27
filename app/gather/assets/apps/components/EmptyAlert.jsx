@@ -18,9 +18,8 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { hot } from 'react-hot-loader/root'
 
 /**
  * EmptyAlert component.
@@ -29,21 +28,16 @@ import { hot } from 'react-hot-loader/root'
  * while requesting it from server.
  */
 
-class EmptyAlert extends Component {
-  render () {
-    return (
-      <div data-qa='data-empty' className='container-fluid'>
-        <p className='alert alert-danger'>
-          <i className='fas fa-exclamation-triangle mr-1' />
-          <FormattedMessage
-            id='alert.empty'
-            defaultMessage='Nothing to display.'
-          />
-        </p>
-      </div>
-    )
-  }
-}
+const EmptyAlert = () => (
+  <div data-qa='data-empty' className='container-fluid'>
+    <p className='alert alert-danger'>
+      <i className='fas fa-exclamation-triangle mr-1' />
+      <FormattedMessage
+        id='alert.empty'
+        defaultMessage='Nothing to display.'
+      />
+    </p>
+  </div>
+)
 
-// Include this to enable HMR for this module
-export default hot(EmptyAlert)
+export default EmptyAlert
