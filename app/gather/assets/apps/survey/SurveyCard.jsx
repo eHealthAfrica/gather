@@ -18,37 +18,33 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedMessage, FormattedNumber } from 'react-intl'
 
 import { getSurveysPath } from '../utils/paths'
 import SurveyDates from './SurveyDates'
 
-export default class SurveyCard extends Component {
-  render () {
-    const { survey } = this.props
+const SurveyCard = ({ survey }) => (
+  <a
+    data-qa={`survey-card-${survey.id}`}
+    href={getSurveysPath({ action: 'view', id: survey.id })}
+    className='card'
+  >
+    <h3 className='card-header'>{survey.name}</h3>
+    <div className='card-block'>
+      <SurveyDates survey={survey} />
 
-    return (
-      <a
-        data-qa={`survey-card-${survey.id}`}
-        href={getSurveysPath({ action: 'view', id: survey.id })}
-        className='card'
-      >
-        <h3 className='card-header'>{survey.name}</h3>
-        <div className='card-block'>
-          <SurveyDates survey={survey} />
+      <p className='card-display text-center'>
+        <span className='card-number'>
+          <FormattedNumber value={survey.entities_count} />
+        </span>
+        <FormattedMessage
+          id='survey.card.entities'
+          defaultMessage='records'
+        />
+      </p>
+    </div>
+  </a>
+)
 
-          <p className='card-display text-center'>
-            <span className='card-number'>
-              <FormattedNumber value={survey.entities_count} />
-            </span>
-            <FormattedMessage
-              id='survey.card.entities'
-              defaultMessage='records'
-            />
-          </p>
-        </div>
-      </a>
-    )
-  }
-}
+export default SurveyCard
