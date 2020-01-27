@@ -18,87 +18,29 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedDate, FormattedMessage, FormattedNumber } from 'react-intl'
 import moment from 'moment'
 
-export default class SurveyDates extends Component {
-  render () {
-    const { survey } = this.props
+const NoSubmissions = () => (
+  <span className='label mr-1'>
+    <FormattedMessage
+      id='survey.dates.submissions.zero'
+      defaultMessage='no data entry'
+    />
+  </span>
+)
 
-    return (
-      <div
-        data-qa={`survey-dates-${survey.id}`}
-        className='card-block'
-      >
-        <p className='card-text small'>
-          <span className='card-dates pr-2'>
-            <span className='label mr-1'>
-              <FormattedMessage
-                id='survey.dates.created'
-                defaultMessage='Created at'
-              />
-            </span>
-            <FormattedDate
-              value={survey.created}
-              year='numeric'
-              month='short'
-              day='numeric'
-            />
-          </span>
+const SubmissionsCount = ({ survey }) => {
+  const days = moment(survey.last_submission).diff(moment(survey.first_submission), 'days')
 
-          {survey.submissions_count === 0 && this.renderNoSubmissions()}
-          {survey.submissions_count > 0 && this.renderSubmissions()}
-          {
-            survey.submissions_count > 0 &&
-            this.props.showDuration &&
-            this.renderSubmissionsDuration()
-          }
-        </p>
-      </div>
-    )
-  }
-
-  renderNoSubmissions () {
-    return (
-      <span className='label mr-1'>
-        <FormattedMessage
-          id='survey.dates.submissions.zero'
-          defaultMessage='no data entry'
-        />
-      </span>
-    )
-  }
-
-  renderSubmissions () {
-    const { survey } = this.props
-    const days = moment(survey.last_submission).diff(moment(survey.first_submission), 'days')
-
-    if (days === 0) {
-      return (
-        <span className='card-dates pr-2'>
-          <span className='label mr-1'>
-            <FormattedMessage
-              id='survey.dates.submissions.on'
-              defaultMessage='data entry on'
-            />
-          </span>
-          <FormattedDate
-            value={survey.first_submission}
-            year='numeric'
-            month='short'
-            day='numeric'
-          />
-        </span>
-      )
-    }
-
+  if (days === 0) {
     return (
       <span className='card-dates pr-2'>
         <span className='label mr-1'>
           <FormattedMessage
-            id='survey.dates.submissions.from'
-            defaultMessage='data entry from'
+            id='survey.dates.submissions.on'
+            defaultMessage='data entry on'
           />
         </span>
         <FormattedDate
@@ -107,42 +49,95 @@ export default class SurveyDates extends Component {
           month='short'
           day='numeric'
         />
-        <span className='label mx-1'>
+      </span>
+    )
+  }
+
+  return (
+    <span className='card-dates pr-2'>
+      <span className='label mr-1'>
+        <FormattedMessage
+          id='survey.dates.submissions.from'
+          defaultMessage='data entry from'
+        />
+      </span>
+      <FormattedDate
+        value={survey.first_submission}
+        year='numeric'
+        month='short'
+        day='numeric'
+      />
+      <span className='label mx-1'>
+        <FormattedMessage
+          id='survey.dates.submissions.to'
+          defaultMessage='to'
+        />
+      </span>
+      <FormattedDate
+        value={survey.last_submission}
+        year='numeric'
+        month='short'
+        day='numeric'
+      />
+    </span>
+  )
+}
+
+const SubmissionsDuration = ({ survey }) => {
+  const days = moment(survey.last_submission).diff(moment(survey.first_submission), 'days') + 1
+
+  return (
+    <span className='card-dates'>
+      <span className='label mr-1'>
+        <FormattedMessage
+          id='survey.dates.submissions.duration'
+          defaultMessage='duration'
+        />
+      </span>
+      <FormattedNumber value={days} />
+      <span className='ml-1'>
+        <FormattedMessage
+          id='survey.dates.submissions.duration.days'
+          defaultMessage='days'
+        />
+      </span>
+    </span>
+  )
+}
+
+const SurveyDates = ({ survey, showDuration }) => (
+  <div
+    data-qa={`survey-dates-${survey.id}`}
+    className='card-block'
+  >
+    <p className='card-text small'>
+      <span className='card-dates pr-2'>
+        <span className='label mr-1'>
           <FormattedMessage
-            id='survey.dates.submissions.to'
-            defaultMessage='to'
+            id='survey.dates.created'
+            defaultMessage='Created at'
           />
         </span>
         <FormattedDate
-          value={survey.last_submission}
+          value={survey.created}
           year='numeric'
           month='short'
           day='numeric'
         />
       </span>
-    )
-  }
 
-  renderSubmissionsDuration () {
-    const { survey } = this.props
-    const days = moment(survey.last_submission).diff(moment(survey.first_submission), 'days') + 1
+      {
+        survey.submissions_count === 0
+          ? <NoSubmissions />
+          : <SubmissionsCount survey={survey} />
+      }
+      {
+        survey.submissions_count > 0 &&
+        showDuration &&
+          <SubmissionsDuration survey={survey} />
+      }
+    </p>
+  </div>
+)
 
-    return (
-      <span className='card-dates'>
-        <span className='label mr-1'>
-          <FormattedMessage
-            id='survey.dates.submissions.duration'
-            defaultMessage='duration'
-          />
-        </span>
-        <FormattedNumber value={days} />
-        <span className='ml-1'>
-          <FormattedMessage
-            id='survey.dates.submissions.duration.days'
-            defaultMessage='days'
-          />
-        </span>
-      </span>
-    )
-  }
-}
+export default SurveyDates
