@@ -18,7 +18,7 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
@@ -28,108 +28,105 @@ import Survey from './Survey'
 import SurveyForm from './SurveyForm'
 import SurveysList from './SurveysList'
 
-class SurveyDispatcher extends Component {
-  render () {
-    const { action, surveyId } = this.props
-    const { ODK_ACTIVE } = this.props.settings
-    // include settings in response
-    const handleResponse = (response) => ({ ...response, settings: this.props.settings })
+const SurveyDispatcher = ({ action, surveyId, settings }) => {
+  const { ODK_ACTIVE } = settings
+  // include settings in response
+  const handleResponse = (response) => ({ ...response, settings })
 
-    switch (action) {
-      case 'add': {
-        const addUrls = []
+  switch (action) {
+    case 'add': {
+      const addUrls = []
 
-        if (ODK_ACTIVE) {
-          const odkAddUrls = [
-            {
-              name: 'surveyors',
-              url: getSurveyorsAPIPath({ page: 1, pageSize: 1000 })
-            }
-          ]
-          // add odk urls to edit ones
-          odkAddUrls.forEach(url => addUrls.push(url))
-        }
-
-        return (
-          <FetchUrlsContainer
-            urls={addUrls}
-            targetComponent={SurveyForm}
-            handleResponse={handleResponse}
-          />
-        )
-      }
-
-      case 'edit': {
-        const editUrls = [
+      if (ODK_ACTIVE) {
+        const odkAddUrls = [
           {
-            name: 'survey',
-            url: getSurveysAPIPath({ id: surveyId })
+            name: 'surveyors',
+            url: getSurveyorsAPIPath({ page: 1, pageSize: 1000 })
           }
         ]
-
-        if (ODK_ACTIVE) {
-          const odkEditUrls = [
-            {
-              name: 'odkSurvey',
-              url: getSurveysAPIPath({ app: ODK_APP, id: surveyId }),
-              force: {
-                url: getSurveysAPIPath({ app: ODK_APP }),
-                data: { project_id: surveyId }
-              }
-            },
-            {
-              name: 'surveyors',
-              url: getSurveyorsAPIPath({ page: 1, pageSize: 1000 })
-            }
-          ]
-
-          // add odk urls to edit ones
-          odkEditUrls.forEach(url => editUrls.push(url))
-        }
-
-        return (
-          <FetchUrlsContainer
-            urls={editUrls}
-            targetComponent={SurveyForm}
-            handleResponse={handleResponse}
-          />
-        )
+        // add odk urls to edit ones
+        odkAddUrls.forEach(url => addUrls.push(url))
       }
 
-      case 'view': {
-        const viewUrls = [
+      return (
+        <FetchUrlsContainer
+          urls={addUrls}
+          targetComponent={SurveyForm}
+          handleResponse={handleResponse}
+        />
+      )
+    }
+
+    case 'edit': {
+      const editUrls = [
+        {
+          name: 'survey',
+          url: getSurveysAPIPath({ id: surveyId })
+        }
+      ]
+
+      if (ODK_ACTIVE) {
+        const odkEditUrls = [
           {
-            name: 'survey',
-            url: getSurveysAPIPath({ id: surveyId, withStats: true })
+            name: 'odkSurvey',
+            url: getSurveysAPIPath({ app: ODK_APP, id: surveyId }),
+            force: {
+              url: getSurveysAPIPath({ app: ODK_APP }),
+              data: { project_id: surveyId }
+            }
           },
           {
-            name: 'skeleton',
-            url: getSurveysAPIPath({ id: surveyId, action: 'schemas-skeleton' })
+            name: 'surveyors',
+            url: getSurveyorsAPIPath({ page: 1, pageSize: 1000 })
           }
         ]
 
-        return (
-          <FetchUrlsContainer
-            urls={viewUrls}
-            targetComponent={Survey}
-            handleResponse={handleResponse}
-          />
-        )
+        // add odk urls to edit ones
+        odkEditUrls.forEach(url => editUrls.push(url))
       }
 
-      default:
-        return (
-          <PaginationContainer
-            pageSize={12}
-            url={getSurveysAPIPath({ withStats: true })}
-            position='top'
-            listComponent={SurveysList}
-            search
-            showPrevious
-            showNext
-          />
-        )
+      return (
+        <FetchUrlsContainer
+          urls={editUrls}
+          targetComponent={SurveyForm}
+          handleResponse={handleResponse}
+        />
+      )
     }
+
+    case 'view': {
+      const viewUrls = [
+        {
+          name: 'survey',
+          url: getSurveysAPIPath({ id: surveyId, withStats: true })
+        },
+        {
+          name: 'skeleton',
+          url: getSurveysAPIPath({ id: surveyId, action: 'schemas-skeleton' })
+        }
+      ]
+
+      return (
+        <FetchUrlsContainer
+          urls={viewUrls}
+          targetComponent={Survey}
+          handleResponse={handleResponse}
+        />
+      )
+    }
+
+    default:
+      return (
+        <PaginationContainer
+          pageSize={12}
+          url={getSurveysAPIPath({ withStats: true })}
+          position='top'
+          listComponent={SurveysList}
+          search
+          showPrevious
+          showNext
+        />
+      )
   }
 }
 
