@@ -18,8 +18,7 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
-import { hot } from 'react-hot-loader/root'
+import React from 'react'
 
 /**
  * WarningAlert component.
@@ -28,26 +27,22 @@ import { hot } from 'react-hot-loader/root'
  * while executing any action.
  */
 
-class WarningAlert extends Component {
-  render () {
-    const { warnings } = this.props
-    if (!warnings || !warnings.length) {
-      return <div />
-    }
-
-    return (
-      <div data-qa='data-warning' className='form-warning'>
-        {
-          warnings.map((warning, index) => (
-            <p key={index} data-qa={`data-warning-${index}`} className='warning'>
-              {warning}
-            </p>
-          ))
-        }
-      </div>
-    )
+const WarningAlert = ({ warnings }) => {
+  if (!warnings || !warnings.length) {
+    return ''
   }
+
+  return (
+    <div data-qa='data-warning' className='form-warning'>
+      {
+        warnings.map((warning, index) => (
+          <p key={index} data-qa={`data-warning-${index}`} className='warning'>
+            {warning}
+          </p>
+        ))
+      }
+    </div>
+  )
 }
 
-// Include this to enable HMR for this module
-export default hot(WarningAlert)
+export default WarningAlert
