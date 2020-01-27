@@ -18,9 +18,8 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { hot } from 'react-hot-loader/root'
 
 /**
  * LoadingSpinner component.
@@ -28,21 +27,16 @@ import { hot } from 'react-hot-loader/root'
  * Renders a spinner indicating that data is being loaded from server.
  */
 
-class LoadingSpinner extends Component {
-  render () {
-    return (
-      <div data-qa='data-loading' className='container-fluid'>
-        <p className='alert alert-info'>
-          <i className='loading-spinner mr-2' />
-          <FormattedMessage
-            id='alert.loading'
-            defaultMessage='Loading data from server…'
-          />
-        </p>
-      </div>
-    )
-  }
-}
+const LoadingSpinner = () => (
+  <div data-qa='data-loading' className='container-fluid'>
+    <p className='alert alert-info'>
+      <i className='loading-spinner mr-2' />
+      <FormattedMessage
+        id='alert.loading'
+        defaultMessage='Loading data from server…'
+      />
+    </p>
+  </div>
+)
 
-// Include this to enable HMR for this module
-export default hot(LoadingSpinner)
+export default LoadingSpinner
