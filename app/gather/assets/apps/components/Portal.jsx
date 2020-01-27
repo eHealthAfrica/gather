@@ -18,44 +18,34 @@
  * under the License.
  */
 
-import React from 'react'
+import { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { hot } from 'react-hot-loader/root'
 
 // https://reactjs.org/docs/portals.html
 
-class Portal extends React.Component {
-  constructor (props) {
-    super(props)
-    this.element = document.createElement('div')
+const Portal = ({ children, onEscape, onEnter }) => {
+  const [element] = useState(document.createElement('div'))
 
-    this.onKeyDown = (event) => {
+  useEffect(() => {
+    const onKeyDown = (event) => {
       if (event.key === 'Escape') {
-        this.props.onEscape && this.props.onEscape()
+        onEscape && onEscape()
       }
       if (event.key === 'Enter') {
-        this.props.onEnter && this.props.onEnter()
+        onEnter && onEnter()
       }
     }
-  }
 
-  componentDidMount () {
-    document.body.appendChild(this.element)
-    document.addEventListener('keydown', this.onKeyDown)
-  }
+    document.body.appendChild(element)
+    document.addEventListener('keydown', onKeyDown)
 
-  componentWillUnmount () {
-    document.body.removeChild(this.element)
-    document.removeEventListener('keydown', this.onKeyDown)
-  }
+    return () => {
+      document.body.removeChild(element)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  })
 
-  render () {
-    return ReactDOM.createPortal(
-      this.props.children,
-      this.element
-    )
-  }
+  return ReactDOM.createPortal(children, element)
 }
 
-// Include this to enable HMR for this module
-export default hot(Portal)
+export default Portal

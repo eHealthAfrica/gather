@@ -25,11 +25,7 @@ import { mount } from 'enzyme'
 
 import Portal from './Portal'
 
-class Foo extends React.Component {
-  render () {
-    return 'foo'
-  }
-}
+const Foo = () => 'foo'
 
 describe('Portal', () => {
   it('should render the component in the DOM', () => {
