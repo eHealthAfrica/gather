@@ -1144,5 +1144,4 @@ class SurveyForm extends Component {
   }
 }
 
-// Include this to enable `this.props.intl` for this component.
 export default injectIntl(SurveyForm)

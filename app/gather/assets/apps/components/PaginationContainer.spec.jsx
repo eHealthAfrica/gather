@@ -33,11 +33,7 @@ import {
   RefreshSpinner
 } from './index'
 
-class Foo extends React.Component {
-  render () {
-    return `foo: [${this.props.list}]`
-  }
-}
+const Foo = ({ list }) =>  `foo: [${list}]`
 
 const BLANK_STATE = {
   isLoading: false,

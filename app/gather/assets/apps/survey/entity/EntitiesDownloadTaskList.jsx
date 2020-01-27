@@ -206,5 +206,4 @@ const EntitiesDownloadTaskList = ({
     </div>
   )
 
-// Include this to enable `this.props.intl` for this component.
 export default injectIntl(EntitiesDownloadTaskList)

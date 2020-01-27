@@ -19,7 +19,6 @@
  */
 
 import React, { Component } from 'react'
-import { hot } from 'react-hot-loader/root'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
@@ -134,5 +133,4 @@ class SurveyDispatcher extends Component {
   }
 }
 
-// Include this to enable HMR for this module
-export default hot(SurveyDispatcher)
+export default SurveyDispatcher

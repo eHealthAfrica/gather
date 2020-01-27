@@ -413,5 +413,4 @@ class SurveyMasks extends Component {
   }
 }
 
-// Include this to enable `this.props.intl` for this component.
 export default injectIntl(SurveyMasks)

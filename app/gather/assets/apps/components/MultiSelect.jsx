@@ -21,7 +21,6 @@
 import React, { Component } from 'react'
 import { defineMessages, injectIntl } from 'react-intl'
 import FilteredMultiSelect from 'react-filtered-multiselect'
-import { hot } from 'react-hot-loader/root'
 
 import { deepEqual, sortBy } from '../utils'
 
@@ -131,6 +130,4 @@ class MultiSelect extends Component {
   }
 }
 
-// Include this to enable `this.props.intl` for this component.
-// Include this to enable HMR for this module
-export default hot(injectIntl(MultiSelect))
+export default injectIntl(MultiSelect)
