@@ -25,11 +25,7 @@ import { mount } from 'enzyme'
 
 import { isMounted } from './dom'
 
-class Foo extends React.Component {
-  render () {
-    return 'foo ' + JSON.stringify(this.props)
-  }
-}
+const Foo = (props) => 'foo ' + JSON.stringify(this.props)
 
 describe('DOM utils', () => {
   let element = null
