@@ -18,9 +18,8 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { FormattedDate, FormattedTime } from 'react-intl'
-import { hot } from 'react-hot-loader/root'
 
 import RelativeTime from './RelativeTime'
 
@@ -31,39 +30,34 @@ import RelativeTime from './RelativeTime'
  * Like: October 17, 2017 18:30:20 GMT+2 (1 hour ago)
  */
 
-class FullDateTime extends Component {
-  render () {
-    const { date } = this.props
+const FullDateTime = ({ date }) => {
+  if (!date) return <div />
 
-    if (!date) return <div />
-
-    return (
-      <span>
-        <span className='mr-2'>
-          <FormattedDate
-            value={date}
-            year='numeric'
-            month='long'
-            day='numeric'
-          />
-        </span>
-        <span className='mr-2'>
-          <FormattedTime
-            value={date}
-            hour12={false}
-            hour='2-digit'
-            minute='2-digit'
-            second='2-digit'
-            timeZoneName='short'
-          />
-        </span>
-        <span>
-          (<RelativeTime date={date} />)
-        </span>
+  return (
+    <span>
+      <span className='mr-2'>
+        <FormattedDate
+          value={date}
+          year='numeric'
+          month='long'
+          day='numeric'
+        />
       </span>
-    )
-  }
+      <span className='mr-2'>
+        <FormattedTime
+          value={date}
+          hour12={false}
+          hour='2-digit'
+          minute='2-digit'
+          second='2-digit'
+          timeZoneName='short'
+        />
+      </span>
+      <span>
+        (<RelativeTime date={date} />)
+      </span>
+    </span>
+  )
 }
 
-// Include this to enable HMR for this module
-export default hot(FullDateTime)
+export default FullDateTime
