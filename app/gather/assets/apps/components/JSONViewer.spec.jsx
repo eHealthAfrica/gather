@@ -23,25 +23,27 @@
 import React from 'react'
 import { mountWithIntl } from '../../tests/enzyme-helpers'
 
+import { BLANK, DASH } from '../utils/constants'
+
 import JSONViewer from './JSONViewer'
 
 describe('JSONViewer', () => {
   describe('Basic types', () => {
-    it('should render "–" without meaningful data', () => {
+    it('should render BLANK constant without meaningful data', () => {
       const component = mountWithIntl(<JSONViewer />)
-      expect(component.text()).toEqual('–')
+      expect(component.text()).toEqual(BLANK)
 
       const componentNull = mountWithIntl(<JSONViewer data={null} />)
-      expect(componentNull.text()).toEqual('–')
+      expect(componentNull.text()).toEqual(BLANK)
 
       const componentUndefined = mountWithIntl(<JSONViewer data={undefined} />)
-      expect(componentUndefined.text()).toEqual('–')
+      expect(componentUndefined.text()).toEqual(BLANK)
 
       const componentEmptyString = mountWithIntl(<JSONViewer data='' />)
-      expect(componentEmptyString.text()).toEqual('–')
+      expect(componentEmptyString.text()).toEqual(BLANK)
 
       const componentEmptyLongString = mountWithIntl(<JSONViewer data='   ' />)
-      expect(componentEmptyLongString.text()).toEqual('–')
+      expect(componentEmptyLongString.text()).toEqual(BLANK)
     })
 
     it('should render integer values', () => {
@@ -91,14 +93,14 @@ describe('JSONViewer', () => {
       expect(componentTime.text()).toEqual('13:24:16')
 
       const componentDateTime = mountWithIntl(<JSONViewer data='2018-01-02T13:24:16.000Z' />)
-      expect(componentDateTime.text()).toEqual('January 2, 2018 – 13:24:16 UTC')
+      expect(componentDateTime.text()).toEqual(`January 2, 2018 ${DASH} 13:24:16 UTC`)
     })
   })
 
   describe('Object', () => {
-    it('should render "–" without meaningful data', () => {
+    it('should render BLANK constant without meaningful data', () => {
       const componentEmptyObject = mountWithIntl(<JSONViewer data={{}} />)
-      expect(componentEmptyObject.text()).toEqual('–')
+      expect(componentEmptyObject.text()).toEqual(BLANK)
     })
 
     it('should render the object in pieces', () => {
@@ -140,7 +142,7 @@ describe('JSONViewer', () => {
 
       properties.forEach((node, index) => {
         expect(node.find('.property-title').text()).toEqual(`property ${index}`) // cleaned key name
-        expect(node.find('.property-value').text()).toEqual('–')
+        expect(node.find('.property-value').text()).toEqual(BLANK)
       })
     })
 
@@ -169,9 +171,9 @@ describe('JSONViewer', () => {
   })
 
   describe('Array', () => {
-    it('should render "–" without meaningful data', () => {
+    it('should render BLANK constant without meaningful data', () => {
       const componentEmptyArray = mountWithIntl(<JSONViewer data={[]} />)
-      expect(componentEmptyArray.text()).toEqual('–')
+      expect(componentEmptyArray.text()).toEqual(BLANK)
     })
 
     it('should render the array in pieces', () => {
@@ -213,7 +215,7 @@ describe('JSONViewer', () => {
       expect(properties.length).toEqual(6)
 
       properties.forEach((node, index) => {
-        expect(node.text()).toEqual('–')
+        expect(node.text()).toEqual(BLANK)
       })
     })
   })

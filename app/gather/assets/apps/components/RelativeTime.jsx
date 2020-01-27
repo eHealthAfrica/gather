@@ -22,6 +22,8 @@ import React from 'react'
 import { FormattedRelativeTime, injectIntl } from 'react-intl'
 import { selectUnit } from '@formatjs/intl-utils'
 
+import { DASH } from '../utils/constants'
+
 const DATE_OPTIONS = {
   year: 'numeric',
   month: 'long',
@@ -40,7 +42,7 @@ const RelativeTime = ({ date, intl: { formatDate, formatTime } }) => {
   if (!date) return <div />
 
   const { value, unit } = selectUnit(new Date(date))
-  const title = formatDate(date, DATE_OPTIONS) + ' – ' + formatTime(date, TIME_OPTIONS)
+  const title = formatDate(date, DATE_OPTIONS) + ' ' + DASH + ' ' + formatTime(date, TIME_OPTIONS)
 
   return (
     <span title={title}>

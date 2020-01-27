@@ -31,3 +31,6 @@ export const EXPORT_EXCEL_FORMAT = 'xlsx'
 export const KERNEL_APP = 'kernel'
 export const ODK_APP = 'odk'
 export const GATHER_APP = 'gather'
+
+export const BLANK = '–'
+export const DASH = '–'

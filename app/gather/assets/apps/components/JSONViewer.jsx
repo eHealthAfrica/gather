@@ -27,6 +27,7 @@ import {
 } from 'react-intl'
 import { hot } from 'react-hot-loader/root'
 
+import { BLANK, DASH } from '../utils/constants'
 import { getLabel, getType } from '../utils/types'
 import Link from './Link'
 
@@ -96,7 +97,7 @@ class JSONViewer extends Component {
   renderEmptyValue () {
     return (
       <span className='empty'>
-        –
+        {BLANK}
       </span>
     )
   }
@@ -139,9 +140,7 @@ class JSONViewer extends Component {
   renderDateTime (value) {
     return (
       <span className='value' title={value}>
-        {this.renderDate(value)}
-        {' – '}
-        {this.renderTime(value)}
+        {this.renderDate(value)} {DASH} {this.renderTime(value)}
       </span>
     )
   }
