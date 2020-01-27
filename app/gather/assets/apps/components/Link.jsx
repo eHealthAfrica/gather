@@ -18,27 +18,21 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
-import { hot } from 'react-hot-loader/root'
+import React from 'react'
 
 /**
  * Link component.
  *
  * Renders a link.
  */
-class Link extends Component {
-  render () {
-    return (
-      <a
-        href={this.props.link.url}
-        target='_blank'
-        rel='noopener noreferrer nofollow'
-      >
-        {this.props.link.name}
-      </a>
-    )
-  }
-}
+const Link = ({ link: { url, name } }) => (
+  <a
+    href={url}
+    target='_blank'
+    rel='noopener noreferrer nofollow'
+  >
+    {name}
+  </a>
+)
 
-// Include this to enable HMR for this module
-export default hot(Link)
+export default Link
