@@ -18,8 +18,7 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
-import { hot } from 'react-hot-loader/root'
+import React from 'react'
 
 /**
  * RefreshSpinner component.
@@ -27,15 +26,10 @@ import { hot } from 'react-hot-loader/root'
  * Renders a spinner that overlays the current page.
  */
 
-class RefreshSpinner extends Component {
-  render () {
-    return (
-      <div data-qa='data-refreshing' className='refreshing'>
-        <div className='loading-spinner' />
-      </div>
-    )
-  }
-}
+const RefreshSpinner = () => (
+  <div data-qa='data-refreshing' className='refreshing'>
+    <div className='loading-spinner' />
+  </div>
+)
 
-// Include this to enable HMR for this module
-export default hot(RefreshSpinner)
+export default RefreshSpinner
