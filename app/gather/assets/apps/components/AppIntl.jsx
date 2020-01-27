@@ -18,9 +18,8 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import { IntlProvider } from 'react-intl'
-import { hot } from 'react-hot-loader/root'
 
 /**
  * AppIntl component.
@@ -34,15 +33,10 @@ if (!window.Intl || !Object.keys(window.Intl).length) {
   require('@formatjs/intl-relativetimeformat/dist/locale-data/en')
 }
 
-class AppIntl extends Component {
-  render () {
-    return (
-      <IntlProvider defaultLocale='en' locale={navigator.locale || 'en'}>
-        {this.props.children}
-      </IntlProvider>
-    )
-  }
-}
+const AppIntl = ({ children }) => (
+  <IntlProvider defaultLocale='en' locale={navigator.locale || 'en'}>
+    {children}
+  </IntlProvider>
+)
 
-// Include this to enable HMR for this module
-export default hot(AppIntl)
+export default AppIntl

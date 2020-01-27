@@ -26,11 +26,7 @@ import { mount } from 'enzyme'
 
 import AppIntl from './AppIntl'
 
-class Foo extends React.Component {
-  render () {
-    return 'foo'
-  }
-}
+const Foo = () => 'foo'
 
 describe('AppIntl', () => {
   it('should render the component with wrapped by IntlProvider', () => {
