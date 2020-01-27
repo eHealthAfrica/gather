@@ -18,8 +18,7 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
-import { hot } from 'react-hot-loader/root'
+import React from 'react'
 
 import { getType } from '../utils/types'
 
@@ -30,29 +29,24 @@ import { getType } from '../utils/types'
  * while executing any action.
  */
 
-class ErrorAlert extends Component {
-  render () {
-    const { errors } = this.props
-
-    const eType = getType(errors)
-    if (!eType) {
-      return <div />
-    }
-    const list = (eType !== 'array') ? [errors] : errors
-
-    return (
-      <div data-qa='data-erred' className='form-error'>
-        {
-          list.map((error, index) => (
-            <p key={index} data-qa={`data-erred-${index}`} className='error'>
-              {error}
-            </p>
-          ))
-        }
-      </div>
-    )
+const ErrorAlert = ({ errors }) => {
+  const eType = getType(errors)
+  if (!eType) {
+    return ''
   }
+  const list = (eType !== 'array') ? [errors] : errors
+
+  return (
+    <div data-qa='data-erred' className='form-error'>
+      {
+        list.map((error, index) => (
+          <p key={index} data-qa={`data-erred-${index}`} className='error'>
+            {error}
+          </p>
+        ))
+      }
+    </div>
+  )
 }
 
-// Include this to enable HMR for this module
-export default hot(ErrorAlert)
+export default ErrorAlert
