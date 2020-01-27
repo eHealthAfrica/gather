@@ -20,9 +20,9 @@
 
 import ReactDOM from 'react-dom'
 
-export const isMounted = (Component) => {
+export const isMounted = (instance) => {
   try {
-    ReactDOM.findDOMNode(Component)
+    ReactDOM.findDOMNode(instance)
     return true
   } catch (e) {
     return false
