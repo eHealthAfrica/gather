@@ -122,13 +122,6 @@ export const sortNumericArray = (array) => {
 }
 
 /**
- * Navigate to a given url
- */
-export const goTo = (url) => {
-  window.location.assign(url)
-}
-
-/**
  *  Multiples of bytes (decimal):
  *
  *    Value     Unit
@@ -168,4 +161,11 @@ export const selectDigitalUnit = (num) => {
 export const getFileName = (filepath) => {
   const parts = filepath.split('/')
   return parts[parts.length - 1]
+}
+
+/**
+ * Navigate to a given url
+ */
+export const goTo = (url) => {
+  window.location.assign(url)
 }

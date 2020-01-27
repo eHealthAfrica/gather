@@ -383,6 +383,7 @@ describe('PaginationContainer', () => {
           url={path}
           sizes={[1, 10, 25]}
 
+          titleBar={path}
           search
           showFirst
           showPrevious
@@ -417,6 +418,7 @@ describe('PaginationContainer', () => {
       expect(component.state('page')).toEqual(2)
       expect(component.state('search')).toEqual('bla')
       expect(component.find(PaginationBar).exists()).toBeTruthy()
+      expect(component.find(PaginationBar).text()).toContain(path) // title bar
 
       return component
     }

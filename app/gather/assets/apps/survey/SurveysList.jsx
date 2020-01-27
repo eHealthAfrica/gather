@@ -57,7 +57,7 @@ const SurveysList = ({ intl: { formatMessage } }) => (
       />
     </div>
 
-    <div data-qa='surveys-inactive'>
+    <div data-qa='surveys-inactive' className='mt-5'>
       <h4 className='section-title title'>
         {formatMessage(MESSAGES.inactive)}
       </h4>
