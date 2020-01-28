@@ -20,7 +20,7 @@
 
 import React from 'react'
 
-import { FetchUrlsContainer, PaginationContainer } from '../components'
+import { FetchUrlsContainer } from '../components'
 import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
 import { ODK_APP } from '../utils/constants'
 
@@ -116,17 +116,7 @@ const SurveyDispatcher = ({ action, surveyId, settings }) => {
     }
 
     default:
-      return (
-        <PaginationContainer
-          pageSize={12}
-          url={getSurveysAPIPath({ withStats: true })}
-          position='top'
-          listComponent={SurveysList}
-          search
-          showPrevious
-          showNext
-        />
-      )
+      return <SurveysList />
   }
 }
 

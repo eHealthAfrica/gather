@@ -162,3 +162,10 @@ export const getFileName = (filepath) => {
   const parts = filepath.split('/')
   return parts[parts.length - 1]
 }
+
+/**
+ * Navigate to a given url
+ */
+export const goTo = (url) => {
+  window.location.assign(url)
+}

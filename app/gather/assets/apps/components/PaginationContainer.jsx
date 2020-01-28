@@ -197,6 +197,7 @@ class PaginationContainer extends Component {
   renderPaginationBar () {
     return (
       <PaginationBar
+        title={this.props.titleBar}
         currentPage={this.state.page}
         pageSize={this.state.pageSize}
         sizes={this.state.sizes}

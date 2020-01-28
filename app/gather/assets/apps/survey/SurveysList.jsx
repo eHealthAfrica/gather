@@ -18,40 +18,63 @@
  * under the License.
  */
 
-import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl'
+import React from 'react'
+import { defineMessages, injectIntl } from 'react-intl'
 
-import SurveyCard from './SurveyCard'
+import { PaginationContainer } from '../components'
+import { getSurveysAPIPath } from '../utils/paths'
 
-export default class SurveysList extends Component {
-  render () {
-    const { list } = this.props
+import SurveysListCards from './SurveysListCards'
+import SurveysListTable from './SurveysListTable'
 
-    if (list.length === 0) {
-      return <div data-qa='surveys-list-empty' />
-    }
-
-    return (
-      <div data-qa='surveys-list' className='surveys-list'>
-        <h4 className='title'>
-          <FormattedMessage
-            id='survey.list.title'
-            defaultMessage='Surveys'
-          />
-        </h4>
-
-        <div className='surveys-list-cards'>
-          {
-            list.map(survey => (
-              <SurveyCard
-                key={survey.id}
-                className='col-6 col-sm-4 col-md-3'
-                survey={survey}
-              />
-            ))
-          }
-        </div>
-      </div>
-    )
+const MESSAGES = defineMessages({
+  active: {
+    defaultMessage: 'Active Surveys',
+    id: 'surveys.list.active.title'
+  },
+  inactive: {
+    defaultMessage: 'Inactive Surveys',
+    id: 'surveys.list.inactive.title'
   }
-}
+})
+
+const SurveysList = ({ intl: { formatMessage } }) => (
+  <div className='surveys-list'>
+    <div data-qa='surveys-active'>
+      <h4 className='title'>
+        {formatMessage(MESSAGES.active)}
+      </h4>
+
+      <PaginationContainer
+        pageSize={12}
+        url={getSurveysAPIPath({ withStats: true, active: true })}
+        position='bottom'
+        listComponent={SurveysListCards}
+        titleBar={formatMessage(MESSAGES.active)}
+        search
+        showPrevious
+        showNext
+      />
+    </div>
+
+    <div data-qa='surveys-inactive' className='mt-5'>
+      <h4 className='section-title title'>
+        {formatMessage(MESSAGES.inactive)}
+      </h4>
+
+      <PaginationContainer
+        pageSize={10}
+        url={getSurveysAPIPath({ withStats: true, active: false })}
+        position='bottom'
+        listComponent={SurveysListTable}
+        titleBar={formatMessage(MESSAGES.inactive)}
+        search
+        showPrevious
+        showNext
+      />
+    </div>
+  </div>
+)
+
+// Include this to enable `props.intl` for this component.
+export default injectIntl(SurveysList)

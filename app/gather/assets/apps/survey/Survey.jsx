@@ -21,7 +21,6 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { GATHER_APP } from '../utils/constants'
 import {
   getSurveysPath,
@@ -31,9 +30,12 @@ import {
 } from '../utils/paths'
 import { cleanJsonPaths, reorderObjectKeys } from '../utils/types'
 
+import { FetchUrlsContainer, PaginationContainer } from '../components'
+
+import ActivateButton from './components/ActivateButton'
 import SurveyDetail from './SurveyDetail'
 import SurveyDashboard from './SurveyDashboard'
-import SurveyMasks from './mask/SurveyMasks'
+import SurveyMasks from './components/SurveyMasks'
 import EntitiesList from './entity/EntitiesList'
 import EntityItem from './entity/EntityItem'
 import EntitiesDownload from './entity/EntitiesDownload'
@@ -58,23 +60,21 @@ class Survey extends Component {
       allPaths: paths,
       selectedPaths: paths,
       activationError: null,
-      dashboardConfig: null
+      dashboardConfig: null,
+      error: null,
+      loading: false
     }
-    this.saveDashboardConfig = this.saveDashboardConfig.bind(this)
-  }
-
-  saveDashboardConfig (dashboardConfig) {
-    this.setState({ dashboardConfig })
   }
 
   render () {
-    const { survey } = this.props
+    const { survey, settings } = this.props
 
     return (
       <div data-qa={`survey-item-${survey.id}`} className='survey-view'>
         <div className='survey-header'>
           <h2>{survey.name}</h2>
           <div className='header-actions'>
+            <ActivateButton survey={survey} settings={settings} />
             <a
               href={getSurveysPath({ action: 'edit', id: survey.id })}
               role='button'
@@ -242,7 +242,7 @@ class Survey extends Component {
                 labels={labels}
                 entitiesCount={total}
                 dashboardConfig={dashboardConfig}
-                saveDashboardConfig={this.saveDashboardConfig}
+                saveDashboardConfig={(dashboardConfig) => { this.setState({ dashboardConfig }) }}
               />
             )
             : (

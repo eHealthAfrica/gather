@@ -20,9 +20,40 @@
 
 .surveys-list {
   @extend .page-content;
+
+  .section-title {
+    padding: 20px 0 10px;
+    border-bottom: 1px solid $text-color;
+  }
 }
 
-.surveys-list-cards {
+.surveys-table {
+  .col-1,
+  .col-2,
+  .col-6 {
+    padding: 10px;
+  }
+
+  .entries {
+    border-bottom: 1px solid $grey;
+
+    .name {
+      color: $action-color;
+      font-size: $font-size-standard;
+    }
+
+    .record {
+      font-weight: bold;
+      font-size: $font-size-standard;
+    }
+  }
+
+  .vline {
+    border-right: 1px solid $grey;
+  }
+}
+
+.survey-cards {
   display: flex;
   flex-wrap: wrap;
   margin: 0 -1rem;

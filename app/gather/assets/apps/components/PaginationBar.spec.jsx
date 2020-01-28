@@ -64,6 +64,7 @@ describe('PaginationBar', () => {
   it('should render with at least 2 pages', () => {
     const component = mountComponent(
       <PaginationBar
+        title='testing'
         currentPage={1}
         pageSize={10}
         records={11}
@@ -71,6 +72,7 @@ describe('PaginationBar', () => {
       />
     )
 
+    expect(component.text()).toContain('testing')
     expect(component.find('[data-qa="data-pagination"]').exists()).toBeTruthy()
     expect(component.find('[data-qa="data-pagination-search"]').exists()).toBeFalsy()
     expect(component.find('[data-qa="data-pagination-buttons"]').exists()).toBeTruthy()

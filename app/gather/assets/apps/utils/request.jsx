@@ -18,6 +18,8 @@
  * under the License.
  */
 
+import { goTo } from './index'
+
 const CSRF_TOKEN = 'csrfmiddlewaretoken'
 
 const buildFetchOptions = (method, payload, multipart, extras) => {
@@ -133,7 +135,7 @@ const inspectResponse = ({ download, filename }, resolve, reject, response) => {
       .then(content => resolve(content))
   } else if (response.status === 403) {
     const logoutUrl = document.getElementById('logout-link').href
-    window.location.assign(logoutUrl)
+    goTo(logoutUrl)
     return reject(new Error())
   } else {
     const error = new Error(response.statusText)

@@ -21,7 +21,7 @@
 import React, { Component } from 'react'
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
 
-import { clone, deepEqual, generateRandomId } from '../utils'
+import { clone, deepEqual, generateRandomId, goTo } from '../utils'
 import { deleteData, postData, putData, patchData } from '../utils/request'
 import {
   getMediaFileAPIPath,
@@ -1135,12 +1135,12 @@ class SurveyForm extends Component {
 
   backToView () {
     // navigate to Survey view page
-    window.location.assign(getSurveysPath({ action: 'view', id: this.state.id }))
+    goTo(getSurveysPath({ action: 'view', id: this.state.id }))
   }
 
   backToList () {
     // navigate to Surveys list page
-    window.location.assign(getSurveysPath({ action: 'list' }))
+    goTo(getSurveysPath({ action: 'list' }))
   }
 }
 
