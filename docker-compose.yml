@@ -135,6 +135,8 @@ services:
     extends:
       file: ./docker-compose-base.yml
       service: gather-base
+    volumes:
+      - ./.persistent_data/static/gather:/var/www/static
     depends_on:
       db:
         condition: service_healthy

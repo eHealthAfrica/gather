@@ -50,9 +50,6 @@ services:
       EXPORT_MAX_ROWS_SIZE: 1000
 
       WEB_SERVER_PORT: 9105
-    volumes:
-      # volumes in tests
-      - ./tmp/test/gather/static:/var/www/static
     depends_on:
       db-test:
         condition: service_healthy
