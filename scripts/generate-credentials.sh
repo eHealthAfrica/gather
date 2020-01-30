@@ -64,7 +64,7 @@ cat << EOF
 # ------------------------------------------------------------------
 # Aether
 # ==================================================================
-AETHER_VERSION=1.5.1-rc
+AETHER_VERSION=alpha
 
 # used in docker-compose-local.yml
 AETHER_PATH=../aether
