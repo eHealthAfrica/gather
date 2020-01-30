@@ -253,9 +253,6 @@ services:
       WEBPACK_STATS_FILE: /code/gather/assets/bundles/webpack-stats.json
     volumes:
       - ./app:/code
-
-      - ./.persistent_data/backups/gather:/backups
-      - ./.persistent_data/static/gather:/var/www/static
     command: start_dev
 
   # ---------------------------------
@@ -268,17 +265,5 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      #################################################
-      #                    WARNING                    #
-      # do not include the root folder as volume or   #
-      # `node_modules` folder will not be available   #
-      #################################################
-
-      # include all folders and root files manually :'(
-      - ./app/gather/assets/apps:/code/apps
-      - ./app/gather/assets/bundles:/code/bundles
-      - ./app/gather/assets/conf:/code/conf
-      - ./app/gather/assets/css:/code/css
-      - ./app/gather/assets/tests:/code/tests
-      - ./app/gather/assets/package.json:/code/package.json
+      - ./app/gather/assets:/code/assets
     command: start_dev
