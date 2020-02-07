@@ -110,11 +110,11 @@ function setup {
 
     # copy assets bundles folder into static folder
     local WEBPACK_FILES="./gather/assets/bundles"
-    if [ $COLLECT_STATIC_FILES_ON_STORAGE ]; then
-        local CDN_FULL_URL="${CDN_URL}"
-        if [ $COLLECT_STATIC_FILES_VERSIONED ]; then
+    if [ ${COLLECT_STATIC_FILES_ON_STORAGE:-} ]; then
+        local CDN_FULL_URL="${CDN_URL:-}"
+        if [ ${COLLECT_STATIC_FILES_VERSIONED:-} ]; then
             local APP_VERSION=`cat /var/tmp/VERSION`
-            CDN_FULL_URL="${CDN_URL}/${APP_VERSION}"
+            CDN_FULL_URL="${CDN_URL:-}/${APP_VERSION}"
         else
             local APP_VERSION=""
         fi
