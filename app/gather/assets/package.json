@@ -16,7 +16,7 @@
     "test-js": "jest --expand",
     "test-js-verbose": "TERM=dumb && jest --expand --colors --maxWorkers=1",
     "test": "npm run test-lint && npm run test-js",
-    "build": "webpack --config ./conf/webpack.prod.js",
+    "build": "rm -rf ./bundles/* && webpack --config ./conf/webpack.prod.js",
     "start": "node ./conf/webpack.server.js"
   },
   "dependencies": {

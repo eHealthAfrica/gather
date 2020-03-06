@@ -209,9 +209,7 @@ services:
 
   gather-base:
     image: gather
-    build:
-      context: .
-      dockerfile: app/Dockerfile
+    build: .
     stdin_open: true
     tty: true
     environment:

@@ -1,5 +1,9 @@
 FROM python:3.7-slim-buster
 
+LABEL description="Gather 3 > Effortless data collection and curation" \
+      name="gather" \
+      author="eHealth Africa"
+
 ################################################################################
 ## setup container
 ################################################################################
