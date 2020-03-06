@@ -16,13 +16,13 @@ RUN /tmp/setup_revision.sh
 
 FROM node:lts-slim AS app_node
 
-WORKDIR /code/
-COPY ./app/gather/assets/ /code/
-RUN npm install -q
-# copy application version and git revision
+WORKDIR /node/
+## copy application version and git revision
 COPY --from=app_resource /tmp/resources/. /var/tmp/
-# build react app
-RUN npm run build
+## copy source code
+COPY ./app/gather/assets/ /node/
+## build react app
+RUN npm install -q && npm run build
 
 
 ################################################################################
@@ -35,23 +35,23 @@ LABEL description="Gather 3 > Effortless data collection and curation" \
       name="gather" \
       author="eHealth Africa"
 
+## set up container
 WORKDIR /code
+ENTRYPOINT ["/code/entrypoint.sh"]
 
 COPY ./app/conf/docker/* /tmp/
 RUN /tmp/setup.sh
 
-COPY ./app/ /code/
-RUN chown -R gather: /code
+## copy source code
+COPY --chown=gather:gather ./app/ /code/
 
-# install app
+## install dependencies
 RUN pip install -q --upgrade pip && \
     pip install -q -r /code/conf/pip/requirements.txt
 
-# copy react app
+## copy react app
 RUN rm -Rf /code/gather/assets/
-COPY --from=app_node --chown=gather:gather /code/bundles/. /code/gather/assets/bundles
+COPY --from=app_node --chown=gather:gather /node/bundles/. /code/gather/assets/bundles
 
-# copy application version and git revision
+## copy application version and revision
 COPY --from=app_resource --chown=gather:gather /tmp/resources/. /var/tmp/
-
-ENTRYPOINT ["/code/entrypoint.sh"]
