@@ -16,7 +16,17 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import copy
+from django.conf import settings
+from rest_framework import permissions, status
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    renderer_classes,
+)
+from rest_framework.renderers import JSONRenderer
 
 from aether.sdk.multitenancy.views import MtViewSetMixin
 from .models import Survey, Mask
@@ -44,3 +54,33 @@ class MaskViewSet(MtViewSetMixin, ModelViewSet):
     search_fields = ('survey__name', 'name', 'columns',)
     ordering = ('survey', 'name',)
     mt_field = 'survey'
+
+
+@api_view(['GET'])
+@renderer_classes([JSONRenderer])
+# @permission_classes([permissions.IsAuthenticated])
+def consumer_config_view(request, *args, **kwargs):
+  _survey_name = request.data.get('name')
+  if not _survey_name:
+    Response('Invalid survey name', status=status.HTTP_400_BAD_REQUEST)
+
+  # Configure Consumers
+  if settings.AUTO_CONFIG_CONSUMERS:
+    cons_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
+    cons_errors = []
+    for consumer in cons_settings:
+      if not consumer.keys() >= {'resources', 'subscription', 'job', 'url', 'name'}:
+        cons_errors += [
+          { consumer_name: 'Invalid config settings'}
+        ]
+        continue
+
+      consumer_name = consumer.pop('name')
+      consumer_url = consumer.pop('url')
+
+    Response('Elasticsearch and kibana resources are missing', status=status.HTTP_400_BAD_REQUEST)
+
+
+  return Response(consumer_url)
+
+

@@ -17,6 +17,7 @@
 # under the License.
 
 import os
+import json
 
 from aether.sdk.conf.settings import *  # noqa
 from aether.sdk.conf.settings import (
@@ -69,8 +70,12 @@ AETHER_APPS = [
     if key.startswith(AETHER_PREFIX)
 ]
 
-# ElasticSearch consumer URL
-ES_CONSUMER_URL = os.environ.get('ES_CONSUMER_URL')
+# ElasticSearch consumer
+CONSUMERS_CONFIG_FILE = os.environ.get('CONSUMERS_CONFIG_FILE', '/code/conf/consumers.json')
+CONSUMERS_SETTINGS = []
+if os.path.exists(CONSUMERS_CONFIG_FILE):
+  with open(CONSUMERS_CONFIG_FILE, 'r') as f:
+    CONSUMERS_SETTINGS = json.load(f)
 
 
 # Upload files

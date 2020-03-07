@@ -245,6 +245,8 @@ services:
       PGPORT: 5432
       PGUSER: postgres
 
+      CONSUMERS_CONFIG_FILE: '/code/conf/consumers.json'
+
       # With offline export no restrictions
       EXPORT_MAX_ROWS_SIZE: 0
 
