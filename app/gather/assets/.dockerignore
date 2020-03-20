@@ -1,2 +1,9 @@
-.*
-!.env
+.dockerignore
+Dockerfile
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*,cover
+*.log
+node_modules
