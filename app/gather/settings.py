@@ -70,12 +70,16 @@ AETHER_APPS = [
     if key.startswith(AETHER_PREFIX)
 ]
 
+TENANCY_HEADER = os.environ.get('TENANCY_HEADER', 'X-Oauth-realm')
+
 # ElasticSearch consumer
 CONSUMERS_CONFIG_FILE = os.environ.get('CONSUMERS_CONFIG_FILE', '/code/conf/consumers.json')
-CONSUMERS_SETTINGS = []
+AUTO_CONFIG_CONSUMERS = os.environ.get('AUTO_CONFIG_CONSUMERS')
+CONSUMER_SETTINGS = []
+ES_CONSUMER_URL = os.environ.get('ES_CONSUMER_URL')
 if os.path.exists(CONSUMERS_CONFIG_FILE):
-  with open(CONSUMERS_CONFIG_FILE, 'r') as f:
-    CONSUMERS_SETTINGS = json.load(f)
+    with open(CONSUMERS_CONFIG_FILE, 'r') as f:
+        CONSUMER_SETTINGS = json.load(f)
 
 
 # Upload files

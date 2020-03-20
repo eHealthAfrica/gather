@@ -50,9 +50,15 @@ services:
       EXPORT_MAX_ROWS_SIZE: 1000
 
       WEB_SERVER_PORT: 9105
+
+      CONSUMERS_CONFIG_FILE: '/code/conf/consumers.json'
+      AUTO_CONFIG_CONSUMERS: "true"
+      TENANCY_HEADER: 'X-Oauth-realm'
     depends_on:
       db-test:
         condition: service_healthy
+    volumes:
+      - ./app/gather/api/tests/test_consumers.json:/code/conf/consumers.json
     command: test
 
 

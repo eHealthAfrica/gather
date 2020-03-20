@@ -31,6 +31,12 @@ from rest_framework.renderers import JSONRenderer
 from aether.sdk.multitenancy.views import MtViewSetMixin
 from .models import Survey, Mask
 from .serializers import SurveySerializer, MaskSerializer
+from .utils import (
+  __clean_name,
+  configure_consumers,
+  delete_survey_subscription,
+)
+from aether.sdk.multitenancy.utils import get_current_realm
 
 
 class SurveyViewSet(MtViewSetMixin, ModelViewSet):
@@ -56,31 +62,35 @@ class MaskViewSet(MtViewSetMixin, ModelViewSet):
     mt_field = 'survey'
 
 
-@api_view(['GET'])
+@api_view(['POST', 'DELETE'])
 @renderer_classes([JSONRenderer])
-# @permission_classes([permissions.IsAuthenticated])
-def consumer_config_view(request, *args, **kwargs):
-  _survey_name = request.data.get('name')
-  if not _survey_name:
-    Response('Invalid survey name', status=status.HTTP_400_BAD_REQUEST)
+@permission_classes([permissions.IsAuthenticated])
+def consumer_config(request, *args, **kwargs):
+    _survey_name = request.data.get('name')
+    _headers = {}
+    if not _survey_name:
+        return Response('Missing survey name', status=status.HTTP_400_BAD_REQUEST)
 
-  # Configure Consumers
-  if settings.AUTO_CONFIG_CONSUMERS:
-    cons_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
-    cons_errors = []
-    for consumer in cons_settings:
-      if not consumer.keys() >= {'resources', 'subscription', 'job', 'url', 'name'}:
-        cons_errors += [
-          { consumer_name: 'Invalid config settings'}
-        ]
-        continue
+    _survey_name_clean = __clean_name(_survey_name)
 
-      consumer_name = consumer.pop('name')
-      consumer_url = consumer.pop('url')
+    _realm = get_current_realm(request)
+    _headers[settings.TENANCY_HEADER] = _realm
 
-    Response('Elasticsearch and kibana resources are missing', status=status.HTTP_400_BAD_REQUEST)
-
-
-  return Response(consumer_url)
-
-
+    # Configure Consumers
+    if settings.AUTO_CONFIG_CONSUMERS:
+        consumer_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
+        if request.method == 'POST':
+            consumers, errors = configure_consumers(consumer_settings, _survey_name_clean, _headers)
+            if errors:
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(f'Configured {consumers} consumers successfully', status=status.HTTP_200_OK)
+        elif request.method == 'DELETE':
+            consumer_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
+            errors = delete_survey_subscription(consumer_settings, _survey_name_clean, _headers)
+            if errors:
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            pass    # pragma: no cover
+    else:
+        return Response('Consumer auto configuration is turned off', status=status.HTTP_200_OK)

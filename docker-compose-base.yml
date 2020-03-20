@@ -246,6 +246,8 @@ services:
       PGUSER: postgres
 
       CONSUMERS_CONFIG_FILE: '/code/conf/consumers.json'
+      AUTO_CONFIG_CONSUMERS: "true"
+      TENANCY_HEADER: 'X-Oauth-realm'
 
       # With offline export no restrictions
       EXPORT_MAX_ROWS_SIZE: 0

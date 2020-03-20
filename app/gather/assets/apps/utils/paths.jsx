@@ -126,6 +126,13 @@ export const getMasksAPIPath = ({ id, ...params }) => {
 }
 
 /**
+ * Returns the API url to configure defined consumers
+ */
+export const getConsumerConfigAPIPath = () => {
+  return `${getAppPath()}/api/consumers-config/`
+}
+
+/**
  * Return the REST API url
  *
  * Without "action":

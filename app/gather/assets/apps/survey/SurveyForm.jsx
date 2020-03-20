@@ -28,7 +28,8 @@ import {
   getSurveysAPIPath,
   getSurveysPath,
   getXFormsAPIPath,
-  getMediaFileContentPath
+  getMediaFileContentPath,
+  getConsumerConfigAPIPath
 } from '../utils/paths'
 
 import { ODK_APP, GATHER_APP } from '../utils/constants'
@@ -128,6 +129,14 @@ const MESSAGES = defineMessages({
   newForm: {
     defaultMessage: 'new',
     id: 'survey.odk.form.xform.new'
+  },
+  configureConsumers: {
+    defaultMessage: 'Configuring consumers for survey “{name}”',
+    id: 'survey.form.action.consumers.configuration.survey'
+  },
+  deleteConsumerSurvey: {
+    defaultMessage: 'Unsubscribing from survey topic “{name}”',
+    id: 'survey.form.action.delete.consumer.survey'
   }
 })
 
@@ -813,6 +822,20 @@ class SurveyForm extends Component {
       this.backToList()
     }
 
+    const deleteConsumerSubscription = () => {
+      this.setState({
+        actionsInProgress: [
+          ...this.state.actionsInProgress,
+          formatMessage(MESSAGES.handleDone),
+          formatMessage(MESSAGES.deleteConsumerSurvey, { name: survey.name })
+        ]
+      })
+
+      deleteData(getConsumerConfigAPIPath(), { payload: { name: survey.name } })
+        .then(afterDelete)
+        .catch(afterDelete)
+    }
+
     const afterGatherDelete = () => {
       if (!this.props.settings.ODK_ACTIVE) {
         return afterDelete()
@@ -828,9 +851,9 @@ class SurveyForm extends Component {
 
       // delete ODK survey and continue
       deleteData(getSurveysAPIPath({ app: ODK_APP, id: survey.id }))
-        .then(afterDelete)
+        .then(deleteConsumerSubscription)
         // ignore ODK errors (it might not exist)
-        .catch(afterDelete)
+        .catch(deleteConsumerSubscription)
     }
 
     this.setState({
@@ -1072,6 +1095,16 @@ class SurveyForm extends Component {
       method: patchData,
       url: getSurveysAPIPath({ app: ODK_APP, id: this.state.id, action: 'propagate' })
     })
+
+    if (this.state.odk.xforms.length) {
+      // Action to configure consumers for the survey
+      actions.push({
+        message: formatMessage(MESSAGES.configureConsumers, { name: this.state.name }),
+        method: postData,
+        url: getConsumerConfigAPIPath(),
+        data: { name: this.state.name }
+      })
+    }
 
     const executeActions = () => {
       if (!actions.length) {
