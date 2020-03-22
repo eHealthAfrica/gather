@@ -17,6 +17,7 @@
 # under the License.
 
 import logging
+import os
 from requests.exceptions import HTTPError
 from aether.python.utils import request
 
@@ -102,6 +103,8 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
 
     cons_errors = []
     cons = []
+    consumer_env_variables = {}
+
     for consumer in consumer_settings:
         if not consumer.keys() >= {'resources', 'subscription', 'job', 'url', 'name'}:
             cons_errors += [
@@ -113,6 +116,7 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
         consumer_url = consumer.pop('url')
         consumer_resources = consumer.pop('resources')
         job_data = {}
+        consumer_env_variables[consumer_name] = get_env_variables(consumer_name)
 
         # check if consumer is online
         try:
@@ -128,6 +132,7 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
         for resource in consumer_resources.keys():
             _cons_res = consumer_resources[resource]
             _resource_id = _cons_res.get('id', f'{resource}-id')
+            _cons_res.update(get_resource_env(consumer_env_variables, consumer_name, resource))
             try:
                 upsert_resource(consumer_url, resource, _cons_res, headers)
                 job_data[resource] = _resource_id
@@ -217,3 +222,31 @@ def delete_survey_subscription(consumer_settings, survey_name, headers={}):
             }]
             LOG.debug(str(e))
     return _errors
+
+
+def get_env_variables(consumer):
+    '''
+    Gets consumer variables from environment variables
+    Search format: CONSUMER_*
+    '''
+    key_word = f'{consumer.lower()}_'
+    consumer_variables = {
+        v: os.environ[v]
+        for v in os.environ
+        if v.lower().startswith(key_word)
+    }
+    return consumer_variables
+
+
+def get_resource_env(consumer_variables, consumer, resource):
+    '''
+    Gets resource variables from consumer variables
+    Search format: CONSUMER_*
+    '''
+    key_word = f'{consumer.lower()}_{resource.lower()}_'
+    resource_variables = {
+        v.replace(key_word, ''): consumer_variables[v]
+        for v in consumer_variables
+        if v.lower().startswith(key_word)
+    }
+    return resource_variables

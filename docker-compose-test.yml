@@ -54,6 +54,9 @@ services:
       CONSUMERS_CONFIG_FILE: '/code/conf/consumers.json'
       AUTO_CONFIG_CONSUMERS: "true"
       TENANCY_HEADER: 'X-Oauth-realm'
+
+      TEST_VARIABLE_1: 'test variable 1'
+      TEST_VARIABLE_2: 'test variable 2'
     depends_on:
       db-test:
         condition: service_healthy

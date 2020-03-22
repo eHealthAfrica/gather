@@ -27,6 +27,8 @@ from ..utils import (
     configure_consumers,
     consumer_request,
     delete_survey_subscription,
+    get_env_variables,
+    get_resource_env,
     upsert_resource
 )
 
@@ -263,3 +265,23 @@ class UtilsTests(TestCase):
         c_settings[0]['url'] = test_base_url
         errors = delete_survey_subscription(c_settings, 'Test Survey 3')
         self.assertEqual(len(errors), 1)
+
+        def test_get_env_variables(self):
+            test_consumer_name = 'test'
+            variables = get_env_variables(test_consumer_name)
+            self.assertEqual(len(variables), 2)
+            self.assertIn('TEST_VARIABLE_1', variables)
+            self.assertIn('TEST_VARIABLE_2', variables)
+
+        def test_get_resource_env(self):
+            consumer_variables = {
+                'TEST_KIBANA_USERNAME': 'user',
+                'TEST_KIBANA_PASSWORD': 'password',
+                'TEST_ES_APIKEY': 'test_api_key'
+            }
+            self.assertEqual(len(consumer_variables), 3)
+            resource_variables = get_resource_env(consumer_variables, 'test', 'kibana')
+            self.assertEqual(len(resource_variables), 2)
+            self.assertIn('USERNAME', resource_variables)
+            self.assertIn('PASSWORD', resource_variables)
+            self.assertEqual(resource_variables['PASSWORD'], 'password')
