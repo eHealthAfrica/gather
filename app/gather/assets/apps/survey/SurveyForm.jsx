@@ -831,7 +831,7 @@ class SurveyForm extends Component {
         ]
       })
 
-      deleteData(getConsumerConfigAPIPath(), { payload: { name: survey.name } })
+      deleteData(getConsumerConfigAPIPath(survey.id))
         .then(afterDelete)
         .catch(afterDelete)
     }
@@ -1101,8 +1101,7 @@ class SurveyForm extends Component {
       actions.push({
         message: formatMessage(MESSAGES.configureConsumers, { name: this.state.name }),
         method: postData,
-        url: getConsumerConfigAPIPath(),
-        data: { name: this.state.name }
+        url: getConsumerConfigAPIPath(this.state.id),
       })
     }
 

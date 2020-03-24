@@ -153,3 +153,60 @@ services:
     extra_hosts:
       - aether.local:192.168.3.10
       - gather.local:192.168.3.10
+
+  elasticsearch-consumer:
+    image: ehealthafrica/aether-elasticsearch-consumer:2.0.3
+    environment:
+
+      # redis
+      REDIS_DB: 1
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: passwordpassword
+
+      # local ES/Kibana
+      KIBANA_URL: http://kibana:5601/kibana-app
+      ELASTICSEARCH_URL: elasticsearch:9200
+      ELASTICSEARCH_USER: admin
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+
+      # kafka
+      KAFKA_URL: ${KAFKA_URL}
+      SECURITY.PROTOCOL: ${KAFKA_SECURITY}
+      SASL.MECHANISM: PLAIN
+      SASL.USERNAME: ${KAFKA_CONSUMER_USER}
+      SASL.PASSWORD: ${KAFKA_CONSUMER_PASSWORD}
+
+      # consumer settings
+      TENANCY_HEADER: x-oauth-realm
+      CONSUMER_NAME: 'CONS'
+      ES_CONSUMER_CONFIG_PATH: /code/conf/consumer/consumer.json
+      ES_CONSUMER_KAFKA_CONFIG_PATH: /code/conf/consumer/kafka.json
+      EXPOSE_PORT: 9099
+      # STACKDRIVER_LOGGING: 0
+      LOG_LEVEL: "DEBUG"
+
+    command: start
+    networks:
+      - gather_net
+    extra_hosts:
+      - aether.local:192.168.3.10
+      - gather.local:192.168.3.10
+    # this is private to the cluster, only open for debugging
+    # ports:
+    #   - 9099:9099
+
+  redis:
+    image: redis:alpine
+    command: >
+      redis-server
+      --requirepass passwordpassword
+      --notify-keyspace-events KEA
+      --appendonly yes
+      --auto-aof-rewrite-percentage 100
+      --auto-aof-rewrite-min-size 64mb
+    networks:
+      - gather_net
+    extra_hosts:
+      - aether.local:192.168.3.10
+      - gather.local:192.168.3.10

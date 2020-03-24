@@ -21,6 +21,7 @@ from rest_framework import permissions, status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import (
+    action,
     api_view,
     permission_classes,
     renderer_classes,
@@ -47,6 +48,30 @@ class SurveyViewSet(MtViewSetMixin, ModelViewSet):
     serializer_class = SurveySerializer
     search_fields = ('name',)
     ordering = ('name',)
+
+    @action(detail=True, methods=['post', 'delete'], url_name='consumer', url_path='consumer-config')
+    def consumer(self, request, pk=None, *args, **kwargs):
+        survey = self.get_object_or_404(pk=pk)
+        _survey_name = survey.name
+        _headers = {}
+        _realm = get_current_realm(request)
+        _headers[settings.CONSUMER_TENANCY_HEADER] = _realm
+
+        # Configure Consumers
+        if not settings.AUTO_CONFIG_CONSUMERS:
+            return Response(_('Consumer auto configuration is turned off'), status=status.HTTP_200_OK)
+
+        consumer_settings = settings.CONSUMER_SETTINGS
+        if request.method == 'POST':
+            consumers, errors = configure_consumers(consumer_settings, _survey_name, _headers)
+            if errors:
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(f'{_("Configured")} {consumers} {_("consumers successfully")}', status=status.HTTP_200_OK)
+        else:
+            errors = delete_survey_subscription(consumer_settings, _survey_name, _headers)
+            if errors:
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MaskViewSet(MtViewSetMixin, ModelViewSet):
