@@ -83,7 +83,6 @@ def consumer_config(request, *args, **kwargs):
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(f'Configured {consumers} consumers successfully', status=status.HTTP_200_OK)
     elif request.method == 'DELETE':
-        consumer_settings = settings.CONSUMER_SETTINGS
         errors = delete_survey_subscription(consumer_settings, _survey_name, _headers)
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
