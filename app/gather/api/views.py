@@ -35,6 +35,7 @@ from .utils import (
   delete_survey_subscription,
 )
 from aether.sdk.multitenancy.utils import get_current_realm
+from django.utils.translation import gettext as _
 
 
 class SurveyViewSet(MtViewSetMixin, ModelViewSet):
@@ -67,21 +68,21 @@ def consumer_config(request, *args, **kwargs):
     _survey_name = request.data.get('name')
     _headers = {}
     if not _survey_name:
-        return Response('Missing survey name', status=status.HTTP_400_BAD_REQUEST)
+        return Response(_('Missing survey name'), status=status.HTTP_400_BAD_REQUEST)
 
     _realm = get_current_realm(request)
     _headers[settings.CONSUMER_TENANCY_HEADER] = _realm
 
     # Configure Consumers
     if not settings.AUTO_CONFIG_CONSUMERS:
-        return Response('Consumer auto configuration is turned off', status=status.HTTP_200_OK)
+        return Response(_('Consumer auto configuration is turned off'), status=status.HTTP_200_OK)
 
     consumer_settings = settings.CONSUMER_SETTINGS
     if request.method == 'POST':
         consumers, errors = configure_consumers(consumer_settings, _survey_name, _headers)
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(f'Configured {consumers} consumers successfully', status=status.HTTP_200_OK)
+        return Response(f'{_("Configured")} {consumers} {_("consumers successfully")}', status=status.HTTP_200_OK)
     else:
         errors = delete_survey_subscription(consumer_settings, _survey_name, _headers)
         if errors:
