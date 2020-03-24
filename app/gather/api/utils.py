@@ -149,7 +149,7 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
         _cons_sub = consumer.get(_sub_resource)
         _resource_id = f'{survey_name.lower()}-{_sub_resource}-id'
         _cons_sub['id'] = _resource_id
-        _cons_sub['topic_pattern'] = survey_name
+        _cons_sub['topic_pattern'] = f'{survey_name}*'
         try:
             upsert_resource(consumer_url, _sub_resource, _cons_sub, headers)
             job_data[_sub_resource] = [_resource_id]
