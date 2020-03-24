@@ -74,7 +74,7 @@ TENANCY_HEADER = os.environ.get('TENANCY_HEADER', 'X-Oauth-realm')
 
 # ElasticSearch consumer
 CONSUMERS_CONFIG_FILE = os.environ.get('CONSUMERS_CONFIG_FILE', '/code/conf/consumers.json')
-AUTO_CONFIG_CONSUMERS = os.environ.get('AUTO_CONFIG_CONSUMERS')
+AUTO_CONFIG_CONSUMERS = bool(os.environ.get('AUTO_CONFIG_CONSUMERS'))
 CONSUMER_SETTINGS = []
 ES_CONSUMER_URL = os.environ.get('ES_CONSUMER_URL')
 if os.path.exists(CONSUMERS_CONFIG_FILE):
