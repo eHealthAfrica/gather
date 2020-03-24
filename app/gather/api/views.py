@@ -70,7 +70,7 @@ def consumer_config(request, *args, **kwargs):
         return Response('Missing survey name', status=status.HTTP_400_BAD_REQUEST)
 
     _realm = get_current_realm(request)
-    _headers[settings.TENANCY_HEADER] = _realm
+    _headers[settings.CONSUMER_TENANCY_HEADER] = _realm
 
     # Configure Consumers
     if not settings.AUTO_CONFIG_CONSUMERS:
@@ -82,10 +82,8 @@ def consumer_config(request, *args, **kwargs):
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(f'Configured {consumers} consumers successfully', status=status.HTTP_200_OK)
-    elif request.method == 'DELETE':
+    else:
         errors = delete_survey_subscription(consumer_settings, _survey_name, _headers)
         if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_204_NO_CONTENT)
-    else:
-        pass    # pragma: no cover

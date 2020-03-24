@@ -70,7 +70,7 @@ AETHER_APPS = [
     if key.startswith(AETHER_PREFIX)
 ]
 
-TENANCY_HEADER = os.environ.get('TENANCY_HEADER', 'X-Oauth-realm')
+CONSUMER_TENANCY_HEADER = os.environ.get('TENANCY_HEADER', 'X-Oauth-realm')
 
 # ElasticSearch consumer
 CONSUMERS_CONFIG_FILE = os.environ.get('CONSUMERS_CONFIG_FILE', '/code/conf/consumers.json')
