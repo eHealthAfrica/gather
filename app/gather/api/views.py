@@ -32,7 +32,6 @@ from aether.sdk.multitenancy.views import MtViewSetMixin
 from .models import Survey, Mask
 from .serializers import SurveySerializer, MaskSerializer
 from .utils import (
-  __clean_name,
   configure_consumers,
   delete_survey_subscription,
 )
@@ -71,26 +70,24 @@ def consumer_config(request, *args, **kwargs):
     if not _survey_name:
         return Response('Missing survey name', status=status.HTTP_400_BAD_REQUEST)
 
-    _survey_name_clean = __clean_name(_survey_name)
-
     _realm = get_current_realm(request)
     _headers[settings.TENANCY_HEADER] = _realm
 
     # Configure Consumers
-    if settings.AUTO_CONFIG_CONSUMERS:
-        consumer_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
-        if request.method == 'POST':
-            consumers, errors = configure_consumers(consumer_settings, _survey_name_clean, _headers)
-            if errors:
-                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(f'Configured {consumers} consumers successfully', status=status.HTTP_200_OK)
-        elif request.method == 'DELETE':
-            consumer_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
-            errors = delete_survey_subscription(consumer_settings, _survey_name_clean, _headers)
-            if errors:
-                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            pass    # pragma: no cover
-    else:
+    if not settings.AUTO_CONFIG_CONSUMERS:
         return Response('Consumer auto configuration is turned off', status=status.HTTP_200_OK)
+
+    consumer_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
+    if request.method == 'POST':
+        consumers, errors = configure_consumers(consumer_settings, _survey_name, _headers)
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(f'Configured {consumers} consumers successfully', status=status.HTTP_200_OK)
+    elif request.method == 'DELETE':
+        consumer_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
+        errors = delete_survey_subscription(consumer_settings, _survey_name, _headers)
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        pass    # pragma: no cover

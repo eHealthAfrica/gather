@@ -19,7 +19,8 @@
 import logging
 import os
 from requests.exceptions import HTTPError
-from aether.python.utils import request
+from aether.sdk.utils import request
+from django.utils.translation import gettext as _
 
 LOG = logging.getLogger('Utils')
 
@@ -79,7 +80,7 @@ def upsert_resource(base_url, resource_name, resource, headers={}, skip_subs=Fal
             LOG.debug(str(e))
             raise e
     else:
-        err = f'{resource_name}: No id provided'
+        err = f'{resource_name}: {_("No id provided")}'
         LOG.debug(err)
         raise Exception(err)
 
@@ -104,17 +105,18 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
     cons_errors = []
     cons = []
     consumer_env_variables = {}
+    survey_name = __clean_name(survey_name)
 
     for consumer in consumer_settings:
         if not consumer.keys() >= {'resources', 'subscription', 'job', 'url', 'name'}:
             cons_errors += [
-                {consumer.get('name', 'Unknown'): 'Invalid config settings'}
+                {consumer.get('name', 'Unknown'): _('Invalid config settings')}
             ]
             continue
 
-        consumer_name = consumer.pop('name')
-        consumer_url = consumer.pop('url')
-        consumer_resources = consumer.pop('resources')
+        consumer_name = consumer.get('name')
+        consumer_url = consumer.get('url')
+        consumer_resources = consumer.get('resources')
         job_data = {}
         consumer_env_variables[consumer_name] = get_env_variables(consumer_name)
 
@@ -123,9 +125,9 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
             consumer_request(url=f'{consumer_url}health', headers=headers)
         except Exception as e:
             cons_errors += [
-                {consumer_name: 'Consumer is offline'}
+                {consumer_name: _('Consumer is offline')}
             ]
-            LOG.error(str({consumer_name: f'Consumer is offline @ {consumer_url}, error: {str(e)}'}))
+            LOG.error(str({consumer_name: f'{_("Consumer is offline @")} {consumer_url}, error: {str(e)}'}))
             continue
 
         # register resources (upsert)
@@ -144,7 +146,7 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
 
         # register subscription
         _sub_resource = 'subscription'
-        _cons_sub = consumer.pop(_sub_resource)
+        _cons_sub = consumer.get(_sub_resource)
         _resource_id = f'{survey_name.lower()}-{_sub_resource}-id'
         _cons_sub['id'] = _resource_id
         _cons_sub['topic_pattern'] = survey_name
@@ -159,9 +161,9 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
 
         # register job
         _resource = 'job'
-        _cons_job = consumer.pop(_resource)
+        _cons_job = consumer.get(_resource)
         job_data['id'] = _cons_job.get('id', f'{_resource}-id')
-        job_data['name'] = _cons_job.get('name', 'ES Job')
+        job_data['name'] = _cons_job.get('name', 'Gather Job')
         try:
             upsert_resource(consumer_url, _resource, job_data, headers)
         except Exception as e:
@@ -185,8 +187,8 @@ def delete_survey_subscription(consumer_settings, survey_name, headers={}):
     _subscription_key = 'subscription'
 
     for consumer in consumer_settings:
-        consumer_name = consumer.pop('name')
-        consumer_url = consumer.pop('url')
+        consumer_name = consumer.get('name')
+        consumer_url = consumer.get('url')
         try:
             survey_subscription_id = f'{_survey_name.lower()}-{_subscription_key}-id'
             jobs = consumer_request(

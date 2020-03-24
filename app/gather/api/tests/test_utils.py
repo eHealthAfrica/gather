@@ -149,7 +149,7 @@ class UtilsTests(TestCase):
         self.assertEqual(consumers[0], 'es')
 
         c_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
-        sub_id = 'test survey 4-subscription-id'
+        sub_id = 'testsurvey4-subscription-id'
         test_url_subscription_list = f'{test_base_url}subscription/list'
         responses.add(
             responses.GET, test_url_subscription_list,
