@@ -78,7 +78,7 @@ class UtilsTests(TestCase):
         test_base_url = 'http://test.local/'
 
         test_resource = test_settings[0]['job']
-        resource_id = test_resource.get('id')
+        resource_id = test_resource.pop('id')
 
         with self.assertRaises(Exception) as exec:
             upsert_resource(test_base_url, 'job', test_resource)
@@ -123,7 +123,7 @@ class UtilsTests(TestCase):
     def test_configure_consumers(self):
         c_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
 
-        resources = c_settings[0].get('resources')
+        resources = c_settings[0].pop('resources')
         consumers, errors = configure_consumers(c_settings, 'Test Survey 1')
         self.assertEqual(len(errors), 1)
         self.assertEqual(errors[0], {'es': 'Invalid config settings'})
