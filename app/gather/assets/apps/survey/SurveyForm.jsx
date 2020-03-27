@@ -867,16 +867,15 @@ class SurveyForm extends Component {
     }
 
     const deleteGatherSurvey = () => {
+      this.setState({
+        actionsInProgress: [
+          ...this.state.actionsInProgress,
+          formatMessage(MESSAGES.handleDone),
+          formatMessage(MESSAGES.deleteGatherSurvey, { name: survey.name })
+        ]
+      })
 
-        this.setState({
-            actionsInProgress: [
-              ...this.state.actionsInProgress,
-              formatMessage(MESSAGES.handleDone),
-              formatMessage(MESSAGES.deleteGatherSurvey, { name: survey.name })
-            ]
-          })
-
-        deleteData(getSurveysAPIPath({ app: GATHER_APP, id: survey.id }))
+      deleteData(getSurveysAPIPath({ app: GATHER_APP, id: survey.id }))
         .then(afterGatherDelete)
         .catch(afterGatherDelete)
     }
@@ -1117,10 +1116,10 @@ class SurveyForm extends Component {
 
     // The action is to save the survey in gather
     actions.push({
-        message: formatMessage(MESSAGES.saveGatherSurvey, { name: this.state.name }),
-        method: this.state.gather.project_id ? putData : postData,
-        url: getSurveysAPIPath({ app: GATHER_APP, id: this.state.gather.project_id }),
-        data: {...this.state, project_id: this.state.id}
+      message: formatMessage(MESSAGES.saveGatherSurvey, { name: this.state.name }),
+      method: this.state.gather.project_id ? putData : postData,
+      url: getSurveysAPIPath({ app: GATHER_APP, id: this.state.gather.project_id }),
+      data: { ...this.state, project_id: this.state.id }
     })
 
     if (this.state.odk.xforms.length) {
@@ -1128,7 +1127,7 @@ class SurveyForm extends Component {
       actions.push({
         message: formatMessage(MESSAGES.configureConsumers, { name: this.state.name }),
         method: postData,
-        url: getConsumerConfigAPIPath(this.state.id),
+        url: getConsumerConfigAPIPath(this.state.id)
       })
     }
 

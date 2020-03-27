@@ -21,7 +21,7 @@
 import React from 'react'
 
 import { FetchUrlsContainer } from '../components'
-import { getSurveyorsAPIPath, getSurveysAPIPath, getGatherSurveysAPIPath } from '../utils/paths'
+import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
 import { ODK_APP, GATHER_APP } from '../utils/constants'
 
 import Survey from './Survey'
