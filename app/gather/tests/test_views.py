@@ -30,5 +30,5 @@ class ViewsTest(TestCase):
         self.assertEqual(response.json(), {
             'aether_apps': ['kernel', 'odk'],
             'export_max_rows_size': 1000,
-            'es_consumer_url': 'http://es-consumer-url',
+            'dashboard_url': 'http://kibana:5601/kibana-app',
         })

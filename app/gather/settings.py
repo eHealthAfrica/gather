@@ -27,6 +27,15 @@ from aether.sdk.conf.settings import (
 )
 
 
+def get_dashboard_url(settings):
+    url = None
+    for consumer in settings:
+        url = consumer.get('resources', {}).get('kibana', {}).get('url', None)
+        if url:
+            return url
+    return url
+
+
 # ------------------------------------------------------------------------------
 # Gather Configuration
 # ------------------------------------------------------------------------------
@@ -76,10 +85,10 @@ CONSUMER_TENANCY_HEADER = os.environ.get('TENANCY_HEADER', 'X-Oauth-realm')
 CONSUMERS_CONFIG_FILE = os.environ.get('CONSUMERS_CONFIG_FILE', '/code/conf/consumers.json')
 AUTO_CONFIG_CONSUMERS = bool(os.environ.get('AUTO_CONFIG_CONSUMERS'))
 CONSUMER_SETTINGS = []
-ES_CONSUMER_URL = os.environ.get('ES_CONSUMER_URL')
 if os.path.exists(CONSUMERS_CONFIG_FILE):
     with open(CONSUMERS_CONFIG_FILE, 'r') as f:
         CONSUMER_SETTINGS = json.load(f)
+        DASHBOARD_URL = get_dashboard_url(CONSUMER_SETTINGS)
 
 
 # Upload files

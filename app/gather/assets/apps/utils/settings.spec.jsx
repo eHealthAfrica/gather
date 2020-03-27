@@ -42,14 +42,14 @@ describe('Settings utils', () => {
         .reply(200, {
           aether_apps: ['kernel', 'odk'],
           export_max_rows_size: 10000,
-          es_consumer_url: 'http://localhost:5601/'
+          dashboard_url: 'http://localhost:5601/'
         })
 
       return getSettings().then(settings => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: true,
           EXPORT_MAX_ROWS_SIZE: 10000,
-          ES_CONSUMER_URL: 'http://localhost:5601/'
+          DASHBOARD_URL: 'http://localhost:5601/'
         })
       })
     })
@@ -65,7 +65,7 @@ describe('Settings utils', () => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: false,
           EXPORT_MAX_ROWS_SIZE: 0,
-          ES_CONSUMER_URL: null
+          DASHBOARD_URL: null
         })
       })
     })
@@ -79,7 +79,7 @@ describe('Settings utils', () => {
         assert.deepStrictEqual(settings, {
           ODK_ACTIVE: true,
           EXPORT_MAX_ROWS_SIZE: 0,
-          ES_CONSUMER_URL: null
+          DASHBOARD_URL: null
         })
       })
     })
