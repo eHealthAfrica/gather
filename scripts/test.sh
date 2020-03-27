@@ -46,10 +46,10 @@ echo "_____________________________________________ Killing ALL containers"
 docker-compose kill
 $DC_TEST kill
 $DC_TEST down -v
-# $DC_TEST pull db-test
+$DC_TEST pull db-test
 
-# prepare_and_test_container gather-assets
-# $DC_TEST run --rm gather-assets-test build
+prepare_and_test_container gather-assets
+$DC_TEST run --rm gather-assets-test build
 
 echo "_____________________________________________ Starting database"
 $DC_TEST up -d db-test
