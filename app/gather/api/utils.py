@@ -19,8 +19,8 @@
 import logging
 import os
 from requests.exceptions import HTTPError
-from aether.sdk.utils import request
 from django.utils.translation import gettext as _
+from aether.sdk.utils import request
 
 LOG = logging.getLogger('Utils')
 

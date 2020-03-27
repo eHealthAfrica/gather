@@ -17,20 +17,20 @@
 # under the License.
 
 from django.conf import settings
+from django.utils.translation import gettext as _
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from aether.sdk.multitenancy.views import MtViewSetMixin
+from aether.sdk.multitenancy.utils import get_current_realm
 from .models import Survey, Mask
 from .serializers import SurveySerializer, MaskSerializer
 from .utils import (
   configure_consumers,
   delete_survey_subscription,
 )
-from aether.sdk.multitenancy.utils import get_current_realm
-from django.utils.translation import gettext as _
 
 
 class SurveyViewSet(MtViewSetMixin, ModelViewSet):
