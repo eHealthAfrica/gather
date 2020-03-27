@@ -60,7 +60,7 @@ class SurveyViewSet(MtViewSetMixin, ModelViewSet):
             consumers, errors = configure_consumers(consumer_settings, _survey_name, _realm, _headers)
             if errors:
                 return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response(f'{_("Configured")} {consumers} {_("consumers successfully")}', status=status.HTTP_200_OK)
+            return Response(_('Configured {} consumers successfully').format(consumers), status=status.HTTP_200_OK)
         else:
             errors = delete_survey_subscription(consumer_settings, _survey_name, _realm, _headers)
             if errors:
