@@ -126,6 +126,13 @@ export const getMasksAPIPath = ({ id, ...params }) => {
 }
 
 /**
+ * Returns the API url to configure defined consumers
+ */
+export const getConsumerConfigAPIPath = (id) => {
+  return buildAPIPath(GATHER_APP, 'surveys', id, { action: 'consumers-config' })
+}
+
+/**
  * Return the REST API url
  *
  * Without "action":
