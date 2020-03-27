@@ -21,8 +21,8 @@
 import React from 'react'
 
 import { FetchUrlsContainer } from '../components'
-import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
-import { ODK_APP } from '../utils/constants'
+import { getSurveyorsAPIPath, getSurveysAPIPath, getGatherSurveysAPIPath } from '../utils/paths'
+import { ODK_APP, GATHER_APP } from '../utils/constants'
 
 import Survey from './Survey'
 import SurveyForm from './SurveyForm'
@@ -62,6 +62,10 @@ const SurveyDispatcher = ({ action, surveyId, settings }) => {
         {
           name: 'survey',
           url: getSurveysAPIPath({ id: surveyId })
+        },
+        {
+          name: 'gather',
+          url: getSurveysAPIPath({ app: GATHER_APP, id: surveyId })
         }
       ]
 
@@ -103,6 +107,10 @@ const SurveyDispatcher = ({ action, surveyId, settings }) => {
         {
           name: 'skeleton',
           url: getSurveysAPIPath({ id: surveyId, action: 'schemas-skeleton' })
+        },
+        {
+          name: 'gather',
+          url: getSurveysAPIPath({ app: GATHER_APP, id: surveyId })
         }
       ]
 

@@ -35,7 +35,6 @@ router.register('masks', views.MaskViewSet)
 
 urlpatterns = [
     path(route='gather/', view=include(router.urls)),
-    path(route='consumers-config/', view=views.consumer_config, name='consumers-config')
 ]
 
 for app in settings.AETHER_APPS:

@@ -124,12 +124,12 @@ class UtilsTests(TestCase):
         c_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
 
         resources = c_settings[0].pop('resources')
-        consumers, errors = configure_consumers(c_settings, 'Test Survey 1')
+        consumers, errors = configure_consumers(c_settings, 'Test Survey 1', 'test')
         self.assertEqual(len(errors), 1)
         self.assertEqual(errors[0], {'es': 'Invalid config settings'})
 
         c_settings[0]['resources'] = resources
-        consumers, errors = configure_consumers(c_settings, 'Test Survey 2')
+        consumers, errors = configure_consumers(c_settings, 'Test Survey 2', 'test')
         self.assertEqual(len(errors), 1)
         self.assertEqual(errors[0], {'es': 'Consumer is offline'})
 
@@ -143,13 +143,13 @@ class UtilsTests(TestCase):
 
         c_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
         c_settings[0]['url'] = test_base_url
-        consumers, errors = configure_consumers(c_settings, 'Test Survey 3')
+        consumers, errors = configure_consumers(c_settings, 'Test Survey 3', 'test')
         self.assertEqual(len(errors), 4)
         self.assertEqual(len(consumers), 1)
         self.assertEqual(consumers[0], 'es')
 
         c_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
-        sub_id = 'testsurvey4-subscription-id'
+        sub_id = 'test-testsurvey4-subscription-id'
         test_url_subscription_list = f'{test_base_url}subscription/list'
         responses.add(
             responses.GET, test_url_subscription_list,
@@ -183,7 +183,7 @@ class UtilsTests(TestCase):
 
         c_settings[0]['url'] = test_base_url
         c_settings[0]['subscription']['id'] = sub_id
-        consumers, errors = configure_consumers(c_settings, 'Test Survey 4')
+        consumers, errors = configure_consumers(c_settings, 'Test Survey 4', 'test')
         self.assertEqual(len(errors), 0)
         self.assertEqual(len(consumers), 1)
         self.assertEqual(consumers[0], 'es')
@@ -193,13 +193,13 @@ class UtilsTests(TestCase):
         test_base_url = 'http://test.local/'
         c_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
         c_settings[0]['url'] = test_base_url
-        errors = delete_survey_subscription(c_settings, 'Test Survey 1')
+        errors = delete_survey_subscription(c_settings, 'Test Survey 1', 'test')
         self.assertEqual(len(errors), 1)
 
         test_url_resouce_list = f'{test_base_url}job/list'
         job_id = 'test-job-id'
         job_id_1 = 'test-job-id-2'
-        sub_id = 'testsurvey2-subscription-id'
+        sub_id = 'test-testsurvey2-subscription-id'
         responses.add(
             responses.GET, test_url_resouce_list,
             json=[job_id, job_id_1],
@@ -258,12 +258,12 @@ class UtilsTests(TestCase):
 
         c_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
         c_settings[0]['url'] = test_base_url
-        errors = delete_survey_subscription(c_settings, 'Test Survey 2')
+        errors = delete_survey_subscription(c_settings, 'Test Survey 2', 'test')
         self.assertEqual(len(errors), 0)
 
         c_settings = copy.deepcopy(settings.CONSUMER_SETTINGS)
         c_settings[0]['url'] = test_base_url
-        errors = delete_survey_subscription(c_settings, 'Test Survey 3')
+        errors = delete_survey_subscription(c_settings, 'Test Survey 3', 'test')
         self.assertEqual(len(errors), 1)
 
         def test_get_env_variables(self):

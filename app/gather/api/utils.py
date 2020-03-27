@@ -91,10 +91,10 @@ def __clean_name(value):
     Converts to title case
     Removes spaces
     '''
-    return ''.join([c if c.isalnum() else ' ' for c in value]).title().replace(' ', '')
+    return ''.join([c if c.isalnum() or c == '_' else ' ' for c in value]).title().replace(' ', '')
 
 
-def configure_consumers(consumer_settings, survey_name, headers={}):
+def configure_consumers(consumer_settings, survey_name, realm, headers={}):
     '''
     Creates or updates consumer resources
     Add a subscription to a topic as the survey name
@@ -147,7 +147,7 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
         # register subscription
         _sub_resource = 'subscription'
         _cons_sub = consumer.get(_sub_resource)
-        _resource_id = f'{survey_name.lower()}-{_sub_resource}-id'
+        _resource_id = f'{realm}-{survey_name.lower()}-{_sub_resource}-id'
         _cons_sub['id'] = _resource_id
         _cons_sub['topic_pattern'] = f'{survey_name}*'
         try:
@@ -176,7 +176,7 @@ def configure_consumers(consumer_settings, survey_name, headers={}):
     return cons, cons_errors
 
 
-def delete_survey_subscription(consumer_settings, survey_name, headers={}):
+def delete_survey_subscription(consumer_settings, survey_name, realm, headers={}):
     '''
     Removes survey subscriptions from all jobs
     Deletes jobs if subscriptions are empty
@@ -190,7 +190,7 @@ def delete_survey_subscription(consumer_settings, survey_name, headers={}):
         consumer_name = consumer.get('name')
         consumer_url = consumer.get('url')
         try:
-            survey_subscription_id = f'{_survey_name.lower()}-{_subscription_key}-id'
+            survey_subscription_id = f'{realm}-{_survey_name.lower()}-{_subscription_key}-id'
             jobs = consumer_request(
                 url=f'{consumer_url}job/list',
                 headers=headers

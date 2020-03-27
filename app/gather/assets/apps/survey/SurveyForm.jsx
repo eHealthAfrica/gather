@@ -107,6 +107,10 @@ const MESSAGES = defineMessages({
     defaultMessage: 'Deleting survey “{name}” in ODK',
     id: 'survey.form.action.delete.odk.survey'
   },
+  deleteGatherSurvey: {
+    defaultMessage: 'Deleting survey “{name}” in Gather',
+    id: 'survey.form.action.delete.gather.survey'
+  },
   deleteODKXForm: {
     defaultMessage: 'Deleting xform “{name}” in ODK',
     id: 'survey.form.action.delete.odk.xform'
@@ -137,6 +141,10 @@ const MESSAGES = defineMessages({
   deleteConsumerSurvey: {
     defaultMessage: 'Unsubscribing from survey topic “{name}”',
     id: 'survey.form.action.delete.consumer.survey'
+  },
+  saveGatherSurvey: {
+    defaultMessage: 'Saving “{name}” survey in Gather',
+    id: 'survey.form.action.save.gather.survey'
   }
 })
 
@@ -145,8 +153,10 @@ class SurveyForm extends Component {
     super(props)
 
     const survey = clone(props.survey || {})
+    const gather = clone(props.gather || {})
     this.state = {
       ...survey,
+      gather,
       errors: {},
       isUpdating: false,
       actionsInProgress: []
@@ -832,8 +842,8 @@ class SurveyForm extends Component {
       })
 
       deleteData(getConsumerConfigAPIPath(survey.id))
-        .then(afterDelete)
-        .catch(afterDelete)
+        .then(deleteGatherSurvey)
+        .catch(deleteGatherSurvey)
     }
 
     const afterGatherDelete = () => {
@@ -850,10 +860,25 @@ class SurveyForm extends Component {
       })
 
       // delete ODK survey and continue
-      deleteData(getSurveysAPIPath({ app: ODK_APP, id: survey.id }))
-        .then(deleteConsumerSubscription)
+      deleteData(getSurveysAPIPath({ app: ODK_APP, id: survey.project_id }))
+        .then(afterDelete)
         // ignore ODK errors (it might not exist)
-        .catch(deleteConsumerSubscription)
+        .catch(afterDelete)
+    }
+
+    const deleteGatherSurvey = () => {
+
+        this.setState({
+            actionsInProgress: [
+              ...this.state.actionsInProgress,
+              formatMessage(MESSAGES.handleDone),
+              formatMessage(MESSAGES.deleteGatherSurvey, { name: survey.name })
+            ]
+          })
+
+        deleteData(getSurveysAPIPath({ app: GATHER_APP, id: survey.id }))
+        .then(afterGatherDelete)
+        .catch(afterGatherDelete)
     }
 
     this.setState({
@@ -866,13 +891,7 @@ class SurveyForm extends Component {
 
     // delete Kernel survey and continue
     deleteData(getSurveysAPIPath({ id: survey.id }))
-      .then(() => {
-        // delete also Gather survey and continue
-        deleteData(getSurveysAPIPath({ app: GATHER_APP, id: survey.id }))
-          .then(afterGatherDelete)
-          // ignore Gather errors (it might not exist)
-          .catch(afterGatherDelete)
-      })
+      .then(deleteConsumerSubscription)
       .catch(error => { this.handleError(error, 'delete') })
   }
 
@@ -1089,11 +1108,19 @@ class SurveyForm extends Component {
       })
     })
 
-    // The last action is to propagate ODK Project artefacts to Kernel
+    // The action is to propagate ODK Project artefacts to Kernel
     actions.push({
       message: formatMessage(MESSAGES.propagateODKSurvey, { name: this.state.name }),
       method: patchData,
       url: getSurveysAPIPath({ app: ODK_APP, id: this.state.id, action: 'propagate' })
+    })
+
+    // The action is to save the survey in gather
+    actions.push({
+        message: formatMessage(MESSAGES.saveGatherSurvey, { name: this.state.name }),
+        method: this.state.gather.project_id ? putData : postData,
+        url: getSurveysAPIPath({ app: GATHER_APP, id: this.state.gather.project_id }),
+        data: {...this.state, project_id: this.state.id}
     })
 
     if (this.state.odk.xforms.length) {
