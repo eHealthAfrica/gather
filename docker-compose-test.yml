@@ -41,8 +41,6 @@ services:
       AETHER_ODK_TOKEN: odk-test-token
       AETHER_ODK_URL: http://odk-test
 
-      ES_CONSUMER_URL: http://es-consumer-url
-
       DB_NAME: gather-test
       PGHOST: db-test
       PGPASSWORD: this-is-really-really-secret.trust-me!

@@ -136,7 +136,7 @@ class Survey extends Component {
           <ul className='survey-data-tabs'>
             {
               // Enable Dashboard tab only if the ES consumer is connected to Gather
-              settings.ES_CONSUMER_URL &&
+              settings.DASHBOARD_URL &&
                 <li className='dashboard-tab'>
                   <button
                     type='button'
