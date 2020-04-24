@@ -41,8 +41,6 @@ services:
       AETHER_ODK_TOKEN: odk-test-token
       AETHER_ODK_URL: http://odk-test
 
-      ES_CONSUMER_URL: http://es-consumer-url
-
       DB_NAME: gather-test
       PGHOST: db-test
       PGPASSWORD: this-is-really-really-secret.trust-me!
@@ -50,9 +48,18 @@ services:
       EXPORT_MAX_ROWS_SIZE: 1000
 
       WEB_SERVER_PORT: 9105
+
+      CONSUMERS_CONFIG_FILE: '/code/conf/consumers.json'
+      AUTO_CONFIG_CONSUMERS: "true"
+      TENANCY_HEADER: 'X-Oauth-realm'
+
+      TEST_VARIABLE_1: 'test variable 1'
+      TEST_VARIABLE_2: 'test variable 2'
     depends_on:
       db-test:
         condition: service_healthy
+    volumes:
+      - ./app/gather/api/tests/test_consumers.json:/code/conf/consumers.json
     command: test
 
 
