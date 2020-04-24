@@ -1,6 +1,6 @@
 .dockerignore
 Dockerfile
-db.sqlite3
+gather.Dockerfile
 __pycache__
 *.pyc
 *.pyo
@@ -16,4 +16,4 @@ pip-delete-this-directory.txt
 coverage.xml
 *,cover
 *.log
-.git
+node_modules

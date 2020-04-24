@@ -209,9 +209,7 @@ services:
 
   gather-base:
     image: gather
-    build:
-      context: .
-      dockerfile: app/Dockerfile
+    build: .
     stdin_open: true
     tty: true
     environment:
@@ -244,6 +242,10 @@ services:
       PGPASSWORD: ${GATHER_DB_PASSWORD}
       PGPORT: 5432
       PGUSER: postgres
+
+      CONSUMERS_CONFIG_FILE: '/code/conf/consumers.json'
+      AUTO_CONFIG_CONSUMERS: "true"
+      TENANCY_HEADER: 'X-Oauth-realm'
 
       # With offline export no restrictions
       EXPORT_MAX_ROWS_SIZE: 0
