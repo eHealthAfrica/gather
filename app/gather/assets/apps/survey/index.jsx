@@ -65,7 +65,11 @@ const SurveyDispatcher = ({ action, surveyId, settings }) => {
         },
         {
           name: 'gather',
-          url: getSurveysAPIPath({ app: GATHER_APP, id: surveyId })
+          url: getSurveysAPIPath({ app: GATHER_APP, id: surveyId }),
+          force: {
+            url: getSurveysAPIPath({ app: GATHER_APP }),
+            data: { project_id: surveyId }
+          }
         }
       ]
 
@@ -110,7 +114,11 @@ const SurveyDispatcher = ({ action, surveyId, settings }) => {
         },
         {
           name: 'gather',
-          url: getSurveysAPIPath({ app: GATHER_APP, id: surveyId })
+          url: getSurveysAPIPath({ app: GATHER_APP, id: surveyId }),
+          force: {
+            url: getSurveysAPIPath({ app: GATHER_APP }),
+            data: { project_id: surveyId }
+          }
         }
       ]
 
