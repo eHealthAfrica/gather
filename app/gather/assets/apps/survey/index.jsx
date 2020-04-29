@@ -22,7 +22,7 @@ import React from 'react'
 
 import { FetchUrlsContainer } from '../components'
 import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
-import { ODK_APP, GATHER_APP } from '../utils/constants'
+import { ODK_APP, GATHER_APP, MAX_FETCH_SIZE } from '../utils/constants'
 
 import Survey from './Survey'
 import SurveyForm from './SurveyForm'
@@ -41,7 +41,7 @@ const SurveyDispatcher = ({ action, surveyId, settings }) => {
         const odkAddUrls = [
           {
             name: 'surveyors',
-            url: getSurveyorsAPIPath({ page: 1, pageSize: 1000 })
+            url: getSurveyorsAPIPath({ page: 1, pageSize: MAX_FETCH_SIZE })
           }
         ]
         // add odk urls to edit ones
@@ -85,7 +85,7 @@ const SurveyDispatcher = ({ action, surveyId, settings }) => {
           },
           {
             name: 'surveyors',
-            url: getSurveyorsAPIPath({ page: 1, pageSize: 1000 })
+            url: getSurveyorsAPIPath({ page: 1, pageSize: MAX_FETCH_SIZE })
           }
         ]
 

@@ -44,6 +44,7 @@ services:
       DB_NAME: gather-test
       PGHOST: db-test
       PGPASSWORD: this-is-really-really-secret.trust-me!
+      DJANGO_USE_CACHE: null
 
       EXPORT_MAX_ROWS_SIZE: 1000
 

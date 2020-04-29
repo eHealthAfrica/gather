@@ -24,6 +24,9 @@
 // the first two rows would be the header so we reduce in two the value.
 export const MAX_PAGE_SIZE = 1048574
 
+// Maximum size of the select options in the forms
+export const MAX_FETCH_SIZE = 1000
+
 export const EXPORT_CSV_FORMAT = 'csv'
 export const EXPORT_EXCEL_FORMAT = 'xlsx'
 
