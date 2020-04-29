@@ -34,7 +34,7 @@ const MESSAGES = defineMessages({
     id: 'multiselect.deselect'
   },
   filter: {
-    defaultMessage: 'Type…',
+    defaultMessage: 'Search…',
     id: 'multiselect.filter'
   }
 })
