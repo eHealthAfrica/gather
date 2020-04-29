@@ -83,6 +83,9 @@ function setup {
     # migrate data model if needed
     python ./manage.py migrate --noinput
 
+    # clean out expired sessions
+    python ./manage.py clearsessions
+
     # create admin user
     # arguments:
     #    -u=admin
