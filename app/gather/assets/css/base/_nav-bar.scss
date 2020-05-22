@@ -20,8 +20,8 @@
 
 .navbar {
   background: $text-color;
-  box-shadow: 0 -2px 2px rgba($black, .4) inset;
-  font: .9rem $nav-font-family;
+  box-shadow: 0 -2px 2px rgba($black, 0.4) inset;
+  font: 0.9rem $nav-font-family;
   font-weight: 700;
   padding: 0;
 }
@@ -30,7 +30,7 @@
   align-items: stretch;
   display: flex;
   flex-direction: row;
-  margin-left: .5rem;
+  margin-left: 0.5rem;
 }
 
 .navbar-nav.float-right {
@@ -40,10 +40,11 @@
 
 .nav-item {
   @include label;
+
   align-items: center;
-  color: rgba($white, .5);
+  color: rgba($white, 0.5);
   display: flex;
-  padding: .2rem .6rem 0;
+  padding: 0.2rem 0.6rem 0;
 
   .btn:not(.btn-primary) {
     color: $action-color;
@@ -55,25 +56,25 @@
 }
 
 .user-name {
-  border-left: 1px solid rgba($white, .2);
+  border-left: 1px solid rgba($white, 0.2);
   text-transform: none;
 
   .logout {
-    margin-left: .5rem;
+    margin-left: 0.5rem;
   }
 }
 
 .navbar-brand {
-  background: rgba($action-color, .3);
+  background: rgba($action-color, 0.3);
   margin: 0;
-  padding: .6rem 1.5rem;
+  padding: 0.6rem 1.5rem;
   position: relative;
   height: $navbar-height;
 
   span {
     display: inline-block;
     margin-left: 36px;
-    padding: .1rem;
+    padding: 0.1rem;
   }
 }
 
@@ -91,14 +92,14 @@ nav {
 
 .navbar-toggler {
   color: $white;
-  padding: .75rem;
+  padding: 0.75rem;
   z-index: 2;
 }
 
 @media screen and (max-width: 767px) {
   .nav-item {
-    padding: .3rem 1rem;
-    border-bottom: 1px solid rgba($white, .2);
+    padding: 0.3rem 1rem;
+    border-bottom: 1px solid rgba($white, 0.2);
   }
 
   .navbar-collapse {
