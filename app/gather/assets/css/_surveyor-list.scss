@@ -51,6 +51,18 @@
   .password-reset {
     margin-bottom: 2rem;
   }
+
+  .multi-select {
+    &::before {
+      content: '\f46d'; /* fa-clipboard-list */
+    }
+
+    option {
+      &::before {
+        content: '\f46d'; /* fa-clipboard-list */
+      }
+    }
+  }
 }
 
 @media screen and (min-width: 992px) {

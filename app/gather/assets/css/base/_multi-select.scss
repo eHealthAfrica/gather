@@ -1,0 +1,82 @@
+/*
+ * Copyright (C) 2020 by eHealth Africa : http://www.eHealthAfrica.org
+ *
+ * See the NOTICE file distributed with this work for additional information
+ * regarding copyright ownership.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+.multi-select {
+  border-radius: $border-radius;
+  display: flex;
+  flex-direction: column;
+  background: $white;
+  box-shadow: 1px 1px 5px $shadow-color;
+
+  &::before {
+    content: '\f192'; /* fa-dot-circle */
+    font-family: $icon-font;
+    font-size: 1.3rem;
+    padding: 0.8rem;
+    color: $white;
+    margin-right: 0.4em;
+    position: absolute;
+  }
+
+  option {
+    font-family: $body-font-family;
+    padding: 0.4rem 1rem;
+    font-size: $font-size-s;
+    border-bottom: 1px solid $lighter-grey;
+    background: none;
+
+    &::before {
+      content: '\f192'; /* fa-dot-circle */
+      font-family: $icon-font;
+      margin-right: 0.4em;
+    }
+
+    &:last-child {
+      border: 0;
+    }
+  }
+
+  select {
+    border-radius: 0;
+    border: 0;
+    padding: 0.5rem 1rem 0;
+    min-height: 200px;
+  }
+
+  input,
+  input:focus {
+    background: $edit-color;
+    border: 0;
+    box-shadow: none;
+    color: $white;
+    padding-left: 2.5rem;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+
+    &::placeholder {
+      color: rgba($white, 0.6);
+    }
+  }
+
+  .btn {
+    margin: 1rem;
+    width: auto;
+  }
+}
