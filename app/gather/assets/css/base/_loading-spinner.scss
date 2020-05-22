@@ -19,23 +19,13 @@
  */
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes pulse {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .loading-spinner {
@@ -46,7 +36,7 @@
   border-radius: 50%;
   height: 24px;
   position: relative;
-  top: .2rem;
+  top: 0.2rem;
   width: 24px;
 
   &::before {
@@ -64,7 +54,7 @@
 
 /* creates an overlay that prevents interaction with other controls */
 .refreshing {
-  background-color: rgba($text-color, .7);
+  background-color: rgba($text-color, 0.7);
   position: fixed;
   top: 0;
   left: 0;

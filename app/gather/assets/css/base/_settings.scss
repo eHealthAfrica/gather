@@ -37,7 +37,7 @@ $white:                   #fff;
 
 $text-color:              $darker-grey;
 $background-color:        #f4f7f9;
-$shadow-color:            rgba($text-color, .2);
+$shadow-color:            rgba($text-color, 0.2);
 
 $action-color:            #5eb1f2;
 $hover-color:             #49b1cf;
@@ -47,12 +47,12 @@ $edit-color:              #02d0ac;
 // Fonts
 // ************************************
 
-$body-font-family:        Asap, Arial, sans-serif;
+$body-font-family:        asap, arial, sans-serif;
 $icon-font:               'Font Awesome 5 Free';
-$nav-font-family:         Quicksand, sans-serif;
+$nav-font-family:         quicksand, sans-serif;
 
-$font-size-xs:            .8rem;
-$font-size-s:             .94rem;
+$font-size-xs:            0.8rem;
+$font-size-s:             0.94rem;
 $font-size-standard:      1rem;
 $font-size-m:             1.125rem;
 $font-size-l:             1.75rem;
@@ -63,7 +63,7 @@ $font-size-xxl:           3rem;
 // Sizes
 // ************************************
 
-$border-radius:           .25rem;
+$border-radius:           0.25rem;
 $navbar-height:           2.9rem;
 $padding-unit:            4rem;
 $toolbar-height-mobile:   60px;

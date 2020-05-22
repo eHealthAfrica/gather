@@ -25,19 +25,19 @@
   margin-left: auto;
 
   .btn {
-    margin-left: .7rem;
-    background: rgba($white, .3);
+    margin-left: 0.7rem;
+    background: rgba($white, 0.3);
     font-weight: 500;
-    transition: all .3s;
+    transition: all 0.3s;
 
     &:not(.open).active {
-      background: rgba($text-color, .5);
+      background: rgba($text-color, 0.5);
       color: $white;
       box-shadow: 1px 1px 2px $text-color inset;
       position: relative;
 
       &:hover {
-        box-shadow: 1px 1px 3px $text-color inset, 0 0 0 3px rgba($white, .5);
+        box-shadow: 1px 1px 3px $text-color inset, 0 0 0 3px rgba($white, 0.5);
       }
     }
 
@@ -66,10 +66,9 @@
     }
 
     &:hover {
-      box-shadow: 0 0 0 3px rgba($white, .5);
+      box-shadow: 0 0 0 3px rgba($white, 0.5);
     }
   }
-
 }
 
 .filter-container {
@@ -80,7 +79,7 @@
   left: 0;
   top: 120%;
   max-height: calc(100vh - #{$toolbar-height-mobile});
-  transition: all .4s;
+  transition: all 0.4s;
   opacity: 0;
   display: flex;
   flex-direction: column;
@@ -116,7 +115,7 @@
 }
 
 .presets-container {
-  padding: .6rem 5vw;
+  padding: 0.6rem 5vw;
   align-items: baseline;
   display: flex;
   flex-shrink: 0;
@@ -124,7 +123,7 @@
 
   .filter-presets {
     list-style: none;
-    margin-right: -.5rem;
+    margin-right: -0.5rem;
     margin-left: auto;
     display: flex;
     align-items: baseline;
@@ -133,9 +132,9 @@
   }
 
   .mask-preset {
-    margin: .2em .4rem;
-    background: rgba($action-color, .5);
-    transition: all .3s;
+    margin: 0.2em 0.4rem;
+    background: rgba($action-color, 0.5);
+    transition: all 0.3s;
     display: inline-flex;
     align-items: center;
 
@@ -144,7 +143,7 @@
       padding: 0;
       margin: 0;
       height: 1.3em;
-      line-height: .9em;
+      line-height: 0.9em;
       color: $white;
     }
 
@@ -155,7 +154,7 @@
       height: 1.3em;
       padding: 0;
       margin: 0;
-      margin-left: .4em;
+      margin-left: 0.4em;
       color: $white;
 
       &:hover {
@@ -172,7 +171,7 @@
       &::before {
         content: '\f00c'; /* fa-check */
         position: absolute;
-        left: .5em;
+        left: 0.5em;
         font-family: $icon-font;
         font-size: 1em;
         line-height: 1.3em;
@@ -201,7 +200,7 @@
   }
 
   input[type='text'] {
-    padding: .3em .5em;
+    padding: 0.3em 0.5em;
     line-height: 1.3em;
     min-width: 9rem;
     font-size: $font-size-s;
@@ -223,23 +222,25 @@
 
   ul {
     display: block;
+    padding: 1rem 5vw;
+    counter-reset: item;
+    //
     -webkit-column-count: 2;      /* Chrome, Safari, Opera */
     -moz-column-count: 2;         /* Firefox */
     column-count: 2;
+    //
     -webkit-column-gap: 2rem;     /* Chrome, Safari, Opera */
     -moz-column-gap: 2rem;        /* Firefox */
     column-gap: 2rem;
+    //
     -webkit-column-width: 25rem;  /* Chrome, Safari, Opera */
     -moz-column-width: 25rem;     /* Firefox */
     column-width: 25rem;
-
-    padding: 1rem 5vw;
-    counter-reset: item;
   }
 
   .item-title {
     list-style: none;
-    padding: .3rem;
+    padding: 0.3rem;
     font-style: italic;
     font-size: $font-size-s;
     display: flex;
@@ -249,6 +250,7 @@
 
     .marker {
       @include radio;
+
       flex: 0 0 auto;
     }
 
@@ -273,7 +275,7 @@
     flex-wrap: wrap;
 
     .save-presets {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
 
     .filter-presets {

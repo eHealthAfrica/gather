@@ -23,16 +23,16 @@
 
   .header {
     border-bottom: 1px solid;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 
   .surveyors {
     .row {
       border-bottom: 1px solid $light-grey;
-      padding: .4rem;
+      padding: 0.4rem;
 
       .fa-user {
-        font-size: .9rem;
+        font-size: 0.9rem;
         color: $dark-grey;
       }
 
@@ -54,7 +54,6 @@
 }
 
 @media screen and (min-width: 992px) {
-
   .surveyor-edit {
     form {
       width: 80%;
