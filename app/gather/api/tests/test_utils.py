@@ -167,16 +167,16 @@ class UtilsTests(TestCase):
         resources = ['elasticsearch', 'kibana', 'job']
 
         for r in resources:
-            test_url_resouce_list = f'{test_base_url}{r}/list'
+            test_url_resource_list = f'{test_base_url}{r}/list'
             responses.add(
-                responses.GET, test_url_resouce_list,
+                responses.GET, test_url_resource_list,
                 json=[],
                 status=200
             )
 
-            test_url_resouce_add = f'{test_base_url}{r}/add'
+            test_url_resource_add = f'{test_base_url}{r}/add'
             responses.add(
-                responses.POST, test_url_resouce_add,
+                responses.POST, test_url_resource_add,
                 body='true',
                 status=200
             )
@@ -196,12 +196,12 @@ class UtilsTests(TestCase):
         errors = delete_survey_subscription(c_settings, 'Test Survey 1', 'test')
         self.assertEqual(len(errors), 1)
 
-        test_url_resouce_list = f'{test_base_url}job/list'
+        test_url_resource_list = f'{test_base_url}job/list'
         job_id = 'test-job-id'
         job_id_1 = 'test-job-id-2'
         sub_id = 'test-testsurvey2-subscription-id'
         responses.add(
-            responses.GET, test_url_resouce_list,
+            responses.GET, test_url_resource_list,
             json=[job_id, job_id_1],
             status=200
         )
@@ -217,9 +217,9 @@ class UtilsTests(TestCase):
             status=200
         )
 
-        test_url_resouce_get = f'{test_base_url}job/get?id={job_id_1}'
+        test_url_resource_get = f'{test_base_url}job/get?id={job_id_1}'
         responses.add(
-            responses.GET, test_url_resouce_get,
+            responses.GET, test_url_resource_get,
             json={
                 'subscription': [sub_id],
                 'id': job_id,
@@ -228,30 +228,30 @@ class UtilsTests(TestCase):
             status=200
         )
 
-        test_url_resouce_delete = f'{test_base_url}subscription/delete?id={sub_id}'
+        test_url_resource_delete = f'{test_base_url}subscription/delete?id={sub_id}'
         responses.add(
-            responses.DELETE, test_url_resouce_delete,
+            responses.DELETE, test_url_resource_delete,
             body='true',
             status=201
         )
 
-        test_url_resouce_update = f'{test_base_url}job/update?id={job_id}'
+        test_url_resource_update = f'{test_base_url}job/update?id={job_id}'
         responses.add(
-            responses.POST, test_url_resouce_update,
+            responses.POST, test_url_resource_update,
             body='true',
             status=200
         )
 
-        test_url_resouce_delete = f'{test_base_url}subscription/delete?id={sub_id}'
+        test_url_resource_delete = f'{test_base_url}subscription/delete?id={sub_id}'
         responses.add(
-            responses.GET, test_url_resouce_delete,
+            responses.GET, test_url_resource_delete,
             body='true',
             status=200
         )
 
-        test_url_resouce_delete = f'{test_base_url}job/delete?id={job_id_1}'
+        test_url_resource_delete = f'{test_base_url}job/delete?id={job_id_1}'
         responses.add(
-            responses.GET, test_url_resouce_delete,
+            responses.GET, test_url_resource_delete,
             body='true',
             status=200
         )

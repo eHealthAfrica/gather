@@ -177,23 +177,23 @@ describe('paths utils', () => {
     // NOTE: the `passthrough` parameter is ALWAYS included,
     // this does not apply to rest of parameters
 
-    it('should return the Export Taks API path', () => {
+    it('should return the Export Task API path', () => {
       assert.strictEqual(getExportTasksAPIPath({}), prefix + 'export-tasks.json?passthrough=true')
     })
 
-    it('should return the Survey Export Taks API path', () => {
+    it('should return the Survey Export Task API path', () => {
       assert.strictEqual(
         getExportTasksAPIPath({ project: 1 }),
         prefix + 'export-tasks.json?passthrough=true&project=1')
     })
 
-    it('should return the Surveys Export Taks API path with search', () => {
+    it('should return the Surveys Export Task API path with search', () => {
       assert.strictEqual(
         getExportTasksAPIPath({ search: 'survey' }),
         prefix + 'export-tasks.json?passthrough=true&search=survey')
     })
 
-    it('should return the Surveys Export Taks API path without search', () => {
+    it('should return the Surveys Export Task API path without search', () => {
       assert.strictEqual(
         getExportTasksAPIPath({ search: 'survey', id: 1 }),
         prefix + 'export-tasks/1.json?passthrough=true')

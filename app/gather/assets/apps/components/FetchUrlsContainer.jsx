@@ -50,8 +50,8 @@ import RefreshSpinner from './RefreshSpinner'
  *
  *   `handleResponse`:     Function that transforms the response.
  *
- *   `targetComponent`:    The rendered component after a sucessful request.
- *                         It's going to received as properties the trasformed
+ *   `targetComponent`:    The rendered component after a successful request.
+ *                         It's going to received as properties the transformed
  *                         response and a function that allows to reload the data.
  *
  */
