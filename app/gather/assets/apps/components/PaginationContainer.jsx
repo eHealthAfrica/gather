@@ -44,7 +44,7 @@ const buildSizes = (sizes = [], pageSize = 25) => sortNumericArray([...new Set([
  *   `url`:               The url to fetch, should allow `page` and `page_size` parameters.
  *   `sizes`:             The list of available page sizes. Default to [].
  *   `pageSize`:          The page size. Default to 25.
- *   `listComponent`:     The rendered component after a sucessful request.
+ *   `listComponent`:     The rendered component after a successful request.
  *                        It's going to received as properties the list of results,
  *                        the total number of results and the position number
  *                        of the first element.

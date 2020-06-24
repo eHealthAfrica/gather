@@ -366,7 +366,7 @@ export const getLabelTree = (jsonPath, labels = {}, labelSeparator = ' / ', sepa
  *   - attributes, "@xxx"
  *   - xForm internal, "_id", "_version", ...
  *   - paths with AVRO internal flags, "#", "?", "*"
- *   - intermmediate paths, ["a", "a.b", "a.c"] => ["a.b", "a.c"]
+ *   - intermediate paths, ["a", "a.b", "a.c"] => ["a.b", "a.c"]
  *
  * @param {array} jsonPaths  - The list of jsonpaths
  * @param {string} separator - The properties separator

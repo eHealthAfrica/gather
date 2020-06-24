@@ -28,11 +28,11 @@ import { deepEqual, sortBy } from '../utils'
 const MESSAGES = defineMessages({
   select: {
     defaultMessage: 'Add',
-    id: 'multiselect.select'
+    id: 'multi-select.select'
   },
   deselect: {
     defaultMessage: 'Remove',
-    id: 'multiselect.deselect'
+    id: 'multi-select.deselect'
   }
 })
 
