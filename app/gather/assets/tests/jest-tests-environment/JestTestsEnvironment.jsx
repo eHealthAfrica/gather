@@ -66,7 +66,7 @@ class JestTestsEnvironment extends JSDOMEnvironment {
     // Import intl-relativetimeformat polyfill for unsupported environments
     if (!this.global.window.Intl || !Object.keys(this.global.window.Intl).length) {
       require('@formatjs/intl-relativetimeformat/polyfill')
-      require('@formatjs/intl-relativetimeformat/dist/locale-data/en')
+      require('@formatjs/intl-relativetimeformat/locale-data/en')
     }
   }
 
