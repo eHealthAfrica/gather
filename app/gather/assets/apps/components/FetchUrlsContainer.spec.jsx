@@ -316,10 +316,9 @@ describe('FetchUrlsContainer', () => {
       })
 
       it('should render the fetch error warning', async () => {
-        const component = buildFetchComponent('/fetch-error')
-
         nock('http://localhost').get('/fetch-error').reply(404, {})
 
+        const component = buildFetchComponent('/fetch-error')
         await component.instance().loadData()
         component.update()
 
@@ -334,9 +333,9 @@ describe('FetchUrlsContainer', () => {
       })
 
       it('should render the empty warning', async () => {
-        const component = buildFetchComponent('/fetch-empty')
-
         nock('http://localhost').get('/fetch-empty').reply(200, {})
+
+        const component = buildFetchComponent('/fetch-empty')
 
         // make sure that there is no response
         component.setProps({ handleResponse: () => false })
@@ -354,10 +353,9 @@ describe('FetchUrlsContainer', () => {
       })
 
       it('should render the target component', async () => {
-        const component = buildFetchComponent('/fetch-target')
-
         nock('http://localhost').get('/fetch-target').reply(200, {})
 
+        const component = buildFetchComponent('/fetch-target')
         await component.instance().loadData()
         component.update()
 
@@ -405,9 +403,9 @@ describe('FetchUrlsContainer', () => {
       })
 
       it('should NOT render the fetch error warning', async () => {
-        const component = buildFetchSilentComponent('/fetch-error-silent')
-
         nock('http://localhost').get('/fetch-error-silent').reply(404, {})
+
+        const component = buildFetchSilentComponent('/fetch-error-silent')
         component.update()
 
         expect(component.find(LoadingSpinner).exists()).toBeFalsy()
@@ -420,9 +418,9 @@ describe('FetchUrlsContainer', () => {
       })
 
       it('should NOT render the empty warning', async () => {
-        const component = buildFetchSilentComponent('/fetch-empty-silent')
-
         nock('http://localhost').get('/fetch-empty-silent').reply(204)
+
+        const component = buildFetchSilentComponent('/fetch-empty-silent')
 
         // make sure that there is no response
         component.setProps({ handleResponse: () => false })
@@ -439,10 +437,9 @@ describe('FetchUrlsContainer', () => {
       })
 
       it('should render the target component', async () => {
-        const component = buildFetchSilentComponent('/fetch-target-silent')
-
         nock('http://localhost').get('/fetch-target-silent').reply(200, {})
 
+        const component = buildFetchSilentComponent('/fetch-target-silent')
         await component.instance().loadData()
         component.update()
 
