@@ -100,7 +100,7 @@ of the most common ones with non default values. For more info take a look at th
 [docker-compose-base.yml](docker-compose-base.yml) and
 [/scripts/generate-credentials.sh](/scripts/generate-credentials.sh).
 
-See also [Django settings](https://docs.djangoproject.com/en/2.2/ref/settings/).
+See also [Django settings](https://docs.djangoproject.com/en/3.1/ref/settings/).
 
 See also [Aether Django SDK environment variables](https://github.com/eHealthAfrica/aether-django-sdk-library#environment-variables).
 
