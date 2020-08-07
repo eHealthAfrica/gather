@@ -29,7 +29,7 @@ RUN npm install -q && npm run build
 ## using python image to build app
 ################################################################################
 
-FROM python:3.7-slim-buster AS app
+FROM python:3.8-slim-buster AS app
 
 LABEL description="Gather 3 > Effortless data collection and curation" \
       name="gather" \
