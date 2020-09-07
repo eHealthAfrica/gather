@@ -19,19 +19,19 @@
       "name": "Subscription",
       "topic_pattern": "*",
       "topic_options": {
-          "masking_annotation": "@aether_masking",
-          "masking_levels": ["public", "private"],
-          "masking_emit_level": "public",
-          "filter_required": false
+        "masking_annotation": "@aether_masking",
+        "masking_levels": ["public", "private"],
+        "masking_emit_level": "public",
+        "filter_required": false
       },
       "es_options": {
-          "alias_name": "gather",
-          "auto_timestamp": true,
-          "geo_point_creation": true,
-          "geo_point_name": "geopoint"
+        "alias_name": "gather",
+        "auto_timestamp": true,
+        "geo_point_creation": true,
+        "geo_point_name": "geopoint"
       },
       "kibana_options": {
-          "auto_vizualization": "schema"
+        "auto_visualization": "schema"
       },
       "visualizations": []
     },

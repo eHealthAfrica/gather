@@ -23,7 +23,7 @@
 import React from 'react'
 import { mountComponent } from '../../tests/enzyme-helpers'
 
-import FilteredMultiSelect from 'react-filtered-multiselect'
+import FilteredMultiSelect from './FilteredMultiSelect'
 import MultiSelect from './MultiSelect'
 
 describe('MultiSelect', () => {

@@ -19,7 +19,7 @@
  */
 
 .modal {
-  background-color: rgba($text-color, .7);
+  background-color: rgba($text-color, 0.7);
 
   // reset font-settings to override inherited styles from parent element
   font-size: $font-size-standard;
@@ -50,7 +50,7 @@
   .title {
     border-bottom: 1px solid $dark-grey;
     margin-bottom: 1rem;
-    padding-bottom: .5rem;
+    padding-bottom: 0.5rem;
   }
 
   h4.title {
@@ -83,6 +83,7 @@
 
       &::before {
         @include radio;
+
         content: '';
         display: inline-block;
         box-shadow: 0 0 0 2px $grey;
@@ -94,12 +95,13 @@
     }
 
     .selected {
-      background: rgba($action-color, .1);
+      background: rgba($action-color, 0.1);
       border-radius: $border-radius;
 
       .radio {
         &::before {
           @include radio-selected;
+
           box-shadow: 0 0 0 6px $action-color;
         }
       }

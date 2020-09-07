@@ -81,8 +81,8 @@ services:
     environment:
       KEYCLOAK_SERVER_URL: null
     volumes:
-      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
-      # - ${AETHER_PYTHON_PATH:-../aether-python-library}/aether/python:/usr/local/lib/python3.7/site-packages/aether/python
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.8/site-packages/aether/sdk
+      # - ${AETHER_PYTHON_PATH:-../aether-python-library}/aether/python:/usr/local/lib/python3.8/site-packages/aether/python
       - ./.persistent_data/backups/kernel:/backups
       - ./.persistent_data/static/kernel:/var/www/static
     depends_on:
@@ -115,7 +115,7 @@ services:
       AETHER_KERNEL_URL: http://aether.local/kernel
       KEYCLOAK_SERVER_URL: null
     volumes:
-      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.8/site-packages/aether/sdk
       - ./.persistent_data/backups/odk:/backups
       - ./.persistent_data/static/odk:/var/www/static
     depends_on:
@@ -158,7 +158,7 @@ services:
       AETHER_KERNEL_URL: http://aether.local/kernel
       KEYCLOAK_SERVER_URL: null
     volumes:
-      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.8/site-packages/aether/sdk
       - ./.persistent_data/backups/ui:/backups
       - ./.persistent_data/static/ui:/var/www/static
     depends_on:
@@ -202,7 +202,7 @@ services:
       file: ./docker-compose-base.yml
       service: gather-base
     # volumes:
-    #   - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
+    #   - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.8/site-packages/aether/sdk
     depends_on:
       db:
         condition: service_healthy

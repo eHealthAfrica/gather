@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test-lint-js": "standard './**/*.js*'",
-    "test-lint-scss": "sass-lint --config ./conf/sass-lint.yml --verbose",
+    "test-lint-scss": "stylelint './css/**/*.{css,scss,sass}'",
     "test-lint": "npm run test-lint-js && npm run test-lint-scss",
     "test-js": "jest --expand",
     "test-js-verbose": "TERM=dumb && jest --expand --colors --maxWorkers=1",
@@ -20,40 +20,41 @@
     "start": "node ./conf/webpack.server.js"
   },
   "dependencies": {
-    "@formatjs/intl-relativetimeformat": "~4.5.0",
-    "abortcontroller-polyfill": "~1.4.0",
-    "bootstrap": "~4.4.0",
+    "@formatjs/intl-relativetimeformat": "~7.0.0",
+    "abortcontroller-polyfill": "~1.5.0",
+    "bootstrap": "~4.5.0",
     "jquery": "~3.5.0",
-    "moment": "~2.24.0",
+    "moment": "~2.27.0",
     "popper.js": "~1.16.0",
     "react": "~16.13.0",
     "react-dom": "~16.13.0",
-    "react-filtered-multiselect": "~0.5.1",
-    "react-intl": "~4.5.0",
-    "whatwg-fetch": "~3.0.0"
+    "react-intl": "~5.4.0",
+    "whatwg-fetch": "~3.4.0"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0",
-    "@babel/preset-env": "~7.9.0",
-    "@babel/preset-react": "~7.9.0",
+    "@babel/core": "~7.11.0",
+    "@babel/preset-env": "~7.11.0",
+    "@babel/preset-react": "~7.10.0",
     "@hot-loader/react-dom": "~16.13.0",
     "abort-controller": "~3.0.0",
     "babel-loader": "~8.1.0",
-    "css-loader": "~3.5.0",
+    "css-loader": "~4.2.0",
     "enzyme": "~3.11.0",
     "enzyme-adapter-react-16": "~1.15.0",
+    "eslint": "~7.6.0",
     "express": "~4.17.0",
-    "jest": "~25.4.0",
-    "mini-css-extract-plugin": "~0.9.0",
-    "nock": "~12.0.0",
+    "jest": "~26.3.0",
+    "mini-css-extract-plugin": "~0.10.0",
+    "nock": "~13.0.0",
     "node-fetch": "~2.6.0",
     "node-sass": "~4.14.0",
     "react-hot-loader": "~4.12.0",
-    "sass-lint": "~1.13.0",
-    "sass-loader": "~8.0.0",
+    "sass-loader": "~9.0.0",
     "standard": "~14.3.0",
     "style-loader": "~1.2.0",
-    "webpack": "~4.43.0",
+    "stylelint": "~13.6.0",
+    "stylelint-config-standard": "~20.0.0",
+    "webpack": "~4.44.0",
     "webpack-bundle-tracker": "~0.4.3",
     "webpack-cli": "~3.3.0",
     "webpack-dev-middleware": "~3.7.0",
@@ -89,6 +90,13 @@
       "package-lock.json"
     ],
     "verbose": true
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "at-rule-no-unknown": null,
+      "no-descending-specificity": null
+    }
   },
   "jest": {
     "collectCoverage": true,
