@@ -1,4 +1,4 @@
-version: "2.1"
+version: "2.4"
 
 services:
 
@@ -99,6 +99,9 @@ services:
       PGPORT: 5432
       PGUSER: postgres
 
+      ENABLE_CONNECTION_POOL: "true"
+      DB_POOL_INTERNAL: "true"
+
       DJANGO_USE_CACHE: "true"
       REDIS_DJANGO_CACHE: "true"
       REDIS_SESSION_CACHE: "true"
@@ -168,6 +171,9 @@ services:
       PGPORT: 5432
       PGUSER: postgres
 
+      ENABLE_CONNECTION_POOL: "true"
+      DB_POOL_INTERNAL: "true"
+
       DJANGO_USE_CACHE: "true"
       REDIS_DJANGO_CACHE: "true"
       REDIS_SESSION_CACHE: "true"
@@ -215,6 +221,9 @@ services:
       PGPASSWORD: ${UI_DB_PASSWORD}
       PGPORT: 5432
       PGUSER: postgres
+
+      ENABLE_CONNECTION_POOL: "true"
+      DB_POOL_INTERNAL: "true"
 
       DJANGO_USE_CACHE: "true"
       REDIS_DJANGO_CACHE: "true"
@@ -270,6 +279,9 @@ services:
       PGPASSWORD: ${GATHER_DB_PASSWORD}
       PGPORT: 5432
       PGUSER: postgres
+
+      ENABLE_CONNECTION_POOL: "true"
+      DB_POOL_INTERNAL: "true"
 
       DJANGO_USE_CACHE: "true"
       REDIS_DJANGO_CACHE: "true"
