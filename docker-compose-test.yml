@@ -1,4 +1,4 @@
-version: "2.1"
+version: "2.4"
 
 services:
 
@@ -45,6 +45,7 @@ services:
       PGHOST: db-test
       PGPASSWORD: this-is-really-really-secret.trust-me!
       DJANGO_USE_CACHE: null
+      ENABLE_CONNECTION_POOL: null
 
       EXPORT_MAX_ROWS_SIZE: 1000
 
