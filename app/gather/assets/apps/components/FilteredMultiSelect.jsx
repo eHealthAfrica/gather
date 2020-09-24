@@ -48,9 +48,9 @@ const FilteredMultiSelect = ({
   const [filter, setFilter] = useState('')
   const [selected, setSelected] = useState([])
 
-  const values = selectedOptions.map((option) => option[valueProp])
+  const values = selectedOptions.map((option) => option[valueProp].toString())
   const filteredOptions = options.filter((option) => (
-    values.indexOf(option[valueProp]) === -1 &&
+    values.indexOf(option[valueProp].toString()) === -1 &&
     (!filter || option[textProp].toUpperCase().indexOf(filter.toUpperCase()) !== -1)
   ))
 
@@ -64,9 +64,9 @@ const FilteredMultiSelect = ({
 
       // if only remains one... add it as selected and reset filter
       if (filteredOptions.length === 1) {
+        onChange([...selectedOptions, filteredOptions[0]])
         setFilter('')
         setSelected([])
-        onChange([...selectedOptions, filteredOptions[0]])
       }
     }
   }
@@ -83,11 +83,11 @@ const FilteredMultiSelect = ({
   }
 
   const handleAddSelectedToSelection = () => {
-    setSelected([])
     onChange([
       ...selectedOptions,
-      ...filteredOptions.filter((item) => selected.indexOf(item[valueProp]) > -1)
+      ...filteredOptions.filter((item) => selected.indexOf(item[valueProp].toString()) > -1)
     ])
+    setSelected([])
   }
 
   return (
@@ -114,7 +114,7 @@ const FilteredMultiSelect = ({
       >
         {
           filteredOptions.map((option) => (
-            <option key={option[valueProp]} value={option[valueProp]}>
+            <option key={option[valueProp]} value={option[valueProp].toString()}>
               {option[textProp]}
             </option>
           ))
