@@ -1,4 +1,4 @@
-version: "2.1"
+version: "2.4"
 
 networks:
   gather_net:
@@ -24,6 +24,13 @@ services:
       service: postgres-base
     volumes:
       - gather_database_data:/var/lib/postgresql/data
+    networks:
+      - gather_net
+
+  redis:
+    extends:
+      file: ./docker-compose-base.yml
+      service: redis-base
     networks:
       - gather_net
 
@@ -69,9 +76,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      minio:
+        condition: service_started
       nginx:
         condition: service_healthy
-      minio:
+      redis:
         condition: service_started
     networks:
       - gather_net
@@ -104,9 +113,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      minio:
+        condition: service_started
       nginx:
         condition: service_healthy
-      minio:
+      redis:
         condition: service_started
       kernel:
         condition: service_started
@@ -129,6 +140,8 @@ services:
         condition: service_healthy
       nginx:
         condition: service_healthy
+      redis:
+        condition: service_started
       kernel:
         condition: service_started
     networks:
@@ -163,6 +176,8 @@ services:
         condition: service_healthy
       nginx:
         condition: service_healthy
+      redis:
+        condition: service_started
       kernel:
         condition: service_started
       odk:

@@ -208,7 +208,7 @@ class EntitiesDownload extends Component {
         label: (
           <FormattedMessage
             id='entities.download.data.format.split'
-            defaultMessage='Normalised into multiple files (better for importing into a relational database)'
+            defaultMessage='Normalized into multiple files (better for importing into a relational database)'
           />
         )
       },

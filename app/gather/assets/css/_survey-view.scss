@@ -28,7 +28,7 @@
   h2 {
     font-size: $font-size-xl;
     font-weight: 400;
-    margin: 0 0 .5rem;
+    margin: 0 0 0.5rem;
   }
 
   .header-actions {
@@ -45,7 +45,7 @@
   .title {
     border-bottom: 1px solid $text-color;
     margin-bottom: 1rem;
-    padding-bottom: .5rem;
+    padding-bottom: 0.5rem;
   }
 }
 
@@ -59,6 +59,7 @@
 
 .survey-records {
   @include label;
+
   position: absolute;
   bottom: 2rem;
   left: 5vw;
@@ -80,14 +81,14 @@
   }
 
   .pagination-bar {
-    background: rgba($action-color, .9);
+    background: rgba($action-color, 0.9);
     box-shadow: none;
   }
 }
 
 .survey-data-toolbar {
   background: $action-color;
-  box-shadow: 0 1px 2px rgba($text-color, .5) inset, 0 1px 2px rgba($text-color, .5);
+  box-shadow: 0 1px 2px rgba($text-color, 0.5) inset, 0 1px 2px rgba($text-color, 0.5);
   position: sticky;
   top: 0;
   z-index: 101;
@@ -115,7 +116,7 @@
   }
 
   .dashboard-tab {
-    background: rgba($white, .2);
+    background: rgba($white, 0.2);
     border-right: 1px solid $white;
 
     .tab {
@@ -142,6 +143,7 @@
 
 .tab {
   @include label;
+
   background: none;
   color: $white;
   margin-right: 2.2rem;
@@ -170,7 +172,7 @@
     width: 100%;
     border-bottom: 1px solid $light-grey;
     display: flex;
-    padding: .5rem 0;
+    padding: 0.5rem 0;
 
     .empty {
       color: lighten($dark-grey, 20);
@@ -179,7 +181,7 @@
     .btn-collapse,
     .btn-expand {
       margin-left: -1.8rem;
-      margin-right: .4rem;
+      margin-right: 0.4rem;
     }
   }
 
@@ -211,12 +213,11 @@
   }
 
   .property-item {
-    padding-bottom: .5rem;
+    padding-bottom: 0.5rem;
   }
 
   .array {
-
-    &>.property-title {
+    & > .property-title {
       font-weight: 800;
       font-style: normal;
       color: $text-color;
@@ -233,7 +234,6 @@
   }
 
   .array .array {
-
     .property-item {
       border: 0;
       margin: 0;
@@ -255,7 +255,7 @@
     border: 0;
     font-weight: 400;
     font-style: italic;
-    padding: 1rem .6rem;
+    padding: 1rem 0.6rem;
     position: relative;
 
     &::before {
@@ -263,8 +263,8 @@
       display: inline-block;
       position: absolute;
       left: 0;
-      top: .6rem;
-      bottom: .6rem;
+      top: 0.6rem;
+      bottom: 0.6rem;
       width: 1px;
       border-left: 1px solid $dark-grey;
     }
@@ -277,7 +277,7 @@
   }
 
   th[colspan] {
-    padding: .4rem .6rem;
+    padding: 0.4rem 0.6rem;
 
     &::before {
       bottom: 0;
@@ -285,18 +285,18 @@
   }
 
   th[colspan='1'] {
-    padding: 1rem .6rem;
+    padding: 1rem 0.6rem;
 
     &::before {
-      top: .6rem;
-      bottom: .6rem;
+      top: 0.6rem;
+      bottom: 0.6rem;
     }
   }
 
   td {
     border: 0;
     border-bottom: 1px solid $lighter-grey;
-    padding: .6rem;
+    padding: 0.6rem;
 
     &:first-child {
       border-right: 1px solid $dark-grey;
@@ -312,7 +312,7 @@
   }
 
   .property-item {
-    margin: .3rem 0 0 1.6rem;
+    margin: 0.3rem 0 0 1.6rem;
 
     &:first-child {
       margin-top: 0;
@@ -321,7 +321,7 @@
 
   .property {
     display: flex;
-    padding: .2rem 0;
+    padding: 0.2rem 0;
     border-bottom: 1px dotted $light-grey;
   }
 
@@ -419,7 +419,6 @@
 }
 
 .tasks-list {
-
   thead {
     background: $bg-grey;
     border-bottom: 1px solid $dark-grey;
@@ -429,7 +428,7 @@
     border: 0;
     font-weight: 400;
     font-style: italic;
-    padding: 1rem .6rem;
+    padding: 1rem 0.6rem;
     position: relative;
 
     &::before {
@@ -437,8 +436,8 @@
       display: inline-block;
       position: absolute;
       left: 0;
-      top: .6rem;
-      bottom: .6rem;
+      top: 0.6rem;
+      bottom: 0.6rem;
       width: 1px;
       border-left: 1px solid $dark-grey;
     }
@@ -453,7 +452,7 @@
   td {
     border: 0;
     border-bottom: 1px solid $lighter-grey;
-    padding: .6rem;
+    padding: 0.6rem;
 
     &:first-child {
       border-right: 1px solid $dark-grey;
@@ -465,7 +464,7 @@
   .tasks {
     .fa-clock,
     .fa-user {
-      font-size: .9rem;
+      font-size: 0.9rem;
       color: $dark-grey;
     }
 
@@ -492,14 +491,12 @@
 }
 
 @media screen and (max-width: 576px) {
-
   .tab {
     margin-right: 1.2em;
   }
 }
 
 @media screen and (max-width: 768px) {
-
   .survey-header {
     padding-top: 2rem;
     flex-wrap: wrap;
@@ -515,15 +512,14 @@
       left: auto;
     }
 
-    &>div {
+    & > div {
       flex: 1;
       width: 100%;
       margin-bottom: 2rem;
-   }
+    }
   }
 
   .survey-data-tabs {
-
     .tab {
       padding: 1rem 0;
       height: $toolbar-height-mobile;
@@ -531,11 +527,9 @@
   }
 
   .toolbar-filter {
-    padding-top: .6rem;
-    padding-left: 5vw;
-    padding: .6rem 5vw .4rem;
+    padding: 0.6rem 5vw 0.4rem;
     width: 100%;
-    border-top: 1px solid rgba($white, .3);
+    border-top: 1px solid rgba($white, 0.3);
 
     .filter-toggles {
       text-align: right;
@@ -543,7 +537,6 @@
   }
 
   .survey-data {
-
     nav {
       top: $toolbar-height-mobile;
     }

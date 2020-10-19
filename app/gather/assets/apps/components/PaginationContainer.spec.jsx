@@ -124,13 +124,12 @@ describe('PaginationContainer', () => {
     })
 
     it('should render the not found warning', () => {
-      const component = buildStateComponent('/paginate-not-found')
-
       nock('http://localhost')
         .get('/paginate-not-found')
         .query({ page: 1, page_size: 25, search: 'something' })
         .reply(200, { count: 0, results: [] })
 
+      const component = buildStateComponent('/paginate-not-found')
       component.setState({
         ...BLANK_STATE,
         search: 'something',
@@ -196,8 +195,6 @@ describe('PaginationContainer', () => {
     })
 
     it('should change current page to 1 if pageSize is changed', () => {
-      const component = buildStateComponent('/paginate-page-size')
-
       nock('http://localhost')
         .get('/paginate-page-size')
         .query({ page: 14, page_size: 50 })
@@ -206,6 +203,7 @@ describe('PaginationContainer', () => {
           results: global.range(0, 50)
         })
 
+      const component = buildStateComponent('/paginate-page-size')
       component.setState({ page: 14, pageSize: 50 })
       expect(component.state('page')).toEqual(14)
       expect(component.state('pageSize')).toEqual(50)
@@ -288,13 +286,12 @@ describe('PaginationContainer', () => {
     })
 
     it('should render the fetch error warning', async () => {
-      const component = buildFetchComponent('/fetch-warning')
-
       nock('http://localhost')
         .get('/fetch-warning')
         .query({ page: 1, page_size: 25 })
         .reply(404)
 
+      const component = buildFetchComponent('/fetch-warning')
       await component.instance().loadData()
       expect(component.state('isLoading')).toBeFalsy()
       expect(component.state('isRefreshing')).toBeFalsy()
@@ -312,13 +309,12 @@ describe('PaginationContainer', () => {
     })
 
     it('should render the empty warning', async () => {
-      const component = buildFetchComponent('/fetch-empty')
-
       nock('http://localhost')
         .get('/fetch-empty')
         .query({ page: 1, page_size: 25 })
         .reply(200, { count: 0, results: [] })
 
+      const component = buildFetchComponent('/fetch-empty')
       await component.instance().loadData()
       expect(component.state('isLoading')).toBeFalsy()
       expect(component.state('isRefreshing')).toBeFalsy()
@@ -337,13 +333,12 @@ describe('PaginationContainer', () => {
     })
 
     it('should render the list component', async () => {
-      const component = buildFetchComponent('/fetch-list')
-
       nock('http://localhost')
         .get('/fetch-list')
         .query({ page: 1, page_size: 25 })
         .reply(200, { count: 1, results: [1] })
 
+      const component = buildFetchComponent('/fetch-list')
       await component.instance().loadData()
       expect(component.state('isLoading')).toBeFalsy()
       expect(component.state('isRefreshing')).toBeFalsy()

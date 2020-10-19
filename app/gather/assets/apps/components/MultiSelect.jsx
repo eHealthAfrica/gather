@@ -20,22 +20,19 @@
 
 import React, { Component } from 'react'
 import { defineMessages, injectIntl } from 'react-intl'
-import FilteredMultiSelect from 'react-filtered-multiselect'
+
+import FilteredMultiSelect from './FilteredMultiSelect'
 
 import { deepEqual, sortBy } from '../utils'
 
 const MESSAGES = defineMessages({
   select: {
     defaultMessage: 'Add',
-    id: 'multiselect.select'
+    id: 'multi-select.select'
   },
   deselect: {
     defaultMessage: 'Remove',
-    id: 'multiselect.deselect'
-  },
-  filter: {
-    defaultMessage: 'Type…',
-    id: 'multiselect.filter'
+    id: 'multi-select.deselect'
   }
 })
 
@@ -43,9 +40,7 @@ const MESSAGES = defineMessages({
  * MultiSelect component.
  *
  * Renders a multi-select component similar to Django MultiSelect widget.
- * https://github.com/insin/react-filtered-multiselect
  */
-
 class MultiSelect extends Component {
   constructor (props) {
     super(props)
@@ -91,7 +86,6 @@ class MultiSelect extends Component {
     return (
       <FilteredMultiSelect
         buttonText={formatMessage(buttonText)}
-        placeholder={formatMessage(MESSAGES.filter)}
 
         options={options}
         selectedOptions={selected}
@@ -99,14 +93,6 @@ class MultiSelect extends Component {
         textProp={this.state.textProp}
 
         onChange={onChange.bind(this)}
-
-        size={6}
-        classNames={{
-          button: 'btn btn-block btn-secondary',
-          buttonActive: 'btn btn-block btn-secondary',
-          filter: 'form-control',
-          select: 'form-control'
-        }}
       />
     )
   }

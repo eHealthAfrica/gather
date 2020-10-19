@@ -16,11 +16,21 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from django.conf import settings
+from django.utils.translation import gettext as _
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from aether.sdk.multitenancy.views import MtViewSetMixin
+from aether.sdk.multitenancy.utils import get_current_realm
 from .models import Survey, Mask
 from .serializers import SurveySerializer, MaskSerializer
+from .utils import (
+  configure_consumers,
+  delete_survey_subscription,
+)
 
 
 class SurveyViewSet(MtViewSetMixin, ModelViewSet):
@@ -32,6 +42,30 @@ class SurveyViewSet(MtViewSetMixin, ModelViewSet):
     serializer_class = SurveySerializer
     search_fields = ('name',)
     ordering = ('name',)
+
+    @action(detail=True, methods=['post', 'delete'], url_name='consumer', url_path='consumers-config')
+    def consumer(self, request, pk=None, *args, **kwargs):
+        survey = self.get_object_or_404(pk=pk)
+        _survey_name = survey.name
+        _headers = {}
+        _realm = get_current_realm(request)
+        _headers[settings.CONSUMER_TENANCY_HEADER] = _realm
+
+        # Configure Consumers
+        if not settings.AUTO_CONFIG_CONSUMERS:
+            return Response(_('Consumer auto configuration is turned off'), status=status.HTTP_200_OK)
+
+        consumer_settings = settings.CONSUMER_SETTINGS
+        if request.method == 'POST':
+            consumers, errors = configure_consumers(consumer_settings, _survey_name, _realm, _headers)
+            if errors:
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(_('Configured {} consumers successfully').format(consumers), status=status.HTTP_200_OK)
+        else:
+            errors = delete_survey_subscription(consumer_settings, _survey_name, _realm, _headers)
+            if errors:
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MaskViewSet(MtViewSetMixin, ModelViewSet):

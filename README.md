@@ -151,9 +151,11 @@ See also [Aether Django SDK environment variables](https://github.com/eHealthAfr
     - `AETHER_ODK_URL`: `http://odk:8102` Aether ODK Server url.
 
   - Aether consumers:
-    - `ES_CONSUMER_URL`: ElasticSearch consumer URL used to push the project
-      chart visualization settings for each AVRO Schema field defined
-      in the Survey Dashboard settings page.
+    - `CONSUMERS_CONFIG_FILE`: Path to default consumers configurations. Edit `./app/conf/consumers.json` to include new consumers.
+    - `AUTO_CONFIG_CONSUMERS`: Flag used to indicate if consumers be automatically configure on the creation of a survey. **mandatory** `CONSUMERS_CONFIG_FILE` must be provided.
+
+    **Note** To include sensitive properties to `CONSUMERS_CONFIG_FILE` such as credentials, add an environment variable in the format `{CONSUMER}_{RESOURCE}_{VARIABLE}`. For instance to add a `kibana` username and password to the `ES` consumer, the environment variable will be:
+    `ES_KIBANA_USERNAME`, and `ES_KIBANA_PASSWORD`. For the elasticsearch instance. `ES_ELASTICSEARCH_USERNAME`, and `ES_ELASTICSEARCH_PASSWORD`
 
 *[Return to TOC](#table-of-contents)*
 

@@ -22,7 +22,7 @@ import React from 'react'
 
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 import { getSurveyorsAPIPath, getSurveysAPIPath } from '../utils/paths'
-import { ODK_APP } from '../utils/constants'
+import { ODK_APP, MAX_FETCH_SIZE } from '../utils/constants'
 
 import SurveyorForm from './SurveyorForm'
 import SurveyorsList from './SurveyorsList'
@@ -33,7 +33,12 @@ const SurveyorDispatcher = ({ action, surveyorId }) => {
       const addUrls = [
         {
           name: 'surveys',
-          url: getSurveysAPIPath({ app: ODK_APP, fields: ['project_id', 'name'].join(',') })
+          url: getSurveysAPIPath({
+            app: ODK_APP,
+            fields: ['project_id', 'name'].join(','),
+            page: 1,
+            pageSize: MAX_FETCH_SIZE
+          })
         }
       ]
 
@@ -48,7 +53,12 @@ const SurveyorDispatcher = ({ action, surveyorId }) => {
         },
         {
           name: 'surveys',
-          url: getSurveysAPIPath({ app: ODK_APP, fields: ['project_id', 'name'].join(',') })
+          url: getSurveysAPIPath({
+            app: ODK_APP,
+            fields: ['project_id', 'name'].join(','),
+            page: 1,
+            pageSize: MAX_FETCH_SIZE
+          })
         }
       ]
 

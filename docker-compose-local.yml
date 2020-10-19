@@ -8,7 +8,7 @@
 #
 # ------------------------------------------------------------------------------
 
-version: "2.1"
+version: "2.4"
 
 networks:
   local:
@@ -34,6 +34,13 @@ services:
       service: postgres-base
     volumes:
       - gather_local_database_data:/var/lib/postgresql/data
+    networks:
+      - local
+
+  redis:
+    extends:
+      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
+      service: redis-base
     networks:
       - local
 
@@ -81,16 +88,20 @@ services:
     environment:
       KEYCLOAK_SERVER_URL: null
     volumes:
-      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
-      # - ${AETHER_PYTHON_PATH:-../aether-python-library}/aether/python:/usr/local/lib/python3.7/site-packages/aether/python
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.8/site-packages/aether/sdk
+      # - ${AETHER_PYTHON_PATH:-../aether-python-library}/aether/python:/usr/local/lib/python3.8/site-packages/aether/python
       - ./.persistent_data/backups/kernel:/backups
       - ./.persistent_data/static/kernel:/var/www/static
     depends_on:
       db:
         condition: service_healthy
+      keycloak:
+        condition: service_started
+      minio:
+        condition: service_started
       nginx:
         condition: service_healthy
-      minio:
+      redis:
         condition: service_started
       redis:
         condition: service_started
@@ -115,16 +126,21 @@ services:
       AETHER_KERNEL_URL: http://aether.local/kernel
       KEYCLOAK_SERVER_URL: null
     volumes:
-      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.8/site-packages/aether/sdk
       - ./.persistent_data/backups/odk:/backups
       - ./.persistent_data/static/odk:/var/www/static
     depends_on:
       db:
-        condition: service_healthy
-      nginx:
-        condition: service_healthy
-      minio:
-        condition: service_started
+        db:
+          condition: service_healthy
+        keycloak:
+          condition: service_started
+        minio:
+          condition: service_started
+        nginx:
+          condition: service_healthy
+        redis:
+          condition: service_started
       kernel:
         condition: service_started
     networks:
@@ -166,15 +182,21 @@ services:
       AETHER_KERNEL_URL: http://aether.local/kernel
       KEYCLOAK_SERVER_URL: null
     volumes:
-      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
+      # - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.8/site-packages/aether/sdk
       - ./.persistent_data/backups/ui:/backups
       - ./.persistent_data/static/ui:/var/www/static
     depends_on:
       db:
         condition: service_healthy
+      keycloak:
+        condition: service_started
       nginx:
         condition: service_healthy
+      redis:
+        condition: service_started
       kernel:
+        condition: service_started
+      ui-assets:
         condition: service_started
     networks:
       - local
@@ -204,12 +226,16 @@ services:
       file: ./docker-compose-base.yml
       service: gather-base
     # volumes:
-    #   - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.7/site-packages/aether/sdk
+    #   - ${AETHER_SDK_PATH:-../aether-django-sdk-library}/aether/sdk:/usr/local/lib/python3.8/site-packages/aether/sdk
     depends_on:
       db:
         condition: service_healthy
+      keycloak:
+        condition: service_started
       nginx:
         condition: service_healthy
+      redis:
+        condition: service_started
       kernel:
         condition: service_started
       odk:

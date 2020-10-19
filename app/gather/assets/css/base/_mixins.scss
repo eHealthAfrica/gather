@@ -20,9 +20,9 @@
 
 @mixin label {
   font-family: $nav-font-family;
-  font-size: .85rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: .03em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
@@ -38,7 +38,7 @@
   border-radius: 50%;
   box-shadow: 0 0 0 2px $action-color;
   margin: 0 12px;
-  transition: all .1s;
+  transition: all 0.1s;
 }
 
 @mixin radio-selected {
@@ -52,11 +52,11 @@
   -webkit-column-count: 3;      /* Chrome, Safari, Opera */
   -moz-column-count: 3;         /* Firefox */
   column-count: 3;
-
+  //
   -webkit-column-gap: 2rem;     /* Chrome, Safari, Opera */
   -moz-column-gap: 2rem;        /* Firefox */
   column-gap: 2rem;
-
+  //
   -webkit-column-width: 25rem;  /* Chrome, Safari, Opera */
   -moz-column-width: 25rem;     /* Firefox */
   column-width: 25rem;
