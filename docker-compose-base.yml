@@ -19,17 +19,6 @@ services:
 
   redis-base:
     image: redis:alpine
-    command: redis-server --requirepass ${REDIS_PASSWORD}
-
-  minio-base:
-    image: minio/minio
-    environment:
-      MINIO_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
-    command: minio server --quiet --address minio:9090 /data
-
-  redis-base:
-    image: redis:alpine
     command: >
       redis-server
       --requirepass ${REDIS_PASSWORD}
@@ -37,6 +26,13 @@ services:
       --appendonly yes
       --auto-aof-rewrite-percentage 100
       --auto-aof-rewrite-min-size 64mb
+
+  minio-base:
+    image: minio/minio
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_STORAGE_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_STORAGE_SECRET_KEY}
+    command: minio server --quiet --address minio:9090 /data
 
 
   # ---------------------------------

@@ -53,13 +53,6 @@ services:
     networks:
       - local
 
-  redis:
-    extends:
-      file: ${AETHER_PATH:-../aether}/docker-compose-base.yml
-      service: redis-base
-    networks:
-      - local
-
 
   # ---------------------------------
   # NGINX
@@ -101,8 +94,6 @@ services:
         condition: service_started
       nginx:
         condition: service_healthy
-      redis:
-        condition: service_started
       redis:
         condition: service_started
       exm:
