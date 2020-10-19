@@ -62,7 +62,7 @@ for container in "${containers[@]}"; do
 done
 
 # build containers
-containers=( kernel ui odk gather )
+containers=( exm kernel ui odk gather )
 for container in "${containers[@]}"; do
     build_container ${container}
 done
