@@ -204,6 +204,6 @@ const EntitiesDownloadTaskList = ({
         </tbody>
       </table>
     </div>
-  )
+    )
 
 export default injectIntl(EntitiesDownloadTaskList)

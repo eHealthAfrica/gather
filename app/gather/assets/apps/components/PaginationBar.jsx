@@ -143,7 +143,7 @@ class PaginationBar extends Component {
     const onKeyUp = (event) => {
       if (event.key === 'Enter') {
         this.props.onSearch(this.state.search)
-        this.state.currentSearch = this.state.search
+        this.setState({ currentSearch: this.state.search })
       }
     }
     const { formatMessage } = this.props.intl

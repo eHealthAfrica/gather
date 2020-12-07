@@ -79,45 +79,51 @@ const SurveysListTable = ({ list }) => (
             </div>
             <div className='col-2 title'>
               {
-                submissionsCount ? (
-                  <FormattedDate
-                    value={firstSubmission}
-                    year='numeric'
-                    month='short'
-                    day='numeric'
-                  />
-                ) : BLANK
+                submissionsCount
+                  ? (
+                    <FormattedDate
+                      value={firstSubmission}
+                      year='numeric'
+                      month='short'
+                      day='numeric'
+                    />
+                    )
+                  : BLANK
               }
             </div>
             <div className='col-2 title'>
               {
-                submissionsCount ? (
-                  <FormattedDate
-                    value={lastSubmission}
-                    year='numeric'
-                    month='short'
-                    day='numeric'
-                  />
-                ) : BLANK
+                submissionsCount
+                  ? (
+                    <FormattedDate
+                      value={lastSubmission}
+                      year='numeric'
+                      month='short'
+                      day='numeric'
+                    />
+                    )
+                  : BLANK
               }
             </div>
             <div className='col-1 title vline'>
               {
-                submissionsCount ? (
-                  <>
-                    <FormattedNumber
-                      value={
-                        moment(lastSubmission).diff(moment(firstSubmission), 'days') + 1
-                      }
-                    />
-                    <span className='ml-1'>
-                      <FormattedMessage
-                        id='surveys.list.duration.days'
-                        defaultMessage='days'
+                submissionsCount
+                  ? (
+                    <>
+                      <FormattedNumber
+                        value={
+                          moment(lastSubmission).diff(moment(firstSubmission), 'days') + 1
+                        }
                       />
-                    </span>
-                  </>
-                ) : BLANK
+                      <span className='ml-1'>
+                        <FormattedMessage
+                          id='surveys.list.duration.days'
+                          defaultMessage='days'
+                        />
+                      </span>
+                    </>
+                    )
+                  : BLANK
               }
             </div>
             <div className='col-1 record'>

@@ -86,12 +86,10 @@ class MultiSelect extends Component {
     return (
       <FilteredMultiSelect
         buttonText={formatMessage(buttonText)}
-
         options={options}
         selectedOptions={selected}
         valueProp={this.state.valueProp}
         textProp={this.state.textProp}
-
         onChange={onChange.bind(this)}
       />
     )

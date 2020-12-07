@@ -43,13 +43,13 @@ const SurveyDashboard = ({
                       id='alert.config.close'
                       defaultMessage='Close'
                     />
-                  )
+                    )
                   : (
                     <FormattedMessage
                       id='alert.config.dashboard'
                       defaultMessage='Dashboard Configuration'
                     />
-                  )
+                    )
               }
             </a>
           </p>

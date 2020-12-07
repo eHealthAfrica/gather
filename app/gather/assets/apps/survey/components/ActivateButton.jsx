@@ -101,17 +101,19 @@ const ActivateButton = ({
     >
       <i className={`fas fa-${active ? 'stop' : 'play'} invert mr-3`} />
       {
-        active ? (
-          <FormattedMessage
-            id='survey.view.action.deactivate'
-            defaultMessage='Deactivate survey'
-          />
-        ) : (
-          <FormattedMessage
-            id='survey.view.action.activate'
-            defaultMessage='Activate survey'
-          />
-        )
+        active
+          ? (
+            <FormattedMessage
+              id='survey.view.action.deactivate'
+              defaultMessage='Deactivate survey'
+            />
+            )
+          : (
+            <FormattedMessage
+              id='survey.view.action.activate'
+              defaultMessage='Activate survey'
+            />
+            )
       }
     </button>
   )
