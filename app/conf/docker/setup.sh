@@ -30,15 +30,15 @@ APT_INSTALL="apt-get -qq --yes --allow-downgrades --allow-remove-essential --all
 # install missing packages of slim distribution and Gather required ones
 PACKAGE_LIST=/tmp/apt-packages.txt
 if [ -f "$PACKAGE_LIST" ]; then
-    apt-get update -qq
-    $APT_INSTALL `cat $PACKAGE_LIST`
+    apt-get update -qq > /dev/null
+    $APT_INSTALL `cat $PACKAGE_LIST` > /dev/null
 fi
 
 # add postgres apt repo to get more recent postgres versions
 echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' > /etc/apt/sources.list.d/pgdg.list
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-apt-get update -qq
-$APT_INSTALL $POSTGRES_PACKAGE
+apt-get update -qq > /dev/null
+$APT_INSTALL $POSTGRES_PACKAGE > /dev/null
 
 
 ################################################################################
@@ -50,12 +50,14 @@ useradd -ms /bin/false gather
 mkdir -p /var/run/gather/log/
 touch /var/run/gather/uwsgi.pid
 
-chown gather: /var/run/gather/* -Rf
-chmod -R 755 /var/run/gather/* -R
+chown -Rf gather: /var/run/gather/*
+chmod -R 755      /var/run/gather/*
 
 
 ################################################################################
 # cleaning
 ################################################################################
 
-apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+apt-get clean
+apt-get autoremove
