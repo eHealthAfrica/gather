@@ -98,7 +98,7 @@ class SurveyorForm extends Component {
           id='surveyor.form.title.add'
           defaultMessage='New surveyor'
         />
-      )
+        )
       : (
         <span>
           <FormattedMessage
@@ -110,7 +110,7 @@ class SurveyorForm extends Component {
             {surveyor.username}
           </span>
         </span>
-      )
+        )
     )
     const dataQA = (isNew
       ? 'surveyor-add'
