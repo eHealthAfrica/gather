@@ -17,3 +17,4 @@ WORKDIR /code/assets
 COPY ./ /code/assets
 
 ENTRYPOINT ["/code/assets/conf/entrypoint.sh"]
+USER node
