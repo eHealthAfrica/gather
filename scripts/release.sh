@@ -20,17 +20,6 @@
 #
 set -Eeuo pipefail
 
-function build_container {
-    local container=$1
-    local BUILD_OPTIONS="--no-cache --force-rm --pull"
-
-    docker-compose build \
-        ${BUILD_OPTIONS} \
-        --build-arg GIT_REVISION=${TRAVIS_COMMIT} \
-        --build-arg VERSION=${VERSION} \
-        ${container}
-}
-
 # release version depending on TRAVIS_BRANCH (develop | release-#.#) / TRAVIS_TAG (#.#.#)
 if [[ ${TRAVIS_TAG} =~ ^[0-9]+(\.[0-9]+){2}$ ]]; then
     VERSION=${TRAVIS_TAG}
@@ -44,27 +33,29 @@ else
     VERSION="alpha"
 fi
 
+APP="gather"
+DOCKER_IMAGE="ehealthafrica/${APP}:${VERSION}"
+
 echo "--------------------------------------------------------------"
+echo "Docker image:        ${DOCKER_IMAGE}"
 echo "Releasing in branch: ${TRAVIS_BRANCH}"
 echo "Release version:     ${VERSION}"
 echo "Release revision:    ${TRAVIS_COMMIT}"
 echo "--------------------------------------------------------------"
 
-APP="gather"
-DOCKER_IMAGE="ehealthafrica/${APP}:${VERSION}"
-
-# Build and distribute the JS assets
-build_container gather-assets
-docker-compose run --rm gather-assets build
-
-# Build and push docker image to docker hub
-build_container ${APP}
+echo "Building Docker image ${DOCKER_IMAGE}"
+docker build \
+    --pull \
+    --no-cache \
+    --force-rm \
+    --tag $DOCKER_IMAGE \
+    --file ${APP}.Dockerfile \
+    .
 
 # Login in docker hub
 docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
 
 echo "Pushing Docker image ${DOCKER_IMAGE}"
-docker tag ${APP} ${DOCKER_IMAGE}
 docker push ${DOCKER_IMAGE}
 
 docker logout
