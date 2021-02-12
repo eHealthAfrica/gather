@@ -29,11 +29,12 @@ function prepare_and_test_container {
         --build-arg VERSION="${VERSION}" \
         $container
     echo "_____________________________________________ Testing $1"
-    $DC_TEST run --rm "$1"-test test
+    $DC_RUN "$1"-test test
     echo "_____________________________________________ $1 Done"
 }
 
 DC_TEST="docker-compose -f docker-compose-test.yml"
+DC_RUN="$DC_TEST run --rm"
 GIT_REVISION=rev-$(date "+%Y%m%d%H%M%S")
 VERSION="t.s.t"
 
@@ -49,7 +50,7 @@ $DC_TEST down -v
 $DC_TEST pull db-test
 
 prepare_and_test_container gather-assets
-$DC_TEST run --rm gather-assets-test build
+$DC_RUN -u root gather-assets-test build
 
 echo "_____________________________________________ Starting database"
 $DC_TEST up -d db-test
