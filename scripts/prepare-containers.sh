@@ -45,7 +45,7 @@ docker volume create gather_minio_data    2>/dev/null || true
 
 # pull dependencies
 docker-compose pull db
-docker-compose pull kernel odk ui
+docker-compose pull exm kernel odk ui
 
 if [ ! -f ./VERSION ]; then
     VERSION="0.0.0"

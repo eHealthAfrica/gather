@@ -499,7 +499,7 @@ class SurveyForm extends Component {
         <small className='mr-3'>
           (<RelativeTime date={xform.created_at} />)
         </small>
-      )
+        )
       : ''
     )
 
@@ -606,7 +606,7 @@ class SurveyForm extends Component {
                     defaultMessage='To add media files you need to save the survey first'
                   />
                 </small>
-              )
+                )
           }
         </div>
 
@@ -624,13 +624,13 @@ class SurveyForm extends Component {
                         id='survey.odk.form.xforms.active'
                         defaultMessage='active'
                       />
-                    )
+                      )
                     : (
                       <FormattedMessage
                         id='survey.odk.form.xforms.inactive'
                         defaultMessage='inactive'
                       />
-                    )
+                      )
                 }
                 <i className={`ml-1 fas fa-toggle-${activeStatus}`} />
               </div>
@@ -708,7 +708,7 @@ class SurveyForm extends Component {
               >
                 {mediaFile.name}
               </a>
-            )
+              )
             : mediaFile.name
         }
 
@@ -1061,12 +1061,12 @@ class SurveyForm extends Component {
                     ...this.state.odk,
                     xforms: this.state.odk.xforms.map(xf => xf.key === xform.key
                       ? ({
-                        ...xf,
-                        media_files: xform.media_files.map(mf2 => mf2.key === mf.key
-                          ? ({ ...mf2, id: response.id })
-                          : mf2
-                        )
-                      })
+                          ...xf,
+                          media_files: xform.media_files.map(mf2 => mf2.key === mf.key
+                            ? ({ ...mf2, id: response.id })
+                            : mf2
+                          )
+                        })
                       : xf
                     )
                   }

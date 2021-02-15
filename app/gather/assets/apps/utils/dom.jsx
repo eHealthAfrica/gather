@@ -22,6 +22,7 @@ import ReactDOM from 'react-dom'
 
 export const isMounted = (instance) => {
   try {
+    // eslint-disable-next-line
     ReactDOM.findDOMNode(instance)
     return true
   } catch (e) {
