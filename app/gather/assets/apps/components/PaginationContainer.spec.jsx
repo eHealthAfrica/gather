@@ -373,7 +373,6 @@ describe('PaginationContainer', () => {
           listComponent={Foo}
           url={path}
           sizes={[1, 10, 25]}
-
           titleBar={path}
           search
           showFirst

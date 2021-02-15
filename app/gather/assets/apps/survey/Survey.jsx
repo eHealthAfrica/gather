@@ -244,7 +244,7 @@ class Survey extends Component {
                 dashboardConfig={dashboardConfig}
                 saveDashboardConfig={(dashboardConfig) => { this.setState({ dashboardConfig }) }}
               />
-            )
+              )
             : (
               <PaginationContainer
                 key={viewMode + new Date()}
@@ -258,7 +258,7 @@ class Survey extends Component {
                 extras={viewMode === TASKS_VIEW ? null : extras}
                 mapResponse={viewMode === TASKS_VIEW ? null : mapResponse}
               />
-            )
+              )
         }
       </div>
     )

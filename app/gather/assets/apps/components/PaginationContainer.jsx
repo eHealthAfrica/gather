@@ -202,11 +202,9 @@ class PaginationContainer extends Component {
         pageSize={this.state.pageSize}
         sizes={this.state.sizes}
         records={(this.state.list && this.state.list.count) || 0}
-
         goToPage={(page) => { this.setState({ page, isRefreshing: true }) }}
         onSearch={(search) => { this.setState({ search, page: 1, isRefreshing: true }) }}
         setPageSize={(pageSize) => { this.setState({ pageSize, page: 1, isRefreshing: true }) }}
-
         search={this.props.search}
         showFirst={this.props.showFirst}
         showPrevious={this.props.showPrevious}
