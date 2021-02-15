@@ -32,7 +32,7 @@ const buildFetchOptions = (method, payload, multipart, extras) => {
       'X-METHOD': method, // See comment below
       // The default behavior of Kong is to redirect to the login page
       // if the user is not authorized, with this header we try to receive
-      // the real status code "403" and redirect us to the logout page
+      // the real status code "401" and redirect us to the logout page
       'X-Oauth-Unauthorized': 'status_code'
     },
     ...extras
@@ -133,7 +133,8 @@ const inspectResponse = ({ download, filename }, resolve, reject, response) => {
     return response
       .json()
       .then(content => resolve(content))
-  } else if (response.status === 403) {
+  } else if (response.status === 401 || response.status === 403) {
+    // 401 - Unauthorized / 403 - Forbidden
     const logoutUrl = document.getElementById('logout-link').href
     goTo(logoutUrl)
     return reject(new Error())
