@@ -4,9 +4,6 @@ language: shell
 services:
   - docker
 
-before_script:
-  - ./scripts/generate-credentials.sh > .env
-
 # build only the develop or release-#.# branches or tags like #.#.#
 branches:
   only:
@@ -20,11 +17,13 @@ jobs:
   include:
     - name: "Test gather application"
       stage: test
-      script: ./scripts/test.sh
+      script: |
+        ./scripts/generate-credentials.sh > .env
+        ./scripts/test.sh
 
     - name: "Test concourse deployment"
       stage: test
-      script: docker build --pull --file gather.Dockerfile .
+      script: docker build --file gather.Dockerfile .
 
     - name: "Publish gather container in Docker Hub"
       stage: deploy
