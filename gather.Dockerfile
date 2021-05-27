@@ -22,7 +22,8 @@ COPY --from=app_resource /tmp/resources/. /var/tmp/
 ## copy source code
 COPY ./app/gather/assets/ /node/
 ## build react app
-RUN npm install -s && npm run build
+RUN npm install -s --no-audit --no-fund --no-package-lock && \
+    npm run build
 
 
 ################################################################################
@@ -46,7 +47,12 @@ RUN /tmp/setup.sh
 COPY --chown=gather:gather ./app/ /code/
 
 ## install dependencies
-RUN pip install -q --upgrade pip && \
+ENV VIRTUAL_ENV=/var/run/gather/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN mkdir -p $VIRTUAL_ENV && \
+    python3 -m venv $VIRTUAL_ENV && \
+    pip install -q --upgrade pip && \
     pip install -q -r /code/conf/pip/requirements.txt
 
 ## copy react app

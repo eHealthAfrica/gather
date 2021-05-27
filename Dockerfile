@@ -20,7 +20,13 @@ ENTRYPOINT ["/code/entrypoint.sh"]
 ################################################################################
 
 COPY --chown=gather:gather ./app/conf/pip /code/conf/pip
-RUN pip install -q --upgrade pip && \
+
+ENV VIRTUAL_ENV=/var/run/gather/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN mkdir -p $VIRTUAL_ENV && \
+    python3 -m venv $VIRTUAL_ENV && \
+    pip install -q --upgrade pip && \
     pip install -q -r /code/conf/pip/requirements.txt
 COPY --chown=gather:gather ./app /code
 

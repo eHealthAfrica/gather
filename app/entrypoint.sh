@@ -54,16 +54,17 @@ function show_help {
 }
 
 function pip_freeze {
-    pip install virtualenv
-    rm -rf /tmp/env
+    local VENV=/tmp/env
+    rm -rf ${VENV}
+    mkdir -p ${VENV}
+    python3 -m venv ${VENV}
 
-    virtualenv -p python3 /tmp/env/
-    /tmp/env/bin/pip install -q \
+    ${VENV}/bin/pip install -q \
         -r ./conf/pip/primary-requirements.txt \
         --upgrade
 
     cat conf/pip/requirements_header.txt | tee conf/pip/requirements.txt
-    /tmp/env/bin/pip freeze --local | grep -v appdir | tee -a conf/pip/requirements.txt
+    ${VENV}/bin/pip freeze --local | grep -v appdir | tee -a conf/pip/requirements.txt
 }
 
 function setup {
@@ -230,7 +231,7 @@ case "$1" in
 
         setup
 
-        # Export woraround: in seconds: 20min
+        # Export workaround: in seconds: 20min
         export UWSGI_HARAKIRI=${UWSGI_HARAKIRI:-1200}
 
         ./conf/uwsgi/start.sh
