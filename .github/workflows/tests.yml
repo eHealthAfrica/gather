@@ -1,0 +1,34 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - release-[0-9]+\.[0-9]+
+
+  push:
+    branches:
+      - develop
+      - release-[0-9]+\.[0-9]+
+
+jobs:
+
+  test-gather:
+    name: Test gather application
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+          ./scripts/generate-credentials.sh > .env
+          ./scripts/test.sh
+
+  check-deployment:
+    name: Check concourse deployment
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build container
+        run: docker build --file gather.Dockerfile .
