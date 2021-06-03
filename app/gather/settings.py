@@ -82,7 +82,7 @@ AETHER_APPS = [
 CONSUMER_TENANCY_HEADER = os.environ.get('TENANCY_HEADER', 'X-Oauth-realm')
 
 # ElasticSearch consumer
-CONSUMERS_CONFIG_FILE = os.environ.get('CONSUMERS_CONFIG_FILE', '/code/conf/consumers.json')
+CONSUMERS_CONFIG_FILE = os.environ.get('CONSUMERS_CONFIG_FILE', './conf/consumers.json')
 AUTO_CONFIG_CONSUMERS = bool(os.environ.get('AUTO_CONFIG_CONSUMERS'))
 CONSUMER_SETTINGS = []
 if os.path.exists(CONSUMERS_CONFIG_FILE):

@@ -173,7 +173,7 @@ function test_lint {
 }
 
 function test_coverage {
-    rm -R /code/.coverage* 2>/dev/null || true
+    coverage erase || true
 
     coverage run \
         --concurrency=multiprocessing \
@@ -186,7 +186,7 @@ function test_coverage {
     coverage report
     coverage erase
 
-    cat /code/conf/extras/good_job.txt
+    cat ./conf/extras/good_job.txt
 }
 
 BACKUPS_FOLDER=/backups
