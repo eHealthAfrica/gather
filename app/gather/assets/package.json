@@ -46,7 +46,7 @@
     "express": "~4.17.0",
     "jest": "~27.0.0",
     "mini-css-extract-plugin": "~1.6.0",
-    "nock": "~13.0.0",
+    "nock": "~13.1.0",
     "node-fetch": "~2.6.0",
     "node-sass": "~5.0.0",
     "react-hot-loader": "~4.13.0",
