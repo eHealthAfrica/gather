@@ -43,6 +43,9 @@ echo "Release version:     ${VERSION}"
 echo "Release revision:    ${TRAVIS_COMMIT}"
 echo "--------------------------------------------------------------"
 
+# Login in docker hub
+docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+
 echo "Building Docker image ${DOCKER_IMAGE}"
 docker build \
     --pull \
@@ -51,9 +54,6 @@ docker build \
     --tag $DOCKER_IMAGE \
     --file ${APP}.Dockerfile \
     .
-
-# Login in docker hub
-docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
 
 echo "Pushing Docker image ${DOCKER_IMAGE}"
 docker push ${DOCKER_IMAGE}

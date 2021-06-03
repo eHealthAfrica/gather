@@ -65,6 +65,9 @@ jobs:
 
     - name: Test concourse deployment
       stage: test
+      # https://www.docker.com/increase-rate-limits
+      # https://docs.docker.com/docker-hub/download-rate-limit/#how-do-i-authenticate-pull-requests
+      before_script: docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
       script: docker build --pull --file gather.Dockerfile .
 
     - name: Publish gather container in Docker Hub
