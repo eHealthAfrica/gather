@@ -63,6 +63,10 @@ jobs:
       python: '3.8'
       script: ./scripts/test-python.sh
 
+    - name: Test Setup
+      before_script: ./scripts/generate-credentials.sh > .env
+      script: docker-compose config
+
     - name: Test concourse deployment
       stage: test
       # https://www.docker.com/increase-rate-limits
