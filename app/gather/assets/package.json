@@ -22,9 +22,9 @@
   "dependencies": {
     "@formatjs/intl-relativetimeformat": "~9.1.0",
     "@formatjs/intl-utils": "~3.8.0",
+    "@popperjs/core": "~2.9.0",
     "abortcontroller-polyfill": "~1.7.0",
-    "bootstrap": "~4.6.0",
-    "jquery": "~3.6.0",
+    "bootstrap": "~5.0.0",
     "moment": "~2.29.0",
     "popper.js": "~1.16.0",
     "react": "~16.14.0",

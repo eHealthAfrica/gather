@@ -35,7 +35,7 @@ const FullDateTime = ({ date }) => {
 
   return (
     <span>
-      <span className='mr-2'>
+      <span className='me-2'>
         <FormattedDate
           value={date}
           year='numeric'
@@ -43,7 +43,7 @@ const FullDateTime = ({ date }) => {
           day='numeric'
         />
       </span>
-      <span className='mr-2'>
+      <span className='me-2'>
         <FormattedTime
           value={date}
           hour12={false}

@@ -31,7 +31,7 @@ import { FormattedMessage } from 'react-intl'
 const FetchErrorAlert = ({ error }) => (
   <div data-qa='data-erred' className='container-fluid'>
     <p className='alert alert-danger'>
-      <i className='fas fa-exclamation-triangle mr-1' />
+      <i className='fas fa-exclamation-triangle me-1' />
       <FormattedMessage
         id='alert.error.fetch'
         defaultMessage={`
@@ -43,7 +43,7 @@ const FetchErrorAlert = ({ error }) => (
     {
       error && error.content && error.content.detail &&
         <p data-qa='data-erred-reason' className='alert alert-danger'>
-          <i className='fas fa-exclamation-triangle mr-1' />
+          <i className='fas fa-exclamation-triangle me-1' />
           {error.content.detail}
         </p>
     }

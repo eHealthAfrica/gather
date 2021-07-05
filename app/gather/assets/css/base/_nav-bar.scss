@@ -33,7 +33,7 @@
   margin-left: 0.5rem;
 }
 
-.navbar-nav.float-right {
+.navbar-nav.float-end {
   float: none;
   margin-left: auto;
 }
@@ -51,8 +51,13 @@
   }
 }
 
-.nav-link.active {
-  color: $action-color;
+.nav-link {
+  color: $white;
+
+  &.active,
+  &:hover {
+    color: $action-color;
+  }
 }
 
 .user-name {

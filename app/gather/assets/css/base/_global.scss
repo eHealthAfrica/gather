@@ -240,6 +240,7 @@ small {
 
 .badge-default {
   background: $lighter-grey;
+  color: $text-color;
   font-weight: normal;
   font-size: $font-size-xs;
 }
@@ -252,7 +253,6 @@ textarea.form-control {
   border-radius: 0;
   box-shadow: 1px 1px 1px rgba($text-color, 0.3) inset;
   font-family: $body-font-family;
-  padding: 0.8em;
 
   &:disabled {
     background: $lighter-grey;
@@ -345,6 +345,7 @@ input:active {
 }
 
 .actions {
+  margin: 2rem 0;
   padding: 2rem 0;
   border-top: 1px solid $grey;
   display: flex;
@@ -384,6 +385,16 @@ pre {
   overflow: auto;
   white-space: pre;
   padding: 0.5rem;
+}
+
+// from bootstrap 4
+.form-inline {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 @media screen and (max-width: 576px) {

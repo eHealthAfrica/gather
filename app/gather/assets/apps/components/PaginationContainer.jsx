@@ -180,7 +180,7 @@ class PaginationContainer extends Component {
       return (
         <div data-qa='data-empty' className='container-fluid'>
           <p className='alert alert-danger'>
-            <i className='fas fa-exclamation-triangle mr-2' />
+            <i className='fas fa-exclamation-triangle me-2' />
             <FormattedMessage
               id='pagination.search.empty'
               defaultMessage='No results found for {search}.'

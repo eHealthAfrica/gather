@@ -88,7 +88,7 @@ class EntitiesDownload extends Component {
         className='btn btn-primary'
         onClick={() => { this.setState({ open: true }) }}
       >
-        <i className='fas fa-download mr-2' />
+        <i className='fas fa-download me-2' />
         <FormattedMessage
           id='entities.download.title'
           defaultMessage='Generate file for download'
@@ -263,22 +263,22 @@ class EntitiesDownload extends Component {
         label: EXPORT_CSV_FORMAT.toUpperCase(),
         // in case of checked, render the CSV options
         renderChecked: () => (
-          <div className='ml-5 form-inline'>
-            <div className='form-group mr-5'>
+          <div className='ms-5 form-inline'>
+            <div className='form-group me-5 row'>
               <label
-                className='form-control-label label mr-2'
+                className='form-label label me-2 col'
                 title={formatMessage(MESSAGES.delimiterHint)}
               >
                 <FormattedMessage
                   id='entities.download.csv.separator'
                   defaultMessage='Delimiter'
                 />
-                <sup className='ml-1'><b>(*)</b></sup>
+                <sup className='ms-1'><b>(*)</b></sup>
               </label>
               <input
                 name='csvSeparator'
                 type='text'
-                className='form-control'
+                className='col form-control'
                 size={3}
                 maxLength={1}
                 value={this.state.csvSeparator || ''}
@@ -286,8 +286,8 @@ class EntitiesDownload extends Component {
                 onKeyUp={onKeyUp}
               />
             </div>
-            <div className='form-group mr-5'>
-              <label className='form-control-label label mr-2'>
+            <div className='form-group me-5 row'>
+              <label className='form-label label me-2 col'>
                 <FormattedMessage
                   id='entities.download.csv.quote'
                   defaultMessage='Quote'
@@ -296,15 +296,15 @@ class EntitiesDownload extends Component {
               <input
                 name='csvQuote'
                 type='text'
-                className='form-control'
+                className='col form-control'
                 size={3}
                 maxLength={1}
                 value={this.state.csvQuote || ''}
                 onChange={onInputChange}
               />
             </div>
-            <div className='form-group mr-5'>
-              <label className='form-control-label label mr-2'>
+            <div className='form-group me-5 row'>
+              <label className='form-label label me-2 col'>
                 <FormattedMessage
                   id='entities.download.csv.escape'
                   defaultMessage='Escape'
@@ -313,7 +313,7 @@ class EntitiesDownload extends Component {
               <input
                 name='csvEscape'
                 type='text'
-                className='form-control'
+                className='col form-control'
                 size={3}
                 maxLength={1}
                 value={this.state.csvEscape || ''}
@@ -386,7 +386,7 @@ class EntitiesDownload extends Component {
                         id='entities.download.page.from'
                         defaultMessage='From record'
                       />
-                      <b className='mr-1 ml-1'>
+                      <b className='me-1 ms-1'>
                         <FormattedNumber value={(page - 1) * pageSize + 1} />
                       </b>
 
@@ -394,26 +394,26 @@ class EntitiesDownload extends Component {
                         id='entities.download.page.to'
                         defaultMessage='to record'
                       />
-                      <b className='ml-1'>
+                      <b className='ms-1'>
                         <FormattedNumber value={Math.min((page) * pageSize, total)} />
                       </b>
 
                       {
                         pages > 1 &&
                           <>
-                            <b className='mr-2 ml-2'>&ndash;</b>
+                            <b className='me-2 ms-2'>&ndash;</b>
                             <FormattedMessage
                               id='entities.download.page.current'
                               defaultMessage='Block'
                             />
-                            <b className='mr-1 ml-1'>
+                            <b className='me-1 ms-1'>
                               <FormattedNumber value={page} />
                             </b>
                             <FormattedMessage
                               id='entities.download.page.of'
                               defaultMessage='of'
                             />
-                            <b className='mr-1 ml-1'>
+                            <b className='me-1 ms-1'>
                               <FormattedNumber value={pages} />
                             </b>
                           </>
@@ -445,13 +445,13 @@ class EntitiesDownload extends Component {
                   </h4>
 
                   <div
-                    className='form-group mt-2 ml-2'
+                    className='form-group mt-2 ms-2'
                     onClick={() => { this.setState({ generateRecords: !this.state.generateRecords }) }}
                   >
                     <i
                       className={`fa ${this.state.generateRecords ? 'fa-toggle-on' : 'fa-toggle-off'}`}
                     />
-                    <label className='form-control-label ml-2'>
+                    <label className='form-label ms-2'>
                       <FormattedMessage
                         id='entities.download.records.include'
                         defaultMessage='Generate file with records'
@@ -481,17 +481,17 @@ class EntitiesDownload extends Component {
                           />
                         </h5>
 
-                        {this.renderChoices(HEADERS, 'headerContent', 'd-inline mr-5')}
+                        {this.renderChoices(HEADERS, 'headerContent', 'd-inline me-5')}
 
                         <div className='form-inline p-2'>
                           <div
-                            className='form-group mt-2 ml-2'
+                            className='form-group mt-2 ms-2'
                             onClick={() => { this.setState({ headerFull: !this.state.headerFull }) }}
                           >
                             <i
                               className={`fa ${this.state.headerFull ? 'fa-toggle-on' : 'fa-toggle-off'}`}
                             />
-                            <label className='form-control-label ml-2'>
+                            <label className='form-label ms-2'>
                               <FormattedMessage
                                 id='entities.download.headers.full'
                                 defaultMessage='Show full path in headers'
@@ -501,8 +501,8 @@ class EntitiesDownload extends Component {
 
                           {
                             this.state.headerFull &&
-                              <div className='form-group ml-5'>
-                                <label className='form-control-label label mr-2'>
+                              <div className='form-group ms-5 row'>
+                                <label className='col form-label label me-2'>
                                   <FormattedMessage
                                     id='entities.download.headers.separator'
                                     defaultMessage='Delimiter'
@@ -511,7 +511,7 @@ class EntitiesDownload extends Component {
                                 <input
                                   name='headerSeparator'
                                   type='text'
-                                  className='form-control'
+                                  className='col form-control'
                                   size={3}
                                   maxLength={1}
                                   value={this.state.headerSeparator || ''}
@@ -547,13 +547,13 @@ class EntitiesDownload extends Component {
                   </h4>
 
                   <div
-                    className='form-group mt-2 ml-2'
+                    className='form-group mt-2 ms-2'
                     onClick={() => { this.setState({ generateAttachments: !this.state.generateAttachments }) }}
                   >
                     <i
                       className={`fa ${this.state.generateAttachments ? 'fa-toggle-on' : 'fa-toggle-off'}`}
                     />
-                    <label className='form-control-label ml-2'>
+                    <label className='form-label ms-2'>
                       <FormattedMessage
                         id='entities.download.attachments.full'
                         defaultMessage='Generate zip file with all attachments'
@@ -624,7 +624,7 @@ class EntitiesDownload extends Component {
           onClick={() => { this.setState({ [name]: option.id }) }}
         >
           <div className='radio' />
-          <label className='ml-1'>
+          <label className='ms-1'>
             {option.label}
           </label>
         </div>
@@ -644,7 +644,7 @@ class EntitiesDownload extends Component {
     return list.map(option => (
       <div
         key={option.id}
-        className='form-group mt-2 ml-2'
+        className='form-group mt-2 ms-2'
         onClick={() => {
           const choices = this.state[name]
           if (choices.indexOf(option.id) > -1) {
@@ -657,7 +657,7 @@ class EntitiesDownload extends Component {
         <i
           className={`fas ${this.state[name].indexOf(option.id) > -1 ? 'fa-toggle-on' : 'fa-toggle-off'}`}
         />
-        <label className='ml-1'>
+        <label className='ms-1'>
           {option.label}
         </label>
       </div>
@@ -668,7 +668,7 @@ class EntitiesDownload extends Component {
     const renderBody = (error) => (
       <>
         <p>
-          <i className='fas fa-exclamation-triangle mr-1' />
+          <i className='fas fa-exclamation-triangle me-1' />
           <FormattedMessage
             id='entities.download.error'
             defaultMessage={`
@@ -680,7 +680,7 @@ class EntitiesDownload extends Component {
         {
           error.content && error.content.detail &&
             <p>
-              <i className='fas fa-exclamation-triangle mr-1' />
+              <i className='fas fa-exclamation-triangle me-1' />
               {error.content.detail}
             </p>
         }
@@ -744,7 +744,7 @@ class EntitiesDownload extends Component {
     return (
       <div className='modal-header'>
         <h5 className='modal-title'>
-          <i className='fas fa-download mr-2' />
+          <i className='fas fa-download me-2' />
           <FormattedMessage
             id='entities.download.title'
             defaultMessage='Download'
@@ -753,11 +753,9 @@ class EntitiesDownload extends Component {
         <button
           data-qa='confirm-button-close'
           type='button'
-          className='close'
+          className='btn-close'
           onClick={close}
-        >
-          &times;
-        </button>
+        />
       </div>
     )
   }

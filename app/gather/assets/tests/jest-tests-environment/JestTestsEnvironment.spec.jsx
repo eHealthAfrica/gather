@@ -24,10 +24,6 @@ const nock = require('nock')
 
 describe('Tests Environment', () => {
   it('should set the common global variables', () => {
-    expect(global.window.$).toBeTruthy()
-    expect(global.window.jQuery).toBeTruthy()
-    expect(global.window.Popper).toBeTruthy()
-
     expect(global.window.navigator.language).toEqual('en')
   })
 

@@ -26,8 +26,6 @@
 const JSDOMEnvironment = require('jest-environment-jsdom')
 const AbortController = require('abort-controller')
 const fetch = require('node-fetch')
-const $ = require('jquery')
-const popper = require('popper.js')
 
 const testURL = 'http://localhost'
 
@@ -50,11 +48,6 @@ class JestTestsEnvironment extends JSDOMEnvironment {
       { value: 'en', configurable: true }
     )
 
-    // include global variables
-    this.global.window.$ = $(this.global.window)
-    this.global.window.jQuery = this.global.window.$
-    this.global.window.Popper = popper
-
     // uses "node-fetch" in tests, "whatwg-fetch" only works in browsers
     // check that the url is not a relative url, otherwise prepend testURL
     // Fixes: [TypeError: Only absolute URLs are supported]
@@ -71,10 +64,6 @@ class JestTestsEnvironment extends JSDOMEnvironment {
   }
 
   async teardown () {
-    this.global.window.$ = null
-    this.global.window.jQuery = null
-    this.global.window.Popper = null
-
     this.global.jsdom = null
     this.global.range = null
     this.global.window.fetch = null

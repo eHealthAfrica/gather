@@ -226,7 +226,7 @@ class SurveyForm extends Component {
             id='survey.form.title.edit'
             defaultMessage='Edit survey'
           />
-          <span className='survey-name ml-1'>{survey.name}</span>
+          <span className='survey-name ms-1'>{survey.name}</span>
         </span>
       )
     }
@@ -243,7 +243,7 @@ class SurveyForm extends Component {
 
     return (
       <div className={`form-group big-input ${errors.name ? 'error' : ''}`}>
-        <label className='form-control-label title'>
+        <label className='form-label title'>
           <FormattedMessage
             id='survey.form.name'
             defaultMessage='Name'
@@ -334,7 +334,7 @@ class SurveyForm extends Component {
 
     return (
       <div className={`form-group ${errors.surveyors ? 'error' : ''}`}>
-        <label className='form-control-label title'>
+        <label className='form-label title'>
           <FormattedMessage
             id='survey.odk.form.surveyors'
             defaultMessage='Granted Surveyors'
@@ -384,7 +384,7 @@ class SurveyForm extends Component {
     return (
       <>
         <div className='my-3'>
-          <label className='form-control-label title'>
+          <label className='form-label title'>
             <FormattedMessage
               id='survey.odk.form.xforms.list'
               defaultMessage='xForms'
@@ -496,7 +496,7 @@ class SurveyForm extends Component {
 
     const date = (xform.id
       ? (
-        <small className='mr-3'>
+        <small className='me-3'>
           (<RelativeTime date={xform.created_at} />)
         </small>
         )
@@ -505,7 +505,7 @@ class SurveyForm extends Component {
 
     const title = (
       <span title={xform.description} className='form-title'>
-        <i className='fas fa-file mr-2' />
+        <i className='fas fa-file me-2' />
         {xform.title}
         <span className='badge badge-default mx-2'>
           <FormattedMessage
@@ -569,11 +569,11 @@ class SurveyForm extends Component {
                   xform.file &&
                     <>
                       <small>| New form version: </small>
-                      <span className='ml-2 badge badge-default'>
+                      <span className='ms-2 badge badge-default'>
                         <span>{xform.file.name}</span>
                         <button
                           type='button'
-                          className='btn btn-sm icon-only btn-danger ml-2'
+                          className='btn btn-sm icon-only btn-danger ms-2'
                           onClick={removeFile}
                         >
                           <i className='fas fa-times' />
@@ -585,7 +585,7 @@ class SurveyForm extends Component {
           }
 
           <ConfirmButton
-            className='btn btn-sm icon-only btn-danger delete-form-button mr-2'
+            className='btn btn-sm icon-only btn-danger delete-form-button me-2'
             cancelable
             condition={() => xform.id}
             onConfirm={onRemove}
@@ -600,7 +600,7 @@ class SurveyForm extends Component {
             xform.id
               ? this.renderMediaFiles(xform, title, onChangeMediaFiles)
               : (
-                <small className='ml-4'>
+                <small className='ms-4'>
                   <FormattedMessage
                     id='survey.odk.form.xforms.file.media.files'
                     defaultMessage='To add media files you need to save the survey first'
@@ -614,7 +614,7 @@ class SurveyForm extends Component {
           xform.id &&
             <div className='row-extras'>
               <div
-                className={`form-toggle ${activeStatus} float-right`}
+                className={`form-toggle ${activeStatus} float-end`}
                 onClick={toggleFlagActive}
               >
                 {
@@ -632,7 +632,7 @@ class SurveyForm extends Component {
                       />
                       )
                 }
-                <i className={`ml-1 fas fa-toggle-${activeStatus}`} />
+                <i className={`ms-1 fas fa-toggle-${activeStatus}`} />
               </div>
             </div>
         }
@@ -674,7 +674,7 @@ class SurveyForm extends Component {
         }
 
         <label className='btn btn-default' htmlFor={inputFileId}>
-          <i className='fas fa-plus-circle fa-lg mr-1' />
+          <i className='fas fa-plus-circle fa-lg me-1' />
           <FormattedMessage
             id='survey.odk.form.xform.media.files.add'
             defaultMessage='Add media files'
@@ -696,7 +696,7 @@ class SurveyForm extends Component {
     const { formatMessage } = this.props.intl
 
     return (
-      <span key={mediaFile.name} className='ml-2 mb-1 badge badge-default'>
+      <span key={mediaFile.name} className='ms-2 mb-1 badge badge-default'>
         {
           mediaFile.id
             ? (
@@ -713,7 +713,7 @@ class SurveyForm extends Component {
         }
 
         <ConfirmButton
-          className='btn btn-sm icon-only btn-danger ml-2'
+          className='btn btn-sm icon-only btn-danger ms-2'
           cancelable
           condition={() => mediaFile.id}
           onConfirm={() => { onRemove(mediaFile) }}
@@ -778,7 +778,7 @@ class SurveyForm extends Component {
               </div>
 
               <div className='modal-body'>
-                <i className='fas fa-spin fa-cog mr-2' />
+                <i className='fas fa-spin fa-cog me-2' />
                 <FormattedMessage
                   id='survey.form.action.updating'
                   defaultMessage='Saving data in progress…'
