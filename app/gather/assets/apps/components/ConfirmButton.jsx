@@ -92,11 +92,9 @@ const ConfirmButton = ({
                       <button
                         data-qa='confirm-button-close'
                         type='button'
-                        className='close'
+                        className='btn-close'
                         onClick={onCancel}
-                      >
-                        &times;
-                      </button>
+                      />
                   }
                 </div>
 

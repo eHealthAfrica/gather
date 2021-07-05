@@ -105,8 +105,8 @@ class SurveyorForm extends Component {
             id='surveyor.form.title.edit'
             defaultMessage='Edit surveyor'
           />
-          <span className='username ml-2'>
-            <i className='fas fa-user mr-1' />
+          <span className='username ms-2'>
+            <i className='fas fa-user me-1' />
             {surveyor.username}
           </span>
         </span>
@@ -125,7 +125,7 @@ class SurveyorForm extends Component {
 
         <form onSubmit={this.onSubmit.bind(this)}>
           <div className={`form-group big-input ${errors.username ? 'error' : ''}`}>
-            <label className='form-control-label title'>
+            <label className='form-label title'>
               <FormattedMessage
                 id='surveyor.form.username'
                 defaultMessage='Surveyor username'
@@ -155,7 +155,7 @@ class SurveyorForm extends Component {
                     onConfirm={this.onDelete.bind(this)}
                     title={
                       <span className='username'>
-                        <i className='fas fa-user mr-1' />
+                        <i className='fas fa-user me-1' />
                         {surveyor.username}
                       </span>
                     }
@@ -213,7 +213,7 @@ class SurveyorForm extends Component {
     return (
       <>
         <div className={`form-group big-input ${errors.password ? 'error' : ''}`}>
-          <label className='form-control-label title'>
+          <label className='form-label title'>
             <FormattedMessage
               id='surveyor.form.password'
               defaultMessage='Password'
@@ -240,7 +240,7 @@ class SurveyorForm extends Component {
         </div>
 
         <div className='form-group big-input'>
-          <label className='form-control-label title'>
+          <label className='form-label title'>
             <FormattedMessage
               id='surveyor.form.password.repeat'
               defaultMessage='Repeat password'
@@ -269,7 +269,7 @@ class SurveyorForm extends Component {
 
     return (
       <div className='form-group'>
-        <label className='form-control-label title'>
+        <label className='form-label title'>
           <FormattedMessage
             id='surveyorForm.surveyor.surveys'
             defaultMessage='Assigned Surveys'

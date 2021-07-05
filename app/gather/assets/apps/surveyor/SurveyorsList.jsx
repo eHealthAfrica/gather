@@ -51,7 +51,7 @@ export default ({ list }) => list.length === 0
             list.map(({ id, username, project_names: projects }) => (
               <div key={id} data-qa='surveyor-list-item' className='row'>
                 <div data-qa='surveyor-name' className='col-4'>
-                  <i className='fas fa-user mr-2' />
+                  <i className='fas fa-user me-2' />
                   {username}
                 </div>
                 <div data-qa='surveyor-projects' className='col-6 surveys'>
@@ -61,7 +61,7 @@ export default ({ list }) => list.length === 0
                   <a
                     href={getSurveyorsPath({ action: 'edit', id })}
                     role='button'
-                    className='btn btn-sm btn-secondary icon-only float-right'
+                    className='btn btn-sm btn-secondary icon-only float-end'
                   >
                     <i className='fas fa-pencil-alt' />
                   </a>

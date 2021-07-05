@@ -36,7 +36,7 @@ const SurveyDetail = ({ survey }) => (
     </div>
 
     <div className='survey-records'>
-      <span className='record-number mr-1'>
+      <span className='record-number me-1'>
         <FormattedNumber value={survey.entities_count} />
       </span>
       <FormattedMessage

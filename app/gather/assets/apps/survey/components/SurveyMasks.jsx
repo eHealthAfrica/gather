@@ -178,7 +178,7 @@ class SurveyMasks extends Component {
             onClick={() => { this.setState({ showColumns: !this.state.showColumns }) }}
           >
             {currentMask.name}
-            <i className='fas fa-angle-down ml-2' />
+            <i className='fas fa-angle-down ms-2' />
           </button>
         </div>
 
@@ -297,7 +297,7 @@ class SurveyMasks extends Component {
     return (
       <div className='save-presets'>
         <form onSubmit={this.onSubmit.bind(this)}>
-          <label className='form-control-label title mr-2' htmlFor='mask-name'>
+          <label className='form-control-label title me-2' htmlFor='mask-name'>
             <FormattedMessage
               id='survey.mask.preset.save.label'
               defaultMessage='Save as'
@@ -311,7 +311,7 @@ class SurveyMasks extends Component {
             placeholder={formatMessage(MESSAGES.namePlaceholder)}
             className='form-control'
           />
-          <button type='submit' className='btn btn-secondary ml-2'>
+          <button type='submit' className='btn btn-secondary ms-2'>
             <FormattedMessage
               id='survey.mask.preset.save.button'
               defaultMessage='Save'

@@ -35,7 +35,7 @@ const HelpMessage = ({ children }) => {
     <div data-qa='data-help-message' className='d-inline'>
       <button
         type='button'
-        className='btn btn-sm btn-info rounded-circle float-right'
+        className='btn btn-sm btn-info rounded-circle float-end'
         data-toggle='collapse'
         data-target={'#' + randomId}
       >

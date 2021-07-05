@@ -23,7 +23,7 @@ import { FormattedDate, FormattedMessage, FormattedNumber } from 'react-intl'
 import moment from 'moment'
 
 const NoSubmissions = () => (
-  <span className='label mr-1'>
+  <span className='label me-1'>
     <FormattedMessage
       id='survey.dates.submissions.zero'
       defaultMessage='no data entry'
@@ -36,8 +36,8 @@ const SubmissionsCount = ({ survey }) => {
 
   if (days === 0) {
     return (
-      <span className='card-dates pr-2'>
-        <span className='label mr-1'>
+      <span className='card-dates pe-2'>
+        <span className='label me-1'>
           <FormattedMessage
             id='survey.dates.submissions.on'
             defaultMessage='data entry on'
@@ -54,8 +54,8 @@ const SubmissionsCount = ({ survey }) => {
   }
 
   return (
-    <span className='card-dates pr-2'>
-      <span className='label mr-1'>
+    <span className='card-dates pe-2'>
+      <span className='label me-1'>
         <FormattedMessage
           id='survey.dates.submissions.from'
           defaultMessage='data entry from'
@@ -88,14 +88,14 @@ const SubmissionsDuration = ({ survey }) => {
 
   return (
     <span className='card-dates'>
-      <span className='label mr-1'>
+      <span className='label me-1'>
         <FormattedMessage
           id='survey.dates.submissions.duration'
           defaultMessage='duration'
         />
       </span>
       <FormattedNumber value={days} />
-      <span className='ml-1'>
+      <span className='ms-1'>
         <FormattedMessage
           id='survey.dates.submissions.duration.days'
           defaultMessage='days'
@@ -111,8 +111,8 @@ const SurveyDates = ({ survey, showDuration }) => (
     className='card-block'
   >
     <p className='card-text small'>
-      <span className='card-dates pr-2'>
-        <span className='label mr-1'>
+      <span className='card-dates pe-2'>
+        <span className='label me-1'>
           <FormattedMessage
             id='survey.dates.created'
             defaultMessage='Created at'

@@ -30,7 +30,7 @@ import { FormattedMessage } from 'react-intl'
 const LoadingSpinner = () => (
   <div data-qa='data-loading' className='container-fluid'>
     <p className='alert alert-info'>
-      <i className='loading-spinner mr-2' />
+      <i className='loading-spinner me-2' />
       <FormattedMessage
         id='alert.loading'
         defaultMessage='Loading data from server…'

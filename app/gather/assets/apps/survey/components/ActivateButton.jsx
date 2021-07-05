@@ -95,11 +95,11 @@ const ActivateButton = ({
   return (
     <button
       type='button'
-      className='btn btn-secondary btn-icon mr-3'
+      className='btn btn-secondary btn-icon me-3'
       disabled={running}
       onClick={() => { toggle() }}
     >
-      <i className={`fas fa-${active ? 'stop' : 'play'} invert mr-3`} />
+      <i className={`fas fa-${active ? 'stop' : 'play'} invert me-3`} />
       {
         active
           ? (

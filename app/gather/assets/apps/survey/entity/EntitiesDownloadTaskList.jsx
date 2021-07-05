@@ -109,25 +109,25 @@ const EntitiesDownloadTaskList = ({
                   {task.id}
                 </td>
                 <td>
-                  <i className='fas fa-user mr-2' />
+                  <i className='fas fa-user me-2' />
                   {task.created_by}
                 </td>
                 <td>
-                  <i className='fas fa-clock mr-2' />
+                  <i className='fas fa-clock me-2' />
                   <RelativeTime date={task.created} />
                 </td>
                 <td
                   className={`status ${(task.status_records || '').toLowerCase()}`}
                   title={task.error_records || ''}
                 >
-                  {task.error_records && <i className='mr-2 fas fa-exclamation-triangle' />}
+                  {task.error_records && <i className='me-2 fas fa-exclamation-triangle' />}
                   {task.status_records || '—'}
                 </td>
                 <td
                   className={`status ${(task.status_attachments || '').toLowerCase()}`}
                   title={task.error_attachments || ''}
                 >
-                  {task.error_attachments && <i className='mr-2 fas fa-exclamation-triangle' />}
+                  {task.error_attachments && <i className='me-2 fas fa-exclamation-triangle' />}
                   {task.status_attachments || '—'}
                 </td>
                 <td>
@@ -137,11 +137,11 @@ const EntitiesDownloadTaskList = ({
                         const { unit, value } = selectDigitalUnit(file.size)
                         return (
                           <li key={jndex} className='mb-2'>
-                            <a href={file.file_url} className='mr-2'>
-                              <i className='fas fa-download mr-2' />
+                            <a href={file.file_url} className='me-2'>
+                              <i className='fas fa-download me-2' />
                               {getFileName(file.name)}
                             </a>
-                            <div className='ml-4'>
+                            <div className='ms-4'>
                               (
                               <small title={`${file.size} bytes`}>
                                 <FormattedMessage
@@ -156,7 +156,7 @@ const EntitiesDownloadTaskList = ({
                                   value={value}
                                 />
                               </small>,
-                              <small className='ml-2'>
+                              <small className='ms-2'>
                                 <FormattedMessage
                                   id='entities.download.task.list.file.md5'
                                   defaultMessage='md5'
@@ -172,7 +172,7 @@ const EntitiesDownloadTaskList = ({
                 </td>
                 <td>
                   <ConfirmButton
-                    className='btn btn-sm icon-only btn-danger delete-form-button mr-2'
+                    className='btn btn-sm icon-only btn-danger delete-form-button me-2'
                     cancelable
                     onConfirm={() => {
                       const url = getExportTasksAPIPath({ id: task.id })
@@ -187,7 +187,7 @@ const EntitiesDownloadTaskList = ({
                     }}
                     title={
                       <span>
-                        <i className='fas fa-trash mr-1' />
+                        <i className='fas fa-trash me-1' />
                         <FormattedMessage
                           id='task.item.delete.title'
                           defaultMessage='Delete task'

@@ -115,7 +115,7 @@ const SurveysListTable = ({ list }) => (
                           moment(lastSubmission).diff(moment(firstSubmission), 'days') + 1
                         }
                       />
-                      <span className='ml-1'>
+                      <span className='ms-1'>
                         <FormattedMessage
                           id='surveys.list.duration.days'
                           defaultMessage='days'

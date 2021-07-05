@@ -80,7 +80,7 @@ class Survey extends Component {
               role='button'
               className='btn btn-primary btn-icon'
             >
-              <i className='fas fa-pen invert mr-3' />
+              <i className='fas fa-pen invert me-3' />
               <FormattedMessage
                 id='survey.view.action.edit'
                 defaultMessage='Edit survey'
@@ -144,7 +144,7 @@ class Survey extends Component {
                     className={`tab ${viewMode === DASHBOARD_VIEW ? 'active' : ''}`}
                     onClick={() => { this.setState({ viewMode: DASHBOARD_VIEW }) }}
                   >
-                    <i className='fas fa-chart-area mr-2' />
+                    <i className='fas fa-chart-area me-2' />
                     <FormattedMessage
                       id='survey.view.action.dashboard'
                       defaultMessage='Dashboard'
@@ -159,7 +159,7 @@ class Survey extends Component {
                 className={`tab ${viewMode === TABLE_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: TABLE_VIEW }) }}
               >
-                <i className='fas fa-th-list mr-2' />
+                <i className='fas fa-th-list me-2' />
                 <FormattedMessage
                   id='survey.view.action.table'
                   defaultMessage='Table'
@@ -173,7 +173,7 @@ class Survey extends Component {
                 className={`tab ${viewMode === SINGLE_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: SINGLE_VIEW }) }}
               >
-                <i className='fas fa-file mr-2' />
+                <i className='fas fa-file me-2' />
                 <FormattedMessage
                   id='survey.view.action.single'
                   defaultMessage='Single'
@@ -187,7 +187,7 @@ class Survey extends Component {
                 className={`tab ${viewMode === TASKS_VIEW ? 'active' : ''}`}
                 onClick={() => { this.setState({ viewMode: TASKS_VIEW }) }}
               >
-                <i className='fas fa-download mr-2' />
+                <i className='fas fa-download me-2' />
                 <FormattedMessage
                   id='survey.view.action.tasks'
                   defaultMessage='Download'
@@ -206,7 +206,7 @@ class Survey extends Component {
                       className='tab'
                       onClick={() => { this.setState({ viewMode }) }}
                     >
-                      <i className='fas fa-redo mr-2' />
+                      <i className='fas fa-redo me-2' />
                       <FormattedMessage
                         id='survey.view.action.refresh'
                         defaultMessage='Refresh'
@@ -220,7 +220,7 @@ class Survey extends Component {
 
         {
           viewMode === TASKS_VIEW &&
-            <div className='ml-5 m-3'>
+            <div className='ms-5 m-3'>
               <EntitiesDownload
                 survey={survey}
                 total={total}

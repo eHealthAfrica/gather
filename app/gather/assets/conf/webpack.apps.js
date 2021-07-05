@@ -42,8 +42,6 @@ const buildEntries = (hmr) => {
   const list = {
     // the apps that DO NOT need Hot Module Replacement in development mode
     common: [
-      'jquery',
-      'popper.js',
       'bootstrap',
       'whatwg-fetch',
       'abortcontroller-polyfill/dist/polyfill-patch-fetch'
