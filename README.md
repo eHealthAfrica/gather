@@ -28,7 +28,6 @@
     - [Check outdated dependencies](#check-outdated-dependencies)
     - [Update requirements file](#update-requirements-file)
 
-
 ## Introduction
 
 Gather is an ODK-compatible data collection tool.
@@ -36,7 +35,6 @@ It is built on top of the [Aether framework](https://aether.ehealthafrica.org).
 If you want to try it out, the easiest way is to follow the
 [instructions](https://gather.ehealthafrica.org/documentation/try/)
 on the [Gather microsite](https://gather.ehealthafrica.org).
-
 
 ## Setup
 
@@ -92,7 +90,6 @@ This instruction is included in the `./scripts/prepare-containers.sh` script.
 
 *[Return to TOC](#table-of-contents)*
 
-
 ### Environment Variables
 
 Most of the environment variables are set to default values. This is the short list
@@ -100,7 +97,7 @@ of the most common ones with non default values. For more info take a look at th
 [docker-compose-base.yml](docker-compose-base.yml) and
 [/scripts/generate-credentials.sh](/scripts/generate-credentials.sh).
 
-See also [Django settings](https://docs.djangoproject.com/en/3.1/ref/settings/).
+See also [Django settings](https://docs.djangoproject.com/en/3.2/ref/settings/).
 
 See also [Aether Django SDK environment variables](https://github.com/eHealthAfrica/aether-django-sdk-library#environment-variables).
 
@@ -124,7 +121,7 @@ See also [Aether Django SDK environment variables](https://github.com/eHealthAfr
       with UWSGI_, and dashes are substituted with underscores.*
     ](https://uwsgi-docs.readthedocs.io/en/latest/Configuration.html#environment-variables)
 
-  See more in https://uwsgi-docs.readthedocs.io/
+  See more in <https://uwsgi-docs.readthedocs.io/>
 
 - Django specific:
   - `ADMIN_USERNAME`: `admin` the setup script will create a superuser
@@ -159,7 +156,6 @@ See also [Aether Django SDK environment variables](https://github.com/eHealthAfr
 
 *[Return to TOC](#table-of-contents)*
 
-
 ## Usage
 
 ```bash
@@ -177,7 +173,6 @@ All the created superusers have username `${ADMIN_USERNAME}` and
 password `${ADMIN_PASSWORD}` in each container.
 
 *[Return to TOC](#table-of-contents)*
-
 
 ### Users & Authentication
 
@@ -198,7 +193,6 @@ track better the user actions.
 because only those users can create new users with tokens in the Aether apps.
 
 *[Return to TOC](#table-of-contents)*
-
 
 ## Development
 
@@ -293,7 +287,8 @@ The header has a special format that includes a type, a scope, and a subject:
 <footer>
 ```
 
-#### Types of commit messages:
+#### Types of commit messages
+
 - *build*: Changes that affect the build system or external dependencies
 - *ci*: Changes to CI configuration files and scripts
 - *docs*: Documentation only changes
@@ -305,15 +300,19 @@ The header has a special format that includes a type, a scope, and a subject:
 - *test*: Adding missing tests or correcting existing tests
 
 #### Scope
+
 The candidates for scope depends on the project and the technologies being used. It is fairly up to the developer to select a scope.
 
 #### Subject
+
 The subject contains a succinct description of the change:
+
 - use the imperative, present tense: “change” not “changed” nor “changes”
 - don’t capitalize the first letter
 - no dot/period (.) at the end
 
 #### Footer (Optional)
+
 Footer is used for citing issues that this commit closes (if any).
 
 *[Return to TOC](#table-of-contents)*
@@ -331,42 +330,40 @@ Frontend assets include JS, CSS, and fonts. They are all handled by webpack.
 Frontend assets are mounted on the pages via the
 [django-webpack-loader](https://github.com/owais/django-webpack-loader).
 
-* There is a file with all the apps list: `app/gather/assets/conf/webpack.apps.js`.
+- There is a file with all the apps list: `app/gather/assets/conf/webpack.apps.js`.
 
-* There are three webpack configuration files:
+- There are three webpack configuration files:
 
   - `app/gather/assets/conf/webpack.common.js`  -- contains the common features to build the webpack files.
   - `app/gather/assets/conf/webpack.server.js`  -- starts the server in port `3005` with Hot Module Replacement (HMR).
   - `app/gather/assets/conf/webpack.prod.js`    -- compiles the files to be used in the Django app.
 
-* The `start_dev` entry point starts a webpack development server (port `3005`),
+- The `start_dev` entry point starts a webpack development server (port `3005`),
   that watches assets, rebuilds and does hot reloading of JS Components.
 
   ```bash
   docker-compose up gather-assets
   ```
 
-* The `build` entry point compiles the files to be used in the Django app.
+- The `build` entry point compiles the files to be used in the Django app.
   The resultant files are kept in the `app/gather/assets/bundles` folder.
 
   ```bash
   docker-compose run --rm gather-assets build
   ```
 
-* The CSS build is separate, and can contain both `.sass` and `.css` files.
+- The CSS build is separate, and can contain both `.sass` and `.css` files.
   They spit out a webpack build called `styles.css`.
 
-* Each page has their own JS entry point (needs to be defined in `webpack.apps.js`).
+- Each page has their own JS entry point (needs to be defined in `webpack.apps.js`).
   On top of that, they load a common chunk, containing `bootstrap`, `popper.js` and other
   stuff that the `webpack common chunk` plugin finds is shared between the apps.
 
 *[Return to TOC](#table-of-contents)*
 
-
 ## Containers and services
 
 The list of the main containers:
-
 
 | Container         | Description                                                       |
 | ----------------- | ----------------------------------------------------------------- |
@@ -377,12 +374,10 @@ The list of the main containers:
 | **odk**           | Aether ODK Collect Adapter app (imports data from ODK Collect)    |
 | **ui**            | Aether Kernel UI (only needed for advanced mapping functionality) |
 
-
 All the containers definition for development can be found in the
 [docker-compose-base.yml](docker-compose-base.yml) file.
 
 *[Return to TOC](#table-of-contents)*
-
 
 ## Run commands in the containers
 
@@ -397,7 +392,6 @@ If there is no interaction with any other container then include the option `--n
 See more in [docker-compose run](https://docs.docker.com/compose/reference/run).
 
 *[Return to TOC](#table-of-contents)*
-
 
 ### Python container
 
@@ -428,7 +422,6 @@ The following are some examples:
 
 *[Return to TOC](#table-of-contents)*
 
-
 ### Node container
 
 The [app/gather/assets/conf/entrypoint.sh](app/gather/assets/conf/entrypoint.sh)
@@ -450,7 +443,6 @@ The following are some examples:
 | Start webpack server with HMR              | `docker-compose run --rm gather-assets start_dev`         |
 
 *[Return to TOC](#table-of-contents)*
-
 
 ### Run tests
 
@@ -503,7 +495,6 @@ docker-compose run --rm gather-assets eval npm run test-js-verbose
 ```
 
 *[Return to TOC](#table-of-contents)*
-
 
 ### Upgrade dependencies
 
