@@ -33,6 +33,7 @@ import { cleanJsonPaths, reorderObjectKeys } from '../utils/types'
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 
 import ActivateButton from './components/ActivateButton'
+import ExtractButton from './components/ExtractButton'
 import SurveyDetail from './SurveyDetail'
 import SurveyDashboard from './SurveyDashboard'
 import SurveyMasks from './components/SurveyMasks'
@@ -75,6 +76,7 @@ class Survey extends Component {
           <h2>{survey.name}</h2>
           <div className='header-actions'>
             <ActivateButton survey={survey} settings={settings} />
+            <ExtractButton survey={survey} />
             <a
               href={getSurveysPath({ action: 'edit', id: survey.id })}
               role='button'

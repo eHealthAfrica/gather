@@ -71,7 +71,8 @@ const SurveysListTable = ({ list }) => (
           first_submission: firstSubmission,
           last_submission: lastSubmission,
           entities_count: entitiesCount,
-          submissions_count: submissionsCount
+          submissions_count: submissionsCount,
+          pending_submissions_count: pendingCount
         }) => (
           <div key={id} data-qa='inactive-survey' className='row entries'>
             <div className='col-6 name'>
@@ -126,8 +127,22 @@ const SurveysListTable = ({ list }) => (
                   : BLANK
               }
             </div>
-            <div className='col-1 record'>
-              <FormattedNumber value={entitiesCount} />
+            <div className='col-1'>
+              <span className='record'>
+                <FormattedNumber value={entitiesCount} />
+              </span>
+              {pendingCount > 0 && (
+                <sub className='ms-1'>
+                  (
+                  <FormattedMessage
+                    id='surveys.list.records.missing'
+                    defaultMessage='missing'
+                  />
+                  &nbsp;
+                  <FormattedNumber value={pendingCount} />
+                  )
+                </sub>
+              )}
             </div>
           </div>
         ))
