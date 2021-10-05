@@ -30,6 +30,18 @@ function build_container {
         ${container}
 }
 
+function _on_exit {
+    $DC down
+}
+
+function _on_err {
+    _on_exit
+    exit 1
+}
+
+trap '_on_exit' EXIT
+trap '_on_err' ERR
+
 # Generate credentials if missing
 if [ -e ".env" ]; then
     echo "[.env] file already exists! Remove it if you want to generate a new one."
@@ -53,6 +65,8 @@ echo "_____________________________________________"
 echo "Version:     ${VERSION}"
 echo "Revision:    ${GIT_REVISION}"
 echo "_____________________________________________"
+
+$DC pull db redis minio nginx
 
 # build assets containers
 containers=( ui gather )
