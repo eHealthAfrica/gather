@@ -33,6 +33,18 @@ function prepare_and_test_container {
     echo "_____________________________________________ $1 Done"
 }
 
+function _on_exit {
+    $DC_TEST down -v
+}
+
+function _on_err {
+    _on_exit
+    exit 1
+}
+
+trap '_on_exit' EXIT
+trap '_on_err' ERR
+
 DC_TEST="docker-compose -f docker-compose-test.yml"
 DC_RUN="$DC_TEST run --rm"
 GIT_REVISION=rev-$(date "+%Y%m%d%H%M%S")
