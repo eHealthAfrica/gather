@@ -135,7 +135,7 @@ const SurveysListTable = ({ list }) => (
                 <sub className='ms-1'>
                   (
                   <FormattedMessage
-                    id='surveys.list.recors.missing'
+                    id='surveys.list.records.missing'
                     defaultMessage='missing'
                   />
                   &nbsp;
