@@ -42,7 +42,7 @@ const ExtractButton = ({
     setRunning(false)
 
     if (error) {
-      window.alert(formatMessage(MESSAGES.errorDeactivate) + '\n' + error.toString())
+      window.alert(formatMessage(MESSAGES.errorExtract) + '\n' + error.toString())
     }
 
     // refresh page
