@@ -30,6 +30,19 @@ function build_container {
         ${container}
 }
 
+
+function _on_exit {
+    docker-compose down
+}
+
+function _on_err {
+    _on_exit
+    exit 1
+}
+
+trap '_on_exit' EXIT
+trap '_on_err' ERR
+
 # Generate credentials if missing
 if [ -e ".env" ]; then
     echo "[.env] file already exists! Remove it if you want to generate a new one."
@@ -44,7 +57,7 @@ docker volume create gather_database_data 2>/dev/null || true
 docker volume create gather_minio_data    2>/dev/null || true
 
 # pull dependencies
-docker-compose pull db
+docker-compose pull db redis minio nginx
 docker-compose pull exm kernel odk ui
 
 if [ ! -f ./VERSION ]; then
