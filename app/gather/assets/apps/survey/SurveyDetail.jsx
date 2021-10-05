@@ -38,6 +38,12 @@ const SurveyDetail = ({ survey }) => (
     <div className='survey-records'>
       <span className='record-number me-1'>
         <FormattedNumber value={survey.entities_count} />
+
+        {survey.pending_submissions_count > 0 && (
+          <small>
+            (<FormattedNumber value={survey.pending_submissions_count} />)
+          </small>
+        )}
       </span>
       <FormattedMessage
         id='survey.detail.entities'

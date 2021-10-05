@@ -37,6 +37,12 @@ const SurveyCard = ({ survey }) => (
       <p className='card-display text-center'>
         <span className='card-number'>
           <FormattedNumber value={survey.entities_count} />
+
+          {survey.pending_submissions_count > 0 && (
+            <small>
+              (<FormattedNumber value={survey.pending_submissions_count} />)
+            </small>
+          )}
         </span>
         <FormattedMessage
           id='survey.card.entities'
