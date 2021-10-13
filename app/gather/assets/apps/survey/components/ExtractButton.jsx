@@ -21,6 +21,7 @@
 import React, { useState } from 'react'
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 
+import WindowAlert from '../../components/WindowAlert'
 import { goTo } from '../../utils'
 import { getSurveysPath, getSurveysAPIPath } from '../../utils/paths'
 import { patchData } from '../../utils/request'
@@ -37,40 +38,47 @@ const ExtractButton = ({
   intl: { formatMessage }
 }) => {
   const [running, setRunning] = useState(false)
+  const [error, setError] = useState()
 
-  const onDone = (error, odk) => {
+  const onDone = (error) => {
     setRunning(false)
 
     if (error) {
-      window.alert(formatMessage(MESSAGES.errorExtract) + '\n' + error.toString())
+      setError(error.message)
+    } else {
+      // refresh page
+      goTo(getSurveysPath({ action: 'view', id }))
     }
-
-    // refresh page
-    goTo(getSurveysPath({ action: 'view', id }))
   }
 
   const extract = () => {
     setRunning(true)
+    setError(null)
+
     patchData(getSurveysAPIPath({ id, action: 'extract' }))
-      .then((resp) => { console.log(resp); onDone() })
-      .catch(error => { onDone(error, false) })
+      .then(() => { onDone() })
+      .catch(error => { onDone(error) })
   }
 
   if (pendingCount === 0) return ''
 
   return (
-    <button
-      type='button'
-      className='btn btn-secondary btn-icon me-3'
-      disabled={running}
-      onClick={() => { extract() }}
-    >
-      <i className='fas fa-share invert me-3' />
-      <FormattedMessage
-        id='survey.view.action.extract'
-        defaultMessage='Extract missing records'
-      />
-    </button>
+    <>
+      <button
+        type='button'
+        className='btn btn-secondary btn-icon me-3'
+        disabled={running}
+        onClick={() => { extract() }}
+      >
+        <i className='fas fa-share invert me-3' />
+        <FormattedMessage
+          id='survey.view.action.extract'
+          defaultMessage='Extract missing records'
+        />
+      </button>
+
+      <WindowAlert title={formatMessage(MESSAGES.errorExtract)} message={error} />
+    </>
   )
 }
 
