@@ -96,6 +96,10 @@ describe('Common components', () => {
     expect(components.WarningAlert).toBeTruthy()
   })
 
+  it('WindowAlert should be declared', () => {
+    expect(components.WindowAlert).toBeTruthy()
+  })
+
   it('IDontExist should not be declared', () => {
     expect(components.IDontExist).toBeFalsy()
   })

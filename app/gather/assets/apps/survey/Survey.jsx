@@ -33,6 +33,7 @@ import { cleanJsonPaths, reorderObjectKeys } from '../utils/types'
 import { FetchUrlsContainer, PaginationContainer } from '../components'
 
 import ActivateButton from './components/ActivateButton'
+import DownloadODKButton from './components/DownloadODKButton'
 import ExtractButton from './components/ExtractButton'
 import SurveyDetail from './SurveyDetail'
 import SurveyDashboard from './SurveyDashboard'
@@ -76,6 +77,7 @@ class Survey extends Component {
           <h2>{survey.name}</h2>
           <div className='header-actions'>
             <ActivateButton survey={survey} settings={settings} />
+            <DownloadODKButton survey={survey} settings={settings} />
             <ExtractButton survey={survey} />
             <a
               href={getSurveysPath({ action: 'edit', id: survey.id })}
