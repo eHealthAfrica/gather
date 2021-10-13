@@ -38,6 +38,7 @@ import Portal from './Portal'
 import RefreshSpinner from './RefreshSpinner'
 import RelativeTime from './RelativeTime'
 import WarningAlert from './WarningAlert'
+import WindowAlert from './WindowAlert'
 
 // export all components
 export {
@@ -59,5 +60,6 @@ export {
   Portal,
   RefreshSpinner,
   RelativeTime,
-  WarningAlert
+  WarningAlert,
+  WindowAlert
 }

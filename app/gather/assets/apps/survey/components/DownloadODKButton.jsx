@@ -22,19 +22,20 @@ import React, { useState } from 'react'
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 
 import WindowAlert from '../../components/WindowAlert'
-import { goTo } from '../../utils'
-import { getSurveysPath, getSurveysAPIPath } from '../../utils/paths'
-import { patchData } from '../../utils/request'
+import { ODK_APP } from '../../utils/constants'
+import { getSurveysAPIPath } from '../../utils/paths'
+import { getData } from '../../utils/request'
 
 const MESSAGES = defineMessages({
-  errorExtract: {
-    defaultMessage: 'Unexpected error while extracting missing records',
-    id: 'extract.button.error'
+  errorDownload: {
+    defaultMessage: 'Unexpected error while downloading ODK xForms',
+    id: 'download.button.error'
   }
 })
 
-const ExtractButton = ({
-  survey: { id, pending_submissions_count: pendingCount },
+const DownloadODKButton = ({
+  settings,
+  survey: { id },
   intl: { formatMessage }
 }) => {
   const [running, setRunning] = useState(false)
@@ -45,22 +46,21 @@ const ExtractButton = ({
 
     if (error) {
       setError(error.message)
-    } else {
-      // refresh page
-      goTo(getSurveysPath({ action: 'view', id }))
     }
   }
 
-  const extract = () => {
+  const download = () => {
     setRunning(true)
     setError(null)
 
-    patchData(getSurveysAPIPath({ id, action: 'extract' }))
+    getData(getSurveysAPIPath({ app: ODK_APP, id, action: 'download' }), { download: true })
       .then(() => { onDone() })
       .catch(error => { onDone(error) })
   }
 
-  if (pendingCount === 0) return ''
+  if (!settings.ODK_ACTIVE) {
+    return ''
+  }
 
   return (
     <>
@@ -68,18 +68,17 @@ const ExtractButton = ({
         type='button'
         className='btn btn-secondary btn-icon me-3'
         disabled={running}
-        onClick={() => { extract() }}
+        onClick={() => { download() }}
       >
-        <i className='fas fa-share invert me-3' />
+        <i className='fas fa-download invert me-3' />
         <FormattedMessage
-          id='survey.view.action.extract'
-          defaultMessage='Extract missing records'
+          id='survey.view.action.download.odk'
+          defaultMessage='Download ODK xForms'
         />
       </button>
-
-      <WindowAlert title={formatMessage(MESSAGES.errorExtract)} message={error} />
+      <WindowAlert title={formatMessage(MESSAGES.errorDownload)} message={error} />
     </>
   )
 }
 
-export default injectIntl(ExtractButton)
+export default injectIntl(DownloadODKButton)

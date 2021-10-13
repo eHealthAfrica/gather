@@ -21,6 +21,7 @@
 import React, { useState } from 'react'
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 
+import WindowAlert from '../../components/WindowAlert'
 import { goTo } from '../../utils'
 import { ODK_APP } from '../../utils/constants'
 import { getSurveysPath, getSurveysAPIPath } from '../../utils/paths'
@@ -52,6 +53,8 @@ const ActivateButton = ({
   intl: { formatMessage }
 }) => {
   const [running, setRunning] = useState(false)
+  const [error, setError] = useState()
+  const [errorTitle, setErrorTitle] = useState()
 
   const toggle = () => {
     const onDone = (error, odk) => {
@@ -61,14 +64,19 @@ const ActivateButton = ({
         const errorMsg = odk
           ? active ? MESSAGES.errorODKDeactivate : MESSAGES.errorODKActivate
           : active ? MESSAGES.errorDeactivate : MESSAGES.errorActivate
-        window.alert(formatMessage(errorMsg) + '\n' + error.toString())
-      }
 
-      // refresh page
-      goTo(getSurveysPath({ action: 'view', id }))
+        setErrorTitle(formatMessage(errorMsg))
+        setError(error.message)
+      } else {
+        // refresh page
+        goTo(getSurveysPath({ action: 'view', id }))
+      }
     }
 
     setRunning(true)
+    setErrorTitle(null)
+    setError(null)
+
     patchData(getSurveysAPIPath({ id }), { active: !active })
       .then(() => {
         if (settings.ODK_ACTIVE) {
@@ -93,29 +101,33 @@ const ActivateButton = ({
   }
 
   return (
-    <button
-      type='button'
-      className='btn btn-secondary btn-icon me-3'
-      disabled={running}
-      onClick={() => { toggle() }}
-    >
-      <i className={`fas fa-${active ? 'stop' : 'play'} invert me-3`} />
-      {
-        active
-          ? (
-            <FormattedMessage
-              id='survey.view.action.deactivate'
-              defaultMessage='Deactivate survey'
-            />
-            )
-          : (
-            <FormattedMessage
-              id='survey.view.action.activate'
-              defaultMessage='Activate survey'
-            />
-            )
-      }
-    </button>
+    <>
+      <button
+        type='button'
+        className='btn btn-secondary btn-icon me-3'
+        disabled={running}
+        onClick={() => { toggle() }}
+      >
+        <i className={`fas fa-${active ? 'stop' : 'play'} invert me-3`} />
+        {
+          active
+            ? (
+              <FormattedMessage
+                id='survey.view.action.deactivate'
+                defaultMessage='Deactivate survey'
+              />
+              )
+            : (
+              <FormattedMessage
+                id='survey.view.action.activate'
+                defaultMessage='Activate survey'
+              />
+              )
+        }
+      </button>
+
+      <WindowAlert title={errorTitle} message={error} />
+    </>
   )
 }
 
