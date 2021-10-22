@@ -16,9 +16,25 @@
 # specific language governing permissions and limitations
 # under the License.
 
+from django.conf import settings
 from django.contrib import admin
 
 from .api.models import Survey, Mask
+
+
+if settings.MULTITENANCY:  # pragma: no cover
+    PROJECT_LIST_FILTER = (
+        ('mt__realm', admin.EmptyFieldListFilter),
+        'mt__realm',
+    )
+    MASK_LIST_FILTER = (
+        ('survey__mt__realm', admin.EmptyFieldListFilter),
+        'survey__mt__realm',
+    )
+
+else:  # pragma: no cover
+    PROJECT_LIST_FILTER = []
+    MASK_LIST_FILTER = []
 
 
 class SurveyAdmin(admin.ModelAdmin):
@@ -26,6 +42,7 @@ class SurveyAdmin(admin.ModelAdmin):
     list_display = ('project_id', 'name',)
     search_fields = ('name',)
     ordering = list_display
+    list_filter = PROJECT_LIST_FILTER
 
 
 class MaskAdmin(admin.ModelAdmin):
@@ -33,6 +50,7 @@ class MaskAdmin(admin.ModelAdmin):
     list_display = ('survey', 'name', 'columns',)
     search_fields = ('survey__name', 'name', 'columns',)
     ordering = list_display
+    list_filter = MASK_LIST_FILTER
 
 
 admin.site.register(Survey, SurveyAdmin)
