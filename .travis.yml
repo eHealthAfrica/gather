@@ -56,7 +56,7 @@ jobs:
     - name: Test ReactJS App
       if: type != pull_request
       language: node_js
-      node_js: lts/*
+      node_js: 14
       script: ./scripts/test-node.sh
 
     - name: Test Django App

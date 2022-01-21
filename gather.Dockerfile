@@ -14,7 +14,7 @@ RUN /tmp/setup_revision.sh
 ## using node image to build react app
 ################################################################################
 
-FROM node:lts-alpine AS app_node
+FROM node:14-alpine AS app_node
 
 WORKDIR /node/
 ## copy application version and git revision
