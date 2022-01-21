@@ -54,24 +54,24 @@ jobs:
   fast_finish: true
   include:
     - name: Test ReactJS App
-      if: type != pull_request
+      if: type = pull_request
       language: node_js
       node_js: 14
       script: ./scripts/test-node.sh
 
     - name: Test Django App
-      if: type != pull_request
+      if: type = pull_request
       language: python
       python: '3.8'
       script: ./scripts/test-python.sh
 
     - name: Test Setup
-      if: type != pull_request
+      if: type = pull_request
       before_script: ./scripts/generate-credentials.sh > .env
       script: docker-compose config
 
     - name: Test concourse deployment
-      if: type != pull_request
+      if: type = pull_request
       stage: test
       # https://www.docker.com/increase-rate-limits
       # https://docs.docker.com/docker-hub/download-rate-limit/#how-do-i-authenticate-pull-requests
