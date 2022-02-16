@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3.8-slim-bullseye
 
 LABEL description="Gather 3 > Effortless data collection and curation" \
       name="gather" \
