@@ -30,7 +30,7 @@ RUN npm install -s --no-audit --no-fund --no-package-lock && \
 ## using python image to build app
 ################################################################################
 
-FROM python:3.8-slim-bullseye AS app
+FROM python:3.8-slim AS app
 
 LABEL description="Gather 3 > Effortless data collection and curation" \
       name="gather" \
