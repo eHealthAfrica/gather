@@ -4,29 +4,38 @@
 
 ## Table of contents
 
-- [Table of contents](#table-of-contents)
-- [Introduction](#introduction)
-- [Setup](#Setup)
-  - [Dependencies](#dependencies)
-  - [Installation](#installation)
-  - [Environment Variables](#environment-variables)
-    - [Gather instance](#gather-instance)
-- [Usage](#usage)
-  - [Users & Authentication](#users--authentication)
-    - [Token Authentication](#token-authentication)
-- [Development](#development)
-  - [Code style](#code-style)
-  - [Naming conventions](#naming-conventions)
-  - [Commit Message Format](#commit-message-format)
-  - [Frontend assets](#frontend-assets)
-- [Containers and services](#containers-and-services)
-- [Run commands in the containers](#run-commands-in-the-containers)
-  - [Python container](#python-container)
-  - [Node container](#node-container)
-  - [Run tests](#run-tests)
-  - [Upgrade dependencies](#upgrade-dependencies)
-    - [Check outdated dependencies](#check-outdated-dependencies)
-    - [Update requirements file](#update-requirements-file)
+- [Gather](#gather)
+  - [Table of contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Setup](#setup)
+    - [Dependencies](#dependencies)
+    - [Installation](#installation)
+      - [Build containers](#build-containers)
+      - [Include these entries in your `/etc/hosts` or `C:\Windows\System32\Drivers\etc\hosts` file](#include-these-entries-in-your-etchosts-or-cwindowssystem32driversetchosts-file)
+      - [Generate credentials for local development with docker-compose](#generate-credentials-for-local-development-with-docker-compose)
+    - [Environment Variables](#environment-variables)
+      - [Gather instance](#gather-instance)
+  - [Usage](#usage)
+    - [Users & Authentication](#users--authentication)
+      - [Token Authentication](#token-authentication)
+  - [Development](#development)
+    - [Code style](#code-style)
+    - [Naming conventions](#naming-conventions)
+    - [Commit Message Format](#commit-message-format)
+      - [Types of commit messages](#types-of-commit-messages)
+      - [Scope](#scope)
+      - [Subject](#subject)
+      - [Footer (Optional)](#footer-optional)
+  - [Release Management](#release-management)
+    - [Frontend assets](#frontend-assets)
+  - [Containers and services](#containers-and-services)
+  - [Run commands in the containers](#run-commands-in-the-containers)
+    - [Python container](#python-container)
+    - [Node container](#node-container)
+    - [Run tests](#run-tests)
+    - [Upgrade dependencies](#upgrade-dependencies)
+      - [Check outdated dependencies](#check-outdated-dependencies)
+      - [Update requirements file](#update-requirements-file)
 
 ## Introduction
 
@@ -403,11 +412,11 @@ The following are some examples:
 
 | Action                                     | Command                                                   |
 | ------------------------------------------ | --------------------------------------------------------- |
-| List predefined commands                   | `docker-compose run --rm gather help`                     |
+| List predefined commands                   | `docker-compose run --rm --no-deps gather help`           |
 | Run tests                                  | `docker-compose run --rm gather test`                     |
-| Run code style tests                       | `docker-compose run --rm gather test_lint`                |
+| Run code style tests                       | `docker-compose run --rm --no-deps gather test_lint`      |
 | Run python tests                           | `docker-compose run --rm gather test_coverage`            |
-| Create a shell inside the container        | `docker-compose run --rm gather bash`                     |
+| Create a shell inside the container        | `docker-compose run --rm --no-deps gather bash`           |
 | Execute shell command inside the container | `docker-compose run --rm gather eval <command>`           |
 | Run django manage.py                       | `docker-compose run --rm gather manage help`              |
 | Create a python shell                      | `docker-compose run --rm gather manage shell`             |
@@ -415,8 +424,8 @@ The following are some examples:
 | Show ORM migrations                        | `docker-compose run --rm gather manage showmigrations`    |
 | Create pending ORM migration files         | `docker-compose run --rm gather manage makemigrations`    |
 | Apply pending ORM migrations               | `docker-compose run --rm gather manage migrate`           |
-| Check outdated python libraries            | `docker-compose run --rm gather eval pip list --outdated` |
-| Update outdated python libraries           | `docker-compose run --rm gather pip_freeze`               |
+| Check outdated python libraries            | `docker-compose run --rm --no-deps gather eval pip list --outdated` |
+| Update outdated python libraries           | `docker-compose run --rm --no-deps gather pip_freeze`     |
 | Start django development server            | `docker-compose run --rm gather start_dev`                |
 | Start uwsgi server                         | `docker-compose run --rm gather start`                    |
 
