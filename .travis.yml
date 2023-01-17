@@ -1,5 +1,5 @@
 os: linux
-dist: bionic
+dist: jammy
 language: shell
 services:
   - docker
@@ -62,7 +62,7 @@ jobs:
     - name: Test Django App
       if: type = pull_request
       language: python
-      python: '3.8'
+      python: '3.8.13'
       script: ./scripts/test-python.sh
 
     - name: Test Setup
