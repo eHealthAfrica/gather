@@ -1,7 +1,7 @@
 .section {
-  padding: $unit*5 $margin;
-  margin: 0 $margin*-1;
-  min-height: calc(70vH);
+  padding: $unit * 5 $margin;
+  margin: 0 $margin * -1;
+  min-height: calc(70vh);
 
   &:first-child {
     padding-top: $unit;
@@ -10,9 +10,9 @@
 
 .section__title {
   display: block;
-  font-family: "Quicksand", sans-serif;
+  font-family: Quicksand, sans-serif;
   font-size: 2.6em;
-  font-weight:600;
+  font-weight: 600;
   margin-bottom: $unit;
   padding: 0;
   position: relative;
@@ -34,7 +34,7 @@ p {
   font-weight: 300;
   line-height: 1.3em;
   padding: 0;
-  margin: $unit*2 0;
+  margin: $unit * 2 0;
 }
 
 .quote-big {
@@ -42,29 +42,31 @@ p {
   font-weight: 300;
   line-height: 1.3em;
   padding: 1rem 0;
-  &:before {
+
+  &::before {
     content: "» ";
   }
-  &:after {
+
+  &::after {
     content: " «";
   }
 }
 
 .highlight {
   padding: 0 0 0 1em;
-  margin: $unit*2 0 $unit*2 -1em;
+  margin: $unit * 2 0 $unit * 2 -1em;
   border-left: 2px solid $action-color;
 }
 
 .section__action {
-  margin-top: $unit*2;
+  margin-top: $unit * 2;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .box {
-  background: white;
+  background: $white;
   color: $font-color;
   position: relative;
   margin-top: 1rem;
@@ -95,7 +97,6 @@ p {
 }
 
 .center {
-  
   img {
     width: 80%;
     height: 80%;
@@ -116,23 +117,9 @@ p {
 }
 
 .box-content {
-  padding: $unit $unit*1.6;
-  background-color: white;
+  padding: $unit $unit * 1.6;
+  background-color: $white;
 }
-
-// .box-call-out {
-//   padding: $unit;
-//   background-color: $secondary-color;
-//   font-size: 1rem;
-//   text-align: center;
-// }
-
-// .big-number {
-//   font-weight: bold;
-//   font-size: 4em;
-//   color: white;
-//   display: block;
-// }
 
 .box-call-out {
   padding: $unit;
@@ -151,17 +138,17 @@ p {
 .section__bg {
   background: $action-color url("../images/features-bg2.jpg") center center no-repeat;
   background-size: cover;
-  margin: 0 -$margin;
-  margin-top: $unit*-1.5;
   position: relative;
-  // z-index: -1; 
+  margin: 0 -$margin;
+  margin-top: $unit * -1.5;
   margin-bottom: 0;
-  padding: $margin/4 $margin;
-  color: white;
+  padding: $margin / 4 $margin;
+  color: $white;
 
   .block__title {
     min-height: 0px;
-    &:after {
+
+    &::after {
       display: none;
     }
   }
@@ -169,16 +156,16 @@ p {
 
 
 .section.white-bg {
-  background: white;
+  background: $white;
   color: $font-color;
 }
 
 .section .block {
   position: relative;
-  padding: 0 $margin/5;
+  padding: 0 $margin / 5;
   margin: 0;
   margin-top: $unit;
-  border-right: 1px dotted rgba(white, 0.5);
+  border-right: 1px dotted rgba($white, 0.5);
 }
 
 .block:last-child {
@@ -197,8 +184,8 @@ p {
 .circle-image {
   border-radius: 50%;
   overflow: hidden;
-  width: $margin*2.2;
-  height: $margin*2.2;
+  width: $margin * 2.2;
+  height: $margin * 2.2;
   margin: $unit auto;
   position: relative;
 }
@@ -207,10 +194,12 @@ p {
   background: rgba($action-color, 0.3) url("../images/feature1.svg") center center no-repeat;
   background-size: 100%;
 }
+
 .icon-feature2 {
   background: rgba($secondary-color, 0.3) url("../images/feature2.svg") center center no-repeat;
   background-size: 100%;
 }
+
 .icon-feature3 {
   background: rgba($action-color, 0.3) url("../images/feature3.svg") center center no-repeat;
   background-size: 100%;
@@ -223,6 +212,7 @@ p {
   display: flex;
   align-items: center;
   margin: 2rem 1rem 0 0;
+
   img {
     margin-right: 1rem;
   }
@@ -240,7 +230,7 @@ p {
 
 .videoWrapper {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
+  padding-bottom: 56.25%;
   margin-top: 2rem;
   height: 0;
 }
@@ -248,6 +238,7 @@ p {
 .box .videoWrapper {
   margin-top: 0;
 }
+
 .videoWrapper iframe {
   position: absolute;
   top: 0;
@@ -257,18 +248,19 @@ p {
 }
 
 .contact-form {
-  background: white;
-  padding: $unit $unit*3 0;
+  background: $white;
+  padding: $unit $unit * 3 0;
 }
 
 @media screen and (max-width: 740px) {
   .circle-image {
-    width: $margin*5;
-    height: $margin*5;
+    width: $margin * 5;
+    height: $margin * 5;
   }
 
   .box-image {
     height: 40vw;
+
     &.small {
       height: 22vw;
     }
@@ -287,6 +279,7 @@ p {
   .content-box {
     padding: $unit;
   }
+
   .section__feature-content {
     &.active {
       max-height: 2800px;
@@ -305,8 +298,7 @@ p {
 
 @media screen and (min-width: 1600px) {
   .section {
-    padding: $unit*5 $margin*2;
-    margin: 0 $margin*-2;
+    padding: $unit * 5 $margin * 2;
+    margin: 0 $margin * -2;
   }
 }
-
