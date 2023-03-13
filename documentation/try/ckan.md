@@ -10,10 +10,18 @@ In this section we will add the components necessary to spin up a new CKAN insta
 
 ## Setting Up CKAN
 
-We’re going to use a script to make it easier to install and configure CKAN. This will download Docker images for CKAN and perform the necessary configuration. It will then prompt you for a password for the `admin` user. In your terminal, navigate to the `aether-bootstrap` directory inside your cloned copy of `gather-deploy`, and then run the script:
+We’re going to use a script to make it easier to install and configure CKAN. This will download Docker images for CKAN and perform the necessary configuration. It will then prompt you for a password for the `admin` user. In your terminal, navigate to the `aether-bootstrap` directory, and then modify the `options.txt` file:
 
+```text
+## CKAN
+ENABLE_CKAN=true
 ```
-scripts/setup_ckan.sh
+
+Then run the script:
+
+```bash
+./scripts/init.sh
+./scripts/start.sh
 ```
 
 Once this has completed, open a new browser window, go to [http://gather.local:5000](http://gather.local:5000) and login with username `admin` and the password you just entered during the configuration stage.
@@ -26,41 +34,26 @@ Name it `eHADemo` and click **Create Organisation**.
 
 Now that we have CKAN running, we need to turn to Aether Connect, the data publishing half of the Aether platform.
 
-
 ## Setting Up the CKAN Consumer
 
 In order to communicate with CKAN, the CKAN Consumer needs an API Key. This can be found in the CKAN User page at [http://gather.local:5000/user/admin](http://gather.local:5000/user/admin):
 
 ![Getting the CKAN API Key](/images/ckan-api-key.png)
 
-Now you need to edit the CKAN Consumer config file. It’s in the `aether-connect` directory, under `ckan-consumer/config/config.json`. Open it in your favourite text editor. If, for example, you like to use `Vi`, you should type
+Now you need to set up it in the CKAN Consumer.  Using the consumer API usually on <http://localhost:9009> (check `aether-bootstrap/ckan/docker-compose.yml` file; open the consumer port), register the following artifact.
 
-```
-vi ./ckan-consumer/config/config.json
-```
+POST <http://gather.local:9009/ckan/add>
 
-The config file is JSON. We need to set the API Key field. Copy the API key from the CKAN screen, and paste it into the config file as shown:
-
-```
-    ...
-    "ckan_servers": [
-        {
-            "title": "CKAN Demo portal",
-            "url": "http://ckan:5000",
-            "api_key": "ed6e1671-5919-42cc-bf19-27fb47d4fc22",
-            "autoconfig_datasets" : true,
-            "autoconfig_owner_org": "ehademo"
-        }
-    ...
+```json
+  {
+    "id": "ckan-id",
+    "name": "CKAN Instance",
+    "url": "http://ckan:5000",
+    "key": "[your-ckan-api-key]"
+  }
 ```
 
 ## View the Data in CKAN
-
-Now we can start the CKAN Consumer:
-
-```
-scripts/run_ckan_consumer.sh
-```
 
 Open the datasets screen in CKAN at [http://gather.local:5000/dataset/](http://gather.local:5000/dataset/). You should see something like this (the name of your dataset will be slightly different):
 
@@ -80,8 +73,10 @@ Congratulations - we are now publishing the collected data to CKAN!
 
 If you now fill in the `example-microcensus` form again in ODK Collect and submit it to Gather, the data will be automatically published to CKAN.
 
-## Recap 
+## Recap
 
 In this section we created, configured and started a local CKAN instance. We then configured and deployed the Aether-CKAN consumer that reads messages from the Kafka message queue and posts that data to CKAN. We then viewed in CKAN the data that we collected earlier via ODK.
 
-<div style="margin-top: 2rem; text-align: center"><a href="clean-up">Final Steps: Cleaning Up</a></div>
+<div style="margin-top: 2rem; text-align: center">
+<a href="clean-up">Final Steps: Cleaning Up</a>
+</div>

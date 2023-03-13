@@ -27,4 +27,6 @@ It contains a set of tools for creating surveys and collecting data. It is analo
 - The Gather server maps and routes that data to it's proper destination
 - Repeat
 
-[Next Steps: Try it out](../try/index)
+<div style="margin-top: 2rem; text-align: center">
+<a href="../try/index)">Next Steps: Try it out</a>
+</div>
