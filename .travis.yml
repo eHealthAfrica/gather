@@ -65,12 +65,7 @@ jobs:
       python: '3.10'
       script: ./scripts/test-python.sh
 
-    - name: Test Setup
-      if: type = pull_request
-      before_script: ./scripts/generate-credentials.sh > .env
-      script: docker compose config
-
-    - name: Test concourse deployment
+    - name: Test deployment
       if: type = pull_request
       stage: test
       # https://www.docker.com/increase-rate-limits
