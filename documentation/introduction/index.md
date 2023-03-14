@@ -28,5 +28,5 @@ It contains a set of tools for creating surveys and collecting data. It is analo
 - Repeat
 
 <div style="margin-top: 2rem; text-align: center">
-<a href="../try/index)">Next Steps: Try it out</a>
+<a href="../try/index">Next Steps: Try it out</a>
 </div>
