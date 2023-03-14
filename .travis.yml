@@ -62,7 +62,7 @@ jobs:
     - name: Test Django App
       if: type = pull_request
       language: python
-      python: '3.8.13'
+      python: '3.10'
       script: ./scripts/test-python.sh
 
     - name: Test Setup
