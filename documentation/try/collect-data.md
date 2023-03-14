@@ -61,11 +61,17 @@ Fire up _ODK Collect_ on your Android device. Tap the three dots in the top righ
 
 Tap **General Settings**, then in the next screen tap **Server**. For the **URL** you need to enter the following:
 
-```bash
-http://<your ip address>:8443
+**Using Gather-Deploy**
+
+```text
+http://<your ip address>/odk/collect
 ```
 
-*”8443” is the port number that Gather is listening on for connections from ODK Collect. The ODK protocol requires the use of port number 443 (the default port for HTTPS, which is preferable in production but not easy to set up locally) or 8443*
+**Using Aether-Bootstrap**
+
+```text
+https://<your ip address>/dev/odk/collect
+```
 
 Under **Username** and **Password** you need to set the credentials that you set for the surveyor. Once this is done, hit your device’s back button twice to get to the ODK Collect main screen, and then tap **Get Blank Form**. You may be prompted again for the username and password; if so, just enter it again and tap OK.
 

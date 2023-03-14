@@ -85,7 +85,7 @@ You should now see the Gather main screen:
 
 ### Aether-Bootstrap
 
-We’ve created a helper repository on GitHub called **aether-bootstrap** to help you get started.  It contains the instructions that Docker needs in order to download and install the components that make up the Gather server along with Aether Connect, CKAN, Elasticsearch/Kibana and more.
+We’ve created another helper repository on GitHub called **aether-bootstrap** to help you get started.  It contains the instructions that Docker needs in order to download and install the components that make up the Gather server along with Aether Connect, CKAN, Elasticsearch/Kibana and more.
 
 Begin by cloning this repository to your computer:
 

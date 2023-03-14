@@ -24,7 +24,7 @@ Then run the script:
 ./scripts/start.sh
 ```
 
-Once this has completed, open a new browser window, go to [http://gather.local:5601](http://gather.local:5601) Kibana should load and you should see the Kibana welcome screen. Select "Explore my own" to explore the data already uploaded.
+Once this has completed, open a new browser window, go to [http://aether.local/{tenant}/kibana/kibana-app](http://aether.local/dev/kibana/kibana-app) Kibana should load and you should see the Kibana welcome screen. Select "Explore my own" to explore the data already uploaded.
 
 ![Kibana Splashscreen](/images/kibana-ss.png)
 
