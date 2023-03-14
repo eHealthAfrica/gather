@@ -70,7 +70,7 @@ cd gather
 ./scripts/prepare-containers.sh
 ```
 
-**IMPORTANT NOTE**: the docker-compose files are intended to be used exclusively
+**IMPORTANT NOTE**: the docker compose files are intended to be used exclusively
 for local development. Never deploy these to publicly accessible servers.
 
 *[Return to TOC](#table-of-contents)*
@@ -168,7 +168,7 @@ See also [Aether Django SDK environment variables](https://github.com/eHealthAfr
 ## Usage
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 This will start:
@@ -221,7 +221,7 @@ Build local aether and gather containers
 Start local aether and gather containers
 
 ```bash
-docker-compose -f docker-compose-local.yml up
+docker compose -f docker-compose-local.yml up
 ```
 
 *[Return to TOC](#table-of-contents)*
@@ -238,11 +238,11 @@ The code style is tested:
 
 ```bash
 # Python files
-docker-compose run --rm --no-deps gather test_lint
+docker compose run --rm --no-deps gather test_lint
 # Javascript files
-docker-compose run --rm --no-deps gather-assets eval npm run test-lint-js
+docker compose run --rm --no-deps gather-assets eval npm run test-lint-js
 # CSS files
-docker-compose run --rm --no-deps gather-assets eval npm run test-lint-sass
+docker compose run --rm --no-deps gather-assets eval npm run test-lint-sass
 ```
 
 *[Return to TOC](#table-of-contents)*
@@ -351,14 +351,14 @@ Frontend assets are mounted on the pages via the
   that watches assets, rebuilds and does hot reloading of JS Components.
 
   ```bash
-  docker-compose up gather-assets
+  docker compose up gather-assets
   ```
 
 - The `build` entry point compiles the files to be used in the Django app.
   The resultant files are kept in the `app/gather/assets/bundles` folder.
 
   ```bash
-  docker-compose run --rm gather-assets build
+  docker compose run --rm gather-assets build
   ```
 
 - The CSS build is separate, and can contain both `.sass` and `.css` files.
@@ -393,12 +393,12 @@ All the containers definition for development can be found in the
 The pattern to run a command is always
 
 ```bash
-docker-compose run --rm [--no-deps] <container-name> <entrypoint-command> <...args>
+docker compose run --rm [--no-deps] <container-name> <entrypoint-command> <...args>
 ```
 
 If there is no interaction with any other container then include the option `--no-deps`.
 
-See more in [docker-compose run](https://docs.docker.com/compose/reference/run).
+See more in [docker compose run](https://docs.docker.com/compose/reference/run).
 
 *[Return to TOC](#table-of-contents)*
 
@@ -412,22 +412,22 @@ The following are some examples:
 
 | Action                                     | Command                                                   |
 | ------------------------------------------ | --------------------------------------------------------- |
-| List predefined commands                   | `docker-compose run --rm --no-deps gather help`           |
-| Run tests                                  | `docker-compose run --rm gather test`                     |
-| Run code style tests                       | `docker-compose run --rm --no-deps gather test_lint`      |
-| Run python tests                           | `docker-compose run --rm gather test_coverage`            |
-| Create a shell inside the container        | `docker-compose run --rm --no-deps gather bash`           |
-| Execute shell command inside the container | `docker-compose run --rm gather eval <command>`           |
-| Run django manage.py                       | `docker-compose run --rm gather manage help`              |
-| Create a python shell                      | `docker-compose run --rm gather manage shell`             |
-| Create a postgresql shell                  | `docker-compose run --rm gather manage dbshell`           |
-| Show ORM migrations                        | `docker-compose run --rm gather manage showmigrations`    |
-| Create pending ORM migration files         | `docker-compose run --rm gather manage makemigrations`    |
-| Apply pending ORM migrations               | `docker-compose run --rm gather manage migrate`           |
-| Check outdated python libraries            | `docker-compose run --rm --no-deps gather eval pip list --outdated` |
-| Update outdated python libraries           | `docker-compose run --rm --no-deps gather pip_freeze`     |
-| Start django development server            | `docker-compose run --rm gather start_dev`                |
-| Start uwsgi server                         | `docker-compose run --rm gather start`                    |
+| List predefined commands                   | `docker compose run --rm --no-deps gather help`           |
+| Run tests                                  | `docker compose run --rm gather test`                     |
+| Run code style tests                       | `docker compose run --rm --no-deps gather test_lint`      |
+| Run python tests                           | `docker compose run --rm gather test_coverage`            |
+| Create a shell inside the container        | `docker compose run --rm --no-deps gather bash`           |
+| Execute shell command inside the container | `docker compose run --rm gather eval <command>`           |
+| Run django manage.py                       | `docker compose run --rm gather manage help`              |
+| Create a python shell                      | `docker compose run --rm gather manage shell`             |
+| Create a postgresql shell                  | `docker compose run --rm gather manage dbshell`           |
+| Show ORM migrations                        | `docker compose run --rm gather manage showmigrations`    |
+| Create pending ORM migration files         | `docker compose run --rm gather manage makemigrations`    |
+| Apply pending ORM migrations               | `docker compose run --rm gather manage migrate`           |
+| Check outdated python libraries            | `docker compose run --rm --no-deps gather eval pip list --outdated` |
+| Update outdated python libraries           | `docker compose run --rm --no-deps gather pip_freeze`     |
+| Start django development server            | `docker compose run --rm gather start_dev`                |
+| Start uwsgi server                         | `docker compose run --rm gather start`                    |
 
 *[Return to TOC](#table-of-contents)*
 
@@ -441,15 +441,15 @@ The following are some examples:
 
 | Action                                     | Command                                                   |
 | ------------------------------------------ | --------------------------------------------------------- |
-| List predefined commands                   | `docker-compose run --rm gather-assets help`              |
-| Run tests                                  | `docker-compose run --rm gather-assets test`              |
-| Run code style tests                       | `docker-compose run --rm gather-assets test_lint`         |
-| Run JS tests                               | `docker-compose run --rm gather-assets test_js`           |
-| Create a shell inside the container        | `docker-compose run --rm gather-assets bash`              |
-| Execute shell command inside the container | `docker-compose run --rm gather-assets eval <command>`    |
-| Check outdated node libraries              | `docker-compose run --rm gather-assets eval npm outdated` |
-| Build assets used in the Django app        | `docker-compose run --rm gather-assets build`             |
-| Start webpack server with HMR              | `docker-compose run --rm gather-assets start_dev`         |
+| List predefined commands                   | `docker compose run --rm gather-assets help`              |
+| Run tests                                  | `docker compose run --rm gather-assets test`              |
+| Run code style tests                       | `docker compose run --rm gather-assets test_lint`         |
+| Run JS tests                               | `docker compose run --rm gather-assets test_js`           |
+| Create a shell inside the container        | `docker compose run --rm gather-assets bash`              |
+| Execute shell command inside the container | `docker compose run --rm gather-assets eval <command>`    |
+| Check outdated node libraries              | `docker compose run --rm gather-assets eval npm outdated` |
+| Build assets used in the Django app        | `docker compose run --rm gather-assets build`             |
+| Start webpack server with HMR              | `docker compose run --rm gather-assets start_dev`         |
 
 *[Return to TOC](#table-of-contents)*
 
@@ -482,25 +482,25 @@ This will stop ALL running containers and execute `gather` tests.
 or
 
 ```bash
-docker-compose run --rm gather test
-docker-compose run --rm gather-assets test
+docker compose run --rm gather test
+docker compose run --rm gather-assets test
 ```
 
 or
 
 ```bash
-docker-compose run --rm gather test_lint
-docker-compose run --rm gather test_coverage
+docker compose run --rm gather test_lint
+docker compose run --rm gather test_coverage
 
-docker-compose run --rm gather-assets test_lint
-docker-compose run --rm gather-assets test_js
+docker compose run --rm gather-assets test_lint
+docker compose run --rm gather-assets test_js
 
 # more detailed
-docker-compose run --rm gather-assets eval npm run test-lint-sass
-docker-compose run --rm gather-assets eval npm run test-lint-js
+docker compose run --rm gather-assets eval npm run test-lint-sass
+docker compose run --rm gather-assets eval npm run test-lint-js
 
 # in case you need to check `console.log` messages
-docker-compose run --rm gather-assets eval npm run test-js-verbose
+docker compose run --rm gather-assets eval npm run test-js-verbose
 ```
 
 *[Return to TOC](#table-of-contents)*
@@ -510,14 +510,14 @@ docker-compose run --rm gather-assets eval npm run test-js-verbose
 #### Check outdated dependencies
 
 ```bash
-docker-compose run --rm --no-deps gather eval pip list --outdated
-docker-compose run --rm --no-deps gather-assets eval npm outdated
+docker compose run --rm --no-deps gather eval pip list --outdated
+docker compose run --rm --no-deps gather-assets eval npm outdated
 ```
 
 #### Update requirements file
 
 ```bash
-docker-compose run --rm --no-deps gather pip_freeze
+docker compose run --rm --no-deps gather pip_freeze
 ```
 
 *[Return to TOC](#table-of-contents)*

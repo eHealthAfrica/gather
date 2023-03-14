@@ -125,7 +125,7 @@ tmp
 .terraform
 terraform.tfstate.backup
 
-# docker-compose variables
+# docker compose variables
 .env
 
 # Webpack build files
@@ -136,3 +136,7 @@ terraform.tfstate.backup
 
 # persistent data
 .persistent_data
+
+_site
+.sass-cache
+.jekyll-metadata

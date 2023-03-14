@@ -51,7 +51,7 @@ fi
 
 set -Eeuo pipefail
 
-DC="docker-compose -f docker-compose-local.yml"
+DC="docker compose -f docker-compose-local.yml"
 
 if [ ! -f ./VERSION ]; then
     VERSION="0.0.0"
