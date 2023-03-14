@@ -23,7 +23,7 @@ function build_container {
     local container=$1
 
     echo "_____________________________________________ Building container ${container}"
-    docker-compose build \
+    docker compose build \
         ${BUILD_OPTIONS} \
         --build-arg GIT_REVISION=${GIT_REVISION} \
         --build-arg VERSION=${VERSION} \
@@ -32,7 +32,7 @@ function build_container {
 
 
 function _on_exit {
-    docker-compose down
+    docker compose down
 }
 
 function _on_err {
@@ -57,8 +57,8 @@ docker volume create gather_database_data 2>/dev/null || true
 docker volume create gather_minio_data    2>/dev/null || true
 
 # pull dependencies
-docker-compose pull db redis minio nginx
-docker-compose pull exm kernel odk ui
+docker compose pull db redis minio nginx
+docker compose pull exm kernel odk ui
 
 if [ ! -f ./VERSION ]; then
     VERSION="0.0.0"
@@ -75,7 +75,7 @@ echo "_____________________________________________"
 
 # build Gather assets
 build_container gather-assets
-docker-compose run --rm gather-assets build
+docker compose run --rm gather-assets build
 
 # build Gather
 build_container gather

@@ -68,7 +68,7 @@ jobs:
     - name: Test Setup
       if: type = pull_request
       before_script: ./scripts/generate-credentials.sh > .env
-      script: docker-compose config
+      script: docker compose config
 
     - name: Test concourse deployment
       if: type = pull_request

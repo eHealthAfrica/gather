@@ -45,7 +45,7 @@ function _on_err {
 trap '_on_exit' EXIT
 trap '_on_err' ERR
 
-DC_TEST="docker-compose -f docker-compose-test.yml"
+DC_TEST="docker compose -f docker-compose-test.yml"
 DC_RUN="$DC_TEST run --rm"
 GIT_REVISION=rev-$(date "+%Y%m%d%H%M%S")
 VERSION="t.s.t"
@@ -56,7 +56,7 @@ echo "_____________________________________________ Revision: ${GIT_REVISION}"
 echo "_____________________________________________"
 
 echo "_____________________________________________ Killing ALL containers"
-docker-compose kill
+docker compose kill
 $DC_TEST kill
 $DC_TEST down -v
 $DC_TEST pull db-test
