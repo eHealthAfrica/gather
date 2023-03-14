@@ -14,12 +14,12 @@ Before following this run-through, make sure you have met the prerequisites defi
 
 ## Local Browser Client
 
-As mentioned earlier, we are actually setting up an Gather development environment for these exercises.  In this environment, we need to define some domain names that will resolve to the actual location of the server.  It only needs to be done on the machine that you will be using your web browser from.  You will need to edit your **/etc/hosts** file which will require **Administrator** or **root** permissions.  Using your favorite plain text editor, open **/etc/hosts** for editing.
+As mentioned earlier, we are actually setting up an Gather development environment for these exercises.  In this environment, we need to define some domain names that will resolve to the actual location of the server.  It only needs to be done on the machine that you will be using your web browser from.  You will need to edit your **/etc/hosts** file which will require **Administrator** or **root** permissions.  Using your favorite plain text editor, open **/etc/hosts** or **C:\Windows\System32\Drivers\etc\hosts** for editing.
 
-If you are running both the Gather server and web browser client on the same computer, modify the line that starts with **127.0.0.1** as shown Below
+If you are running both the Gather server and web browser client on the same computer, add a new line as shown below:
 
 ```text
-127.0.0.1    localhost aether.local gather.local
+127.0.0.1    aether.local gather.local
 ```
 
 If your server is running remotely from your web browser, for example on AWS, add a line to your **/etc/hosts** substituting the IP address of your Gather server for **XX.XX.XX.XX**.  The new line should look like:
@@ -28,9 +28,13 @@ If your server is running remotely from your web browser, for example on AWS, ad
 XX.XX.XX.XX    aether.local gather.local
 ```
 
-_NOTE: Editing your **/etc/hosts** file will **not** be required in a production environment._
+_NOTE: Editing your **/etc/hosts** or **C:\Windows\System32\Drivers\etc\hosts** file will **not** be required in a production environment._
 
-You will also need to register some domains for local resolution on your computer. This means editing your hosts file. On Mac/Linux this is at `/etc/hosts`; Modify the line that starts with `127.0.0.1` to include:
+You will also need to register some domains for local resolution on your computer. This means editing your hosts file. On Mac/Linux this is at `/etc/hosts`; Add a new line to include:
+
+```text
+127.0.0.1    aether.local gather.local
+```
 
 ## ODK Collect
 
@@ -38,26 +42,28 @@ For data collection, you will need an Android phone or tablet with [ODK Collect]
 
 ## Setup
 
-We’ve created a helper repository on GitHub called **aether-bootstrap** to help you get started.  It contains the instructions that Docker needs in order to download and install the components that make up the Gather server.
+### Gather-Deploy
+
+We’ve created a helper repository on GitHub called **gather-deploy** to help you get started.  It contains the instructions that Docker needs in order to download and install the components that make up the Gather server along with Aether: UI, Kernel and ODK (required to gather data with ODK Collect) but not Aether Connect.
 
 Begin by cloning this repository to your computer:
 
 ```bash
-git clone --recurse-submodules https://github.com/eHealthAfrica/aether-bootstrap.git
+git clone https://github.com/eHealthAfrica/gather-deploy.git
 
-cd aether-bootstrap
+cd gather-deploy
 ```
 
 If you are starting Gather for the first time, you will need to create some docker resources (networks and volumes) and generate credentials for all applications:
 
 ```bash
-./scripts/init.sh
+./setup.sh
 ```
 
 To start all the servers and services, just type
 
 ```bash
-./scripts/start.sh
+./start.sh
 ```
 
 The first time this is run, it will take a while to download all the artifacts to your machine.  Those artifacts are cached locally and will be available the next time you run Gather so the long startup only happens once.
@@ -77,9 +83,50 @@ You should now see the Gather main screen:
 
 ![Gather main screen](/images/gather-first-screen.png)
 
+### Aether-Bootstrap
+
+We’ve created a helper repository on GitHub called **aether-bootstrap** to help you get started.  It contains the instructions that Docker needs in order to download and install the components that make up the Gather server along with Aether Connect, CKAN, Elasticsearch/Kibana and more.
+
+Begin by cloning this repository to your computer:
+
+```bash
+git clone https://github.com/eHealthAfrica/aether-bootstrap.git
+
+cd aether-bootstrap
+```
+
+If you are starting Gather for the first time, you will need to create some docker resources (networks and volumes) and generate credentials for all applications:
+
+```bash
+./scripts/init.sh
+```
+
+*Note: Aether-Bootstrap enables multitenancy! The default setup creates three tenants: dev, prod and test*
+
+To start all the servers and services, just type
+
+```bash
+./scripts/start.sh
+```
+
+The first time this is run, it will take a while to download all the artifacts to your machine.  Those artifacts are cached locally and will be available the next time you run Gather so the long startup only happens once.
+
+Give Gather a minute or so to start up, and then go to [gather.local/{tenant}](http://gather.local/dev) in your browser. Once Gather is ready, you should see the login screen:
+
+![Gather login screen](/images/gather-login.png)
+
+You can login with the following credentials:
+
+|Username|**admin**|
+|Password|**adminadmin**|
+
+You should now see the Gather main screen:
+
+![Gather main screen](/images/gather-first-screen.png)
+
 ## Recap
 
-In this section cloned the `aether-bootstrap` helper repository and then spun up a Gather instance by running a single command.
+In this section cloned the `gather-deploy`/`aether-bootstrap` helper repositories and then spun up a Gather instance by running a single command.
 
 In the next section, we’re going to collect some data using the ODK Collect Android application.
 
