@@ -34,7 +34,7 @@ You will also need to register some domains for local resolution on your compute
 
 ## ODK Collect
 
-For data collection, you will need an Android phone or tablet with [ODK Collect](https://play.google.com/store/apps/details?id=org.odk.collect.android&hl=en_US) installed.  Open the Google Play store on your Android phone and search for **ODK Collect** and install.  Configuration instructions for **ODK collect** will come in a later section.
+For data collection, you will need an Android phone or tablet with [ODK Collect](https://play.google.com/store/apps/details?id=org.odk.collect.android) installed.  Open the Google Play store on your Android phone and search for **ODK Collect** and install.  Configuration instructions for **ODK collect** will come in a later section.
 
 ## Setup
 
