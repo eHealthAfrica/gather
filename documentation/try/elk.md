@@ -10,11 +10,18 @@ In this section we will add the components necessary to spin up a new [Elasticse
 
 ## Setting Up ELK
 
-We’re going to use docker-compose to start the elasticsearch and Kibana servers as well as the Elasticsearch consumer.  No configuration is required, it all should just work.  In your terminal, navigate to the `aether-bootstrap` directory inside your cloned copy of `gather-deploy`, and then:
+We’re going to use docker-compose to start the elasticsearch and Kibana servers as well as the Elasticsearch consumer.  No configuration is required, it all should just work.  In your terminal, navigate to the `aether-bootstrap` directory, and then modify the `options.txt` file:
 
+```text
+## ElasticSearch
+ENABLE_ELASTICSEARCH=true
 ```
-cd elasticsearch
-docker-compose up -d
+
+Then run the script:
+
+```bash
+./scripts/init.sh
+./scripts/start.sh
 ```
 
 Once this has completed, open a new browser window, go to [http://gather.local:5601](http://gather.local:5601) Kibana should load and you should see the Kibana welcome screen. Select "Explore my own" to explore the data already uploaded.
@@ -25,7 +32,7 @@ On the left side bar, select "Management" and then "Index patterns" and you shou
 
 ![Kibana Index Patterns](/images/kibana-index.png)
 
-Index patterns tell Kibana which Elasticsearch indices you want to explore. An index pattern can match the name of a single index, or include a wildcard (*) to match multiple indices.  At this point, you should see an Elasticsearch index named `aet_auto_examplemicrocensus_20170717_1` 
+Index patterns tell Kibana which Elasticsearch indices you want to explore. An index pattern can match the name of a single index, or include a wildcard (*) to match multiple indices.  At this point, you should see an Elasticsearch index named `aet_auto_examplemicrocensus_20170717_1`
 
 Create a Kibana index pattern by using `aet_auto_examplemicrocensus*` then press `> Next Step` and then select `end` from the "Time Filter field name" dropdown.  In Kibana, all data is related to, and can be filtered by, time fields.  Having a default time field makes working with an index pattern much nicer.  In this case, `end` is one of the fields sent by ODK Collect to indicate when the data collection for a survey ended.  Complete the process by selecting `Create index pattern`.
 
@@ -39,10 +46,11 @@ On the left hand side, click on `Discover` and you will probably see a screen wi
 
 If you now fill in the `example-microcensus` form again in ODK Collect and submit it to Gather, the data will be automatically published and visible in Kibana.
 
-Try playing around with visualizations.  
+Try playing around with visualizations.
+
 * Click `Visualize` on the left panel
 * Press the `Create a visualization` button
-* Under "Maps" select `Coordinate Map` 
+* Under "Maps" select `Coordinate Map`
 * Select `aet_auto_examplemicrocensus*` as your index
 * Click on `Geo Coordinates` under "Buckets" and "Select buckets type"
 * Click on `Geohash` to select it as the aggregation type
@@ -50,8 +58,11 @@ Try playing around with visualizations.
 * Press the "run" icon (triangle "play button") above and you should see your data plotted on a map
 
 ![Kibana Map](/images/kibana-map.png)
-## Recap 
+
+## Recap
 
 In this section we started a local ELK instance and then configured and deployed the Aether-Elasticsearch consumer that reads messages from the Kafka message queue and posts that data to Elasticsearch. We then viewed in Kibana the data that we collected earlier via ODK using the Discover mode and by creating a visualization.
 
-<div style="margin-top: 2rem; text-align: center"><a href="clean-up">Final Steps: Cleaning Up</a></div>
+<div style="margin-top: 2rem; text-align: center">
+<a href="clean-up">Final Steps: Cleaning Up</a>
+</div>
