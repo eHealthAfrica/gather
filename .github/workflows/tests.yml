@@ -1,0 +1,96 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - release-[0-9]+\.[0-9]+
+
+  push:
+    branches:
+      - develop
+      - release-[0-9]+\.[0-9]+
+
+jobs:
+
+  test-node:
+    name: Test ReactJS App
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - name: Run tests
+        run: ./scripts/test-node.sh
+
+  test-python:
+    name: Test Django App
+    runs-on: ubuntu-22.04
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      DB_NAME: gather_test
+      PGUSER: gather_user
+      PGPASSWORD: secretsecret
+
+      ADMIN_USERNAME: admin-test
+      ADMIN_PASSWORD: password-test
+
+      DJANGO_SECRET_KEY: django-secret-key-in-test-mode
+      EXPORT_MAX_ROWS_SIZE: 1000
+      WEB_SERVER_PORT: 9105
+
+      APP_NAME: Gather
+      MULTITENANCY: yes
+      DEFAULT_REALM: gather
+      REALM_COOKIE: gather-realm
+
+      EXTERNAL_APPS: aether-kernel,aether-odk
+      AETHER_KERNEL_TOKEN: kernel-test-token
+      AETHER_KERNEL_URL: http://kernel-test
+      AETHER_ODK_TOKEN: odk-test-token
+      AETHER_ODK_URL: http://odk-test
+
+      AUTO_CONFIG_CONSUMERS: 'true'
+      CONSUMERS_CONFIG_FILE: './conf/consumers.json'
+      TENANCY_HEADER: 'X-Oauth-realm'
+      TEST_VARIABLE_1: 'test variable 1'
+      TEST_VARIABLE_2: 'test variable 2'
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          PGUSER: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Run tests
+        run: ./scripts/test-python.sh
+
+  check-deployment:
+    name: Check Deployment
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build container
+        run: docker build --file gather.Dockerfile .

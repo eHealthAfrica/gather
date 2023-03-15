@@ -47,13 +47,7 @@ echo "--------------------------------------------------------------"
 docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
 
 echo "Building Docker image ${DOCKER_IMAGE}"
-docker build \
-    --pull \
-    --no-cache \
-    --force-rm \
-    --tag $DOCKER_IMAGE \
-    --file ${APP}.Dockerfile \
-    .
+docker build --tag $DOCKER_IMAGE --file ${APP}.Dockerfile .
 
 echo "Pushing Docker image ${DOCKER_IMAGE}"
 docker push ${DOCKER_IMAGE}
