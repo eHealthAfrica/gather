@@ -72,7 +72,7 @@ Give Gather a minute or so to start up, and then go to [gather.local](http://gat
 
 ![Gather login screen](/images/gather-login.png)
 
-*Tip: If you see an **Welcome to nginx!** screen instead of the one shown above, just reload the page - that means you were too fast!*
+_Tip: If you see an **Welcome to nginx!** screen instead of the one shown above, just reload the page - that means you were too fast!_
 
 You can login with the following credentials:
 
@@ -101,7 +101,7 @@ If you are starting Gather for the first time, you will need to create some dock
 ./scripts/init.sh
 ```
 
-*Note: Aether-Bootstrap enables multitenancy! The default setup creates three tenants: dev, prod and test*
+_Note: Aether-Bootstrap enables multitenancy! The default setup creates three tenants: dev, prod and test._
 
 To start all the servers and services, just type
 

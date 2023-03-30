@@ -9,13 +9,12 @@ Run it locally with docker:
 ```bash
 docker run --rm \
     --volume="$PWD:/srv/jekyll" \
-    --volume="$PWD/vendor/bundle:/usr/local/bundle:Z" \
-    -p 4000:4000 \
+    -p 4001:4000 \
     -it jekyll/jekyll:3.8 \
     jekyll serve
 ```
 
-Open <http://localhost:4000/>
+Open <http://localhost:4001/>
 
 ## documentation
 

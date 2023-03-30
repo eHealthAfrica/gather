@@ -24,9 +24,9 @@ Then run the script:
 ./scripts/start.sh
 ```
 
-Once this has completed, open a new browser window, go to [http://gather.local:5000](http://gather.local:5000) and login with username `admin` and the password you just entered during the configuration stage.
+Once this has completed, open a new browser window, go to <http://gather.local:5000> and login with username `admin` and the password you just entered during the configuration stage.
 
-Now go to [http://gather.local:5000/organization](http://gather.local:5000/organization) and add a new organization:
+Now go to <http://gather.local:5000/organization> and add a new organization:
 
 ![Adding an Organization in CKAN](/images/ckan-organizations.png)
 
@@ -36,7 +36,7 @@ Now that we have CKAN running, we need to turn to Aether Connect, the data publi
 
 ## Setting Up the CKAN Consumer
 
-In order to communicate with CKAN, the CKAN Consumer needs an API Key. This can be found in the CKAN User page at [http://gather.local:5000/user/admin](http://gather.local:5000/user/admin):
+In order to communicate with CKAN, the CKAN Consumer needs an API Key. This can be found in the CKAN User page at <http://gather.local:5000/user/admin>:
 
 ![Getting the CKAN API Key](/images/ckan-api-key.png)
 
@@ -55,7 +55,7 @@ POST <http://gather.local:9009/ckan/add>
 
 ## View the Data in CKAN
 
-Open the datasets screen in CKAN at [http://gather.local:5000/dataset/](http://gather.local:5000/dataset/). You should see something like this (the name of your dataset will be slightly different):
+Open the datasets screen in CKAN at <http://gather.local:5000/dataset/>. You should see something like this (the name of your dataset will be slightly different):
 
 ![Our dataset in CKAN](/images/ckan-datasets.png)
 
