@@ -18,7 +18,7 @@ You will need a computer running Linux, macOS, a cloud based Linux VM (such as A
   - [git](https://git-scm.com/) must be installed and available
 - Docker
   - [Docker Compose](https://docs.docker.com/compose/) installed setup with at least 3GB limit
-- The following ports should be available on your machine: 80, 443, 5000, 9009
+- The following ports should be available on your machine: 80, 443, 5000
 
 ## Setup Help
 
